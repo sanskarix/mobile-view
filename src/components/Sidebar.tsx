@@ -57,6 +57,11 @@ export const Sidebar = ({
       name: 'Insights',
       href: '/insights',
       icon: BarChart3
+    },
+    {
+      name: 'Settings',
+      href: '/settings',
+      icon: Settings
     }
   ];
 

@@ -332,20 +332,18 @@ export const EventTypes = () => {
             const isEventActive = eventStates[event.id] ?? event.isActive;
             const IconComponent = event.icon;
             return (
-              <div 
-                key={event.id} 
-                className="relative group animate-fade-in cursor-pointer" 
-                onClick={() => handleEventEdit(event.id)}
-              >
-                <div className={`bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm ${
-                  !isEventActive ? 'opacity-50' : ''
-                }`}>
+              <div key={event.id} className="relative group animate-fade-in">
+                {/* Drag handle - positioned outside card on left */}
+                <GripVertical className="absolute -left-8 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity cursor-move z-10" />
+                
+                <div 
+                  className={`bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer ${
+                    !isEventActive ? 'opacity-50' : ''
+                  }`}
+                  onClick={() => handleEventEdit(event.id)}
+                >
                   <div className="flex items-start justify-between">
                     <div className="flex items-start space-x-3 flex-1">
-                      <div className="group-hover:opacity-100 opacity-0 transition-opacity">
-                        <GripVertical className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0 cursor-move" />
-                      </div>
-                      
                       <div className="h-10 w-10 rounded-lg bg-muted/50 flex items-center justify-center flex-shrink-0">
                         <IconComponent className="h-5 w-5 text-muted-foreground" />
                       </div>
@@ -356,51 +354,42 @@ export const EventTypes = () => {
                             {event.title}
                           </h3>
                           
-                          <Switch 
-                            checked={isEventActive} 
-                            onCheckedChange={checked => {
-                              handleToggleEvent(event.id, checked);
-                            }}
-                            onClick={e => e.stopPropagation()}
-                          />
-                          
-                          {/* URL box with preview and copy */}
+                          {/* URL box with icons */}
                           <div className="flex items-center space-x-1 px-2 py-1 bg-muted/50 rounded text-xs text-muted-foreground">
                             <span>cal.id{event.url}</span>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
+                                handleCopyLink(event.id, event.url);
+                              }}
+                              className="p-1 hover:bg-muted rounded flex items-center justify-center"
+                              title="Copy event link"
+                            >
+                              <Copy className="h-3 w-3" />
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
                                 window.open(`https://cal.id${event.url}`, '_blank');
                               }}
-                              className="p-1 hover:bg-muted rounded"
+                              className="p-1 hover:bg-muted rounded flex items-center justify-center"
                               title="Preview event"
                             >
                               <ExternalLink className="h-3 w-3" />
                             </button>
-                            <div className="relative">
-                              <button 
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleCopyLink(event.id, event.url);
-                                }} 
-                                className="p-1 hover:bg-muted rounded"
-                                title="Copy event link"
-                              >
-                                <Copy className="h-3 w-3" />
-                              </button>
-                              {copiedLink === event.id && (
-                                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-foreground text-background text-xs rounded animate-fade-in whitespace-nowrap">
-                                  Copied
-                                </div>
-                              )}
-                            </div>
+                            {copiedLink === event.id && (
+                              <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-foreground text-background text-xs rounded animate-fade-in whitespace-nowrap">
+                                Copied
+                              </div>
+                            )}
                           </div>
                         </div>
                         
                         <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{event.description}</p>
                         <div className="flex items-center">
                           {event.durations?.map(duration => (
-                            <span key={duration} className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-sm rounded mr-2">
+                            <span key={duration} className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded mr-2">
+                              <Clock className="h-3 w-3 mr-1" />
                               {duration}m
                             </span>
                           ))}
@@ -408,17 +397,15 @@ export const EventTypes = () => {
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-3 ml-4">
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEventEdit(event.id);
+                    {/* Enable toggle on the right */}
+                    <div className="flex items-center ml-4">
+                      <Switch 
+                        checked={isEventActive} 
+                        onCheckedChange={checked => {
+                          handleToggleEvent(event.id, checked);
                         }}
-                        className="p-1.5 hover:bg-muted rounded-md transition-colors"
-                        title="Edit event"
-                      >
-                        <Edit className="h-4 w-4 text-muted-foreground" />
-                      </button>
+                        onClick={e => e.stopPropagation()}
+                      />
                     </div>
                   </div>
                 </div>

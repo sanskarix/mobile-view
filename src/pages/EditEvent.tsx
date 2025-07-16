@@ -63,7 +63,7 @@ export const EditEvent = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="h-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="h-full px-8 flex items-center justify-between w-full">
+        <div className="h-full px-8 flex items-center justify-between w-full max-w-none">
           <div className="flex items-center space-x-4">
             <button 
               onClick={handleBack} 
@@ -91,9 +91,9 @@ export const EditEvent = () => {
         </div>
       </header>
 
-      {/* Left-aligned Horizontal Tabs */}
+      {/* Centered Horizontal Tabs */}
       <div className="bg-background border-b border-border">
-        <div className="px-8">
+        <div className="px-8 flex justify-center">
           <nav className="flex space-x-8" aria-label="Tabs">
             {tabs.map((tabItem) => (
               <button
@@ -114,8 +114,8 @@ export const EditEvent = () => {
         </div>
       </div>
 
-      {/* Content with consistent width */}
-      <div className="bg-background px-8">
+      {/* Centered Content with consistent width */}
+      <div className="bg-background px-8 flex justify-center">
         <div className="w-full" style={{ maxWidth: '982.63px' }}>
           {renderTabContent()}
         </div>
