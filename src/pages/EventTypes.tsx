@@ -1,5 +1,6 @@
+
 import React, { useState, useRef, useEffect } from 'react';
-import { Plus, MoreHorizontal, Eye, Edit, Copy as CopyIcon, Code, Trash2, ArrowUp, ArrowDown, Search, Copy } from 'lucide-react';
+import { Plus, MoreHorizontal, ExternalLink, Edit, Copy as CopyIcon, Code, Trash2, ArrowUp, ArrowDown, Search, Copy } from 'lucide-react';
 import { CreateEventModal } from '../components/CreateEventModal';
 import { useNavigate } from 'react-router-dom';
 import { Switch } from '../components/ui/switch';
@@ -31,66 +32,111 @@ export const EventTypes = () => {
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
   const [copiedPublicLink, setCopiedPublicLink] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [eventStates, setEventStates] = useState<{
-    [key: string]: boolean;
-  }>({});
+  const [eventStates, setEventStates] = useState<{[key: string]: boolean}>({});
   const [teamEvents, setTeamEvents] = useState<Team[]>([]);
   const navigate = useNavigate();
 
   // Load teams from localStorage
   useEffect(() => {
     const loadTeams = () => {
-      // Default personal account
-      const personalTeam = {
-        id: 'personal',
-        name: 'Sanskar Yadav',
-        url: 'sanskar',
-        avatar: 'S',
-        eventTypes: [
-          {
-            id: 'event-1',
-            title: '15 Minute Meeting',
-            description: 'A quick 15-minute meeting to discuss your needs.',
-            url: '/sanskar/15min',
-            durations: [15],
-            bookingsToday: 3,
-            isActive: true
-          },
-          {
-            id: 'event-2',
-            title: '30 Minute Meeting',
-            description: 'A 30-minute meeting for detailed discussions.',
-            url: '/sanskar/30min',
-            durations: [30],
-            bookingsToday: 5,
-            isActive: true
-          }
-        ]
-      };
+      // Default teams with 10 event types each
+      const defaultTeams = [
+        {
+          id: 'personal',
+          name: 'Sanskar Yadav',
+          url: 'sanskar',
+          avatar: 'S',
+          eventTypes: [
+            { id: 'p1', title: '15 Minute Meeting', description: 'Quick catch-up call for brief discussions', url: '/sanskar/15min', durations: [15], bookingsToday: 3, isActive: true },
+            { id: 'p2', title: '30 Minute Meeting', description: 'Standard meeting for detailed conversations', url: '/sanskar/30min', durations: [30], bookingsToday: 5, isActive: true },
+            { id: 'p3', title: '1 Hour Consultation', description: 'In-depth consultation and planning session', url: '/sanskar/consultation', durations: [60], bookingsToday: 2, isActive: true },
+            { id: 'p4', title: 'Coffee Chat', description: 'Informal coffee meeting for networking', url: '/sanskar/coffee', durations: [30], bookingsToday: 1, isActive: true },
+            { id: 'p5', title: 'Demo Session', description: 'Product demonstration and Q&A', url: '/sanskar/demo', durations: [45], bookingsToday: 4, isActive: true },
+            { id: 'p6', title: 'Interview', description: 'Job interview and candidate assessment', url: '/sanskar/interview', durations: [60], bookingsToday: 0, isActive: true },
+            { id: 'p7', title: 'Mentorship', description: 'One-on-one mentoring session', url: '/sanskar/mentorship', durations: [45], bookingsToday: 2, isActive: true },
+            { id: 'p8', title: 'Project Review', description: 'Review project progress and feedback', url: '/sanskar/review', durations: [30], bookingsToday: 1, isActive: true },
+            { id: 'p9', title: 'Strategy Planning', description: 'Strategic planning and roadmap discussion', url: '/sanskar/strategy', durations: [60], bookingsToday: 0, isActive: true },
+            { id: 'p10', title: 'Quick Sync', description: 'Brief sync-up and status update', url: '/sanskar/sync', durations: [15], bookingsToday: 3, isActive: true },
+          ]
+        },
+        {
+          id: 'meta',
+          name: 'Meta',
+          url: 'meta',
+          avatar: 'M',
+          eventTypes: [
+            { id: 'm1', title: 'Technical Interview', description: 'Software engineering technical assessment', url: '/meta/tech-interview', durations: [60], bookingsToday: 8, isActive: true },
+            { id: 'm2', title: 'Product Review', description: 'Product feature review and feedback', url: '/meta/product-review', durations: [45], bookingsToday: 5, isActive: true },
+            { id: 'm3', title: 'Design Critique', description: 'UI/UX design review session', url: '/meta/design-critique', durations: [30], bookingsToday: 3, isActive: true },
+            { id: 'm4', title: 'Engineering Sync', description: 'Team engineering synchronization', url: '/meta/eng-sync', durations: [30], bookingsToday: 12, isActive: true },
+            { id: 'm5', title: 'Leadership 1:1', description: 'One-on-one with engineering leadership', url: '/meta/leadership', durations: [30], bookingsToday: 2, isActive: true },
+            { id: 'm6', title: 'Code Review', description: 'Collaborative code review session', url: '/meta/code-review', durations: [45], bookingsToday: 7, isActive: true },
+            { id: 'm7', title: 'Architecture Discussion', description: 'System architecture planning meeting', url: '/meta/architecture', durations: [60], bookingsToday: 1, isActive: true },
+            { id: 'm8', title: 'Sprint Planning', description: 'Agile sprint planning session', url: '/meta/sprint-planning', durations: [90], bookingsToday: 1, isActive: true },
+            { id: 'm9', title: 'Performance Review', description: 'Employee performance evaluation', url: '/meta/performance', durations: [45], bookingsToday: 0, isActive: true },
+            { id: 'm10', title: 'Innovation Workshop', description: 'Brainstorming and innovation session', url: '/meta/innovation', durations: [120], bookingsToday: 0, isActive: true },
+          ]
+        },
+        {
+          id: 'google',
+          name: 'Google',
+          url: 'google',
+          avatar: 'G',
+          eventTypes: [
+            { id: 'g1', title: 'System Design Interview', description: 'Large-scale system design assessment', url: '/google/system-design', durations: [60], bookingsToday: 6, isActive: true },
+            { id: 'g2', title: 'Coding Interview', description: 'Algorithm and data structure interview', url: '/google/coding', durations: [45], bookingsToday: 10, isActive: true },
+            { id: 'g3', title: 'Behavioral Interview', description: 'Leadership and behavioral assessment', url: '/google/behavioral', durations: [45], bookingsToday: 4, isActive: true },
+            { id: 'g4', title: 'Team Collaboration', description: 'Cross-team collaboration meeting', url: '/google/collaboration', durations: [30], bookingsToday: 15, isActive: true },
+            { id: 'g5', title: 'Research Discussion', description: 'AI/ML research and development talk', url: '/google/research', durations: [60], bookingsToday: 2, isActive: true },
+            { id: 'g6', title: 'Product Strategy', description: 'Product roadmap and strategy session', url: '/google/strategy', durations: [60], bookingsToday: 3, isActive: true },
+            { id: 'g7', title: 'Tech Talk', description: 'Internal technology presentation', url: '/google/tech-talk', durations: [45], bookingsToday: 1, isActive: true },
+            { id: 'g8', title: 'Peer Review', description: 'Peer performance and project review', url: '/google/peer-review', durations: [30], bookingsToday: 5, isActive: true },
+            { id: 'g9', title: 'Innovation Time', description: '20% time project discussion', url: '/google/innovation', durations: [45], bookingsToday: 1, isActive: true },
+            { id: 'g10', title: 'Onboarding Session', description: 'New hire onboarding and orientation', url: '/google/onboarding', durations: [90], bookingsToday: 2, isActive: true },
+          ]
+        },
+        {
+          id: 'tesla',
+          name: 'Tesla',
+          url: 'tesla',
+          avatar: 'T',
+          eventTypes: [
+            { id: 't1', title: 'Engineering Review', description: 'Vehicle engineering design review', url: '/tesla/eng-review', durations: [60], bookingsToday: 4, isActive: true },
+            { id: 't2', title: 'Safety Assessment', description: 'Vehicle safety protocol evaluation', url: '/tesla/safety', durations: [45], bookingsToday: 2, isActive: true },
+            { id: 't3', title: 'Manufacturing Sync', description: 'Production line coordination meeting', url: '/tesla/manufacturing', durations: [30], bookingsToday: 8, isActive: true },
+            { id: 't4', title: 'Battery Technology', description: 'Battery innovation and development', url: '/tesla/battery', durations: [60], bookingsToday: 3, isActive: true },
+            { id: 't5', title: 'Autopilot Review', description: 'Self-driving technology assessment', url: '/tesla/autopilot', durations: [90], bookingsToday: 1, isActive: true },
+            { id: 't6', title: 'Supply Chain', description: 'Supplier coordination and planning', url: '/tesla/supply-chain', durations: [45], bookingsToday: 6, isActive: true },
+            { id: 't7', title: 'Quality Control', description: 'Product quality assurance meeting', url: '/tesla/quality', durations: [30], bookingsToday: 7, isActive: true },
+            { id: 't8', title: 'Innovation Lab', description: 'R&D and future technology planning', url: '/tesla/innovation', durations: [120], bookingsToday: 0, isActive: true },
+            { id: 't9', title: 'Sustainability', description: 'Environmental impact and sustainability', url: '/tesla/sustainability', durations: [45], bookingsToday: 1, isActive: true },
+            { id: 't10', title: 'Market Analysis', description: 'Market research and competitive analysis', url: '/tesla/market', durations: [60], bookingsToday: 2, isActive: true },
+          ]
+        },
+        {
+          id: 'onehash',
+          name: 'OneHash',
+          url: 'onehash',
+          avatar: 'O',
+          eventTypes: [
+            { id: 'o1', title: 'Client Onboarding', description: 'New client setup and training session', url: '/onehash/onboarding', durations: [60], bookingsToday: 5, isActive: true },
+            { id: 'o2', title: 'Product Demo', description: 'ERP software demonstration', url: '/onehash/demo', durations: [45], bookingsToday: 8, isActive: true },
+            { id: 'o3', title: 'Implementation Planning', description: 'ERP implementation strategy meeting', url: '/onehash/implementation', durations: [90], bookingsToday: 2, isActive: true },
+            { id: 'o4', title: 'Support Session', description: 'Customer support and troubleshooting', url: '/onehash/support', durations: [30], bookingsToday: 12, isActive: true },
+            { id: 'o5', title: 'Feature Request', description: 'Product feature discussion and planning', url: '/onehash/feature', durations: [45], bookingsToday: 3, isActive: true },
+            { id: 'o6', title: 'Training Workshop', description: 'User training and best practices', url: '/onehash/training', durations: [120], bookingsToday: 1, isActive: true },
+            { id: 'o7', title: 'Sales Consultation', description: 'Pre-sales consultation and needs analysis', url: '/onehash/sales', durations: [45], bookingsToday: 6, isActive: true },
+            { id: 'o8', title: 'Integration Planning', description: 'Third-party integration discussion', url: '/onehash/integration', durations: [60], bookingsToday: 1, isActive: true },
+            { id: 'o9', title: 'Business Review', description: 'Quarterly business review meeting', url: '/onehash/review', durations: [90], bookingsToday: 0, isActive: true },
+            { id: 'o10', title: 'Custom Development', description: 'Custom feature development discussion', url: '/onehash/custom', durations: [60], bookingsToday: 2, isActive: true },
+          ]
+        }
+      ];
 
-      const savedTeams = localStorage.getItem('teams');
-      const teams = savedTeams ? JSON.parse(savedTeams) : [];
-      
-      // Convert saved teams to the format we need
-      const formattedTeams = teams.map((team: any) => ({
-        ...team,
-        eventTypes: team.eventTypes || []
-      }));
-
-      setTeamEvents([personalTeam, ...formattedTeams]);
+      setTeamEvents(defaultTeams);
     };
 
     loadTeams();
-
-    // Listen for team updates
-    const handleTeamsUpdate = () => {
-      loadTeams();
-    };
-
-    window.addEventListener('teamsUpdated', handleTeamsUpdate);
-    return () => {
-      window.removeEventListener('teamsUpdated', handleTeamsUpdate);
-    };
   }, []);
 
   const currentTeam = teamEvents.find(t => t.id === selectedTeam) || teamEvents[0];
@@ -101,9 +147,7 @@ export const EventTypes = () => {
 
   // Initialize event states
   useEffect(() => {
-    const initialStates: {
-      [key: string]: boolean;
-    } = {};
+    const initialStates: {[key: string]: boolean} = {};
     teamEvents.forEach(team => {
       team.eventTypes?.forEach(event => {
         initialStates[event.id] = event.isActive;
@@ -129,30 +173,13 @@ export const EventTypes = () => {
       isActive: true
     };
 
-    // Update team events state
-    setTeamEvents(prevTeams => {
-      const updatedTeams = prevTeams.map(team => 
-        team.id === selectedTeam 
-          ? { ...team, eventTypes: [...(team.eventTypes || []), newEvent] }
-          : team
-      );
-      
-      // If it's not personal team, save to localStorage
-      if (selectedTeam !== 'personal') {
-        const teamsToSave = updatedTeams.slice(1); // Remove personal team
-        localStorage.setItem('teams', JSON.stringify(teamsToSave));
-        window.dispatchEvent(new Event('teamsUpdated'));
-      }
-      
-      return updatedTeams;
-    });
+    setTeamEvents(prevTeams => prevTeams.map(team => 
+      team.id === selectedTeam 
+        ? { ...team, eventTypes: [...(team.eventTypes || []), newEvent] }
+        : team
+    ));
 
-    // Initialize event state
-    setEventStates(prev => ({
-      ...prev,
-      [newEventId]: true
-    }));
-
+    setEventStates(prev => ({ ...prev, [newEventId]: true }));
     setIsCreateModalOpen(false);
     navigate(`/event/${newEventId}/setup`);
   };
@@ -164,34 +191,14 @@ export const EventTypes = () => {
   };
 
   const handleCopyPublicLink = () => {
-    const publicUrl = selectedTeam === 'personal' ? 'https://cal.id/sanskar' : `https://cal.id/${currentTeam.url}`;
+    const publicUrl = selectedTeam === 'personal' ? 'https://cal.id/sanskar' : `https://cal.id/${currentTeam?.url}`;
     navigator.clipboard.writeText(publicUrl);
     setCopiedPublicLink(true);
     setTimeout(() => setCopiedPublicLink(false), 1500);
   };
 
   const handleToggleEvent = (eventId: string, checked: boolean) => {
-    setEventStates(prev => ({
-      ...prev,
-      [eventId]: checked
-    }));
-  };
-
-  const handleArrowClick = (eventId: string, direction: 'up' | 'down') => {
-    const eventIndex = filteredEvents.findIndex(e => e.id === eventId);
-    if (direction === 'up' && eventIndex > 0) {
-      const newEvents = [...filteredEvents];
-      [newEvents[eventIndex], newEvents[eventIndex - 1]] = [newEvents[eventIndex - 1], newEvents[eventIndex]];
-      setTeamEvents(prevTeams => prevTeams.map(team => 
-        team.id === selectedTeam ? { ...team, eventTypes: newEvents } : team
-      ));
-    } else if (direction === 'down' && eventIndex < filteredEvents.length - 1) {
-      const newEvents = [...filteredEvents];
-      [newEvents[eventIndex], newEvents[eventIndex + 1]] = [newEvents[eventIndex + 1], newEvents[eventIndex]];
-      setTeamEvents(prevTeams => prevTeams.map(team => 
-        team.id === selectedTeam ? { ...team, eventTypes: newEvents } : team
-      ));
-    }
+    setEventStates(prev => ({ ...prev, [eventId]: checked }));
   };
 
   const handleMenuAction = (action: string, eventId: string) => {
@@ -222,54 +229,32 @@ export const EventTypes = () => {
 
   return (
     <div className="px-6 pt-3 pb-6 space-y-4 w-full max-w-full">
-      {/* Team Selector */}
-      <div className="flex items-center justify-between space-x-4">
-        <div className="flex items-center space-x-4 flex-1 min-w-0 rounded-md">
-          <div className="flex items-center bg-muted/50 rounded-lg p-1 flex-shrink-0">
-            <button 
-              onClick={() => setSelectedTeam('personal')} 
-              className={`flex items-center px-3 py-1.5 text-sm font-medium rounded-md transition-all whitespace-nowrap ${
-                selectedTeam === 'personal' 
-                  ? 'bg-muted text-foreground shadow-sm' 
-                  : 'text-muted-foreground hover:text-foreground'
+      {/* Tab Navigation */}
+      <div className="border-b border-border">
+        <nav className="flex space-x-8" aria-label="Tabs">
+          {teamEvents.map((team) => (
+            <button
+              key={team.id}
+              onClick={() => setSelectedTeam(team.id)}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+                selectedTeam === team.id
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
               }`}
             >
-              <div className={`h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium mr-2 ${
-                selectedTeam === 'personal' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-muted-foreground/20'
-              }`}>
-                {teamEvents[0]?.avatar}
-              </div>
-              <span className="truncate">Sanskar Yadav</span>
-            </button>
-          </div>
-          
-          <div className="w-px h-5 bg-border flex-shrink-0"></div>
-          
-          <div className="flex space-x-2 flex-1 overflow-x-auto scrollbar-none">
-            {teamEvents.slice(1).map(team => (
-              <button 
-                key={team.id} 
-                onClick={() => setSelectedTeam(team.id)} 
-                className={`flex items-center px-3 py-1.5 text-sm font-medium rounded-md whitespace-nowrap transition-all flex-shrink-0 min-w-fit ${
+              <div className="flex items-center space-x-2">
+                <div className={`h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium ${
                   selectedTeam === team.id 
-                    ? 'bg-primary text-primary-foreground shadow-sm' 
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
-                }`}
-              >
-                <div className={`h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium mr-2 ${
-                  selectedTeam === team.id 
-                    ? 'bg-primary-foreground text-primary' 
+                    ? 'bg-primary text-primary-foreground' 
                     : 'bg-muted-foreground/20'
                 }`}>
                   {team.avatar}
                 </div>
-                <span className="truncate">{team.name}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+                <span>{team.name}</span>
+              </div>
+            </button>
+          ))}
+        </nav>
       </div>
 
       {/* Search Bar and New Button */}
@@ -290,6 +275,7 @@ export const EventTypes = () => {
             <button 
               onClick={handleCopyPublicLink} 
               className="flex items-center space-x-2 px-3 py-1.5 bg-muted/70 text-muted-foreground text-sm rounded-md hover:bg-muted transition-colors"
+              title="Copy public link"
             >
               <span className="text-sm">
                 {selectedTeam === 'personal' ? 'cal.id/sanskar' : `cal.id/${currentTeam?.url}`}
@@ -304,38 +290,13 @@ export const EventTypes = () => {
           </div>
         </div>
         
-        <div className="relative">
-          <button 
-            onClick={() => setShowNewDropdown(!showNewDropdown)} 
-            className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            New
-          </button>
-          
-          {showNewDropdown && (
-            <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-10">
-              <div className="py-1">
-                {teamEvents.map(team => (
-                  <button 
-                    key={team.id} 
-                    onClick={() => {
-                      setSelectedTeam(team.id);
-                      setIsCreateModalOpen(true);
-                      setShowNewDropdown(false);
-                    }} 
-                    className="w-full text-left px-3 py-2 text-sm hover:bg-muted transition-colors flex items-center"
-                  >
-                    <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium mr-2">
-                      {team.avatar}
-                    </div>
-                    {team.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        <button 
+          onClick={() => setIsCreateModalOpen(true)}
+          className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          New
+        </button>
       </div>
 
       {/* Event Types List */}
@@ -349,30 +310,6 @@ export const EventTypes = () => {
               onMouseEnter={() => setHoveredEvent(event.id)} 
               onMouseLeave={() => setHoveredEvent(null)}
             >
-              {/* Move buttons */}
-              {hoveredEvent === event.id && (
-                <div className="absolute -left-6 top-1/2 transform -translate-y-1/2 flex flex-col space-y-1 z-10 animate-scale-in">
-                  <button 
-                    onClick={e => {
-                      e.stopPropagation();
-                      handleArrowClick(event.id, 'up');
-                    }} 
-                    className="p-1.5 bg-background border border-border rounded-lg hover:bg-muted shadow-md transition-all transform hover:scale-105"
-                  >
-                    <ArrowUp className="h-3 w-3 text-muted-foreground" />
-                  </button>
-                  <button 
-                    onClick={e => {
-                      e.stopPropagation();
-                      handleArrowClick(event.id, 'down');
-                    }} 
-                    className="p-1.5 bg-background border border-border rounded-lg hover:bg-muted shadow-md transition-all transform hover:scale-105"
-                  >
-                    <ArrowDown className="h-3 w-3 text-muted-foreground" />
-                  </button>
-                </div>
-              )}
-
               <div 
                 onClick={() => handleEventClick(event.id)} 
                 className={`bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer ${
@@ -385,6 +322,11 @@ export const EventTypes = () => {
                       <h3 className="font-semibold text-foreground text-base">
                         {event.title}
                       </h3>
+                      <Switch 
+                        checked={isEventActive} 
+                        onCheckedChange={checked => handleToggleEvent(event.id, checked)}
+                        onClick={e => e.stopPropagation()}
+                      />
                       <div className="relative">
                         <button 
                           onClick={e => {
@@ -392,6 +334,7 @@ export const EventTypes = () => {
                             handleCopyLink(event.id, event.url);
                           }} 
                           className="flex items-center space-x-2 px-2 py-1 bg-muted/70 text-muted-foreground text-sm rounded hover:bg-muted transition-colors"
+                          title="Copy event link"
                         >
                           <Copy className="h-3 w-3" />
                           <span className="text-sm">Copy</span>
@@ -414,17 +357,17 @@ export const EventTypes = () => {
                   </div>
                   
                   <div className="flex items-center space-x-2 ml-4" onClick={e => e.stopPropagation()}>
-                    <Switch 
-                      checked={isEventActive} 
-                      onCheckedChange={checked => handleToggleEvent(event.id, checked)} 
-                    />
-                    <button className="p-1.5 hover:bg-muted rounded-md transition-colors">
-                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    <button 
+                      className="p-1.5 hover:bg-muted rounded-md transition-colors"
+                      title="Preview event"
+                    >
+                      <ExternalLink className="h-4 w-4 text-muted-foreground" />
                     </button>
                     <div className="relative">
                       <button 
                         onClick={() => setShowMoreOptions(showMoreOptions === event.id ? null : event.id)} 
                         className="p-1.5 hover:bg-muted rounded-md transition-colors"
+                        title="More options"
                       >
                         <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
                       </button>
@@ -435,6 +378,7 @@ export const EventTypes = () => {
                             <button 
                               onClick={() => handleMenuAction('edit', event.id)} 
                               className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                              title="Edit event"
                             >
                               <Edit className="h-4 w-4 mr-2" />
                               Edit
@@ -442,6 +386,7 @@ export const EventTypes = () => {
                             <button 
                               onClick={() => handleMenuAction('duplicate', event.id)} 
                               className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                              title="Duplicate event"
                             >
                               <CopyIcon className="h-4 w-4 mr-2" />
                               Duplicate
@@ -449,6 +394,7 @@ export const EventTypes = () => {
                             <button 
                               onClick={() => handleMenuAction('embed', event.id)} 
                               className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                              title="Embed event"
                             >
                               <Code className="h-4 w-4 mr-2" />
                               Embed
@@ -456,6 +402,7 @@ export const EventTypes = () => {
                             <button 
                               onClick={() => handleMenuAction('delete', event.id)} 
                               className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors text-destructive"
+                              title="Delete event"
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
                               Delete

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Settings, Clock, Shield, Zap, RotateCcw, Smartphone, Workflow, Webhook } from 'lucide-react';
+import { Switch } from '../components/ui/switch';
 import { EventSetup } from '../components/EventSetup';
 import { EventAvailability } from '../components/EventAvailability';
 import { EventLimits } from '../components/EventLimits';
@@ -10,8 +11,6 @@ import { EventApps } from '../components/EventApps';
 import { EventWorkflows } from '../components/EventWorkflows';
 import { EventWebhooks } from '../components/EventWebhooks';
 import { RecurringEvent } from '../components/RecurringEvent';
-import { Header } from '../components/Header';
-import { mockTeams } from '../data/mockData';
 
 const tabs = [
   { id: 'setup', name: 'Event Setup', icon: Settings },
@@ -30,11 +29,11 @@ export const EditEvent = () => {
   const [eventEnabled, setEventEnabled] = useState(true);
   const navigate = useNavigate();
 
-  // Find the actual event from mockData using the eventId from URL
-  const currentEvent = mockTeams.flatMap(team => team.eventTypes).find(event => event.id === eventId);
+  // Mock event data - in real app this would come from an API
+  const eventTitle = 'Sample Event Type';
 
   const handleBack = () => {
-    navigate('/');
+    navigate('/event-types');
   };
 
   const renderTabContent = () => {
@@ -62,49 +61,57 @@ export const EditEvent = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header 
-        eventData={{
-          title: currentEvent?.title || 'Event Not Found',
-          url: currentEvent?.url?.split('/').pop() || 'unknown',
-          enabled: eventEnabled,
-          onEnabledChange: setEventEnabled
-        }}
-      />
-
-      <div className="flex w-full">
-        {/* Sidebar */}
-        <div className="w-56 bg-card border-r border-border min-h-screen sticky top-0">
-          <div className="p-4">
+      {/* Header */}
+      <header className="h-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+        <div className="h-full px-8 flex items-center justify-between w-full">
+          <div className="flex items-center space-x-4">
             <button 
               onClick={handleBack} 
-              className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
+              className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+              title="Back to Event Types"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Event Types
             </button>
+            <div className="w-px h-5 bg-border"></div>
+            <h1 className="text-xl font-semibold text-foreground">{eventTitle}</h1>
           </div>
-          <nav className="px-4 pb-4 space-y-1">
+          
+          <div className="flex items-center space-x-2">
+            <Switch checked={eventEnabled} onCheckedChange={setEventEnabled} />
+            <span className="text-sm text-muted-foreground">
+              {eventEnabled ? 'Enabled' : 'Disabled'}
+            </span>
+          </div>
+        </div>
+      </header>
+
+      {/* Horizontal Tabs */}
+      <div className="bg-background border-b border-border">
+        <div className="px-8">
+          <nav className="flex space-x-8" aria-label="Tabs">
             {tabs.map((tabItem) => (
               <button
                 key={tabItem.id}
                 onClick={() => setActiveTab(tabItem.id)}
-                className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors flex items-center space-x-2 ${
                   activeTab === tabItem.id
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
                 }`}
+                title={tabItem.name}
               >
-                <tabItem.icon className="mr-2 h-4 w-4" />
-                {tabItem.name}
+                <tabItem.icon className="h-4 w-4" />
+                <span>{tabItem.name}</span>
               </button>
             ))}
           </nav>
         </div>
+      </div>
 
-        {/* Main Content */}
-        <div className="flex-1 bg-background">
-          {renderTabContent()}
-        </div>
+      {/* Main Content */}
+      <div className="bg-background">
+        {renderTabContent()}
       </div>
     </div>
   );

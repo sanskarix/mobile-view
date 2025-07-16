@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -34,6 +33,7 @@ import SchedulingComingSoon from "./pages/SchedulingComingSoon";
 import { Teams } from "./pages/Teams";
 import { RoutingForms } from "./pages/RoutingForms";
 import { EditRoutingForm } from "./pages/EditRoutingForm";
+import Home from "./pages/Home";
 
 const queryClient = new QueryClient();
 
@@ -45,7 +45,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<EventTypes />} />
+            <Route index element={<Home />} />
+            <Route path="event-types" element={<EventTypes />} />
             <Route path="event/:eventId/:tab" element={<EditEvent />} />
             <Route path="bookings" element={<Bookings />} />
             <Route path="availability" element={<Availability />} />
