@@ -12,8 +12,6 @@ export const Sidebar = ({
   darkMode,
   setDarkMode
 }: SidebarProps) => {
-  const [showHelpDropdown, setShowHelpDropdown] = useState(false);
-
   const navigation = [
     {
       name: 'Home',
@@ -62,28 +60,9 @@ export const Sidebar = ({
     }
   ];
 
-  const handleDarkModeToggle = () => {
-    setDarkMode(!darkMode);
-  };
-
-  const handleHelpClick = (action: string) => {
-    setShowHelpDropdown(false);
-    switch (action) {
-      case 'discord':
-        window.open('https://discord.gg/cal', '_blank');
-        break;
-      case 'docs':
-        window.open('https://docs.cal.com', '_blank');
-        break;
-      case 'contact':
-        window.location.href = 'mailto:support@cal.id';
-        break;
-    }
-  };
-
   return (
     <div 
-      className="fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border flex flex-col"
+      className="fixed inset-y-0 left-0 z-50 w-64 bg-card flex flex-col"
       style={{
         background: 'linear-gradient(#eff6ff, #eef2ff, #faf5ff)'
       }}
@@ -113,52 +92,17 @@ export const Sidebar = ({
       </nav>
       
       {/* Bottom section */}
-      <div className="px-4 py-4 border-t border-border/50 space-y-3">
-        {/* Help button with dropdown */}
-        <div className="relative">
-          <button 
-            onClick={() => setShowHelpDropdown(!showHelpDropdown)}
-            className="flex items-center w-full px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors group"
-            title="Help & Support"
-          >
-            <HelpCircle className="mr-3 h-4 w-4" />
-            Help & Support
-          </button>
-          
-          {showHelpDropdown && (
-            <div className="absolute bottom-full left-0 mb-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-10">
-              <div className="py-1">
-                <button 
-                  onClick={() => handleHelpClick('discord')}
-                  className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                >
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Community Support
-                </button>
-                <button 
-                  onClick={() => handleHelpClick('docs')}
-                  className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                >
-                  <FileIcon className="h-4 w-4 mr-2" />
-                  Documentation
-                </button>
-                <button 
-                  onClick={() => handleHelpClick('contact')}
-                  className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                >
-                  <Mail className="h-4 w-4 mr-2" />
-                  Contact Us
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-
+      <div className="px-4 py-4 space-y-3">
         {/* Footer links */}
         <div className="space-y-2 text-xs text-muted-foreground">
-          <button className="block hover:text-foreground transition-colors">Privacy Policy</button>
-          <button className="block hover:text-foreground transition-colors">Terms of Service</button>
-          <span className="block">Version 1.0.0</span>
+          <div className="flex items-center justify-center space-x-2">
+            <button className="hover:text-foreground transition-colors">Privacy Policy</button>
+            <span>•</span>
+            <button className="hover:text-foreground transition-colors">Terms of Service</button>
+          </div>
+          <div className="text-center">
+            <span className="block">Version 1.0.0</span>
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown, Moon, HelpCircle, MapPin, LogOut, User, Settings, ExternalLink } from 'lucide-react';
+import { ChevronDown, Moon, HelpCircle, MapPin, LogOut, User, Settings, ExternalLink, MessageSquare, FileIcon, Mail } from 'lucide-react';
 import { Switch } from './ui/switch';
 import { useLocation } from 'react-router-dom';
 
@@ -19,6 +19,7 @@ export const Header = ({
   eventData
 }: HeaderProps) => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [showHelpDropdown, setShowHelpDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
@@ -26,17 +27,18 @@ export const Header = ({
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setShowProfileDropdown(false);
+        setShowHelpDropdown(false);
       }
     };
 
-    if (showProfileDropdown) {
+    if (showProfileDropdown || showHelpDropdown) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showProfileDropdown]);
+  }, [showProfileDropdown, showHelpDropdown]);
 
   const isHomePage = location.pathname === '/';
   const isEventTypesPage = location.pathname === '/event-types';
@@ -54,6 +56,22 @@ export const Header = ({
   };
 
   const pageContent = getPageContent();
+
+  const handleHelpClick = (action: string) => {
+    setShowHelpDropdown(false);
+    setShowProfileDropdown(false);
+    switch (action) {
+      case 'discord':
+        window.open('https://discord.gg/cal', '_blank');
+        break;
+      case 'docs':
+        window.open('https://docs.cal.com', '_blank');
+        break;
+      case 'contact':
+        window.location.href = 'mailto:support@cal.id';
+        break;
+    }
+  };
 
   return (
     <header className="h-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
@@ -131,16 +149,49 @@ export const Header = ({
                     <MapPin className="h-4 w-4 mr-2" />
                     Roadmap
                   </button>
-                  <button 
-                    onClick={() => {
-                      window.open('https://docs.cal.com', '_blank');
-                      setShowProfileDropdown(false);
-                    }}
-                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                  >
-                    <HelpCircle className="h-4 w-4 mr-2" />
-                    Help
-                  </button>
+                  
+                  {/* Help & Support submenu */}
+                  <div className="relative">
+                    <button 
+                      onClick={() => setShowHelpDropdown(!showHelpDropdown)}
+                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors justify-between"
+                    >
+                      <div className="flex items-center">
+                        <HelpCircle className="h-4 w-4 mr-2" />
+                        Help & Support
+                      </div>
+                      <ChevronDown className="h-3 w-3" />
+                    </button>
+                    
+                    {showHelpDropdown && (
+                      <div className="absolute left-full top-0 ml-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-20">
+                        <div className="py-1">
+                          <button 
+                            onClick={() => handleHelpClick('discord')}
+                            className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                          >
+                            <MessageSquare className="h-4 w-4 mr-2" />
+                            Community Support
+                          </button>
+                          <button 
+                            onClick={() => handleHelpClick('docs')}
+                            className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                          >
+                            <FileIcon className="h-4 w-4 mr-2" />
+                            Documentation
+                          </button>
+                          <button 
+                            onClick={() => handleHelpClick('contact')}
+                            className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                          >
+                            <Mail className="h-4 w-4 mr-2" />
+                            Contact Us
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
                   <div className="border-t border-border my-1"></div>
                   <button 
                     onClick={() => {

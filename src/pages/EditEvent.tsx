@@ -71,24 +71,29 @@ export const EditEvent = () => {
               title="Back to Event Types"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Event Types
             </button>
-            <div className="w-px h-5 bg-border"></div>
             <h1 className="text-xl font-semibold text-foreground">{eventTitle}</h1>
           </div>
           
-          <div className="flex items-center space-x-2">
-            <Switch checked={eventEnabled} onCheckedChange={setEventEnabled} />
-            <span className="text-sm text-muted-foreground">
-              {eventEnabled ? 'Enabled' : 'Disabled'}
-            </span>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <Switch checked={eventEnabled} onCheckedChange={setEventEnabled} />
+              <span className="text-sm text-muted-foreground">
+                {eventEnabled ? 'Enabled' : 'Disabled'}
+              </span>
+            </div>
+            
+            {/* Profile */}
+            <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
+              <span className="text-sm font-medium text-primary-foreground">SY</span>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Horizontal Tabs */}
+      {/* Centered Horizontal Tabs */}
       <div className="bg-background border-b border-border">
-        <div className="px-8">
+        <div className="flex justify-center">
           <nav className="flex space-x-8" aria-label="Tabs">
             {tabs.map((tabItem) => (
               <button
@@ -109,9 +114,11 @@ export const EditEvent = () => {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="bg-background">
-        {renderTabContent()}
+      {/* Centered Main Content */}
+      <div className="bg-background flex justify-center">
+        <div className="w-full max-w-4xl">
+          {renderTabContent()}
+        </div>
       </div>
     </div>
   );

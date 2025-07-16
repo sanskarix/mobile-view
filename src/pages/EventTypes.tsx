@@ -1,9 +1,10 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Plus, MoreHorizontal, ExternalLink, Edit, Copy as CopyIcon, Code, Trash2, ArrowUp, ArrowDown, Search, Copy } from 'lucide-react';
+import { Plus, MoreHorizontal, ExternalLink, Edit, Copy as CopyIcon, Code, Trash2, ArrowUp, ArrowDown, Search, Copy, GripVertical } from 'lucide-react';
 import { CreateEventModal } from '../components/CreateEventModal';
 import { useNavigate } from 'react-router-dom';
 import { Switch } from '../components/ui/switch';
+import { Header } from '../components/Header';
 
 interface EventType {
   id: string;
@@ -26,14 +27,12 @@ interface Team {
 export const EventTypes = () => {
   const [selectedTeam, setSelectedTeam] = useState('personal');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [showNewDropdown, setShowNewDropdown] = useState(false);
-  const [hoveredEvent, setHoveredEvent] = useState<string | null>(null);
-  const [showMoreOptions, setShowMoreOptions] = useState<string | null>(null);
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
   const [copiedPublicLink, setCopiedPublicLink] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [eventStates, setEventStates] = useState<{[key: string]: boolean}>({});
   const [teamEvents, setTeamEvents] = useState<Team[]>([]);
+  const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const navigate = useNavigate();
 
   // Load teams from localStorage
@@ -52,8 +51,8 @@ export const EventTypes = () => {
             { id: 'p3', title: '1 Hour Consultation', description: 'In-depth consultation and planning session', url: '/sanskar/consultation', durations: [60], bookingsToday: 2, isActive: true },
             { id: 'p4', title: 'Coffee Chat', description: 'Informal coffee meeting for networking', url: '/sanskar/coffee', durations: [30], bookingsToday: 1, isActive: true },
             { id: 'p5', title: 'Demo Session', description: 'Product demonstration and Q&A', url: '/sanskar/demo', durations: [45], bookingsToday: 4, isActive: true },
-            { id: 'p6', title: 'Interview', description: 'Job interview and candidate assessment', url: '/sanskar/interview', durations: [60], bookingsToday: 0, isActive: true },
-            { id: 'p7', title: 'Mentorship', description: 'One-on-one mentoring session', url: '/sanskar/mentorship', durations: [45], bookingsToday: 2, isActive: true },
+            { id: 'p6', title: 'Job Interview', description: 'Job interview and candidate assessment', url: '/sanskar/interview', durations: [60], bookingsToday: 0, isActive: true },
+            { id: 'p7', title: 'Mentorship Session', description: 'One-on-one mentoring and guidance', url: '/sanskar/mentorship', durations: [45], bookingsToday: 2, isActive: true },
             { id: 'p8', title: 'Project Review', description: 'Review project progress and feedback', url: '/sanskar/review', durations: [30], bookingsToday: 1, isActive: true },
             { id: 'p9', title: 'Strategy Planning', description: 'Strategic planning and roadmap discussion', url: '/sanskar/strategy', durations: [60], bookingsToday: 0, isActive: true },
             { id: 'p10', title: 'Quick Sync', description: 'Brief sync-up and status update', url: '/sanskar/sync', durations: [15], bookingsToday: 3, isActive: true },
@@ -156,7 +155,7 @@ export const EventTypes = () => {
     setEventStates(initialStates);
   }, [teamEvents]);
 
-  const handleEventClick = (eventId: string) => {
+  const handleEventEdit = (eventId: string) => {
     navigate(`/event/${eventId}/setup`);
   };
 
@@ -201,26 +200,13 @@ export const EventTypes = () => {
     setEventStates(prev => ({ ...prev, [eventId]: checked }));
   };
 
-  const handleMenuAction = (action: string, eventId: string) => {
-    setShowMoreOptions(null);
-    switch (action) {
-      case 'edit':
-        handleEventClick(eventId);
-        break;
-      case 'duplicate':
-        console.log('Duplicating event', eventId);
-        break;
-      case 'embed':
-        console.log('Embed event', eventId);
-        break;
-      case 'delete':
-        setTeamEvents(prevTeams => prevTeams.map(team => 
-          team.id === selectedTeam 
-            ? { ...team, eventTypes: team.eventTypes.filter(e => e.id !== eventId) }
-            : team
-        ));
-        break;
-    }
+  const handleDragStart = (e: React.DragEvent, eventId: string) => {
+    setDraggedItem(eventId);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragEnd = () => {
+    setDraggedItem(null);
   };
 
   if (!teamEvents.length) {
@@ -228,204 +214,213 @@ export const EventTypes = () => {
   }
 
   return (
-    <div className="px-6 pt-3 pb-6 space-y-4 w-full max-w-full">
-      {/* Tab Navigation */}
-      <div className="border-b border-border">
-        <nav className="flex space-x-8" aria-label="Tabs">
-          {teamEvents.map((team) => (
+    <div className="min-h-screen bg-background">
+      <Header showEventTypesHeader={true} />
+      
+      {/* Horizontal Tabs */}
+      <div className="bg-background border-b border-border">
+        <div className="px-8">
+          <div className="flex items-center">
+            {/* Personal tab */}
             <button
-              key={team.id}
-              onClick={() => setSelectedTeam(team.id)}
-              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
-                selectedTeam === team.id
+              onClick={() => setSelectedTeam('personal')}
+              className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+                selectedTeam === 'personal'
                   ? 'border-primary text-primary'
                   : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
               }`}
             >
               <div className="flex items-center space-x-2">
                 <div className={`h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium ${
-                  selectedTeam === team.id 
+                  selectedTeam === 'personal' 
                     ? 'bg-primary text-primary-foreground' 
                     : 'bg-muted-foreground/20'
                 }`}>
-                  {team.avatar}
+                  S
                 </div>
-                <span>{team.name}</span>
+                <span>Sanskar Yadav</span>
               </div>
             </button>
-          ))}
-        </nav>
-      </div>
 
-      {/* Search Bar and New Button */}
-      <div className="flex items-center justify-between space-x-4">
-        <div className="flex items-center space-x-4 flex-1">
-          <div className="relative w-80">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <input 
-              type="text" 
-              placeholder="Search events..." 
-              value={searchQuery} 
-              onChange={e => setSearchQuery(e.target.value)} 
-              className="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm" 
-            />
-          </div>
-          
-          <div className="relative">
-            <button 
-              onClick={handleCopyPublicLink} 
-              className="flex items-center space-x-2 px-3 py-1.5 bg-muted/70 text-muted-foreground text-sm rounded-md hover:bg-muted transition-colors"
-              title="Copy public link"
-            >
-              <span className="text-sm">
-                {selectedTeam === 'personal' ? 'cal.id/sanskar' : `cal.id/${currentTeam?.url}`}
-              </span>
-              <Copy className="h-4 w-4" />
-            </button>
-            {copiedPublicLink && (
-              <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-foreground text-background text-xs rounded animate-fade-in whitespace-nowrap">
-                Copied
+            {/* Separator */}
+            <div className="h-6 w-px bg-border mx-4"></div>
+
+            {/* Team tabs - scrollable */}
+            <div className="flex-1 overflow-x-auto">
+              <div className="flex space-x-0">
+                {teamEvents.filter(team => team.id !== 'personal').map((team) => (
+                  <button
+                    key={team.id}
+                    onClick={() => setSelectedTeam(team.id)}
+                    className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+                      selectedTeam === team.id
+                        ? 'border-primary text-primary'
+                        : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-2">
+                      <div className={`h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium ${
+                        selectedTeam === team.id 
+                          ? 'bg-primary text-primary-foreground' 
+                          : 'bg-muted-foreground/20'
+                      }`}>
+                        {team.avatar}
+                      </div>
+                      <span>{team.name}</span>
+                    </div>
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
           </div>
         </div>
-        
-        <button 
-          onClick={() => setIsCreateModalOpen(true)}
-          className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          New
-        </button>
       </div>
 
-      {/* Event Types List */}
-      <div className="space-y-2">
-        {filteredEvents.map(event => {
-          const isEventActive = eventStates[event.id] ?? event.isActive;
-          return (
-            <div 
-              key={event.id} 
-              className="relative group animate-fade-in" 
-              onMouseEnter={() => setHoveredEvent(event.id)} 
-              onMouseLeave={() => setHoveredEvent(null)}
-            >
-              <div 
-                onClick={() => handleEventClick(event.id)} 
-                className={`bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer ${
-                  !isEventActive ? 'opacity-50' : ''
-                }`}
+      <div className="px-8 pt-6 pb-6 space-y-4 w-full max-w-full">
+        {/* Search Bar and New Button */}
+        <div className="flex items-center justify-between space-x-4">
+          <div className="flex items-center space-x-4 flex-1">
+            <div className="relative w-80">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <input 
+                type="text" 
+                placeholder="Search events..." 
+                value={searchQuery} 
+                onChange={e => setSearchQuery(e.target.value)} 
+                className="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm" 
+              />
+            </div>
+            
+            <div className="relative">
+              <button 
+                onClick={handleCopyPublicLink} 
+                className="flex items-center space-x-2 px-3 py-1.5 bg-muted/70 text-muted-foreground text-sm rounded-md hover:bg-muted transition-colors"
+                title="Copy public link"
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center mb-2 space-x-3">
-                      <h3 className="font-semibold text-foreground text-base">
-                        {event.title}
-                      </h3>
+                <span className="text-sm">
+                  {selectedTeam === 'personal' ? 'cal.id/sanskar' : `cal.id/${currentTeam?.url}`}
+                </span>
+                <Copy className="h-4 w-4" />
+              </button>
+              {copiedPublicLink && (
+                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-foreground text-background text-xs rounded animate-fade-in whitespace-nowrap">
+                  Copied
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <button 
+            onClick={() => setIsCreateModalOpen(true)}
+            className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            New
+          </button>
+        </div>
+
+        {/* Event Types List */}
+        <div className="space-y-2">
+          {filteredEvents.map(event => {
+            const isEventActive = eventStates[event.id] ?? event.isActive;
+            return (
+              <div 
+                key={event.id} 
+                className="relative group animate-fade-in cursor-grab active:cursor-grabbing" 
+                draggable
+                onDragStart={(e) => handleDragStart(e, event.id)}
+                onDragEnd={handleDragEnd}
+              >
+                <div className={`bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm ${
+                  !isEventActive ? 'opacity-50' : ''
+                } ${draggedItem === event.id ? 'opacity-50' : ''}`}>
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start space-x-3 flex-1">
+                      <GripVertical className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center mb-2 space-x-3">
+                          <h3 className="font-semibold text-foreground text-base">
+                            {event.title}
+                          </h3>
+                          
+                          {/* URL box with preview and copy */}
+                          <div className="flex items-center space-x-1 px-2 py-1 bg-muted/50 rounded text-xs text-muted-foreground">
+                            <span>cal.id{event.url}</span>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open(`https://cal.id${event.url}`, '_blank');
+                              }}
+                              className="p-1 hover:bg-muted rounded"
+                              title="Preview event"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                            </button>
+                            <div className="relative">
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleCopyLink(event.id, event.url);
+                                }} 
+                                className="p-1 hover:bg-muted rounded"
+                                title="Copy event link"
+                              >
+                                <Copy className="h-3 w-3" />
+                              </button>
+                              {copiedLink === event.id && (
+                                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-foreground text-background text-xs rounded animate-fade-in whitespace-nowrap">
+                                  Copied
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{event.description}</p>
+                        <div className="flex items-center">
+                          {event.durations?.map(duration => (
+                            <span key={duration} className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-sm rounded mr-2">
+                              {duration}m
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center space-x-3 ml-4">
                       <Switch 
                         checked={isEventActive} 
                         onCheckedChange={checked => handleToggleEvent(event.id, checked)}
                         onClick={e => e.stopPropagation()}
                       />
-                      <div className="relative">
-                        <button 
-                          onClick={e => {
-                            e.stopPropagation();
-                            handleCopyLink(event.id, event.url);
-                          }} 
-                          className="flex items-center space-x-2 px-2 py-1 bg-muted/70 text-muted-foreground text-sm rounded hover:bg-muted transition-colors"
-                          title="Copy event link"
-                        >
-                          <Copy className="h-3 w-3" />
-                          <span className="text-sm">Copy</span>
-                        </button>
-                        {copiedLink === event.id && (
-                          <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-foreground text-background text-xs rounded animate-fade-in whitespace-nowrap">
-                            Copied
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{event.description}</p>
-                    <div className="flex items-center">
-                      {event.durations?.map(duration => (
-                        <span key={duration} className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-sm rounded mr-2">
-                          {duration}m
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2 ml-4" onClick={e => e.stopPropagation()}>
-                    <button 
-                      className="p-1.5 hover:bg-muted rounded-md transition-colors"
-                      title="Preview event"
-                    >
-                      <ExternalLink className="h-4 w-4 text-muted-foreground" />
-                    </button>
-                    <div className="relative">
-                      <button 
-                        onClick={() => setShowMoreOptions(showMoreOptions === event.id ? null : event.id)} 
-                        className="p-1.5 hover:bg-muted rounded-md transition-colors"
-                        title="More options"
-                      >
-                        <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
-                      </button>
                       
-                      {showMoreOptions === event.id && (
-                        <div className="absolute right-0 top-full mt-1 w-40 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-10">
-                          <div className="py-1">
-                            <button 
-                              onClick={() => handleMenuAction('edit', event.id)} 
-                              className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                              title="Edit event"
-                            >
-                              <Edit className="h-4 w-4 mr-2" />
-                              Edit
-                            </button>
-                            <button 
-                              onClick={() => handleMenuAction('duplicate', event.id)} 
-                              className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                              title="Duplicate event"
-                            >
-                              <CopyIcon className="h-4 w-4 mr-2" />
-                              Duplicate
-                            </button>
-                            <button 
-                              onClick={() => handleMenuAction('embed', event.id)} 
-                              className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                              title="Embed event"
-                            >
-                              <Code className="h-4 w-4 mr-2" />
-                              Embed
-                            </button>
-                            <button 
-                              onClick={() => handleMenuAction('delete', event.id)} 
-                              className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors text-destructive"
-                              title="Delete event"
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
-                            </button>
-                          </div>
-                        </div>
-                      )}
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEventEdit(event.id);
+                        }}
+                        className="p-1.5 hover:bg-muted rounded-md transition-colors"
+                        title="Edit event"
+                      >
+                        <Edit className="h-4 w-4 text-muted-foreground" />
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
 
-      <CreateEventModal 
-        isOpen={isCreateModalOpen} 
-        onClose={() => setIsCreateModalOpen(false)} 
-        teams={teamEvents} 
-        selectedTeam={selectedTeam} 
-        onCreateEvent={handleCreateEvent} 
-      />
+        <CreateEventModal 
+          isOpen={isCreateModalOpen} 
+          onClose={() => setIsCreateModalOpen(false)} 
+          teams={teamEvents} 
+          selectedTeam={selectedTeam} 
+          onCreateEvent={handleCreateEvent} 
+        />
+      </div>
     </div>
   );
 };

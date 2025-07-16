@@ -91,9 +91,14 @@ export const SettingsSidebar = () => {
   ];
 
   return (
-    <div className="fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border flex flex-col overflow-hidden">
+    <div 
+      className="fixed inset-y-0 left-0 z-50 w-64 bg-card flex flex-col overflow-hidden"
+      style={{
+        background: 'linear-gradient(#eff6ff, #eef2ff, #faf5ff)'
+      }}
+    >
       {/* Logo */}
-      <div className="flex h-20 items-center px-6 border-b border-border">
+      <div className="flex h-20 items-center px-6">
         <img 
           src="https://cdn.prod.website-files.com/5e53d34464688e6f5960a338/682f1bb36cedcb0cd39a7027_Onehash-CalId-logo%20icon.svg" 
           alt="Cal ID" 
