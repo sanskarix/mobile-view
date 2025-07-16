@@ -73,16 +73,16 @@ export const EditEvent = () => {
               <ArrowLeft className="h-4 w-4 mr-2" />
             </button>
             <h1 className="text-xl font-semibold text-foreground">{eventTitle}</h1>
-          </div>
-          
-          <div className="flex items-center space-x-4">
+            
             <div className="flex items-center space-x-2">
               <Switch checked={eventEnabled} onCheckedChange={setEventEnabled} />
               <span className="text-sm text-muted-foreground">
                 {eventEnabled ? 'Enabled' : 'Disabled'}
               </span>
             </div>
-            
+          </div>
+          
+          <div className="flex items-center space-x-4">
             {/* Profile */}
             <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
               <span className="text-sm font-medium text-primary-foreground">SY</span>
@@ -91,9 +91,9 @@ export const EditEvent = () => {
         </div>
       </header>
 
-      {/* Centered Horizontal Tabs */}
+      {/* Left-aligned Horizontal Tabs */}
       <div className="bg-background border-b border-border">
-        <div className="flex justify-center">
+        <div className="px-8">
           <nav className="flex space-x-8" aria-label="Tabs">
             {tabs.map((tabItem) => (
               <button
@@ -114,9 +114,9 @@ export const EditEvent = () => {
         </div>
       </div>
 
-      {/* Centered Main Content */}
-      <div className="bg-background flex justify-center">
-        <div className="w-full max-w-4xl">
+      {/* Content with consistent width */}
+      <div className="bg-background px-8">
+        <div className="w-full" style={{ maxWidth: '982.63px' }}>
           {renderTabContent()}
         </div>
       </div>

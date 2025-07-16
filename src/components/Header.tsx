@@ -73,6 +73,11 @@ export const Header = ({
     }
   };
 
+  const handleHelpAndSupportClick = () => {
+    setShowProfileDropdown(false);
+    setShowHelpDropdown(true);
+  };
+
   return (
     <header className="h-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <div className="h-full px-8 flex items-center justify-between w-full">
@@ -150,47 +155,14 @@ export const Header = ({
                     Roadmap
                   </button>
                   
-                  {/* Help & Support submenu */}
-                  <div className="relative">
-                    <button 
-                      onClick={() => setShowHelpDropdown(!showHelpDropdown)}
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors justify-between"
-                    >
-                      <div className="flex items-center">
-                        <HelpCircle className="h-4 w-4 mr-2" />
-                        Help & Support
-                      </div>
-                      <ChevronDown className="h-3 w-3" />
-                    </button>
-                    
-                    {showHelpDropdown && (
-                      <div className="absolute left-full top-0 ml-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-20">
-                        <div className="py-1">
-                          <button 
-                            onClick={() => handleHelpClick('discord')}
-                            className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                          >
-                            <MessageSquare className="h-4 w-4 mr-2" />
-                            Community Support
-                          </button>
-                          <button 
-                            onClick={() => handleHelpClick('docs')}
-                            className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                          >
-                            <FileIcon className="h-4 w-4 mr-2" />
-                            Documentation
-                          </button>
-                          <button 
-                            onClick={() => handleHelpClick('contact')}
-                            className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                          >
-                            <Mail className="h-4 w-4 mr-2" />
-                            Contact Us
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  {/* Help & Support */}
+                  <button 
+                    onClick={handleHelpAndSupportClick}
+                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <HelpCircle className="h-4 w-4 mr-2" />
+                    Help & Support
+                  </button>
                   
                   <div className="border-t border-border my-1"></div>
                   <button 
@@ -206,6 +178,34 @@ export const Header = ({
                   <button className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors text-destructive">
                     <LogOut className="h-4 w-4 mr-2" />
                     Sign Out
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {showHelpDropdown && (
+              <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-20">
+                <div className="py-1">
+                  <button 
+                    onClick={() => handleHelpClick('discord')}
+                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <MessageSquare className="h-4 w-4 mr-2" />
+                    Community Support
+                  </button>
+                  <button 
+                    onClick={() => handleHelpClick('docs')}
+                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <FileIcon className="h-4 w-4 mr-2" />
+                    Documentation
+                  </button>
+                  <button 
+                    onClick={() => handleHelpClick('contact')}
+                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <Mail className="h-4 w-4 mr-2" />
+                    Contact Us
                   </button>
                 </div>
               </div>
