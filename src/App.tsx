@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { EventTypes } from './pages/EventTypes';
-import { Bookings } from './pages/Bookings';
+import Bookings from './pages/Bookings';
 import { Availability } from './pages/Availability';
 import { EditAvailability } from './pages/EditAvailability';
 import { Teams } from './pages/Teams';
