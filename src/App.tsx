@@ -12,8 +12,8 @@ import { RoutingForms } from './pages/RoutingForms';
 import { EditRoutingForm } from './pages/EditRoutingForm';
 import { EditEvent } from './pages/EditEvent';
 import { Settings } from './pages/Settings';
-import { NotFound } from './pages/NotFound';
-import { SchedulingComingSoon } from './pages/SchedulingComingSoon';
+import NotFound from './pages/NotFound';
+import SchedulingComingSoon from './pages/SchedulingComingSoon';
 
 // Settings pages
 import { Profile } from './pages/settings/Profile';
