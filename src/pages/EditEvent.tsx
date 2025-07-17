@@ -135,7 +135,7 @@ export const EditEvent = () => {
       </div>
 
       {/* Content with proper alignment */}
-      <div className="bg-background py-[13px] mx-[3px] px-[79px] my-[18px]">
+      <div className="bg-background py-[13px] mx-[3px] px-[79px] my-[16px]">
         <div className="p-0 max-w-none mx-auto space-y-6">
           {renderTabContent()}
         </div>
