@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Mail, MessageSquare, Clock } from 'lucide-react';
 import { Switch } from './ui/switch';
-
 const workflowTemplates = [{
   id: 'sms-reminder',
   name: 'SMS Reminder - 10 minutes before',
@@ -27,24 +26,16 @@ const workflowTemplates = [{
   action: 'Send Email',
   timing: 'Immediately after'
 }];
-
 export const EventWorkflows = () => {
   const [activeWorkflows, setActiveWorkflows] = useState<string[]>([]);
-
   const toggleWorkflow = (workflowId: string) => {
-    setActiveWorkflows(prev => 
-      prev.includes(workflowId) 
-        ? prev.filter(id => id !== workflowId) 
-        : [...prev, workflowId]
-    );
+    setActiveWorkflows(prev => prev.includes(workflowId) ? prev.filter(id => id !== workflowId) : [...prev, workflowId]);
   };
-
-  return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+  return <div className="p-6 max-w-6xl mx-auto space-y-6">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <h3 className="text-lg font-semibold text-foreground">Available Workflows</h3>
+            
             <div className="w-2 h-2 bg-muted-foreground/30 rounded-full"></div>
             <span className="text-sm text-muted-foreground">
               {activeWorkflows.length === 0 ? 'No Workflows Active' : `${activeWorkflows.length} Active`}
@@ -57,23 +48,11 @@ export const EventWorkflows = () => {
         </div>
 
         <div className="space-y-3">
-          {workflowTemplates.map(workflow => (
-            <div 
-              key={workflow.id} 
-              className={`w-full p-4 border rounded-lg transition-all ${
-                activeWorkflows.includes(workflow.id) 
-                  ? 'border-[#008c44]/30 bg-[#008c44]/5' 
-                  : 'border-border bg-card hover:border-border/60'
-              }`}
-            >
+          {workflowTemplates.map(workflow => <div key={workflow.id} className={`w-full p-4 border rounded-lg transition-all ${activeWorkflows.includes(workflow.id) ? 'border-[#008c44]/30 bg-[#008c44]/5' : 'border-border bg-card hover:border-border/60'}`}>
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center space-x-3">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                    activeWorkflows.includes(workflow.id) ? 'bg-[#008c44]/10' : 'bg-muted'
-                  }`}>
-                    <workflow.icon className={`h-5 w-5 ${
-                      activeWorkflows.includes(workflow.id) ? 'text-[#008c44]' : 'text-muted-foreground'
-                    }`} />
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${activeWorkflows.includes(workflow.id) ? 'bg-[#008c44]/10' : 'bg-muted'}`}>
+                    <workflow.icon className={`h-5 w-5 ${activeWorkflows.includes(workflow.id) ? 'text-[#008c44]' : 'text-muted-foreground'}`} />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-semibold text-foreground mb-1">{workflow.name}</h4>
@@ -96,16 +75,11 @@ export const EventWorkflows = () => {
                 <span className="text-sm text-muted-foreground">
                   {activeWorkflows.includes(workflow.id) ? 'Enabled' : 'Disabled'}
                 </span>
-                <Switch 
-                  checked={activeWorkflows.includes(workflow.id)} 
-                  onCheckedChange={() => toggleWorkflow(workflow.id)} 
-                />
+                <Switch checked={activeWorkflows.includes(workflow.id)} onCheckedChange={() => toggleWorkflow(workflow.id)} />
               </div>
-            </div>
-          ))}
+            </div>)}
         </div>
 
       </div>
-    </div>
-  );
+    </div>;
 };
