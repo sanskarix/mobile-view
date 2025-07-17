@@ -142,7 +142,7 @@ export const EventAvailability = () => {
             </div>
             <button className="text-primary hover:text-primary/80 text-sm font-medium flex items-center transition-colors">
               <Clock className="h-4 w-4 mr-1" />
-              Edit
+              Edit Availability
               <ExternalLink className="h-3 w-3 ml-1" />
             </button>
           </div>
