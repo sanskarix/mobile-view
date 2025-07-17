@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Settings, Clock, Shield, Zap, RotateCcw, Smartphone, Workflow, Webhook } from 'lucide-react';
@@ -112,18 +113,18 @@ export const EditEvent = () => {
         </div>
       </header>
 
-      {/* Centered Horizontal Tabs */}
+      {/* Left-aligned Horizontal Tabs */}
       <div className="bg-background">
-        <div className="px-8 flex justify-center">
+        <div className="ml-20">
           <nav className="flex space-x-8" aria-label="Tabs">
             {tabs.map(tabItem => (
               <button 
                 key={tabItem.id}
                 onClick={() => setActiveTab(tabItem.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors flex items-center space-x-2 ${
+                className={`py-4 px-1 font-medium text-sm whitespace-nowrap transition-colors flex items-center space-x-2 ${
                   activeTab === tabItem.id 
                     ? 'border-primary text-primary' 
-                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
+                    : 'text-muted-foreground hover:text-foreground hover:border-muted-foreground'
                 }`}
                 title={tabItem.name}
               >
@@ -135,13 +136,9 @@ export const EditEvent = () => {
         </div>
       </div>
 
-      {/* Centered Content with consistent width */}
-      <div className="bg-background flex justify-center px-8">
-        <div className="w-full" style={{ 
-          maxWidth: '982.63px',
-          marginLeft: '80px',
-          marginRight: '80px'
-        }}>
+      {/* Full-width Content with 80px margins */}
+      <div className="bg-background px-20">
+        <div className="w-full">
           {renderTabContent()}
         </div>
       </div>
