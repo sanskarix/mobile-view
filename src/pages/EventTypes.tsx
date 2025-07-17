@@ -1,10 +1,8 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Plus, MoreHorizontal, ExternalLink, Edit, Copy as CopyIcon, Code, Trash2, ArrowUp, ArrowDown, Search, Copy, GripVertical, Calendar, Clock, Users, Video, Coffee, Briefcase, GraduationCap, Heart, Zap, Target } from 'lucide-react';
 import { CreateEventModal } from '../components/CreateEventModal';
 import { useNavigate } from 'react-router-dom';
 import { Switch } from '../components/ui/switch';
-import { Header } from '../components/Header';
 
 interface EventType {
   id: string;
@@ -222,7 +220,11 @@ export const EventTypes = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header showEventTypesHeader={true} />
+      {/* Page Title */}
+      <div className="px-8 pt-6 pb-4">
+        <h1 className="text-xl font-semibold text-foreground mb-1">Event Types</h1>
+        <p className="text-sm text-muted-foreground">Manage your event types and booking configurations.</p>
+      </div>
       
       {/* Horizontal Tabs */}
       <div className="bg-background border-b border-border">

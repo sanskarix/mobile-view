@@ -47,17 +47,13 @@ export const Header = ({
   const isTeamsPage = location.pathname === '/teams';
 
   const renderPageContent = () => {
+    // Don't render page content for Event Types page since it has its own header
+    if (isEventTypesPage) return null;
+    
     if (isHomePage) return (
       <div className="flex-1">
         <h1 className="text-xl font-semibold text-foreground mb-1">Dashboard</h1>
         <p className="text-sm text-muted-foreground">Welcome to your scheduling dashboard overview.</p>
-      </div>
-    );
-    
-    if (showEventTypesHeader && !eventData) return (
-      <div className="flex-1">
-        <h1 className="text-xl font-semibold text-foreground mb-1">Event Types</h1>
-        <p className="text-sm text-muted-foreground">Manage your event types and booking configurations.</p>
       </div>
     );
     
