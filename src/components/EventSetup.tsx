@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Bold, Italic, Link, MapPin, Plus, X, Clock, Settings } from 'lucide-react';
+import { Bold, Italic, Link, MapPin, Plus, X, Clock, Settings, Copy, ExternalLink, Code, Trash2 } from 'lucide-react';
+
 interface EventSetupProps {
   onChange?: () => void;
 }
-export const EventSetup = ({
-  onChange
-}: EventSetupProps) => {
+
+export const EventSetup = ({ onChange }: EventSetupProps) => {
   const [formData, setFormData] = useState({
     title: 'Product Hunt Chats',
     description: 'The essence of Product Hunt reflects in communities- Select a time suitable for you, and let\'s talk products!',
@@ -17,10 +17,12 @@ export const EventSetup = ({
     customDuration: '',
     showCustomDuration: false
   });
+
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState('google-meet');
   const [showLinkInput, setShowLinkInput] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
+  const [copiedUrl, setCopiedUrl] = useState(false);
   const [locationDetails, setLocationDetails] = useState({
     meetingLink: '',
     address: '',
@@ -29,6 +31,7 @@ export const EventSetup = ({
     googleMapsLink: '',
     showGoogleMaps: false
   });
+
   const availableDurations = ['15', '30', '45', '60'];
   const locationOptions = [{
     id: 'conferencing',
@@ -88,6 +91,7 @@ export const EventSetup = ({
     type: 'option',
     icon: '🏢'
   }];
+
   const handleFormChange = (field: string, value: any) => {
     setFormData(prev => ({
       ...prev,
@@ -95,10 +99,22 @@ export const EventSetup = ({
     }));
     onChange?.();
   };
+
+  const handleCopyUrl = () => {
+    navigator.clipboard.writeText(`https://cal.id/sanskar/${formData.url}`);
+    setCopiedUrl(true);
+    setTimeout(() => setCopiedUrl(false), 1500);
+  };
+
+  const handlePreviewUrl = () => {
+    window.open(`https://cal.id/sanskar/${formData.url}`, '_blank');
+  };
+
   const handleDurationToggle = (duration: string) => {
     const newDurations = formData.durations.includes(duration) ? formData.durations.filter(d => d !== duration) : [...formData.durations, duration];
     handleFormChange('durations', newDurations);
   };
+
   const addCustomDuration = () => {
     if (formData.customDuration && !formData.durations.includes(formData.customDuration)) {
       handleFormChange('durations', [...formData.durations, formData.customDuration]);
@@ -109,11 +125,13 @@ export const EventSetup = ({
       }));
     }
   };
+
   const handleLocationSelect = (locationId: string) => {
     setSelectedLocation(locationId);
     setShowLocationDropdown(false);
     handleFormChange('location', locationId);
   };
+
   const handleLinkInsert = () => {
     if (linkUrl) {
       document.execCommand('createLink', false, linkUrl);
@@ -121,6 +139,7 @@ export const EventSetup = ({
       setLinkUrl('');
     }
   };
+
   const renderLocationDetails = () => {
     if (['zoom', 'facetime', 'link-meeting'].includes(selectedLocation)) {
       return <div className="mt-4 p-4 bg-muted/30 rounded-lg">
@@ -179,14 +198,21 @@ export const EventSetup = ({
     }
     return null;
   };
-  return <div className="p-6 max-w-6xl mx-auto space-y-6">
+
+  return (
+    <div className="p-6 max-w-6xl mx-auto space-y-6">
       <div>
-        <label className="block text-sm font-medium text-foreground mb-2">Title</label>
-        <input type="text" value={formData.title} onChange={e => handleFormChange('title', e.target.value)} className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background" />
+        <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+        <input 
+          type="text" 
+          value={formData.title} 
+          onChange={e => handleFormChange('title', e.target.value)} 
+          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-base"
+        />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-2">Description</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
         <div className="border border-border rounded-lg bg-background">
           <div className="flex items-center space-x-2 p-3 border-b border-border">
             <button className="p-2 hover:bg-muted rounded transition-colors" onClick={() => document.execCommand('bold')}>
@@ -199,97 +225,188 @@ export const EventSetup = ({
               <button className="p-2 hover:bg-muted rounded transition-colors" onClick={() => setShowLinkInput(!showLinkInput)}>
                 <Link className="h-4 w-4 text-muted-foreground" />
               </button>
-              {showLinkInput && <div className="absolute top-full left-0 mt-1 p-3 bg-popover border border-border rounded-lg shadow-lg z-10 w-64 animate-scale-in">
-                  <input type="url" placeholder="Enter URL" value={linkUrl} onChange={e => setLinkUrl(e.target.value)} className="w-full px-3 py-2 border border-border rounded mb-2 text-sm bg-background" autoFocus />
+              {showLinkInput && (
+                <div className="absolute top-full left-0 mt-1 p-3 bg-popover border border-border rounded-lg shadow-lg z-10 w-64 animate-scale-in">
+                  <input 
+                    type="url" 
+                    placeholder="Enter URL" 
+                    value={linkUrl} 
+                    onChange={e => setLinkUrl(e.target.value)} 
+                    className="w-full px-3 py-2 border border-border rounded mb-2 text-sm bg-background" 
+                    autoFocus 
+                  />
                   <div className="flex justify-end space-x-2">
                     <button onClick={() => setShowLinkInput(false)} className="px-3 py-1 text-sm text-muted-foreground hover:text-foreground">
                       Cancel
                     </button>
-                    <button onClick={handleLinkInsert} className="px-3 py-1 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90">
+                    <button onClick={() => {
+                      if (linkUrl) {
+                        document.execCommand('createLink', false, linkUrl);
+                        setShowLinkInput(false);
+                        setLinkUrl('');
+                      }
+                    }} className="px-3 py-1 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90">
                       Insert
                     </button>
                   </div>
-                </div>}
+                </div>
+              )}
             </div>
           </div>
-          <div contentEditable className="w-full p-4 min-h-[100px] focus:outline-none" dangerouslySetInnerHTML={{
-          __html: formData.description
-        }} onInput={e => handleFormChange('description', e.currentTarget.innerHTML)} />
+          <div 
+            contentEditable 
+            className="w-full p-4 min-h-[100px] focus:outline-none text-sm text-gray-600" 
+            dangerouslySetInnerHTML={{ __html: formData.description }} 
+            onInput={e => handleFormChange('description', e.currentTarget.innerHTML)} 
+          />
         </div>
         <div className="flex items-center mt-2">
           <input type="checkbox" id="translate" className="mr-2" />
-          <label htmlFor="translate" className="text-sm text-muted-foreground">
+          <label htmlFor="translate" className="text-sm text-gray-500">
             Translate description to the visitor's browser language using AI
           </label>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-2">URL</label>
+        <div className="flex items-center space-x-2 mb-2">
+          <label className="block text-sm font-medium text-gray-700">URL</label>
+          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+          <div className="flex items-center space-x-2 px-3 py-1 bg-gray-100 rounded text-sm text-gray-600">
+            <span>cal.id/sanskar/{formData.url}</span>
+            <button
+              onClick={handleCopyUrl}
+              className="p-1 hover:bg-gray-200 rounded transition-colors"
+              title="Copy URL"
+            >
+              <Copy className="h-3 w-3" />
+            </button>
+            <button
+              onClick={handlePreviewUrl}
+              className="p-1 hover:bg-gray-200 rounded transition-colors"
+              title="Preview"
+            >
+              <ExternalLink className="h-3 w-3" />
+            </button>
+            {copiedUrl && (
+              <div className="absolute bg-gray-800 text-white text-xs px-2 py-1 rounded ml-2">
+                Copied!
+              </div>
+            )}
+          </div>
+        </div>
         <div className="flex">
           <span className="inline-flex items-center px-4 py-3 border border-r-0 border-border bg-muted text-muted-foreground text-sm rounded-l-lg">
             cal.id/sanskar/
           </span>
-          <input type="text" value={formData.url} onChange={e => handleFormChange('url', e.target.value)} className="flex-1 px-4 py-3 border border-border rounded-r-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background" />
+          <input 
+            type="text" 
+            value={formData.url} 
+            onChange={e => handleFormChange('url', e.target.value)} 
+            className="flex-1 px-4 py-3 border border-border rounded-r-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm"
+          />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-4">Available durations</label>
+        <label className="block text-sm font-medium text-gray-700 mb-4">Available durations</label>
         <div className="flex flex-wrap gap-2 mb-4">
-          {availableDurations.map(duration => <button key={duration} onClick={() => handleDurationToggle(duration)} className={`px-4 py-2 text-sm rounded border transition-colors ${formData.durations.includes(duration) ? 'bg-primary/10 border-primary text-primary' : 'bg-background border-border text-foreground hover:bg-muted'}`}>
-              {duration} mins
-            </button>)}
-          {formData.durations.filter(d => !availableDurations.includes(d)).map(duration => <div key={duration} className="flex items-center">
-              <span className="px-4 py-2 text-sm rounded border bg-primary/10 border-primary text-primary">
-                {duration} mins
-              </span>
-            </div>)}
+          {availableDurations.map(duration => (
+            <button 
+              key={duration} 
+              onClick={() => {
+                const newDurations = formData.durations.includes(duration) 
+                  ? formData.durations.filter(d => d !== duration)
+                  : [...formData.durations, duration];
+                handleFormChange('durations', newDurations);
+              }}
+              className={`px-3 py-2 text-sm rounded border transition-colors flex items-center space-x-1 ${
+                formData.durations.includes(duration) 
+                  ? 'bg-primary/10 border-primary text-primary' 
+                  : 'bg-background border-border text-gray-600 hover:bg-muted'
+              }`}
+            >
+              <Clock className="h-3 w-3" />
+              <span>{duration} mins</span>
+            </button>
+          ))}
+          {formData.durations.filter(d => !availableDurations.includes(d)).map(duration => (
+            <div key={duration} className="flex items-center space-x-1 px-3 py-2 text-sm rounded border bg-primary/10 border-primary text-primary">
+              <Clock className="h-3 w-3" />
+              <span>{duration} mins</span>
+            </div>
+          ))}
         </div>
         
-        {!formData.showCustomDuration ? <button onClick={() => setFormData(prev => ({
-        ...prev,
-        showCustomDuration: true
-      }))} className="text-sm text-primary hover:text-primary/80 flex items-center transition-colors">
+        {!formData.showCustomDuration ? (
+          <button 
+            onClick={() => setFormData(prev => ({ ...prev, showCustomDuration: true }))} 
+            className="text-sm text-primary hover:text-primary/80 flex items-center transition-colors"
+          >
             <Plus className="h-4 w-4 mr-1" />
             Add custom duration
-          </button> : <div className="flex items-center space-x-2">
-            <input type="number" value={formData.customDuration} onChange={e => setFormData(prev => ({
-          ...prev,
-          customDuration: e.target.value
-        }))} placeholder="Duration" className="w-24 px-3 py-2 border border-border rounded text-sm bg-background" />
+          </button>
+        ) : (
+          <div className="flex items-center space-x-2">
+            <input 
+              type="number" 
+              value={formData.customDuration} 
+              onChange={e => setFormData(prev => ({ ...prev, customDuration: e.target.value }))} 
+              placeholder="Duration" 
+              className="w-24 px-3 py-2 border border-border rounded text-sm bg-background"
+            />
             <span className="text-sm">mins</span>
-            <button onClick={addCustomDuration} className="px-3 py-2 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90 transition-colors">
+            <button 
+              onClick={() => {
+                if (formData.customDuration && !formData.durations.includes(formData.customDuration)) {
+                  handleFormChange('durations', [...formData.durations, formData.customDuration]);
+                  setFormData(prev => ({ ...prev, customDuration: '', showCustomDuration: false }));
+                }
+              }}
+              className="px-3 py-2 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90 transition-colors"
+            >
               Add
             </button>
-            <button onClick={() => setFormData(prev => ({
-          ...prev,
-          showCustomDuration: false,
-          customDuration: ''
-        }))} className="p-2 text-muted-foreground hover:text-foreground transition-colors">
+            <button 
+              onClick={() => setFormData(prev => ({ ...prev, showCustomDuration: false, customDuration: '' }))} 
+              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+            >
               <X className="h-4 w-4" />
             </button>
-          </div>}
+          </div>
+        )}
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-2">Default duration</label>
-        <select value={formData.defaultDuration} onChange={e => handleFormChange('defaultDuration', e.target.value)} className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background">
-          {formData.durations.map(duration => <option key={duration} value={duration}>{duration} mins</option>)}
+        <label className="block text-sm font-medium text-gray-700 mb-2">Default duration</label>
+        <select 
+          value={formData.defaultDuration} 
+          onChange={e => handleFormChange('defaultDuration', e.target.value)} 
+          className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm"
+        >
+          {formData.durations.map(duration => (
+            <option key={duration} value={duration}>{duration} mins</option>
+          ))}
         </select>
       </div>
 
       <div>
         <div className="flex items-center">
-          <input type="checkbox" id="allowBookerToSelectDuration" checked={formData.allowBookerToSelectDuration} onChange={e => handleFormChange('allowBookerToSelectDuration', e.target.checked)} className="mr-3" />
-          <label htmlFor="allowBookerToSelectDuration" className="text-sm font-medium text-foreground">
+          <input 
+            type="checkbox" 
+            id="allowBookerToSelectDuration" 
+            checked={formData.allowBookerToSelectDuration} 
+            onChange={e => handleFormChange('allowBookerToSelectDuration', e.target.checked)} 
+            className="mr-3"
+          />
+          <label htmlFor="allowBookerToSelectDuration" className="text-sm font-medium text-gray-700">
             Allow booker to select duration
           </label>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-foreground mb-2">Location</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
         <div className="relative">
           <button onClick={() => setShowLocationDropdown(!showLocationDropdown)} className="w-full flex items-center justify-between p-4 border border-border rounded-lg hover:border-border/60 focus:ring-2 focus:ring-ring bg-background transition-colors">
             <div className="flex items-center">
@@ -324,5 +441,19 @@ export const EventSetup = ({
           <a href="#" className="text-primary hover:text-primary/80 transition-colors">App Store</a>.
         </p>
       </div>
-    </div>;
+
+      <div className="flex justify-between items-center pt-8 border-t border-border">
+        <div className="flex space-x-3">
+          <button className="flex items-center px-4 py-2 text-sm border border-border rounded-lg hover:bg-muted transition-colors">
+            <Code className="h-4 w-4 mr-2" />
+            Embed
+          </button>
+          <button className="flex items-center px-4 py-2 text-sm border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition-colors">
+            <Trash2 className="h-4 w-4 mr-2" />
+            Delete event
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };

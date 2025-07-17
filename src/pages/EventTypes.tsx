@@ -220,12 +220,6 @@ export const EventTypes = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Page Title */}
-      <div className="px-8 pt-6 pb-4">
-        <h1 className="text-xl font-semibold text-foreground mb-1">Event Types</h1>
-        <p className="text-sm text-muted-foreground">Manage your event types and booking configurations.</p>
-      </div>
-      
       {/* Horizontal Tabs */}
       <div className="bg-background border-b border-border">
         <div className="px-8">
