@@ -83,7 +83,7 @@ export const EventAdvanced = () => {
               <Checkbox 
                 id="requires-confirmation" 
                 checked={requiresConfirmation}
-                onCheckedChange={setRequiresConfirmation}
+                onCheckedChange={(checked) => setRequiresConfirmation(checked === true)}
               />
               <Label htmlFor="requires-confirmation">
                 Requires confirmation (manual approval)
@@ -94,7 +94,7 @@ export const EventAdvanced = () => {
               <Checkbox 
                 id="disable-guests" 
                 checked={disableGuests}
-                onCheckedChange={setDisableGuests}
+                onCheckedChange={(checked) => setDisableGuests(checked === true)}
               />
               <Label htmlFor="disable-guests">
                 Disable guests (only booker can attend)
@@ -105,7 +105,7 @@ export const EventAdvanced = () => {
               <Checkbox 
                 id="hide-details" 
                 checked={hideEventTypeDetails}
-                onCheckedChange={setHideEventTypeDetails}
+                onCheckedChange={(checked) => setHideEventTypeDetails(checked === true)}
               />
               <Label htmlFor="hide-details">
                 Hide event type details from booking page

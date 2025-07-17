@@ -26,7 +26,7 @@ export const EventLimits = () => {
             <Checkbox 
               id="duration-limit" 
               checked={enableDuration}
-              onCheckedChange={setEnableDuration}
+              onCheckedChange={(checked) => setEnableDuration(checked === true)}
             />
             <Label htmlFor="duration-limit" className="font-medium">
               Limit total booking duration per day
@@ -53,7 +53,7 @@ export const EventLimits = () => {
             <Checkbox 
               id="frequency-limit" 
               checked={enableFrequency}
-              onCheckedChange={setEnableFrequency}
+              onCheckedChange={(checked) => setEnableFrequency(checked === true)}
             />
             <Label htmlFor="frequency-limit" className="font-medium">
               Limit booking frequency
@@ -90,7 +90,7 @@ export const EventLimits = () => {
             <Checkbox 
               id="range-limit" 
               checked={enableRange}
-              onCheckedChange={setEnableRange}
+              onCheckedChange={(checked) => setEnableRange(checked === true)}
             />
             <Label htmlFor="range-limit" className="font-medium">
               Limit how far in advance people can book

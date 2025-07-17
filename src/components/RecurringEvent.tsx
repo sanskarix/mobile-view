@@ -25,7 +25,7 @@ export const RecurringEvent = () => {
             <Checkbox 
               id="enable-recurring" 
               checked={isRecurring}
-              onCheckedChange={setIsRecurring}
+              onCheckedChange={(checked) => setIsRecurring(checked === true)}
             />
             <Label htmlFor="enable-recurring" className="font-medium">
               Enable recurring bookings
