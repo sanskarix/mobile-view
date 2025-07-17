@@ -1,8 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Plus, MoreHorizontal, ExternalLink, Edit, Copy as CopyIcon, Code, Trash2, ArrowUp, ArrowDown, Search, Copy, GripVertical, Calendar, Clock, Users, Video, Coffee, Briefcase, GraduationCap, Heart, Zap, Target } from 'lucide-react';
+import { Plus, MoreHorizontal, ExternalLink, Edit, Copy as CopyIcon, Code, Trash2, ArrowUp, ArrowDown, Search, Copy, GripVertical, Calendar, Clock, Users, Video, Coffee, Briefcase, GraduationCap, Heart, Zap, Target, User } from 'lucide-react';
 import { CreateEventModal } from '../components/CreateEventModal';
+import { CreateTeamEventModal } from '../components/CreateTeamEventModal';
 import { useNavigate } from 'react-router-dom';
 import { Switch } from '../components/ui/switch';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../components/ui/dropdown-menu';
 
 interface EventType {
   id: string;
@@ -40,12 +47,16 @@ const getEventIcon = (title: string) => {
 export const EventTypes = () => {
   const [selectedTeam, setSelectedTeam] = useState('personal');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isCreateTeamModalOpen, setIsCreateTeamModalOpen] = useState(false);
+  const [selectedTeamForCreation, setSelectedTeamForCreation] = useState('');
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
   const [copiedPublicLink, setCopiedPublicLink] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [eventStates, setEventStates] = useState<{[key: string]: boolean}>({});
   const [teamEvents, setTeamEvents] = useState<Team[]>([]);
   const [draggedItem, setDraggedItem] = useState<string | null>(null);
+  const [showNewDropdown, setShowNewDropdown] = useState(false);
+  const newDropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   // Load teams from localStorage
@@ -214,6 +225,46 @@ export const EventTypes = () => {
     setEventStates(prev => ({ ...prev, [eventId]: checked }));
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (newDropdownRef.current && !newDropdownRef.current.contains(event.target as Node)) {
+        setShowNewDropdown(false);
+      }
+    };
+
+    if (showNewDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showNewDropdown]);
+
+  const handleNewSelection = (teamId: string) => {
+    setShowNewDropdown(false);
+    if (teamId === 'personal') {
+      setIsCreateModalOpen(true);
+    } else {
+      setSelectedTeamForCreation(teamId);
+      setIsCreateTeamModalOpen(true);
+    }
+  };
+
+  const handleDuplicateEvent = (eventId: string) => {
+    console.log('Duplicating event:', eventId);
+    // Implement duplicate functionality
+  };
+
+  const handleDeleteEvent = (eventId: string) => {
+    console.log('Deleting event:', eventId);
+    // Implement delete functionality
+    setTeamEvents(prevTeams => prevTeams.map(team => ({
+      ...team,
+      eventTypes: team.eventTypes?.filter(event => event.id !== eventId) || []
+    })));
+  };
+
   if (!teamEvents.length) {
     return <div className="p-8">Loading...</div>;
   }
@@ -313,13 +364,41 @@ export const EventTypes = () => {
             </div>
           </div>
           
-          <button 
-            onClick={() => setIsCreateModalOpen(true)}
-            className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            New
-          </button>
+          <div className="relative" ref={newDropdownRef}>
+            <button 
+              onClick={() => setShowNewDropdown(!showNewDropdown)}
+              className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              New
+            </button>
+            
+            {showNewDropdown && (
+              <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-10">
+                <div className="py-1">
+                  <button 
+                    onClick={() => handleNewSelection('personal')} 
+                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <User className="h-4 w-4 mr-2" />
+                    Personal Event
+                  </button>
+                  {teamEvents.filter(team => team.id !== 'personal').map(team => (
+                    <button 
+                      key={team.id}
+                      onClick={() => handleNewSelection(team.id)} 
+                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                    >
+                      <div className="h-4 w-4 rounded-full bg-primary flex items-center justify-center text-xs font-medium text-primary-foreground mr-2">
+                        {team.avatar}
+                      </div>
+                      {team.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Event Types List */}
@@ -393,8 +472,8 @@ export const EventTypes = () => {
                       </div>
                     </div>
                     
-                    {/* Enable toggle on the right */}
-                    <div className="flex items-center ml-4">
+                    <div className="flex items-center space-x-2 ml-4">
+                      {/* Enable toggle */}
                       <Switch 
                         checked={isEventActive} 
                         onCheckedChange={checked => {
@@ -402,6 +481,36 @@ export const EventTypes = () => {
                         }}
                         onClick={e => e.stopPropagation()}
                       />
+                      
+                      {/* Options dropdown */}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            onClick={(e) => e.stopPropagation()}
+                            className="p-2 hover:bg-muted rounded-lg transition-colors"
+                            title="More options"
+                          >
+                            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-48">
+                          <DropdownMenuItem onClick={() => handleEventEdit(event.id)}>
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDuplicateEvent(event.id)}>
+                            <CopyIcon className="h-4 w-4 mr-2" />
+                            Duplicate
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => handleDeleteEvent(event.id)}
+                            className="text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </div>
                 </div>
@@ -416,6 +525,13 @@ export const EventTypes = () => {
           teams={teamEvents} 
           selectedTeam={selectedTeam} 
           onCreateEvent={handleCreateEvent} 
+        />
+
+        <CreateTeamEventModal
+          open={isCreateTeamModalOpen}
+          onClose={() => setIsCreateTeamModalOpen(false)}
+          teamId={selectedTeamForCreation}
+          teamName={teamEvents.find(t => t.id === selectedTeamForCreation)?.name || ''}
         />
       </div>
     </div>

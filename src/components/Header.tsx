@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronDown, Moon, HelpCircle, MapPin, LogOut, User, Settings, ExternalLink, MessageSquare, FileIcon, Mail, ArrowLeft } from 'lucide-react';
 import { Switch } from './ui/switch';
@@ -115,9 +114,6 @@ export const Header = ({
     setShowHelpDropdown(false);
     setShowProfileDropdown(false);
     switch (action) {
-      case 'discord':
-        window.open('https://discord.gg/cal', '_blank');
-        break;
       case 'docs':
         window.open('https://docs.cal.com', '_blank');
         break;
@@ -238,13 +234,6 @@ export const Header = ({
             {showHelpDropdown && (
               <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-20">
                 <div className="py-1">
-                  <button 
-                    onClick={() => handleHelpClick('discord')} 
-                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                  >
-                    <MessageSquare className="h-4 w-4 mr-2" />
-                    Community Support
-                  </button>
                   <button 
                     onClick={() => handleHelpClick('docs')} 
                     className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
