@@ -11,7 +11,7 @@ export const EventAvailability = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-0 max-w-none mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-foreground">Availability</h3>
         <button

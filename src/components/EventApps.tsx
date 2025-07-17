@@ -1,86 +1,89 @@
 
-import React from 'react';
-import { Plus } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, ExternalLink } from 'lucide-react';
+import { Switch } from './ui/switch';
 
 const availableApps = [
-  { 
-    id: 'basecamp', 
-    name: 'Basecamp3', 
-    category: 'Other', 
-    description: 'Basecamp puts everything you need to get work done in one place. It\'s the calm, organized way to manage projects, work with clients, and communicate company-wide.',
-    logo: '📊'
+  {
+    id: 'zoom',
+    name: 'Zoom',
+    description: 'Video conferencing with Zoom',
+    icon: '🎥',
+    installed: true,
+    enabled: true
   },
-  { 
-    id: 'close', 
-    name: 'Close.com', 
-    category: 'CRM', 
-    description: 'Close is the inside sales CRM of choice for startups and SMBs. Make more calls, send more emails and close more deals starting today.',
-    logo: '💼'
+  {
+    id: 'google-calendar',
+    name: 'Google Calendar',
+    description: 'Sync with Google Calendar',
+    icon: '📅',
+    installed: true,
+    enabled: true
   },
-  { 
-    id: 'fathom', 
-    name: 'Fathom', 
-    category: 'Analytics', 
-    description: 'Fathom Analytics provides simple, privacy-focused website analytics. We\'re a GDPR-compliant, Google Analytics alternative.',
-    logo: '📈'
+  {
+    id: 'slack',
+    name: 'Slack',
+    description: 'Send notifications to Slack',
+    icon: '💬',
+    installed: false,
+    enabled: false
   },
-  { 
-    id: 'google-analytics', 
-    name: 'Google Analytics', 
-    category: 'Analytics', 
-    description: 'Google Analytics is a web analytics service offered by Google that tracks and reports website traffic, currently as a platform inside the Google Marketing Platform brand.',
-    logo: '📊'
-  },
-  { 
-    id: 'giphy', 
-    name: 'Giphy', 
-    category: 'Other', 
-    description: 'Add a GIF to your confirmation page',
-    logo: '🎬'
+  {
+    id: 'zapier',
+    name: 'Zapier',
+    description: 'Connect with 3000+ apps',
+    icon: '⚡',
+    installed: false,
+    enabled: false
   }
 ];
 
 export const EventApps = () => {
-  return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
-      <div className="text-center py-8">
-        <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-4">
-          <span className="text-muted-foreground text-2xl">📱</span>
-        </div>
-        <h3 className="text-lg font-semibold text-foreground mb-2">No apps installed</h3>
-        <p className="text-muted-foreground mb-6 max-w-md mx-auto text-sm">
-          Apps enable you to enhance your workflow and improve your scheduling life significantly.
-        </p>
-        <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm">
-          Browse App Store
-        </button>
-      </div>
+  const [apps, setApps] = useState(availableApps);
 
-      <div>
-        <h3 className="text-lg font-semibold text-foreground mb-2">Available apps</h3>
-        <p className="text-muted-foreground mb-6 text-sm">View popular apps below and explore more in our App Store</p>
-          
+  const toggleApp = (appId: string) => {
+    setApps(prev => prev.map(app => 
+      app.id === appId ? { ...app, enabled: !app.enabled } : app
+    ));
+  };
+
+  return (
+    <div className="p-0 max-w-none mx-auto space-y-6">
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-foreground">Connected Apps</h3>
+          <button className="flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm rounded-lg hover:bg-primary/90 transition-colors">
+            <Plus className="h-4 w-4 mr-2" />
+            Browse Apps
+          </button>
+        </div>
+
         <div className="space-y-3">
-          {availableApps.map((app) => (
-            <div key={app.id} className="flex items-center justify-between p-4 border border-border rounded-lg hover:border-border/60 transition-colors bg-card">
+          {apps.map(app => (
+            <div key={app.id} className="flex items-center justify-between p-4 border border-border rounded-lg">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-muted/50 rounded-lg flex items-center justify-center border border-border">
-                  <span className="text-lg">{app.logo}</span>
+                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                  <span className="text-lg">{app.icon}</span>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center space-x-2 mb-1">
-                    <h4 className="font-medium text-foreground text-sm">{app.name}</h4>
-                    <span className="px-2 py-0.5 bg-muted text-muted-foreground text-xs rounded-full font-medium">
-                      {app.category}
-                    </span>
-                  </div>
-                  <p className="text-muted-foreground text-xs line-clamp-1">{app.description}</p>
+                <div>
+                  <h4 className="font-medium text-foreground">{app.name}</h4>
+                  <p className="text-sm text-muted-foreground">{app.description}</p>
                 </div>
               </div>
-              <button className="flex items-center px-3 py-1.5 text-xs text-foreground border border-border rounded-md hover:bg-muted transition-colors font-medium ml-3">
-                <Plus className="h-3 w-3 mr-1" />
-                Add
-              </button>
+              
+              <div className="flex items-center space-x-3">
+                {!app.installed ? (
+                  <button className="flex items-center px-3 py-1 text-sm text-primary border border-primary rounded hover:bg-primary/10 transition-colors">
+                    Install
+                    <ExternalLink className="h-3 w-3 ml-1" />
+                  </button>
+                ) : (
+                  <Switch 
+                    checked={app.enabled} 
+                    onCheckedChange={() => toggleApp(app.id)} 
+                  />
+                )}
+              </div>
             </div>
           ))}
         </div>
