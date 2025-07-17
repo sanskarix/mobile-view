@@ -243,7 +243,7 @@ export const EventSetup = ({
         <div className="flex items-center space-x-2 mb-2">
           <label className="block text-sm font-medium text-gray-700">URL</label>
           <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-          <div className="flex items-center space-x-2 px-3 py-1 bg-gray-100 rounded text-sm text-gray-600">
+          <div className="flex items-center space-x-2 px-3 py-1 rounded text-sm text-gray-600 bg-transparent">
             <span>cal.id/sanskar/{formData.url}</span>
             <button onClick={handleCopyUrl} className="p-1 hover:bg-gray-200 rounded transition-colors" title="Copy URL">
               <Copy className="h-3 w-3" />
