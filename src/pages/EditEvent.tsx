@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Settings, Clock, Shield, Zap, RotateCcw, Smartphone, Workflow, Webhook } from 'lucide-react';
@@ -138,7 +137,11 @@ export const EditEvent = () => {
 
       {/* Centered Content with consistent width */}
       <div className="bg-background flex justify-center px-8">
-        <div className="w-full" style={{ maxWidth: '982.63px' }}>
+        <div className="w-full" style={{ 
+          maxWidth: '982.63px',
+          marginLeft: '80px',
+          marginRight: '80px'
+        }}>
           {renderTabContent()}
         </div>
       </div>
