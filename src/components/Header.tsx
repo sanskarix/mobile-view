@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronDown, Moon, HelpCircle, MapPin, LogOut, User, Settings, ExternalLink, MessageSquare, FileIcon, Mail, ArrowLeft } from 'lucide-react';
 import { Switch } from './ui/switch';
@@ -59,141 +60,15 @@ export const Header = ({
   const renderPageContent = () => {
     if (isEventEditPage && eventData) {
       return (
-        <div className="flex items-center justify-between w-full">
-          <div className="flex items-center space-x-4">
-            <button 
-              onClick={handleBack} 
-              className="flex items-center text-muted-foreground hover:text-foreground transition-colors" 
-              title="Back to Event Types"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-            </button>
-            <h1 className="text-xl font-semibold text-foreground">{eventData.title}</h1>
-          </div>
-          
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <Switch checked={eventData.enabled} onCheckedChange={eventData.onEnabledChange} />
-              <span className="text-sm text-muted-foreground">
-                {eventData.enabled ? 'Enabled' : 'Disabled'}
-              </span>
-            </div>
-            
-            <div className="w-px h-6 bg-border"></div>
-            
-            <button 
-              onClick={handleSave}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
-            >
-              Save
-            </button>
-            
-            <div className="w-px h-6 bg-border"></div>
-            
-            {/* Profile */}
-            <div className="relative" ref={dropdownRef}>
-              <button 
-                onClick={() => setShowProfileDropdown(!showProfileDropdown)} 
-                className="flex items-center space-x-3 px-4 py-2 hover:bg-muted rounded-lg transition-colors w-full"
-              >
-                <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-                  <span className="text-sm font-medium text-primary-foreground">SY</span>
-                </div>
-                <span className="text-sm font-medium text-foreground">Sanskar Yadav</span>
-                <ChevronDown className="h-4 w-4 text-muted-foreground" />
-              </button>
-              
-              {showProfileDropdown && (
-                <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-10">
-                  <div className="py-1">
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/settings/profile';
-                        setShowProfileDropdown(false);
-                      }} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <User className="h-4 w-4 mr-2" />
-                      My Profile
-                    </button>
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/settings/out-of-office';
-                        setShowProfileDropdown(false);
-                      }} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <Moon className="h-4 w-4 mr-2" />
-                      Out of Office
-                    </button>
-                    <button 
-                      onClick={() => {
-                        window.open('https://roadmap.onehash.ai/', '_blank');
-                        setShowProfileDropdown(false);
-                      }} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <MapPin className="h-4 w-4 mr-2" />
-                      Roadmap
-                    </button>
-                    
-                    {/* Help & Support */}
-                    <button 
-                      onClick={handleHelpAndSupportClick} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <HelpCircle className="h-4 w-4 mr-2" />
-                      Help & Support
-                    </button>
-                    
-                    <div className="border-t border-border my-1"></div>
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/settings';
-                        setShowProfileDropdown(false);
-                      }} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <Settings className="h-4 w-4 mr-2" />
-                      Settings
-                    </button>
-                    <button className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors text-destructive">
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Sign Out
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {showHelpDropdown && (
-                <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-20">
-                  <div className="py-1">
-                    <button 
-                      onClick={() => handleHelpClick('discord')} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <MessageSquare className="h-4 w-4 mr-2" />
-                      Community Support
-                    </button>
-                    <button 
-                      onClick={() => handleHelpClick('docs')} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <FileIcon className="h-4 w-4 mr-2" />
-                      Documentation
-                    </button>
-                    <button 
-                      onClick={() => handleHelpClick('contact')} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <Mail className="h-4 w-4 mr-2" />
-                      Contact Us
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+        <div className="flex items-center space-x-4">
+          <button 
+            onClick={handleBack} 
+            className="flex items-center text-muted-foreground hover:text-foreground transition-colors" 
+            title="Back to Event Types"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+          <h1 className="text-xl font-semibold text-foreground">{eventData.title}</h1>
         </div>
       );
     }
@@ -262,113 +137,133 @@ export const Header = ({
       <div className="h-full px-8 flex items-center justify-between w-full">
         {renderPageContent()}
         
-        {!isEventEditPage && (
-          <div className="flex items-center space-x-4 ml-auto">
-            {/* Profile */}
-            <div className="relative" ref={dropdownRef}>
+        <div className="flex items-center space-x-4 ml-auto">
+          {eventData && (
+            <>
+              <div className="flex items-center space-x-2">
+                <Switch checked={eventData.enabled} onCheckedChange={eventData.onEnabledChange} />
+                <span className="text-sm text-muted-foreground">
+                  {eventData.enabled ? 'Enabled' : 'Disabled'}
+                </span>
+              </div>
+              
+              <div className="w-px h-6 bg-border"></div>
+              
               <button 
-                onClick={() => setShowProfileDropdown(!showProfileDropdown)} 
-                className="flex items-center space-x-3 px-4 py-2 hover:bg-muted rounded-lg transition-colors w-full"
+                onClick={handleSave}
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
               >
-                <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-                  <span className="text-sm font-medium text-primary-foreground">SY</span>
-                </div>
-                <span className="text-sm font-medium text-foreground">Sanskar Yadav</span>
-                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                Save
               </button>
               
-              {showProfileDropdown && (
-                <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-10">
-                  <div className="py-1">
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/settings/profile';
-                        setShowProfileDropdown(false);
-                      }} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <User className="h-4 w-4 mr-2" />
-                      My Profile
-                    </button>
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/settings/out-of-office';
-                        setShowProfileDropdown(false);
-                      }} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <Moon className="h-4 w-4 mr-2" />
-                      Out of Office
-                    </button>
-                    <button 
-                      onClick={() => {
-                        window.open('https://roadmap.onehash.ai/', '_blank');
-                        setShowProfileDropdown(false);
-                      }} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <MapPin className="h-4 w-4 mr-2" />
-                      Roadmap
-                    </button>
-                    
-                    {/* Help & Support */}
-                    <button 
-                      onClick={handleHelpAndSupportClick} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <HelpCircle className="h-4 w-4 mr-2" />
-                      Help & Support
-                    </button>
-                    
-                    <div className="border-t border-border my-1"></div>
-                    <button 
-                      onClick={() => {
-                        window.location.href = '/settings';
-                        setShowProfileDropdown(false);
-                      }} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <Settings className="h-4 w-4 mr-2" />
-                      Settings
-                    </button>
-                    <button className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors text-destructive">
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Sign Out
-                    </button>
-                  </div>
-                </div>
-              )}
+              <div className="w-px h-6 bg-border"></div>
+            </>
+          )}
 
-              {showHelpDropdown && (
-                <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-20">
-                  <div className="py-1">
-                    <button 
-                      onClick={() => handleHelpClick('discord')} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <MessageSquare className="h-4 w-4 mr-2" />
-                      Community Support
-                    </button>
-                    <button 
-                      onClick={() => handleHelpClick('docs')} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <FileIcon className="h-4 w-4 mr-2" />
-                      Documentation
-                    </button>
-                    <button 
-                      onClick={() => handleHelpClick('contact')} 
-                      className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                    >
-                      <Mail className="h-4 w-4 mr-2" />
-                      Contact Us
-                    </button>
-                  </div>
+          {/* Profile */}
+          <div className="relative" ref={dropdownRef}>
+            <button 
+              onClick={() => setShowProfileDropdown(!showProfileDropdown)} 
+              className="flex items-center space-x-3 px-4 py-2 hover:bg-muted rounded-lg transition-colors w-full"
+            >
+              <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
+                <span className="text-sm font-medium text-primary-foreground">SY</span>
+              </div>
+              <span className="text-sm font-medium text-foreground">Sanskar Yadav</span>
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            </button>
+            
+            {showProfileDropdown && (
+              <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-10">
+                <div className="py-1">
+                  <button 
+                    onClick={() => {
+                      window.location.href = '/settings/profile';
+                      setShowProfileDropdown(false);
+                    }} 
+                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <User className="h-4 w-4 mr-2" />
+                    My Profile
+                  </button>
+                  <button 
+                    onClick={() => {
+                      window.location.href = '/settings/out-of-office';
+                      setShowProfileDropdown(false);
+                    }} 
+                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <Moon className="h-4 w-4 mr-2" />
+                    Out of Office
+                  </button>
+                  <button 
+                    onClick={() => {
+                      window.open('https://roadmap.onehash.ai/', '_blank');
+                      setShowProfileDropdown(false);
+                    }} 
+                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <MapPin className="h-4 w-4 mr-2" />
+                    Roadmap
+                  </button>
+                  
+                  {/* Help & Support */}
+                  <button 
+                    onClick={handleHelpAndSupportClick} 
+                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <HelpCircle className="h-4 w-4 mr-2" />
+                    Help & Support
+                  </button>
+                  
+                  <div className="border-t border-border my-1"></div>
+                  <button 
+                    onClick={() => {
+                      window.location.href = '/settings';
+                      setShowProfileDropdown(false);
+                    }} 
+                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <Settings className="h-4 w-4 mr-2" />
+                    Settings
+                  </button>
+                  <button className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors text-destructive">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </button>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+
+            {showHelpDropdown && (
+              <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-20">
+                <div className="py-1">
+                  <button 
+                    onClick={() => handleHelpClick('discord')} 
+                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <MessageSquare className="h-4 w-4 mr-2" />
+                    Community Support
+                  </button>
+                  <button 
+                    onClick={() => handleHelpClick('docs')} 
+                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <FileIcon className="h-4 w-4 mr-2" />
+                    Documentation
+                  </button>
+                  <button 
+                    onClick={() => handleHelpClick('contact')} 
+                    className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <Mail className="h-4 w-4 mr-2" />
+                    Contact Us
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </header>
   );
