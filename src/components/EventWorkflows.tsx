@@ -1,64 +1,118 @@
 
-import React from 'react';
-import { Plus, Zap } from 'lucide-react';
+import React, { useState } from 'react';
+import { ExternalLink, Mail, MessageSquare, Clock } from 'lucide-react';
+import { Switch } from './ui/switch';
+
+const workflowTemplates = [
+  {
+    id: 'sms-reminder',
+    name: 'SMS Reminder - 10 minutes before',
+    description: 'Send an SMS reminder to attendees 10 minutes before the meeting starts',
+    icon: MessageSquare,
+    trigger: 'Before event',
+    action: 'Send SMS',
+    timing: '10 minutes before'
+  },
+  {
+    id: 'email-reminder',
+    name: 'Email Reminder - 30 minutes before',
+    description: 'Send an email reminder to attendees 30 minutes before the meeting starts',
+    icon: Mail,
+    trigger: 'Before event',
+    action: 'Send Email',
+    timing: '30 minutes before'
+  },
+  {
+    id: 'thankyou-email',
+    name: 'Thank You Email - After meeting',
+    description: 'Send a thank you email to attendees after the meeting ends',
+    icon: Mail,
+    trigger: 'After event',
+    action: 'Send Email',
+    timing: 'Immediately after'
+  }
+];
 
 export const EventWorkflows = () => {
-  return (
-    <div className="p-0 max-w-none mx-auto space-y-6">
-      <div className="text-center py-12">
-        <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Zap className="h-8 w-8 text-muted-foreground" />
-        </div>
-        <h3 className="text-lg font-semibold text-foreground mb-2">No workflows configured</h3>
-        <p className="text-muted-foreground mb-6 max-w-md mx-auto text-sm">
-          Create automated workflows to streamline your booking process and save time.
-        </p>
-        <button className="flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm mx-auto">
-          <Plus className="h-4 w-4 mr-2" />
-          Create Workflow
-        </button>
-      </div>
+  const [activeWorkflows, setActiveWorkflows] = useState<string[]>(['sms-reminder']);
 
-      <div>
-        <h3 className="text-lg font-semibold text-foreground mb-2">Available workflow templates</h3>
-        <p className="text-muted-foreground mb-6 text-sm">Choose from pre-built templates to get started quickly</p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[
-            {
-              title: 'Send welcome email',
-              description: 'Automatically send a personalized welcome message when someone books',
-              icon: '📧'
-            },
-            {
-              title: 'Add to CRM',
-              description: 'Create or update contact records in your CRM system',
-              icon: '👤'
-            },
-            {
-              title: 'Send reminder',
-              description: 'Send automated reminders before the scheduled meeting',
-              icon: '⏰'
-            },
-            {
-              title: 'Create calendar event',
-              description: 'Automatically add events to team calendars',
-              icon: '📅'
-            }
-          ].map((template, index) => (
-            <div key={index} className="p-4 border border-border rounded-lg hover:border-border/60 transition-colors bg-card">
-              <div className="flex items-start space-x-3">
-                <div className="w-10 h-10 bg-muted/50 rounded-lg flex items-center justify-center border border-border">
-                  <span className="text-lg">{template.icon}</span>
+  const toggleWorkflow = (workflowId: string) => {
+    setActiveWorkflows(prev => 
+      prev.includes(workflowId) 
+        ? prev.filter(id => id !== workflowId) 
+        : [...prev, workflowId]
+    );
+  };
+
+  return (
+    <div className="p-6 max-w-6xl mx-auto space-y-6">
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-muted-foreground">
+              {activeWorkflows.length} Active
+            </span>
+            <div className="flex items-center space-x-1 text-muted-foreground">
+              <span>•</span>
+              <a 
+                href="/workflows" 
+                className="text-sm text-blue-600 hover:text-blue-700 flex items-center space-x-1"
+              >
+                <span>create new workflow</span>
+                <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {workflowTemplates.map(workflow => (
+            <div 
+              key={workflow.id} 
+              className={`w-full p-4 border rounded-lg transition-all ${
+                activeWorkflows.includes(workflow.id) 
+                  ? 'border-[#008c44]/30 bg-[#008c44]/5' 
+                  : 'border-border bg-card hover:border-border/60'
+              }`}
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center space-x-3">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                    activeWorkflows.includes(workflow.id) 
+                      ? 'bg-[#008c44]/10' 
+                      : 'bg-muted'
+                  }`}>
+                    <workflow.icon className={`h-5 w-5 ${
+                      activeWorkflows.includes(workflow.id) 
+                        ? 'text-[#008c44]' 
+                        : 'text-muted-foreground'
+                    }`} />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-foreground mb-1">{workflow.name}</h4>
+                    <p className="text-muted-foreground mb-2 text-sm">{workflow.description}</p>
+                    <div className="flex items-center space-x-3 text-xs text-muted-foreground">
+                      <span className="flex items-center">
+                        <Clock className="h-3 w-3 mr-1" />
+                        {workflow.trigger}
+                      </span>
+                      <span>•</span>
+                      <span>{workflow.action}</span>
+                      <span>•</span>
+                      <span>{workflow.timing}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h4 className="font-medium text-foreground text-sm mb-1">{template.title}</h4>
-                  <p className="text-muted-foreground text-xs">{template.description}</p>
-                </div>
-                <button className="flex items-center px-3 py-1.5 text-xs text-foreground border border-border rounded-md hover:bg-muted transition-colors font-medium">
-                  <Plus className="h-3 w-3 mr-1" />
-                  Use
-                </button>
+              </div>
+              
+              <div className="flex items-center justify-between pt-3 border-t border-border">
+                <span className="text-sm text-muted-foreground">
+                  {activeWorkflows.includes(workflow.id) ? 'Enabled' : 'Disabled'}
+                </span>
+                <Switch 
+                  checked={activeWorkflows.includes(workflow.id)} 
+                  onCheckedChange={() => toggleWorkflow(workflow.id)} 
+                />
               </div>
             </div>
           ))}

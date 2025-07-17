@@ -1,118 +1,75 @@
 
 import React, { useState } from 'react';
-import { Checkbox } from './ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Input } from './ui/input';
+import { AlertTriangle } from 'lucide-react';
+import { Switch } from './ui/switch';
 
 export const RecurringEvent = () => {
-  const [enableRecurring, setEnableRecurring] = useState(false);
+  const [isRecurringEnabled, setIsRecurringEnabled] = useState(false);
 
   return (
-    <div className="p-0 max-w-none mx-auto space-y-6">
+    <div className="p-6 max-w-6xl mx-auto space-y-6">
       <div className="space-y-6">
-        <div className="flex items-center space-x-3">
-          <Checkbox
-            id="enable-recurring"
-            checked={enableRecurring}
-            onCheckedChange={(checked) => setEnableRecurring(checked === true)}
-          />
+        {/* Warning */}
+        <div className="flex items-start space-x-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
           <div>
-            <label htmlFor="enable-recurring" className="text-sm font-medium text-foreground cursor-pointer">
-              Make this a recurring event
-            </label>
-            <p className="text-sm text-muted-foreground">
-              Allow attendees to book multiple sessions at once
+            <p className="text-sm text-yellow-800">
+              <strong>Experimental:</strong> Recurring Events are currently experimental and cause some issues sometimes when checking for availability. We are working on fixing this.
             </p>
           </div>
         </div>
 
-        {enableRecurring && (
-          <div className="ml-6 space-y-6">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-foreground">Recurrence Settings</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-foreground block mb-2">
-                    Frequency
-                  </label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select frequency" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="daily">Daily</SelectItem>
-                      <SelectItem value="weekly">Weekly</SelectItem>
-                      <SelectItem value="monthly">Monthly</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="text-sm font-medium text-foreground block mb-2">
-                    Number of sessions
-                  </label>
-                  <Input type="number" placeholder="4" min="1" max="52" />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-foreground block mb-2">
-                  Interval
-                </label>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm text-muted-foreground">Every</span>
-                  <Input type="number" placeholder="1" className="w-20" min="1" />
-                  <Select>
-                    <SelectTrigger className="w-32">
-                      <SelectValue placeholder="weeks" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="days">day(s)</SelectItem>
-                      <SelectItem value="weeks">week(s)</SelectItem>
-                      <SelectItem value="months">month(s)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+        {/* Recurring Event Card */}
+        <div className="border border-border rounded-lg p-4 bg-card">
+          <div className="space-y-4">
+            <div className="flex items-center space-x-3">
+              <Switch 
+                id="enable-recurring" 
+                checked={isRecurringEnabled} 
+                onCheckedChange={setIsRecurringEnabled} 
+              />
+              <label htmlFor="enable-recurring" className="text-sm font-medium">
+                Enable Recurring Events
+              </label>
             </div>
-
-            <div className="space-y-4">
-              <h4 className="text-md font-medium text-foreground">Additional Options</h4>
-              
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <Checkbox id="require-all-sessions" />
-                  <label htmlFor="require-all-sessions" className="text-sm font-medium text-foreground cursor-pointer">
-                    Require booking all sessions at once
-                  </label>
+            
+            {isRecurringEnabled && (
+              <div className="space-y-4 pl-6 border-l-2 border-muted animate-fade-in">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Frequency</label>
+                  <select className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background">
+                    <option>Does not repeat</option>
+                    <option>Daily</option>
+                    <option>Weekly</option>
+                    <option>Monthly</option>
+                    <option>Yearly</option>
+                  </select>
                 </div>
-
-                <div className="flex items-center space-x-3">
-                  <Checkbox id="allow-individual-cancellation" />
-                  <label htmlFor="allow-individual-cancellation" className="text-sm font-medium text-foreground cursor-pointer">
-                    Allow cancellation of individual sessions
-                  </label>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <Checkbox id="send-individual-reminders" />
-                  <label htmlFor="send-individual-reminders" className="text-sm font-medium text-foreground cursor-pointer">
-                    Send reminders for each session
-                  </label>
+                
+                <div>
+                  <label className="block text-sm font-medium mb-2">End date</label>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <input type="radio" id="never" name="endType" className="rounded" defaultChecked />
+                      <label htmlFor="never" className="text-sm">Never</label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input type="radio" id="date" name="endType" className="rounded" />
+                      <label htmlFor="date" className="text-sm">On date</label>
+                      <input type="date" className="ml-2 px-2 py-1 border border-border rounded text-sm bg-background" />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input type="radio" id="occurrences" name="endType" className="rounded" />
+                      <label htmlFor="occurrences" className="text-sm">After</label>
+                      <input type="number" className="w-16 ml-2 px-2 py-1 border border-border rounded text-sm bg-background" placeholder="1" />
+                      <span className="text-sm">occurrences</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
-        )}
-
-        {!enableRecurring && (
-          <div className="bg-muted/30 rounded-lg p-6 text-center">
-            <p className="text-muted-foreground text-sm">
-              Enable recurring events to allow attendees to book multiple sessions in a series.
-            </p>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );
