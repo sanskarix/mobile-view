@@ -83,7 +83,7 @@ export const EditEvent = () => {
       {/* Header */}
       <header className="h-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="h-full px-8 flex items-center justify-between w-full max-w-none">
-          <div className="flex items-center space-x-4 mx-0">
+          <div className="flex items-center space-x-4 mx-[95px]">
             <button onClick={handleBack} className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors" title="Back to Event Types">
               <ArrowLeft className="h-4 w-4 mr-2" />
             </button>
@@ -91,9 +91,7 @@ export const EditEvent = () => {
             
             <div className="flex items-center space-x-2">
               <Switch checked={eventEnabled} onCheckedChange={setEventEnabled} />
-              <span className="text-sm text-muted-foreground">
-                {eventEnabled ? 'Enabled' : 'Disabled'}
-              </span>
+              
             </div>
           </div>
           
