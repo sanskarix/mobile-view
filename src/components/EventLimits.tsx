@@ -77,7 +77,7 @@ export const EventLimits = () => {
     };
     updateSetting('limitTotalBookingDuration', 'limits', [...settings.limitTotalBookingDuration.limits, newLimit]);
   };
-  return <div className="p-6 max-w-6xl mx-auto space-y-6">
+  return <div className="p-0 max-w-none mx-auto space-y-6">
       {/* Before Event */}
       <div className="pb-6 space-y-4">
         <h3 className="text-lg font-semibold text-foreground mb-4">Before event</h3>
