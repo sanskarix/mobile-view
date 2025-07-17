@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Settings, Clock, Shield, Zap, RotateCcw, Smartphone, Workflow, Webhook } from 'lucide-react';
@@ -11,7 +10,6 @@ import { EventApps } from '../components/EventApps';
 import { EventWorkflows } from '../components/EventWorkflows';
 import { EventWebhooks } from '../components/EventWebhooks';
 import { RecurringEvent } from '../components/RecurringEvent';
-
 const tabs = [{
   id: 'setup',
   name: 'Event Setup',
@@ -45,7 +43,6 @@ const tabs = [{
   name: 'Webhooks',
   icon: Webhook
 }];
-
 export const EditEvent = () => {
   const {
     eventId,
@@ -69,7 +66,7 @@ export const EditEvent = () => {
       case 'setup':
         return <EventSetup />;
       case 'availability':
-        return <div className="border border-gray-200 rounded-lg p-6"><EventAvailability /></div>;
+        return <EventAvailability />;
       case 'limits':
         return <EventLimits />;
       case 'advanced':
@@ -137,9 +134,9 @@ export const EditEvent = () => {
         </div>
       </div>
 
-      {/* Content with proper alignment and styling */}
+      {/* Content with proper alignment */}
       <div className="bg-background py-[13px] mx-[3px] px-[79px] my-[16px]">
-        <div className="p-0 max-w-none mx-auto space-y-6 text-sm" style={{ color: '#384252' }}>
+        <div className="p-0 max-w-none mx-auto space-y-6">
           {renderTabContent()}
         </div>
       </div>

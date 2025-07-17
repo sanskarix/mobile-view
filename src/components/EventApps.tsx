@@ -1,7 +1,5 @@
-
 import React from 'react';
 import { Plus } from 'lucide-react';
-
 const availableApps = [{
   id: 'basecamp',
   name: 'Basecamp3',
@@ -33,15 +31,13 @@ const availableApps = [{
   description: 'Add a GIF to your confirmation page',
   logo: '🎬'
 }];
-
 export const EventApps = () => {
-  return (
-    <div className="p-0 max-w-none mx-auto space-y-6 text-sm" style={{ color: '#384252' }}>
+  return <div className="p-0 max-w-none mx-auto space-y-6">
       <div className="text-center py-8">
         <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-4">
           <span className="text-muted-foreground text-2xl">📱</span>
         </div>
-        <h3 className="text-sm font-semibold mb-2" style={{ color: '#384252' }}>No apps installed</h3>
+        <h3 className="text-lg font-semibold text-foreground mb-2">No apps installed</h3>
         <p className="text-muted-foreground mb-6 max-w-md mx-auto text-sm">
           Apps enable you to enhance your workflow and improve your scheduling life significantly.
         </p>
@@ -51,19 +47,18 @@ export const EventApps = () => {
       </div>
 
       <div>
-        <h3 className="text-sm font-semibold mb-2" style={{ color: '#384252' }}>Available apps</h3>
+        <h3 className="text-lg font-semibold text-foreground mb-2">Available apps</h3>
         <p className="text-muted-foreground mb-6 text-sm">View popular apps below and explore more in our App Store</p>
           
         <div className="space-y-3">
-          {availableApps.map(app => (
-            <div key={app.id} className="flex items-center justify-between p-4 border border-border rounded-lg hover:border-border/60 transition-colors bg-card">
+          {availableApps.map(app => <div key={app.id} className="flex items-center justify-between p-4 border border-border rounded-lg hover:border-border/60 transition-colors bg-card">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-muted/50 rounded-lg flex items-center justify-center border border-border">
                   <span className="text-lg">{app.logo}</span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2 mb-1">
-                    <h4 className="font-medium text-sm" style={{ color: '#384252' }}>{app.name}</h4>
+                    <h4 className="font-medium text-foreground text-sm">{app.name}</h4>
                     <span className="px-2 py-0.5 bg-muted text-muted-foreground text-xs rounded-full font-medium">
                       {app.category}
                     </span>
@@ -71,14 +66,12 @@ export const EventApps = () => {
                   <p className="text-muted-foreground text-xs line-clamp-1">{app.description}</p>
                 </div>
               </div>
-              <button className="flex items-center px-3 py-1.5 text-xs border border-border rounded-md hover:bg-muted transition-colors font-medium ml-3" style={{ color: '#384252' }}>
+              <button className="flex items-center px-3 py-1.5 text-xs text-foreground border border-border rounded-md hover:bg-muted transition-colors font-medium ml-3">
                 <Plus className="h-3 w-3 mr-1" />
                 Add
               </button>
-            </div>
-          ))}
+            </div>)}
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
