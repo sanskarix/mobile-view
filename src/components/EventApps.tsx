@@ -42,7 +42,7 @@ const availableApps = [
 
 export const EventApps = () => {
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-0 max-w-none mx-auto space-y-6">
       <div className="text-center py-8">
         <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-4">
           <span className="text-muted-foreground text-2xl">📱</span>
