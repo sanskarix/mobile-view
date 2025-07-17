@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown, Moon, HelpCircle, MapPin, LogOut, User, Settings, ExternalLink, MessageSquare, FileIcon, Mail } from 'lucide-react';
+import { ChevronDown, Moon, HelpCircle, MapPin, LogOut, User, Settings, ExternalLink, MessageSquare, FileIcon, Mail, ArrowLeft } from 'lucide-react';
 import { Switch } from './ui/switch';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   showEventTypesHeader?: boolean;
@@ -22,6 +22,7 @@ export const Header = ({
   const [showHelpDropdown, setShowHelpDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -45,8 +46,33 @@ export const Header = ({
   const isBookingsPage = location.pathname === '/bookings';
   const isAvailabilityPage = location.pathname === '/availability';
   const isTeamsPage = location.pathname === '/teams';
+  const isEventEditPage = location.pathname.includes('/event/');
+
+  const handleBack = () => {
+    navigate('/event-types');
+  };
+
+  const handleSave = () => {
+    // Handle save functionality
+    console.log('Save clicked');
+  };
 
   const renderPageContent = () => {
+    if (isEventEditPage && eventData) {
+      return (
+        <div className="flex items-center space-x-4">
+          <button 
+            onClick={handleBack} 
+            className="flex items-center text-muted-foreground hover:text-foreground transition-colors" 
+            title="Back to Event Types"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+          <h1 className="text-xl font-semibold text-foreground">{eventData.title}</h1>
+        </div>
+      );
+    }
+    
     if (isHomePage) return (
       <div className="flex-1">
         <h1 className="text-xl font-semibold text-foreground mb-1">Dashboard</h1>
@@ -111,24 +137,27 @@ export const Header = ({
       <div className="h-full px-8 flex items-center justify-between w-full">
         {renderPageContent()}
         
-        {eventData && (
-          <div className="flex-1">
-            <div className="flex items-center space-x-3 mb-1">
-              <h1 className="text-xl font-semibold text-foreground">
-                {eventData.title}
-              </h1>
-            </div>
-          </div>
-        )}
-        
         <div className="flex items-center space-x-4 ml-auto">
           {eventData && (
-            <div className="flex items-center space-x-2">
-              <Switch checked={eventData.enabled} onCheckedChange={eventData.onEnabledChange} />
-              <span className="text-sm text-muted-foreground">
-                {eventData.enabled ? 'Enabled' : 'Disabled'}
-              </span>
-            </div>
+            <>
+              <div className="flex items-center space-x-2">
+                <Switch checked={eventData.enabled} onCheckedChange={eventData.onEnabledChange} />
+                <span className="text-sm text-muted-foreground">
+                  {eventData.enabled ? 'Enabled' : 'Disabled'}
+                </span>
+              </div>
+              
+              <div className="w-px h-6 bg-border"></div>
+              
+              <button 
+                onClick={handleSave}
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
+              >
+                Save
+              </button>
+              
+              <div className="w-px h-6 bg-border"></div>
+            </>
           )}
 
           {/* Profile */}
