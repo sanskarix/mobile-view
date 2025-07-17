@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Bold, Italic, Link, MapPin, Plus, X, Clock, Settings, Copy, ExternalLink, Code, Trash2 } from 'lucide-react';
+
 interface EventSetupProps {
   onChange?: () => void;
 }
+
 export const EventSetup = ({
   onChange
 }: EventSetupProps) => {
@@ -17,6 +19,7 @@ export const EventSetup = ({
     customDuration: '',
     showCustomDuration: false
   });
+
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState('google-meet');
   const [showLinkInput, setShowLinkInput] = useState(false);
@@ -30,6 +33,7 @@ export const EventSetup = ({
     googleMapsLink: '',
     showGoogleMaps: false
   });
+
   const availableDurations = ['15', '30', '45', '60'];
   const locationOptions = [{
     id: 'conferencing',
@@ -89,6 +93,7 @@ export const EventSetup = ({
     type: 'option',
     icon: '🏢'
   }];
+
   const handleFormChange = (field: string, value: any) => {
     setFormData(prev => ({
       ...prev,
@@ -96,18 +101,22 @@ export const EventSetup = ({
     }));
     onChange?.();
   };
+
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(`https://cal.id/sanskar/${formData.url}`);
     setCopiedUrl(true);
     setTimeout(() => setCopiedUrl(false), 1500);
   };
+
   const handlePreviewUrl = () => {
     window.open(`https://cal.id/sanskar/${formData.url}`, '_blank');
   };
+
   const handleDurationToggle = (duration: string) => {
     const newDurations = formData.durations.includes(duration) ? formData.durations.filter(d => d !== duration) : [...formData.durations, duration];
     handleFormChange('durations', newDurations);
   };
+
   const addCustomDuration = () => {
     if (formData.customDuration && !formData.durations.includes(formData.customDuration)) {
       handleFormChange('durations', [...formData.durations, formData.customDuration]);
@@ -118,11 +127,13 @@ export const EventSetup = ({
       }));
     }
   };
+
   const handleLocationSelect = (locationId: string) => {
     setSelectedLocation(locationId);
     setShowLocationDropdown(false);
     handleFormChange('location', locationId);
   };
+
   const handleLinkInsert = () => {
     if (linkUrl) {
       document.execCommand('createLink', false, linkUrl);
@@ -130,6 +141,7 @@ export const EventSetup = ({
       setLinkUrl('');
     }
   };
+
   const renderLocationDetails = () => {
     if (['zoom', 'facetime', 'link-meeting'].includes(selectedLocation)) {
       return <div className="mt-4 p-4 bg-muted/30 rounded-lg">
@@ -188,6 +200,7 @@ export const EventSetup = ({
     }
     return null;
   };
+
   return <div className="p-0 max-w-none mx-auto space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
@@ -242,25 +255,36 @@ export const EventSetup = ({
       <div>
         <div className="flex items-center space-x-2 mb-2">
           <label className="block text-sm font-medium text-gray-700">URL</label>
-          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-          <div className="flex items-center space-x-2 px-3 py-1 rounded text-sm text-gray-600 bg-transparent">
-            <span>cal.id/sanskar/{formData.url}</span>
-            <button onClick={handleCopyUrl} className="p-1 hover:bg-gray-200 rounded transition-colors" title="Copy URL">
-              <Copy className="h-3 w-3" />
-            </button>
-            <button onClick={handlePreviewUrl} className="p-1 hover:bg-gray-200 rounded transition-colors" title="Preview">
-              <ExternalLink className="h-3 w-3" />
-            </button>
-            {copiedUrl && <div className="absolute bg-gray-800 text-white text-xs px-2 py-1 rounded ml-2">
-                Copied!
-              </div>}
-          </div>
         </div>
-        <div className="flex">
+        <div className="flex items-center">
           <span className="inline-flex items-center px-4 py-3 border border-r-0 border-border bg-muted text-muted-foreground text-sm rounded-l-lg">
             cal.id/sanskar/
           </span>
-          <input type="text" value={formData.url} onChange={e => handleFormChange('url', e.target.value)} className="flex-1 px-4 py-3 border border-border rounded-r-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm" />
+          <input 
+            type="text" 
+            value={formData.url} 
+            onChange={e => handleFormChange('url', e.target.value)} 
+            className="flex-1 px-4 py-3 border border-border focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm" 
+          />
+          <div className="flex items-center border border-l-0 border-border rounded-r-lg bg-background">
+            <button 
+              onClick={handleCopyUrl} 
+              className="p-3 hover:bg-muted transition-colors border-r border-border" 
+              title="Copy URL"
+            >
+              <Copy className="h-4 w-4 text-muted-foreground" />
+            </button>
+            <button 
+              onClick={handlePreviewUrl} 
+              className="p-3 hover:bg-muted transition-colors rounded-r-lg" 
+              title="Preview"
+            >
+              <ExternalLink className="h-4 w-4 text-muted-foreground" />
+            </button>
+          </div>
+          {copiedUrl && <div className="absolute bg-gray-800 text-white text-xs px-2 py-1 rounded ml-2 z-10">
+              Copied!
+            </div>}
         </div>
       </div>
 
