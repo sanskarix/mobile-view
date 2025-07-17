@@ -302,7 +302,7 @@ export const EventSetup = ({
                 {locationOptions.find(opt => opt.id === selectedLocation)?.label || 'Select location'}
               </span>
             </div>
-            <Settings className="h-4 w-4 text-muted-foreground" />
+            
           </button>
           
           {showLocationDropdown && <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto animate-scale-in">
