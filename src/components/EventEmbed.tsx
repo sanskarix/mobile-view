@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ArrowLeft, Copy } from 'lucide-react';
 import { Switch } from './ui/switch';
@@ -185,8 +184,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           }`}
           onClick={() => setSelectedOption('inline')}
         >
-          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
-            <img src="/lovable-uploads/133eb298-18d9-432a-9021-0fb523e22ea1.png" alt="Inline Embed" className="w-full h-full object-cover" />
+          <div className="h-24 bg-gray-100 rounded mb-4 flex items-center justify-center">
+            <div className="text-gray-500 text-sm">Inline Embed</div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Inline Embed
@@ -202,8 +201,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           }`}
           onClick={() => setSelectedOption('floating')}
         >
-          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
-            <img src="/lovable-uploads/69196664-f03c-4fe1-9e86-212a6a594429.png" alt="Floating Button" className="w-full h-full object-cover" />
+          <div className="h-24 bg-gray-100 rounded mb-4 flex items-center justify-center">
+            <div className="text-gray-500 text-sm">Floating Button</div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Floating pop-up button
@@ -219,8 +218,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           }`}
           onClick={() => setSelectedOption('popup')}
         >
-          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
-            <img src="/lovable-uploads/b7d986e8-f6b5-40e1-bb67-0cdd3abcfa79.png" alt="Pop up via element click" className="w-full h-full object-cover" />
+          <div className="h-24 bg-gray-100 rounded mb-4 flex items-center justify-center">
+            <div className="text-gray-500 text-sm">Pop-up Click</div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Pop up via element click
@@ -236,8 +235,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           }`}
           onClick={() => setSelectedOption('email')}
         >
-          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
-            <img src="/lovable-uploads/773f0626-a678-4a35-a919-4e0fb1f2d469.png" alt="Email Embed" className="w-full h-full object-cover" />
+          <div className="h-24 bg-gray-100 rounded mb-4 flex items-center justify-center">
+            <div className="text-gray-500 text-sm">Email Embed</div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Email Embed
