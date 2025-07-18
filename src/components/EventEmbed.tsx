@@ -154,10 +154,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
       {/* Header */}
       <div className="mb-8">
         
-        <p className="text-muted-foreground" style={{
-        fontSize: '14px',
-        color: '#384252'
-      }}>Choose one of the following ways to put Cal ID on your site.</p>
+        
       </div>
 
       {/* Embed Options */}
