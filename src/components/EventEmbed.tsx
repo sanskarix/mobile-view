@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ArrowLeft, Copy } from 'lucide-react';
 import { Switch } from './ui/switch';
@@ -109,7 +110,7 @@ elementOrSelector:"#my-cal-inline",
 config: {"layout":"month_view"},
 calLink: "sanskar/product-hunt-chats",
 });
-Cal.ns["product-hunt-chats"]("ui, {"hideEventTypeDetails":false,"layout":"month_view"});
+Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
 </script>`;
 
         case 'floating':
@@ -184,8 +185,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           }`}
           onClick={() => setSelectedOption('inline')}
         >
-          <div className="h-24 bg-gray-100 rounded mb-4 flex items-center justify-center">
-            <div className="text-gray-500 text-sm">Inline Embed</div>
+          <div className="h-16 bg-gradient-to-br from-blue-50 to-blue-100 rounded mb-4 flex items-center justify-center">
+            <div className="text-blue-600 text-xs font-medium">Inline Embed</div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Inline Embed
@@ -201,8 +202,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           }`}
           onClick={() => setSelectedOption('floating')}
         >
-          <div className="h-24 bg-gray-100 rounded mb-4 flex items-center justify-center">
-            <div className="text-gray-500 text-sm">Floating Button</div>
+          <div className="h-16 bg-gradient-to-br from-green-50 to-green-100 rounded mb-4 flex items-center justify-center">
+            <div className="text-green-600 text-xs font-medium">Floating Button</div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Floating pop-up button
@@ -218,8 +219,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           }`}
           onClick={() => setSelectedOption('popup')}
         >
-          <div className="h-24 bg-gray-100 rounded mb-4 flex items-center justify-center">
-            <div className="text-gray-500 text-sm">Pop-up Click</div>
+          <div className="h-16 bg-gradient-to-br from-purple-50 to-purple-100 rounded mb-4 flex items-center justify-center">
+            <div className="text-purple-600 text-xs font-medium">Pop-up Click</div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Pop up via element click
@@ -235,8 +236,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           }`}
           onClick={() => setSelectedOption('email')}
         >
-          <div className="h-24 bg-gray-100 rounded mb-4 flex items-center justify-center">
-            <div className="text-gray-500 text-sm">Email Embed</div>
+          <div className="h-16 bg-gradient-to-br from-orange-50 to-orange-100 rounded mb-4 flex items-center justify-center">
+            <div className="text-orange-600 text-xs font-medium">Email Embed</div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Email Embed
@@ -263,7 +264,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
                   <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
@@ -363,8 +364,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
               </div>
 
               {/* Preview */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <div className="bg-black rounded-lg p-4 text-white">
+              <div className="bg-gray-50 rounded-lg p-6 flex-shrink-0">
+                <div className="bg-black rounded-lg p-4 text-white max-w-sm mx-auto">
                   <div className="flex justify-between items-center mb-4">
                     <div className="flex items-center space-x-2">
                       <div className="w-8 h-8 rounded-full bg-gray-600"></div>
@@ -407,7 +408,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
                   <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
@@ -524,7 +525,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
               </div>
 
               {/* Preview */}
-              <div className="bg-black rounded-lg p-4 relative min-h-[400px]">
+              <div className="bg-black rounded-lg p-4 relative min-h-[300px] flex-shrink-0 max-w-sm mx-auto">
                 <div 
                   className="absolute rounded-lg px-4 py-2 text-white font-medium text-sm flex items-center space-x-2"
                   style={{
@@ -556,7 +557,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
               </div>
             </div>
 
-            <div className="space-y-6">
+            <div className="max-w-2xl space-y-6">
               <div>
                 <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
                 <select 
@@ -593,7 +594,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                 </select>
               </div>
 
-              <div className="bg-black rounded-lg p-4 flex items-center justify-center min-h-[200px]">
+              <div className="bg-black rounded-lg p-4 flex items-center justify-center min-h-[200px] max-w-md mx-auto">
                 <div className="bg-gray-600 text-white px-4 py-2 rounded text-sm">
                   I am a button that exists on your website
                 </div>
@@ -616,7 +617,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
                   <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
@@ -684,8 +685,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
               </div>
 
               {/* Preview */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <div className="bg-white border border-gray-200 rounded-lg p-4 max-w-sm">
+              <div className="bg-gray-50 rounded-lg p-6 flex-shrink-0">
+                <div className="bg-white border border-gray-200 rounded-lg p-4 max-w-sm mx-auto">
                   <h3 className="font-semibold text-lg mb-2">Product Hunt Chats</h3>
                   <p className="text-sm text-gray-600 mb-1">Duration: 15 mins</p>
                   <p className="text-sm text-gray-600 mb-4">Timezone: {selectedTimezone}</p>
@@ -734,8 +735,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
             <p className="text-sm mb-3" style={{ fontSize: '14px', color: '#384252' }}>
               Place this code in your HTML where you want your OneHash Cal widget to appear.
             </p>
-            <div className="bg-gray-100 border border-gray-300 text-gray-800 p-4 rounded text-sm font-mono overflow-x-auto">
-              <pre>{getEmbedCode()}</pre>
+            <div className="bg-gray-100 border border-gray-300 text-gray-800 p-4 rounded text-sm font-mono overflow-x-auto max-h-80 overflow-y-auto">
+              <pre className="whitespace-pre-wrap break-all">{getEmbedCode()}</pre>
             </div>
           </div>
 
