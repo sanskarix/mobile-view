@@ -11,7 +11,6 @@ import { EventWorkflows } from '../components/EventWorkflows';
 import { EventWebhooks } from '../components/EventWebhooks';
 import { RecurringEvent } from '../components/RecurringEvent';
 import { EventEmbed } from '../components/EventEmbed';
-
 const tabs = [{
   id: 'setup',
   name: 'Event Setup',
@@ -29,10 +28,6 @@ const tabs = [{
   name: 'Advanced',
   icon: Zap
 }, {
-  id: 'embed',
-  name: 'Embed',
-  icon: Settings
-}, {
   id: 'recurring',
   name: 'Recurring',
   icon: RotateCcw
@@ -48,8 +43,11 @@ const tabs = [{
   id: 'webhooks',
   name: 'Webhooks',
   icon: Webhook
+}, {
+  id: 'embed',
+  name: 'Embed',
+  icon: Settings
 }];
-
 export const EditEvent = () => {
   const {
     eventId,
@@ -78,8 +76,6 @@ export const EditEvent = () => {
         return <EventLimits />;
       case 'advanced':
         return <EventAdvanced />;
-      case 'embed':
-        return <EventEmbed />;
       case 'recurring':
         return <RecurringEvent />;
       case 'apps':
@@ -88,6 +84,8 @@ export const EditEvent = () => {
         return <EventWorkflows />;
       case 'webhooks':
         return <EventWebhooks />;
+      case 'embed':
+        return <EventEmbed />;
       default:
         return <EventSetup />;
     }

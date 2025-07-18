@@ -1,48 +1,124 @@
+
 import React, { useState } from 'react';
-import { Plus, Zap, Mail, MessageSquare } from 'lucide-react';
+import { ExternalLink, Mail, MessageSquare, Clock } from 'lucide-react';
 import { Switch } from './ui/switch';
 
+const workflowTemplates = [
+  {
+    id: 'sms-reminder',
+    name: 'SMS Reminder - 10 minutes before',
+    description: 'Send an SMS reminder to attendees 10 minutes before the meeting starts',
+    icon: MessageSquare,
+    trigger: 'Before event',
+    action: 'Send SMS',
+    timing: '10 minutes before'
+  },
+  {
+    id: 'email-reminder',
+    name: 'Email Reminder - 30 minutes before',
+    description: 'Send an email reminder to attendees 30 minutes before the meeting starts',
+    icon: Mail,
+    trigger: 'Before event',
+    action: 'Send Email',
+    timing: '30 minutes before'
+  },
+  {
+    id: 'thankyou-email',
+    name: 'Thank You Email - After meeting',
+    description: 'Send a thank you email to attendees after the meeting ends',
+    icon: Mail,
+    trigger: 'After event',
+    action: 'Send Email',
+    timing: 'Immediately after'
+  }
+];
+
 export const EventWorkflows = () => {
-  const [workflowsEnabled, setWorkflowsEnabled] = useState(false);
-  const [workflows, setWorkflows] = useState([]);
+  const [activeWorkflows, setActiveWorkflows] = useState<string[]>(['sms-reminder']);
+
+  const toggleWorkflow = (workflowId: string) => {
+    setActiveWorkflows(prev => 
+      prev.includes(workflowId) 
+        ? prev.filter(id => id !== workflowId) 
+        : [...prev, workflowId]
+    );
+  };
 
   return (
     <div className="p-0 max-w-none mx-auto space-y-6" style={{ fontSize: '14px', color: '#384252' }}>
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="font-semibold" style={{ fontSize: '16px', color: '#384252' }}>Workflows</h3>
-          <p style={{ fontSize: '14px', color: '#384252' }}>Automate actions when events are scheduled</p>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <span style={{ fontSize: '14px', color: '#384252' }}>
+              {activeWorkflows.length} Active
+            </span>
+            <div className="flex items-center space-x-1">
+              <span style={{ color: '#384252' }}>•</span>
+              <a 
+                href="/workflows" 
+                className="text-blue-600 hover:text-blue-700 flex items-center space-x-1"
+                style={{ fontSize: '14px' }}
+              >
+                <span>Create New Workflow</span>
+                <ExternalLink className="h-3 w-3" />
+              </a>
+            </div>
+          </div>
         </div>
-        <Switch checked={workflowsEnabled} onCheckedChange={setWorkflowsEnabled} />
-      </div>
 
-      {workflowsEnabled ? (
-        workflows.length === 0 ? (
-          <div className="text-center py-12 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg">
-            <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Zap className="h-6 w-6 text-gray-400" />
+        <div className="space-y-3">
+          {workflowTemplates.map(workflow => (
+            <div 
+              key={workflow.id} 
+              className={`w-full p-4 border rounded-lg transition-all ${
+                activeWorkflows.includes(workflow.id) 
+                  ? 'border-[#008c44]/30 bg-[#008c44]/5' 
+                  : 'border-border bg-card hover:border-border/60'
+              }`}
+            >
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center space-x-3">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                    activeWorkflows.includes(workflow.id) 
+                      ? 'bg-[#008c44]/10' 
+                      : 'bg-muted'
+                  }`}>
+                    <workflow.icon className={`h-5 w-5 ${
+                      activeWorkflows.includes(workflow.id) 
+                        ? 'text-[#008c44]' 
+                        : 'text-muted-foreground'
+                    }`} />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold mb-1" style={{ fontSize: '14px', color: '#384252' }}>{workflow.name}</h4>
+                    <p className="mb-2" style={{ fontSize: '14px', color: '#384252' }}>{workflow.description}</p>
+                    <div className="flex items-center space-x-3" style={{ fontSize: '12px', color: '#384252' }}>
+                      <span className="flex items-center">
+                        <Clock className="h-3 w-3 mr-1" />
+                        {workflow.trigger}
+                      </span>
+                      <span>•</span>
+                      <span>{workflow.action}</span>
+                      <span>•</span>
+                      <span>{workflow.timing}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between pt-3 border-t border-border">
+                <span style={{ fontSize: '14px', color: '#384252' }}>
+                  {activeWorkflows.includes(workflow.id) ? 'Enabled' : 'Disabled'}
+                </span>
+                <Switch 
+                  checked={activeWorkflows.includes(workflow.id)} 
+                  onCheckedChange={() => toggleWorkflow(workflow.id)} 
+                />
+              </div>
             </div>
-            <p className="mb-4" style={{ fontSize: '14px', color: '#384252' }}>No workflows configured</p>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium" style={{ fontSize: '14px' }}>
-              Create Workflow
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h4 className="font-semibold" style={{ fontSize: '14px', color: '#384252' }}>Active Workflows</h4>
-              <button className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium" style={{ fontSize: '14px' }}>
-                <Plus className="h-4 w-4 mr-1" />
-                Add Workflow
-              </button>
-            </div>
-          </div>
-        )
-      ) : (
-        <div className="text-center py-8 text-gray-500" style={{ fontSize: '14px' }}>
-          Enable workflows to automate actions when events are scheduled
+          ))}
         </div>
-      )}
+      </div>
     </div>
   );
 };

@@ -1,84 +1,75 @@
+
 import React, { useState } from 'react';
-import { Plus, Clock, ChevronDown } from 'lucide-react';
-import { Switch } from './ui/switch';
-import { DateOverrideModal } from './DateOverrideModal';
+import { ChevronDown, Clock, Edit, ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const EventAvailability = () => {
-  const [showOverrideModal, setShowOverrideModal] = useState(false);
-  const [selectedSchedule, setSelectedSchedule] = useState('default');
-  
-  const schedules = [
-    { id: 'default', name: 'Working Hours' },
-    { id: 'extended', name: 'Extended Hours' },
-    { id: 'weekend', name: 'Weekend Schedule' },
-    { id: 'custom', name: 'Custom Schedule' }
+  const navigate = useNavigate();
+
+  const handleEditAvailability = () => {
+    navigate('/availability');
+  };
+
+  const weeklySchedule = [
+    { day: 'Monday', startTime: '9:00 am', endTime: '5:00 pm', available: true },
+    { day: 'Tuesday', startTime: '9:00 am', endTime: '5:00 pm', available: true },
+    { day: 'Wednesday', startTime: '9:00 am', endTime: '5:00 pm', available: true },
+    { day: 'Thursday', startTime: '9:00 am', endTime: '5:00 pm', available: true },
+    { day: 'Friday', startTime: '9:00 am', endTime: '5:00 pm', available: true },
+    { day: 'Saturday', startTime: '', endTime: '', available: false },
+    { day: 'Sunday', startTime: '', endTime: '', available: false }
   ];
 
-  const [dateOverrides, setDateOverrides] = useState([]);
-
-  const addDateOverride = (date: string) => {
-    setDateOverrides(prev => [...prev, { id: Date.now().toString(), date }]);
-  };
-
-  const deleteDateOverride = (id: string) => {
-    setDateOverrides(prev => prev.filter(override => override.id !== id));
-  };
-
   return (
-    <div className="p-0 max-w-none mx-auto space-y-6" style={{ fontSize: '14px', color: '#384252' }}>
-      {/* Schedule Selection */}
-      <div>
-        <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
-          Which schedule should this event type use?
-        </label>
-        <div className="relative">
-          <select 
-            value={selectedSchedule}
-            onChange={(e) => setSelectedSchedule(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg appearance-none bg-white" 
-            style={{ fontSize: '14px', color: '#384252' }}
-          >
-            {schedules.map(schedule => (
-              <option key={schedule.id} value={schedule.id}>{schedule.name}</option>
-            ))}
-          </select>
-          <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+    <div className="p-6 max-w-none mx-auto space-y-6 border border-gray-200 rounded-lg" style={{ fontSize: '14px', color: '#384252' }}>
+      {/* Header with dropdown */}
+      <div className="flex items-center justify-between border-b border-border pb-4">
+        <div className="flex items-center space-x-2">
+          <h3 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>Working Hours - Default</h3>
+          <ChevronDown className="h-5 w-5 text-muted-foreground" />
         </div>
-        <p className="mt-2" style={{ fontSize: '12px', color: '#384252' }}>
-          Apply a schedule to this event type.
-        </p>
       </div>
 
-      {/* Date Overrides */}
-      <div className="border-t border-gray-200 pt-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold" style={{ fontSize: '16px', color: '#384252' }}>Date Overrides</h3>
-          <button onClick={() => setShowOverrideModal(true)} className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium" style={{ fontSize: '14px' }}>
-            <Plus className="h-4 w-4 mr-1" />
-            Add Override
-          </button>
-        </div>
-
-        {dateOverrides.length === 0 ? (
-          <div className="text-center py-8 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg">
-            <Clock className="h-6 w-6 text-gray-400 mx-auto mb-2" />
-            <p style={{ fontSize: '14px', color: '#384252' }}>No date overrides configured</p>
+      {/* Weekly Schedule */}
+      <div className="space-y-6">
+        {weeklySchedule.map((schedule, index) => (
+          <div key={schedule.day} className="flex items-center justify-between">
+            <div className="font-medium min-w-[120px]" style={{ fontSize: '14px', color: '#384252' }}>
+              {schedule.day}
+            </div>
+            <div className="flex items-center space-x-4" style={{ fontSize: '14px', color: '#384252' }}>
+              {schedule.available ? (
+                <>
+                  <span>{schedule.startTime}</span>
+                  <span>-</span>
+                  <span>{schedule.endTime}</span>
+                </>
+              ) : (
+                <span>Unavailable</span>
+              )}
+            </div>
           </div>
-        ) : (
-          <div className="space-y-3">
-            {dateOverrides.map(override => (
-              <div key={override.id} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg bg-white">
-                <span style={{ fontSize: '14px', color: '#384252' }}>{override.date}</span>
-                <button onClick={() => deleteDateOverride(override.id)} className="text-red-500 hover:text-red-700">
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
+        ))}
       </div>
 
-      <DateOverrideModal isOpen={showOverrideModal} onClose={() => setShowOverrideModal(false)} onDateSelect={addDateOverride} />
+      {/* Timezone section */}
+      <div className="flex items-center justify-between pt-6 border-t border-border">
+        <div className="flex items-center space-x-2">
+          <div className="w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center">
+            <div className="w-2 h-2 bg-white rounded-full"></div>
+          </div>
+          <span style={{ fontSize: '14px', color: '#384252' }}>Asia/Calcutta</span>
+        </div>
+        <button
+          onClick={handleEditAvailability}
+          className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition-colors"
+          style={{ fontSize: '14px' }}
+        >
+          <Clock className="h-4 w-4" />
+          <span>Edit</span>
+          <ExternalLink className="h-3 w-3" />
+        </button>
+      </div>
     </div>
   );
 };

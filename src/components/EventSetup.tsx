@@ -204,12 +204,12 @@ export const EventSetup = ({
 
   return <div className="p-0 max-w-none mx-auto space-y-6">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
-        <input type="text" value={formData.title} onChange={e => handleFormChange('title', e.target.value)} className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-base" />
+        <label className="block text-sm font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Title</label>
+        <input type="text" value={formData.title} onChange={e => handleFormChange('title', e.target.value)} className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background" style={{ fontSize: '14px' }} />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+        <label className="block text-sm font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Description</label>
         <div className="border border-border rounded-lg bg-background">
           <div className="flex items-center space-x-2 p-3 border-b border-border">
             <button className="p-2 hover:bg-muted rounded transition-colors" onClick={() => document.execCommand('bold')}>
@@ -223,9 +223,9 @@ export const EventSetup = ({
                 <Link className="h-4 w-4 text-muted-foreground" />
               </button>
               {showLinkInput && <div className="absolute top-full left-0 mt-1 p-3 bg-popover border border-border rounded-lg shadow-lg z-10 w-64 animate-scale-in">
-                  <input type="url" placeholder="Enter URL" value={linkUrl} onChange={e => setLinkUrl(e.target.value)} className="w-full px-3 py-2 border border-border rounded mb-2 text-sm bg-background" autoFocus />
+                  <input type="url" placeholder="Enter URL" value={linkUrl} onChange={e => setLinkUrl(e.target.value)} className="w-full px-3 py-2 border border-border rounded mb-2 bg-background" style={{ fontSize: '14px' }} autoFocus />
                   <div className="flex justify-end space-x-2">
-                    <button onClick={() => setShowLinkInput(false)} className="px-3 py-1 text-sm text-muted-foreground hover:text-foreground">
+                    <button onClick={() => setShowLinkInput(false)} className="px-3 py-1 text-muted-foreground hover:text-foreground" style={{ fontSize: '14px' }}>
                       Cancel
                     </button>
                     <button onClick={() => {
@@ -234,38 +234,41 @@ export const EventSetup = ({
                     setShowLinkInput(false);
                     setLinkUrl('');
                   }
-                }} className="px-3 py-1 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90">
+                }} className="px-3 py-1 bg-primary text-primary-foreground rounded hover:bg-primary/90" style={{ fontSize: '14px' }}>
                       Insert
                     </button>
                   </div>
                 </div>}
             </div>
           </div>
-          <div contentEditable className="w-full p-4 min-h-[100px] focus:outline-none text-sm text-gray-600" dangerouslySetInnerHTML={{
+          <div contentEditable className="w-full p-4 min-h-[100px] focus:outline-none" style={{ fontSize: '14px', color: '#384252' }} dangerouslySetInnerHTML={{
           __html: formData.description
         }} onInput={e => handleFormChange('description', e.currentTarget.innerHTML)} />
         </div>
         <div className="flex items-center justify-between mt-2">
-          <label htmlFor="translate" className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>
-            Translate description to the visitor's browser language using AI
-          </label>
-          <Switch id="translate" />
+          <div className="flex items-center">
+            <Switch id="translate" />
+            <label htmlFor="translate" className="ml-3" style={{ fontSize: '14px', color: '#384252' }}>
+              Translate description to the visitor's browser language using AI
+            </label>
+          </div>
         </div>
       </div>
 
       <div>
         <div className="flex items-center space-x-2 mb-2">
-          <label className="block text-sm font-medium text-gray-700">URL</label>
+          <label className="block text-sm font-medium" style={{ fontSize: '14px', color: '#384252' }}>URL</label>
         </div>
         <div className="flex items-center">
-          <span className="inline-flex items-center px-4 py-3 border border-r-0 border-border bg-muted text-muted-foreground text-sm rounded-l-lg">
+          <span className="inline-flex items-center px-4 py-3 border border-r-0 border-border bg-muted text-muted-foreground rounded-l-lg" style={{ fontSize: '14px' }}>
             cal.id/sanskar/
           </span>
           <input 
             type="text" 
             value={formData.url} 
             onChange={e => handleFormChange('url', e.target.value)} 
-            className="flex-1 px-4 py-3 border border-border focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm" 
+            className="flex-1 px-4 py-3 border border-border focus:ring-2 focus:ring-ring focus:border-transparent bg-background" 
+            style={{ fontSize: '14px' }}
           />
           <div className="flex items-center border border-l-0 border-border rounded-r-lg bg-background">
             <button 
@@ -283,23 +286,23 @@ export const EventSetup = ({
               <ExternalLink className="h-4 w-4" style={{ color: '#384252' }} />
             </button>
           </div>
-          {copiedUrl && <div className="absolute bg-gray-800 text-white text-xs px-2 py-1 rounded ml-2 z-10">
+          {copiedUrl && <div className="absolute bg-gray-800 text-white px-2 py-1 rounded ml-2 z-10" style={{ fontSize: '14px' }}>
               Copied!
             </div>}
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-4">Available durations</label>
+        <label className="block text-sm font-medium mb-4" style={{ fontSize: '14px', color: '#384252' }}>Available durations</label>
         <div className="flex flex-wrap gap-2 mb-4">
           {availableDurations.map(duration => <button key={duration} onClick={() => {
           const newDurations = formData.durations.includes(duration) ? formData.durations.filter(d => d !== duration) : [...formData.durations, duration];
           handleFormChange('durations', newDurations);
-        }} className={`px-3 py-2 text-sm rounded border transition-colors flex items-center space-x-1 ${formData.durations.includes(duration) ? 'bg-primary/10 border-primary text-primary' : 'bg-background border-border text-gray-600 hover:bg-muted'}`}>
+        }} className={`px-3 py-2 rounded border transition-colors flex items-center space-x-1 ${formData.durations.includes(duration) ? 'bg-primary/10 border-primary text-primary' : 'bg-background border-border text-gray-600 hover:bg-muted'}`} style={{ fontSize: '14px' }}>
               <Clock className="h-3 w-3" />
               <span>{duration} mins</span>
             </button>)}
-          {formData.durations.filter(d => !availableDurations.includes(d)).map(duration => <div key={duration} className="flex items-center space-x-1 px-3 py-2 text-sm rounded border bg-primary/10 border-primary text-primary">
+          {formData.durations.filter(d => !availableDurations.includes(d)).map(duration => <div key={duration} className="flex items-center space-x-1 px-3 py-2 rounded border bg-primary/10 border-primary text-primary" style={{ fontSize: '14px' }}>
               <Clock className="h-3 w-3" />
               <span>{duration} mins</span>
             </div>)}
@@ -308,15 +311,15 @@ export const EventSetup = ({
         {!formData.showCustomDuration ? <button onClick={() => setFormData(prev => ({
         ...prev,
         showCustomDuration: true
-      }))} className="text-sm text-primary hover:text-primary/80 flex items-center transition-colors">
+      }))} className="text-primary hover:text-primary/80 flex items-center transition-colors" style={{ fontSize: '14px' }}>
             <Plus className="h-4 w-4 mr-1" />
             Add custom duration
           </button> : <div className="flex items-center space-x-2">
             <input type="number" value={formData.customDuration} onChange={e => setFormData(prev => ({
           ...prev,
           customDuration: e.target.value
-        }))} placeholder="Duration" className="w-24 px-3 py-2 border border-border rounded text-sm bg-background" />
-            <span className="text-sm">mins</span>
+        }))} placeholder="Duration" className="w-24 px-3 py-2 border border-border rounded bg-background" style={{ fontSize: '14px' }} />
+            <span style={{ fontSize: '14px' }}>mins</span>
             <button onClick={() => {
           if (formData.customDuration && !formData.durations.includes(formData.customDuration)) {
             handleFormChange('durations', [...formData.durations, formData.customDuration]);
@@ -326,7 +329,7 @@ export const EventSetup = ({
               showCustomDuration: false
             }));
           }
-        }} className="px-3 py-2 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90 transition-colors">
+        }} className="px-3 py-2 bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors" style={{ fontSize: '14px' }}>
               Add
             </button>
             <button onClick={() => setFormData(prev => ({
@@ -340,36 +343,38 @@ export const EventSetup = ({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Default duration</label>
-        <select value={formData.defaultDuration} onChange={e => handleFormChange('defaultDuration', e.target.value)} className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm">
+        <label className="block text-sm font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Default duration</label>
+        <select value={formData.defaultDuration} onChange={e => handleFormChange('defaultDuration', e.target.value)} className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background" style={{ fontSize: '14px' }}>
           {formData.durations.map(duration => <option key={duration} value={duration}>{duration} mins</option>)}
         </select>
       </div>
 
       <div>
         <div className="flex items-center justify-between">
-          <label htmlFor="allowBookerToSelectDuration" className="text-sm font-medium" style={{ fontSize: '14px', color: '#384252' }}>
-            Allow booker to select duration
-          </label>
-          <Switch 
-            id="allowBookerToSelectDuration" 
-            checked={formData.allowBookerToSelectDuration} 
-            onCheckedChange={value => handleFormChange('allowBookerToSelectDuration', value)} 
-          />
+          <div className="flex items-center">
+            <Switch 
+              id="allowBookerToSelectDuration" 
+              checked={formData.allowBookerToSelectDuration} 
+              onCheckedChange={value => handleFormChange('allowBookerToSelectDuration', value)} 
+            />
+            <label htmlFor="allowBookerToSelectDuration" className="ml-3 text-sm font-medium" style={{ fontSize: '14px', color: '#384252' }}>
+              Allow booker to select duration
+            </label>
+          </div>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+        <label className="block text-sm font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Location</label>
         <div className="relative">
           <button onClick={() => setShowLocationDropdown(!showLocationDropdown)} className="w-full flex items-center justify-between p-4 border border-border rounded-lg hover:border-border/60 focus:ring-2 focus:ring-ring bg-background transition-colors">
             <div className="flex items-center">
               <div className="w-8 h-8 bg-primary rounded flex items-center justify-center mr-3">
-                <span className="text-primary-foreground text-xs font-bold">
+                <span className="text-primary-foreground font-bold" style={{ fontSize: '14px' }}>
                   {selectedLocation === 'google-meet' ? 'GM' : selectedLocation === 'zoom' ? '🎥' : '📍'}
                 </span>
               </div>
-              <span className="text-foreground">
+              <span className="text-foreground" style={{ fontSize: '14px' }}>
                 {locationOptions.find(opt => opt.id === selectedLocation)?.label || 'Select location'}
               </span>
             </div>
@@ -378,11 +383,11 @@ export const EventSetup = ({
           
           {showLocationDropdown && <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto animate-scale-in">
               {locationOptions.map(option => <div key={option.id}>
-                  {option.type === 'header' ? <div className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide bg-muted/30">
+                  {option.type === 'header' ? <div className="px-4 py-2 font-semibold text-muted-foreground uppercase tracking-wide bg-muted/30" style={{ fontSize: '12px' }}>
                       {option.label}
                     </div> : <button onClick={() => handleLocationSelect(option.id)} className="w-full flex items-center px-4 py-3 text-left hover:bg-muted transition-colors">
-                      <span className="mr-3 text-sm">{option.icon}</span>
-                      <span className="text-sm">{option.label}</span>
+                      <span className="mr-3" style={{ fontSize: '14px' }}>{option.icon}</span>
+                      <span style={{ fontSize: '14px' }}>{option.label}</span>
                     </button>}
                 </div>)}
             </div>}
@@ -390,7 +395,7 @@ export const EventSetup = ({
         
         {renderLocationDetails()}
         
-        <p className="text-sm text-muted-foreground mt-2">
+        <p className="text-muted-foreground mt-2" style={{ fontSize: '14px' }}>
           Can't find the right conferencing app? Visit our{' '}
           <a href="#" className="text-primary hover:text-primary/80 transition-colors">App Store</a>.
         </p>
@@ -398,11 +403,11 @@ export const EventSetup = ({
 
       <div className="flex justify-between items-center pt-8 border-t border-border">
         <div className="flex space-x-3">
-          <button className="flex items-center px-4 py-2 text-sm border border-border rounded-lg hover:bg-muted transition-colors">
+          <button className="flex items-center px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors" style={{ fontSize: '14px' }}>
             <Code className="h-4 w-4 mr-2" />
             Embed
           </button>
-          <button className="flex items-center px-4 py-2 text-sm border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition-colors">
+          <button className="flex items-center px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition-colors" style={{ fontSize: '14px' }}>
             <Trash2 className="h-4 w-4 mr-2" />
             Delete event
           </button>
