@@ -65,27 +65,7 @@ export const EventWorkflows = () => {
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${activeWorkflows.includes(workflow.id) ? 'bg-[#008c44]/10' : 'bg-muted'}`}>
                     <workflow.icon className={`h-5 w-5 ${activeWorkflows.includes(workflow.id) ? 'text-[#008c44]' : 'text-muted-foreground'}`} />
                   </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold mb-1" style={{
-                  fontSize: '14px',
-                  color: '#384252'
-                }}>{workflow.name}</h4>
-                    <p className="mb-2" style={{
-                  fontSize: '14px',
-                  color: '#384252'
-                }}>{workflow.description}</p>
-                    <div className="flex items-center space-x-3" style={{
-                  fontSize: '12px',
-                  color: '#384252'
-                }}>
-                      
-                      <span>•</span>
-                      <span>{workflow.action}</span>
-                      <span>•</span>
-                      <span>{workflow.timing}</span>
-                    </div>
-                                  
-                  </div>
+                  
                 </div>
               </div>
               
