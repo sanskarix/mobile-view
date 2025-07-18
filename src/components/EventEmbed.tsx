@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ArrowLeft, Copy } from 'lucide-react';
 import { Switch } from './ui/switch';
@@ -109,7 +110,7 @@ elementOrSelector:"#my-cal-inline",
 config: {"layout":"month_view"},
 calLink: "sanskar/product-hunt-chats",
 });
-Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
+Cal.ns["product-hunt-chats"]("ui, {"hideEventTypeDetails":false,"layout":"month_view"});
 </script>`;
 
         case 'floating':
@@ -165,9 +166,9 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
   ];
 
   return (
-    <div className="p-0 max-w-none mx-auto space-y-6" style={{ fontSize: '14px', color: '#384252' }}>
+    <div className="p-0 max-w-none mx-auto space-y-8" style={{ fontSize: '14px', color: '#384252' }}>
       {/* Header */}
-      <div className="mb-6">
+      <div className="mb-8">
         <h2 className="text-xl font-semibold mb-3" style={{ fontSize: '20px', color: '#384252' }}>
           How do you want to add OneHash Cal to your site?
         </h2>
@@ -177,15 +178,15 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
       </div>
 
       {/* Embed Options */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         <div 
-          className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
             selectedOption === 'inline' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
           }`}
           onClick={() => setSelectedOption('inline')}
         >
-          <div className="h-24 bg-gray-100 rounded mb-3 flex items-center justify-center overflow-hidden">
-            <img src="/lovable-uploads/133eb298-18d9-432a-9021-0fb523e22ea1.png" alt="Inline Embed" className="w-full h-full object-contain" />
+          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
+            <img src="/lovable-uploads/133eb298-18d9-432a-9021-0fb523e22ea1.png" alt="Inline Embed" className="w-full h-full object-cover" />
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Inline Embed
@@ -196,13 +197,13 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
         </div>
 
         <div 
-          className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
             selectedOption === 'floating' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
           }`}
           onClick={() => setSelectedOption('floating')}
         >
-          <div className="h-24 bg-gray-100 rounded mb-3 flex items-center justify-center overflow-hidden">
-            <img src="/lovable-uploads/69196664-f03c-4fe1-9e86-212a6a594429.png" alt="Floating Button" className="w-full h-full object-contain" />
+          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
+            <img src="/lovable-uploads/69196664-f03c-4fe1-9e86-212a6a594429.png" alt="Floating Button" className="w-full h-full object-cover" />
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Floating pop-up button
@@ -213,13 +214,13 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
         </div>
 
         <div 
-          className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
             selectedOption === 'popup' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
           }`}
           onClick={() => setSelectedOption('popup')}
         >
-          <div className="h-24 bg-gray-100 rounded mb-3 flex items-center justify-center overflow-hidden">
-            <img src="/lovable-uploads/b7d986e8-f6b5-40e1-bb67-0cdd3abcfa79.png" alt="Pop up via element click" className="w-full h-full object-contain" />
+          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
+            <img src="/lovable-uploads/b7d986e8-f6b5-40e1-bb67-0cdd3abcfa79.png" alt="Pop up via element click" className="w-full h-full object-cover" />
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Pop up via element click
@@ -230,13 +231,13 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
         </div>
 
         <div 
-          className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
             selectedOption === 'email' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
           }`}
           onClick={() => setSelectedOption('email')}
         >
-          <div className="h-24 bg-gray-100 rounded mb-3 flex items-center justify-center overflow-hidden">
-            <img src="/lovable-uploads/773f0626-a678-4a35-a919-4e0fb1f2d469.png" alt="Email Embed" className="w-full h-full object-contain" />
+          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
+            <img src="/lovable-uploads/773f0626-a678-4a35-a919-4e0fb1f2d469.png" alt="Email Embed" className="w-full h-full object-cover" />
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Email Embed
@@ -248,9 +249,9 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
       </div>
 
       {/* Configuration based on selected option */}
-      <div className="border-t border-gray-200 pt-6">
+      <div className="border-t border-gray-200 pt-8">
         {selectedOption === 'inline' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex space-x-3">
               <ArrowLeft className="h-5 w-5 mt-1" />
               <div>
@@ -394,7 +395,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
         )}
 
         {selectedOption === 'floating' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex space-x-3">
               <ArrowLeft className="h-5 w-5 mt-1" />
               <div>
@@ -543,7 +544,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
         )}
 
         {selectedOption === 'popup' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex space-x-3">
               <ArrowLeft className="h-5 w-5 mt-1" />
               <div>
@@ -603,7 +604,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
         )}
 
         {selectedOption === 'email' && (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex space-x-3">
               <ArrowLeft className="h-5 w-5 mt-1" />
               <div>
@@ -703,8 +704,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
         )}
 
         {/* Code Display */}
-        <div className="border-t border-gray-200 pt-6 mt-8">
-          <div className="flex items-center justify-between mb-4">
+        <div className="border-t border-gray-200 pt-8 mt-10">
+          <div className="flex items-center justify-between mb-6">
             <div className="flex space-x-4">
               <button 
                 onClick={() => setCodeType('HTML')}
@@ -725,28 +726,27 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                 React
               </button>
             </div>
-            <button className="flex items-center space-x-1 text-blue-600 hover:text-blue-700" style={{ fontSize: '14px' }}>
+            <button className="text-sm text-blue-600 hover:text-blue-700 flex items-center space-x-1">
               <span>📋 Preview</span>
             </button>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-4 mb-4">
-            <p className="mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+          <div className="bg-gray-50 rounded-lg p-4 mb-6">
+            <p className="text-sm mb-3" style={{ fontSize: '14px', color: '#384252' }}>
               Place this code in your HTML where you want your OneHash Cal widget to appear.
             </p>
-            <div className="bg-gray-100 border border-gray-300 text-gray-800 p-4 rounded font-mono overflow-x-auto" style={{ fontSize: '13px' }}>
+            <div className="bg-gray-100 border border-gray-300 text-gray-800 p-4 rounded text-sm font-mono overflow-x-auto">
               <pre>{getEmbedCode()}</pre>
             </div>
           </div>
 
           <div className="flex justify-end space-x-3">
-            <button className="px-4 py-2 border border-gray-300 rounded font-medium hover:bg-gray-50" style={{ fontSize: '14px' }}>
+            <button className="px-4 py-2 border border-gray-300 rounded text-sm font-medium hover:bg-gray-50">
               Close
             </button>
             <button 
               onClick={handleCopyCode}
-              className="px-4 py-2 bg-blue-600 text-white rounded font-medium hover:bg-blue-700 flex items-center space-x-2"
-              style={{ fontSize: '14px' }}
+              className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 flex items-center space-x-2"
             >
               <Copy className="h-4 w-4" />
               <span>Copy Code</span>
