@@ -329,9 +329,8 @@ export const EventSetup = ({
 
       <div>
         <div className="flex items-center justify-between">
-          <label htmlFor="allowBookerToSelectDuration" className="text-sm font-medium" style={{
-          fontSize: '14px',
-          color: '#384252'
+          <label htmlFor="allowBookerToSelectDuration" className="text-sm text-gray-600 font-medium " style={{
+          fontSize: '14px'
         }}>
             Allow booker to select duration
           </label>
