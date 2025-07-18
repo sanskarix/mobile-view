@@ -78,10 +78,7 @@ export const EventWorkflows = () => {
                   fontSize: '12px',
                   color: '#384252'
                 }}>
-                      <span className="flex items-center">
-                        <Clock className="h-3 w-3 mr-1" />
-                        {workflow.trigger}
-                      </span>
+                      
                       <span>•</span>
                       <span>{workflow.action}</span>
                       <span>•</span>
