@@ -1,8 +1,6 @@
-
 import React, { useState } from 'react';
 import { ArrowLeft, Copy } from 'lucide-react';
 import { Switch } from './ui/switch';
-
 export const EventEmbed = () => {
   const [selectedOption, setSelectedOption] = useState('inline');
   const [buttonText, setButtonText] = useState('Book my Cal');
@@ -19,7 +17,6 @@ export const EventEmbed = () => {
   const [brandColorDark, setBrandColorDark] = useState('fafafa');
   const [selectedTimezone, setSelectedTimezone] = useState('Asia/Calcutta');
   const [codeType, setCodeType] = useState('HTML');
-
   const getEmbedCode = () => {
     if (codeType === 'React') {
       switch (selectedOption) {
@@ -112,7 +109,6 @@ calLink: "sanskar/product-hunt-chats",
 });
 Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
 </script>`;
-
         case 'floating':
           return `<script type="text/javascript">
 (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.id/embed-link/embed.js", "init");
@@ -120,7 +116,6 @@ Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
 Cal.ns["product-hunt-chats"]("floatingButton", {"calLink":"sanskar/product-hunt-chats","config":{"layout":"month_view"}});
 Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
 </script>`;
-
         case 'popup':
           return `<script type="text/javascript">
 (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.id/embed-link/embed.js", "init");
@@ -131,7 +126,6 @@ Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
 // data-cal-config='{"layout":"month_view"}'
 Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
 </script>`;
-
         case 'email':
           return `<!-- Email embed code - simplified for email compatibility -->
 <div style="border: 1px solid #e1e5e9; border-radius: 8px; padding: 16px; max-width: 400px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
@@ -144,105 +138,98 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
   </a>
   <p style="margin: 16px 0 0 0; font-size: 12px; color: #999;">Powered by OneHash Cal</p>
 </div>`;
-
         default:
           return '';
       }
     }
   };
-
   const handleCopyCode = () => {
     navigator.clipboard.writeText(getEmbedCode());
   };
-
-  const timezones = [
-    'Asia/Calcutta',
-    'America/New_York',
-    'America/Los_Angeles',
-    'Europe/London',
-    'Europe/Paris',
-    'Asia/Tokyo',
-    'Australia/Sydney'
-  ];
-
-  return (
-    <div className="p-0 max-w-none mx-auto space-y-8" style={{ fontSize: '14px', color: '#384252' }}>
+  const timezones = ['Asia/Calcutta', 'America/New_York', 'America/Los_Angeles', 'Europe/London', 'Europe/Paris', 'Asia/Tokyo', 'Australia/Sydney'];
+  return <div className="p-0 max-w-none mx-auto space-y-8" style={{
+    fontSize: '14px',
+    color: '#384252'
+  }}>
       {/* Header */}
       <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-3" style={{ fontSize: '20px', color: '#384252' }}>
-          How do you want to add OneHash Cal to your site?
-        </h2>
-        <p className="text-muted-foreground" style={{ fontSize: '14px', color: '#384252' }}>
-          Choose one of the following ways to put OneHash Cal on your site.
-        </p>
+        
+        <p className="text-muted-foreground" style={{
+        fontSize: '14px',
+        color: '#384252'
+      }}>Choose one of the following ways to put Cal ID on your site.</p>
       </div>
 
       {/* Embed Options */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <div 
-          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-            selectedOption === 'inline' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-          }`}
-          onClick={() => setSelectedOption('inline')}
-        >
+        <div className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedOption === 'inline' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedOption('inline')}>
           <div className="h-16 bg-gradient-to-br from-blue-50 to-blue-100 rounded mb-4 flex items-center justify-center">
             <div className="text-blue-600 text-xs font-medium">Inline Embed</div>
           </div>
-          <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+          <h3 className="font-semibold text-center mb-2" style={{
+          fontSize: '14px',
+          color: '#384252'
+        }}>
             Inline Embed
           </h3>
-          <p className="text-sm text-center" style={{ fontSize: '12px', color: '#384252' }}>
+          <p className="text-sm text-center" style={{
+          fontSize: '12px',
+          color: '#384252'
+        }}>
             Loads your event type directly inline with your other website content.
           </p>
         </div>
 
-        <div 
-          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-            selectedOption === 'floating' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-          }`}
-          onClick={() => setSelectedOption('floating')}
-        >
+        <div className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedOption === 'floating' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedOption('floating')}>
           <div className="h-16 bg-gradient-to-br from-green-50 to-green-100 rounded mb-4 flex items-center justify-center">
             <div className="text-green-600 text-xs font-medium">Floating Button</div>
           </div>
-          <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+          <h3 className="font-semibold text-center mb-2" style={{
+          fontSize: '14px',
+          color: '#384252'
+        }}>
             Floating pop-up button
           </h3>
-          <p className="text-sm text-center" style={{ fontSize: '12px', color: '#384252' }}>
+          <p className="text-sm text-center" style={{
+          fontSize: '12px',
+          color: '#384252'
+        }}>
             Puts a floating button on your site that triggers a modal with your event type.
           </p>
         </div>
 
-        <div 
-          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-            selectedOption === 'popup' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-          }`}
-          onClick={() => setSelectedOption('popup')}
-        >
+        <div className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedOption === 'popup' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedOption('popup')}>
           <div className="h-16 bg-gradient-to-br from-purple-50 to-purple-100 rounded mb-4 flex items-center justify-center">
             <div className="text-purple-600 text-xs font-medium">Pop-up Click</div>
           </div>
-          <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+          <h3 className="font-semibold text-center mb-2" style={{
+          fontSize: '14px',
+          color: '#384252'
+        }}>
             Pop up via element click
           </h3>
-          <p className="text-sm text-center" style={{ fontSize: '12px', color: '#384252' }}>
+          <p className="text-sm text-center" style={{
+          fontSize: '12px',
+          color: '#384252'
+        }}>
             Open your calendar as a dialog when someone clicks an element.
           </p>
         </div>
 
-        <div 
-          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-            selectedOption === 'email' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-          }`}
-          onClick={() => setSelectedOption('email')}
-        >
+        <div className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedOption === 'email' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedOption('email')}>
           <div className="h-16 bg-gradient-to-br from-orange-50 to-orange-100 rounded mb-4 flex items-center justify-center">
             <div className="text-orange-600 text-xs font-medium">Email Embed</div>
           </div>
-          <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+          <h3 className="font-semibold text-center mb-2" style={{
+          fontSize: '14px',
+          color: '#384252'
+        }}>
             Email Embed
           </h3>
-          <p className="text-sm text-center" style={{ fontSize: '12px', color: '#384252' }}>
+          <p className="text-sm text-center" style={{
+          fontSize: '12px',
+          color: '#384252'
+        }}>
             Select a few available times and embed them in your Email
           </p>
         </div>
@@ -250,58 +237,48 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
 
       {/* Configuration based on selected option */}
       <div className="border-t border-gray-200 pt-8">
-        {selectedOption === 'inline' && (
-          <div className="space-y-8">
-            <div className="flex space-x-3">
-              <ArrowLeft className="h-5 w-5 mt-1" />
-              <div>
-                <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
-                  Inline Embed
-                </h3>
-                <p className="text-sm mb-4" style={{ fontSize: '14px', color: '#384252' }}>
-                  Loads your event type directly inline with your other website content.
-                </p>
-              </div>
-            </div>
+        {selectedOption === 'inline' && <div className="space-y-8">
+            
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>
                     Window sizing
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm mb-2" style={{ fontSize: '14px', color: '#384252' }}>W</label>
-                      <input 
-                        type="text" 
-                        value={windowWidth}
-                        onChange={(e) => setWindowWidth(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded"
-                        style={{ fontSize: '14px' }}
-                      />
+                      <label className="block text-sm mb-2" style={{
+                    fontSize: '14px',
+                    color: '#384252'
+                  }}>W</label>
+                      <input type="text" value={windowWidth} onChange={e => setWindowWidth(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+                    fontSize: '14px'
+                  }} />
                     </div>
                     <div>
-                      <label className="block text-sm mb-2" style={{ fontSize: '14px', color: '#384252' }}>H</label>
-                      <input 
-                        type="text" 
-                        value={windowHeight}
-                        onChange={(e) => setWindowHeight(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded"
-                        style={{ fontSize: '14px' }}
-                      />
+                      <label className="block text-sm mb-2" style={{
+                    fontSize: '14px',
+                    color: '#384252'
+                  }}>H</label>
+                      <input type="text" value={windowHeight} onChange={e => setWindowHeight(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+                    fontSize: '14px'
+                  }} />
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
-                  <select 
-                    value={theme}
-                    onChange={(e) => setTheme(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    style={{ fontSize: '14px' }}
-                  >
+                  <label className="block font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>Theme</label>
+                  <select value={theme} onChange={e => setTheme(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+                fontSize: '14px'
+              }}>
                     <option value="auto">🌓 Auto</option>
                     <option value="light">☀️ Light</option>
                     <option value="dark">🌙 Dark</option>
@@ -309,53 +286,50 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <label style={{ fontSize: '14px', color: '#384252' }}>Hide event type details</label>
-                  <Switch 
-                    checked={hideEventTypeDetails}
-                    onCheckedChange={setHideEventTypeDetails}
-                  />
+                  <label style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>Hide event type details</label>
+                  <Switch checked={hideEventTypeDetails} onCheckedChange={setHideEventTypeDetails} />
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>
                     Brand Color (Light Theme)
                   </label>
                   <div className="flex items-center space-x-3">
-                    <div 
-                      className="w-8 h-8 rounded border"
-                      style={{ backgroundColor: `#${brandColorLight}` }}
-                    ></div>
-                    <input 
-                      type="text" 
-                      value={brandColorLight}
-                      onChange={(e) => setBrandColorLight(e.target.value)}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded"
-                      style={{ fontSize: '14px' }}
-                    />
+                    <div className="w-8 h-8 rounded border" style={{
+                  backgroundColor: `#${brandColorLight}`
+                }}></div>
+                    <input type="text" value={brandColorLight} onChange={e => setBrandColorLight(e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded" style={{
+                  fontSize: '14px'
+                }} />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>
                     Brand Color (Dark Theme)
                   </label>
-                  <input 
-                    type="text" 
-                    value={brandColorDark}
-                    onChange={(e) => setBrandColorDark(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    style={{ fontSize: '14px' }}
-                  />
+                  <input type="text" value={brandColorDark} onChange={e => setBrandColorDark(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+                fontSize: '14px'
+              }} />
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
-                  <select 
-                    value={layout}
-                    onChange={(e) => setLayout(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    style={{ fontSize: '14px' }}
-                  >
+                  <label className="block font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>Layout</label>
+                  <select value={layout} onChange={e => setLayout(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+                fontSize: '14px'
+              }}>
                     <option value="month">Month</option>
                     <option value="week">Week</option>
                     <option value="column">Column</option>
@@ -377,32 +351,34 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                     <div className="text-sm">July 2025</div>
                   </div>
                   <div className="grid grid-cols-7 gap-1 text-xs text-center mb-2">
-                    {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => (
-                      <div key={day} className="p-1">{day}</div>
-                    ))}
+                    {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => <div key={day} className="p-1">{day}</div>)}
                   </div>
                   <div className="grid grid-cols-7 gap-1 text-xs">
-                    {Array.from({length: 35}, (_, i) => (
-                      <div key={i} className="p-2 text-center hover:bg-gray-700 rounded">
+                    {Array.from({
+                  length: 35
+                }, (_, i) => <div key={i} className="p-2 text-center hover:bg-gray-700 rounded">
                         {i < 6 ? '' : i - 5}
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
 
-        {selectedOption === 'floating' && (
-          <div className="space-y-8">
+        {selectedOption === 'floating' && <div className="space-y-8">
             <div className="flex space-x-3">
               <ArrowLeft className="h-5 w-5 mt-1" />
               <div>
-                <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
+                <h3 className="font-semibold mb-2" style={{
+              fontSize: '16px',
+              color: '#384252'
+            }}>
                   Floating pop-up button
                 </h3>
-                <p className="text-sm mb-4" style={{ fontSize: '14px', color: '#384252' }}>
+                <p className="text-sm mb-4" style={{
+              fontSize: '14px',
+              color: '#384252'
+            }}>
                   Puts a floating button on your site that triggers a modal with your event type.
                 </p>
               </div>
@@ -411,36 +387,35 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>
                     Button text
                   </label>
-                  <input 
-                    type="text" 
-                    value={buttonText}
-                    onChange={(e) => setButtonText(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    style={{ fontSize: '14px' }}
-                  />
+                  <input type="text" value={buttonText} onChange={e => setButtonText(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+                fontSize: '14px'
+              }} />
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <label style={{ fontSize: '14px', color: '#384252' }}>Display calendar icon</label>
-                  <Switch 
-                    checked={showCalendarIcon}
-                    onCheckedChange={setShowCalendarIcon}
-                  />
+                  <label style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>Display calendar icon</label>
+                  <Switch checked={showCalendarIcon} onCheckedChange={setShowCalendarIcon} />
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>
                     Position of button
                   </label>
-                  <select 
-                    value={buttonPosition}
-                    onChange={(e) => setButtonPosition(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    style={{ fontSize: '14px' }}
-                  >
+                  <select value={buttonPosition} onChange={e => setButtonPosition(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+                fontSize: '14px'
+              }}>
                     <option value="bottom-right">Bottom right</option>
                     <option value="bottom-left">Bottom left</option>
                     <option value="top-right">Top right</option>
@@ -450,51 +425,47 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                    <label className="block font-medium mb-3" style={{
+                  fontSize: '14px',
+                  color: '#384252'
+                }}>
                       Button color
                     </label>
                     <div className="flex items-center space-x-3">
-                      <div 
-                        className="w-8 h-8 rounded"
-                        style={{ backgroundColor: `#${buttonColor}` }}
-                      ></div>
-                      <input 
-                        type="text" 
-                        value={buttonColor}
-                        onChange={(e) => setButtonColor(e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded"
-                        style={{ fontSize: '14px' }}
-                      />
+                      <div className="w-8 h-8 rounded" style={{
+                    backgroundColor: `#${buttonColor}`
+                  }}></div>
+                      <input type="text" value={buttonColor} onChange={e => setButtonColor(e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded" style={{
+                    fontSize: '14px'
+                  }} />
                     </div>
                   </div>
                   <div>
-                    <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                    <label className="block font-medium mb-3" style={{
+                  fontSize: '14px',
+                  color: '#384252'
+                }}>
                       Text color
                     </label>
                     <div className="flex items-center space-x-3">
-                      <div 
-                        className="w-8 h-8 rounded border"
-                        style={{ backgroundColor: `#${textColor}` }}
-                      ></div>
-                      <input 
-                        type="text" 
-                        value={textColor}
-                        onChange={(e) => setTextColor(e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded"
-                        style={{ fontSize: '14px' }}
-                      />
+                      <div className="w-8 h-8 rounded border" style={{
+                    backgroundColor: `#${textColor}`
+                  }}></div>
+                      <input type="text" value={textColor} onChange={e => setTextColor(e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded" style={{
+                    fontSize: '14px'
+                  }} />
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
-                  <select 
-                    value={theme}
-                    onChange={(e) => setTheme(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    style={{ fontSize: '14px' }}
-                  >
+                  <label className="block font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>Theme</label>
+                  <select value={theme} onChange={e => setTheme(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+                fontSize: '14px'
+              }}>
                     <option value="auto">🌓 Auto</option>
                     <option value="light">☀️ Light</option>
                     <option value="dark">🌙 Dark</option>
@@ -502,21 +473,21 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <label style={{ fontSize: '14px', color: '#384252' }}>Hide event type details</label>
-                  <Switch 
-                    checked={hideEventTypeDetails}
-                    onCheckedChange={setHideEventTypeDetails}
-                  />
+                  <label style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>Hide event type details</label>
+                  <Switch checked={hideEventTypeDetails} onCheckedChange={setHideEventTypeDetails} />
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
-                  <select 
-                    value={layout}
-                    onChange={(e) => setLayout(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    style={{ fontSize: '14px' }}
-                  >
+                  <label className="block font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>Layout</label>
+                  <select value={layout} onChange={e => setLayout(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+                fontSize: '14px'
+              }}>
                     <option value="month">Month</option>
                     <option value="week">Week</option>
                     <option value="column">Column</option>
@@ -526,32 +497,33 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
 
               {/* Preview */}
               <div className="bg-black rounded-lg p-4 relative min-h-[300px] flex-shrink-0 max-w-sm mx-auto">
-                <div 
-                  className="absolute rounded-lg px-4 py-2 text-white font-medium text-sm flex items-center space-x-2"
-                  style={{
-                    backgroundColor: `#${buttonColor}`,
-                    color: `#${textColor}`,
-                    [buttonPosition.includes('bottom') ? 'bottom' : 'top']: '16px',
-                    [buttonPosition.includes('right') ? 'right' : 'left']: '16px'
-                  }}
-                >
+                <div className="absolute rounded-lg px-4 py-2 text-white font-medium text-sm flex items-center space-x-2" style={{
+              backgroundColor: `#${buttonColor}`,
+              color: `#${textColor}`,
+              [buttonPosition.includes('bottom') ? 'bottom' : 'top']: '16px',
+              [buttonPosition.includes('right') ? 'right' : 'left']: '16px'
+            }}>
                   {showCalendarIcon && <span>📅</span>}
                   <span>{buttonText}</span>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
 
-        {selectedOption === 'popup' && (
-          <div className="space-y-8">
+        {selectedOption === 'popup' && <div className="space-y-8">
             <div className="flex space-x-3">
               <ArrowLeft className="h-5 w-5 mt-1" />
               <div>
-                <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
+                <h3 className="font-semibold mb-2" style={{
+              fontSize: '16px',
+              color: '#384252'
+            }}>
                   Pop up via element click
                 </h3>
-                <p className="text-sm mb-4" style={{ fontSize: '14px', color: '#384252' }}>
+                <p className="text-sm mb-4" style={{
+              fontSize: '14px',
+              color: '#384252'
+            }}>
                   Open your calendar as a dialog when someone clicks an element.
                 </p>
               </div>
@@ -559,13 +531,13 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
 
             <div className="max-w-2xl space-y-6">
               <div>
-                <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
-                <select 
-                  value={theme}
-                  onChange={(e) => setTheme(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
-                  style={{ fontSize: '14px' }}
-                >
+                <label className="block font-medium mb-3" style={{
+              fontSize: '14px',
+              color: '#384252'
+            }}>Theme</label>
+                <select value={theme} onChange={e => setTheme(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+              fontSize: '14px'
+            }}>
                   <option value="auto">🌓 Auto</option>
                   <option value="light">☀️ Light</option>
                   <option value="dark">🌙 Dark</option>
@@ -573,21 +545,21 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
               </div>
 
               <div className="flex items-center justify-between">
-                <label style={{ fontSize: '14px', color: '#384252' }}>Hide event type details</label>
-                <Switch 
-                  checked={hideEventTypeDetails}
-                  onCheckedChange={setHideEventTypeDetails}
-                />
+                <label style={{
+              fontSize: '14px',
+              color: '#384252'
+            }}>Hide event type details</label>
+                <Switch checked={hideEventTypeDetails} onCheckedChange={setHideEventTypeDetails} />
               </div>
 
               <div>
-                <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
-                <select 
-                  value={layout}
-                  onChange={(e) => setLayout(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded"
-                  style={{ fontSize: '14px' }}
-                >
+                <label className="block font-medium mb-3" style={{
+              fontSize: '14px',
+              color: '#384252'
+            }}>Layout</label>
+                <select value={layout} onChange={e => setLayout(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+              fontSize: '14px'
+            }}>
                   <option value="month">Month</option>
                   <option value="week">Week</option>
                   <option value="column">Column</option>
@@ -600,18 +572,22 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
 
-        {selectedOption === 'email' && (
-          <div className="space-y-8">
+        {selectedOption === 'email' && <div className="space-y-8">
             <div className="flex space-x-3">
               <ArrowLeft className="h-5 w-5 mt-1" />
               <div>
-                <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
+                <h3 className="font-semibold mb-2" style={{
+              fontSize: '16px',
+              color: '#384252'
+            }}>
                   Email Embed
                 </h3>
-                <p className="text-sm mb-4" style={{ fontSize: '14px', color: '#384252' }}>
+                <p className="text-sm mb-4" style={{
+              fontSize: '14px',
+              color: '#384252'
+            }}>
                   Select a few available times and embed them in your Email
                 </p>
               </div>
@@ -620,66 +596,54 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>
                     Select Date
                   </label>
                   <div className="text-lg font-semibold mb-3">July 2025</div>
                   
                   <div className="grid grid-cols-7 gap-1 text-xs text-center mb-3">
-                    {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => (
-                      <div key={day} className="p-2 font-medium">{day}</div>
-                    ))}
+                    {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => <div key={day} className="p-2 font-medium">{day}</div>)}
                   </div>
                   
                   <div className="grid grid-cols-7 gap-1 text-sm">
-                    {Array.from({length: 35}, (_, i) => {
-                      const date = i - 5;
-                      const isToday = date === 18;
-                      return (
-                        <div 
-                          key={i} 
-                          className={`p-2 text-center cursor-pointer rounded ${
-                            date > 0 && date <= 31 
-                              ? isToday 
-                                ? 'bg-blue-500 text-white' 
-                                : 'hover:bg-gray-100' 
-                              : 'text-gray-300'
-                          }`}
-                        >
+                    {Array.from({
+                  length: 35
+                }, (_, i) => {
+                  const date = i - 5;
+                  const isToday = date === 18;
+                  return <div key={i} className={`p-2 text-center cursor-pointer rounded ${date > 0 && date <= 31 ? isToday ? 'bg-blue-500 text-white' : 'hover:bg-gray-100' : 'text-gray-300'}`}>
                           {date > 0 && date <= 31 ? date : ''}
-                        </div>
-                      );
-                    })}
+                        </div>;
+                })}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>
                     Timezone
                   </label>
-                  <select 
-                    value={selectedTimezone}
-                    onChange={(e) => setSelectedTimezone(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    style={{ fontSize: '14px' }}
-                  >
-                    {timezones.map(tz => (
-                      <option key={tz} value={tz}>{tz}</option>
-                    ))}
+                  <select value={selectedTimezone} onChange={e => setSelectedTimezone(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+                fontSize: '14px'
+              }}>
+                    {timezones.map(tz => <option key={tz} value={tz}>{tz}</option>)}
                   </select>
                 </div>
 
                 <div>
-                  <div className="font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Fri 18</div>
+                  <div className="font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>Fri 18</div>
                   <div className="space-y-2">
-                    {['10:15am', '10:30am', '10:45am', '11:00am', '11:15am', '11:30am', '11:45am'].map(time => (
-                      <div 
-                        key={time} 
-                        className="border border-gray-300 rounded p-2 text-center text-sm cursor-pointer hover:bg-gray-50"
-                      >
+                    {['10:15am', '10:30am', '10:45am', '11:00am', '11:15am', '11:30am', '11:45am'].map(time => <div key={time} className="border border-gray-300 rounded p-2 text-center text-sm cursor-pointer hover:bg-gray-50">
                         {time}
-                      </div>
-                    ))}
+                      </div>)}
                   </div>
                 </div>
               </div>
@@ -690,39 +654,27 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                   <h3 className="font-semibold text-lg mb-2">Product Hunt Chats</h3>
                   <p className="text-sm text-gray-600 mb-1">Duration: 15 mins</p>
                   <p className="text-sm text-gray-600 mb-4">Timezone: {selectedTimezone}</p>
-                  <a 
-                    href="#" 
-                    className="inline-block bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-600"
-                  >
+                  <a href="#" className="inline-block bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-600">
                     See all available times
                   </a>
                   <p className="text-xs text-gray-400 mt-4">Powered by OneHash Cal</p>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          </div>}
 
         {/* Code Display */}
         <div className="border-t border-gray-200 pt-8 mt-10">
           <div className="flex items-center justify-between mb-6">
             <div className="flex space-x-4">
-              <button 
-                onClick={() => setCodeType('HTML')}
-                className={`px-4 py-2 rounded font-medium ${
-                  codeType === 'HTML' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'
-                }`}
-                style={{ fontSize: '14px' }}
-              >
+              <button onClick={() => setCodeType('HTML')} className={`px-4 py-2 rounded font-medium ${codeType === 'HTML' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`} style={{
+              fontSize: '14px'
+            }}>
                 HTML
               </button>
-              <button 
-                onClick={() => setCodeType('React')}
-                className={`px-4 py-2 rounded font-medium ${
-                  codeType === 'React' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'
-                }`}
-                style={{ fontSize: '14px' }}
-              >
+              <button onClick={() => setCodeType('React')} className={`px-4 py-2 rounded font-medium ${codeType === 'React' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`} style={{
+              fontSize: '14px'
+            }}>
                 React
               </button>
             </div>
@@ -732,7 +684,10 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           </div>
 
           <div className="bg-gray-50 rounded-lg p-4 mb-6">
-            <p className="text-sm mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+            <p className="text-sm mb-3" style={{
+            fontSize: '14px',
+            color: '#384252'
+          }}>
               Place this code in your HTML where you want your OneHash Cal widget to appear.
             </p>
             <div className="bg-gray-100 border border-gray-300 text-gray-800 p-4 rounded text-sm font-mono overflow-x-auto max-h-80 overflow-y-auto">
@@ -744,16 +699,12 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
             <button className="px-4 py-2 border border-gray-300 rounded text-sm font-medium hover:bg-gray-50">
               Close
             </button>
-            <button 
-              onClick={handleCopyCode}
-              className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 flex items-center space-x-2"
-            >
+            <button onClick={handleCopyCode} className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 flex items-center space-x-2">
               <Copy className="h-4 w-4" />
               <span>Copy Code</span>
             </button>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
