@@ -469,13 +469,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                 fontSize: '14px',
                 color: '#384252'
               }}>Layout</label>
-                  <select value={layout} onChange={e => setLayout(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
-                fontSize: '14px'
-              }}>
-                    <option value="month">Month</option>
-                    <option value="week">Week</option>
-                    <option value="column">Column</option>
-                  </select>
+                  
                 </div>
               </div>
 
@@ -514,7 +508,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
             }}>
                   <option value="auto">🌓 Auto</option>
                   <option value="light">☀️ Light</option>
-                  <option value="dark">🌙 Dark</option>
+                  <option value="dark" className="my-0 py-[50px] px-[50px] mx-0">🌙 Dark</option>
                 </select>
               </div>
 
