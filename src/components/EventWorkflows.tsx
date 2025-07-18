@@ -45,18 +45,19 @@ export const EventWorkflows = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div className="p-0 max-w-none mx-auto space-y-6" style={{ fontSize: '14px', color: '#384252' }}>
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-muted-foreground">
+            <span style={{ fontSize: '14px', color: '#384252' }}>
               {activeWorkflows.length} Active
             </span>
-            <div className="flex items-center space-x-1 text-muted-foreground">
-              <span>•</span>
+            <div className="flex items-center space-x-1">
+              <span style={{ color: '#384252' }}>•</span>
               <a 
                 href="/workflows" 
-                className="text-sm text-blue-600 hover:text-blue-700 flex items-center space-x-1"
+                className="text-blue-600 hover:text-blue-700 flex items-center space-x-1"
+                style={{ fontSize: '14px' }}
               >
                 <span>Create New Workflow</span>
                 <ExternalLink className="h-3 w-3" />
@@ -89,9 +90,9 @@ export const EventWorkflows = () => {
                     }`} />
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-semibold text-foreground mb-1">{workflow.name}</h4>
-                    <p className="text-muted-foreground mb-2 text-sm">{workflow.description}</p>
-                    <div className="flex items-center space-x-3 text-xs text-muted-foreground">
+                    <h4 className="font-semibold mb-1" style={{ fontSize: '14px', color: '#384252' }}>{workflow.name}</h4>
+                    <p className="mb-2" style={{ fontSize: '14px', color: '#384252' }}>{workflow.description}</p>
+                    <div className="flex items-center space-x-3" style={{ fontSize: '12px', color: '#384252' }}>
                       <span className="flex items-center">
                         <Clock className="h-3 w-3 mr-1" />
                         {workflow.trigger}
@@ -106,7 +107,7 @@ export const EventWorkflows = () => {
               </div>
               
               <div className="flex items-center justify-between pt-3 border-t border-border">
-                <span className="text-sm text-muted-foreground">
+                <span style={{ fontSize: '14px', color: '#384252' }}>
                   {activeWorkflows.includes(workflow.id) ? 'Enabled' : 'Disabled'}
                 </span>
                 <Switch 
