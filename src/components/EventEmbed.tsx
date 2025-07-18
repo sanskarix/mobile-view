@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Copy } from 'lucide-react';
 import { Switch } from './ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 export const EventEmbed = () => {
   const [selectedOption, setSelectedOption] = useState('inline');
@@ -18,107 +17,67 @@ export const EventEmbed = () => {
   const [brandColorLight, setBrandColorLight] = useState('007ee5');
   const [brandColorDark, setBrandColorDark] = useState('fafafa');
   const [selectedTimezone, setSelectedTimezone] = useState('Asia/Calcutta');
-  const [codeType, setCodeType] = useState('html');
 
-  const getEmbedCode = (type: 'html' | 'react' = 'html') => {
+  const getEmbedCode = () => {
     switch (selectedOption) {
       case 'inline':
-        return type === 'html' ? `<div style="width:100%;height:100%;overflow:scroll" id="my-cal-inline"></div>
+        return `<!-- Cal inline embed code begins -->
+<div style="width:${windowWidth};height:${windowHeight};overflow:scroll" id="my-cal-inline"></div>
 <script type="text/javascript">
-(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.id/embed-link/embed.js", "init");
-Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
-Cal.ns["product-hunt-chats"]("inline", {
-elementOrSelector:"#my-cal-inline",
-config: {"layout":"month_view"},
-calLink: "sanskar/product-hunt-chats",
-});
-Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
-</script>` : `import Cal, { getCalApi } from "@calcom/embed-react";
-import { useEffect } from "react";
-
-export default function MyApp() {
-  useEffect(() => {
-    (async function () {
-      const cal = await getCalApi({
-        namespace: "product-hunt-chats",
-        embedLibUrl: "https://app.cal.id/embed-link/embed.js"
-      });
-      cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
-    })();
-  }, []);
-
-  return (
-    <Cal
-      namespace="product-hunt-chats"
-      calLink="sanskar/product-hunt-chats"
-      style={{ width: "100%", height: "100%", overflow: "scroll" }}
-      config={{ layout: "month_view" }}
-      calOrigin="https://cal.id"
-      embedJsUrl="https://app.cal.id/embed-link/embed.js"
-    />
-  );
-}`;
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document;
+    C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) {
+      cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A;
+      cal.loaded = true; } if (ar[0] === L) { const api = function () { p(cal, arguments); };
+      const namespace = ar[1]; api.q = cal.q; if(typeof namespace === "string"){
+        cal.ns[namespace] = cal.ns[namespace] || api;p(cal,
+        ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window,
+        "https://app.cal.id/embed-link/embed.js", "init");
+    Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
+    
+    Cal.ns["product-hunt-chats"]("inline", {
+      elementOrSelector:"#my-cal-inline",
+      config: {"layout":"${layout}"},
+      calLink: "${selectedTimezone !== 'Asia/Calcutta' ? `?tz=${selectedTimezone}` : ''}",
+      calOrigin: "https://app.cal.id/embed-link/embed.js"
+    });
+  </script>`;
 
       case 'floating':
-        return type === 'html' ? `<script type="text/javascript">
-(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.id/embed-link/embed.js", "init");
-Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
-Cal.ns["product-hunt-chats"]("floatingButton", {"calLink":"sanskar/product-hunt-chats","config":{"layout":"month_view"}});
-Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
-</script>` : `import { getCalApi } from "@calcom/embed-react";
-import { useEffect } from "react";
-
-export default function MyApp() {
-  useEffect(() => {
-    (async function () {
-      const cal = await getCalApi({
-        namespace: "product-hunt-chats",
-        embedLibUrl: "https://app.cal.id/embed-link/embed.js"
-      });
-      cal("floatingButton", {
-        calLink: "sanskar/product-hunt-chats",
-        calOrigin: "https://cal.id",
-        config: { layout: "month_view" }
-      });
-      cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
-    })();
-  }, []);
-}`;
+        return `<!-- Cal floating-popup embed code begins -->
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document;
+    C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) {
+      cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A;
+      cal.loaded = true; } if (ar[0] === L) { const api = function () { p(cal, arguments); };
+      const namespace = ar[1]; api.q = cal.q; if(typeof namespace === "string"){
+        cal.ns[namespace] = cal.ns[namespace] || api;p(cal,
+        ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window,
+        "https://app.cal.id/embed-link/embed.js", "init");
+    Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
+    
+    Cal.ns["product-hunt-chats"]("floatingButton", {"calLink":"sanskar/product-hunt-chats","config":{"layout":"${layout}"}});
+    Cal.ns["product-hunt-chats"]("ui", {
+      "hideEventTypeDetails":${hideEventTypeDetails},"layout":"${layout}"
+    });
+  </script>`;
 
       case 'popup':
-        return type === 'html' ? `<script type="text/javascript">
-(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.id/embed-link/embed.js", "init");
-Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
-// Important: Please add the following attributes to the element that should trigger the calendar to open upon clicking.
-// \`data-cal-link="sanskar/product-hunt-chats"\`
-// data-cal-namespace="product-hunt-chats"
-// \`data-cal-config='{"layout":"month_view"}'\`
-Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
-</script>` : `import { getCalApi } from "@calcom/embed-react";
-import { useEffect } from "react";
+        return `<!-- Cal element-click embed code begins -->
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document;
+    C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) {
+      cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A;
+      cal.loaded = true; } if (ar[0] === L) { const api = function () { p(cal, arguments); };
+      const namespace = ar[1]; api.q = cal.q; if(typeof namespace === "string"){
+        cal.ns[namespace] = cal.ns[namespace] || api;p(cal,
+        ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window,
+        "https://app.cal.id/embed-link/embed.js", "init");
+    Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
 
-export default function MyApp() {
-  useEffect(() => {
-    (async function () {
-      const cal = await getCalApi({
-        namespace: "product-hunt-chats",
-        embedLibUrl: "https://app.cal.id/embed-link/embed.js"
-      });
-      cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
-    })();
-  }, []);
-
-  return (
-    <button
-      data-cal-namespace="product-hunt-chats"
-      data-cal-link="sanskar/product-hunt-chats"
-      data-cal-origin="https://cal.id"
-      data-cal-config='{"layout":"month_view"}'
-    >
-      Click me
-    </button>
-  );
-}`;
+    // Important: Please add the following attributes to the element that should trigger the calendar to open upon clicking.
+    // data-cal-link="sanskar/product-hunt-chats"
+    // data-cal-namespace="product-hunt-chats"
+  </script>`;
 
       case 'email':
         return `<!-- Email embed code - simplified for email compatibility -->
@@ -139,7 +98,7 @@ export default function MyApp() {
   };
 
   const handleCopyCode = () => {
-    navigator.clipboard.writeText(getEmbedCode(codeType as 'html' | 'react'));
+    navigator.clipboard.writeText(getEmbedCode());
   };
 
   const timezones = [
@@ -153,32 +112,32 @@ export default function MyApp() {
   ];
 
   return (
-    <div className="p-0 max-w-none mx-auto space-y-8" style={{ fontSize: '14px', color: '#384252' }}>
+    <div className="p-0 max-w-none mx-auto space-y-6" style={{ fontSize: '14px', color: '#384252' }}>
       {/* Header */}
-      <div className="mb-8">
-        <h2 className="text-xl font-medium mb-3" style={{ fontSize: '20px', color: '#384252' }}>
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold mb-2" style={{ fontSize: '20px', color: '#384252' }}>
           How do you want to add OneHash Cal to your site?
         </h2>
-        <p className="text-gray-600" style={{ fontSize: '14px' }}>
+        <p className="text-muted-foreground" style={{ fontSize: '14px', color: '#384252' }}>
           Choose one of the following ways to put OneHash Cal on your site.
         </p>
       </div>
 
       {/* Embed Options */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div 
           className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
             selectedOption === 'inline' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
           }`}
           onClick={() => setSelectedOption('inline')}
         >
-          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
-            <img src="/lovable-uploads/e22c395a-6018-4e51-a67e-8de5b6db7c37.png" alt="Inline Embed" className="w-full h-full object-cover" />
+          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center">
+            <div className="w-16 h-16 bg-blue-500 rounded border-2 border-blue-600"></div>
           </div>
-          <h3 className="font-medium text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+          <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Inline Embed
           </h3>
-          <p className="text-sm text-center text-gray-600" style={{ fontSize: '12px' }}>
+          <p className="text-sm text-center" style={{ fontSize: '12px', color: '#384252' }}>
             Loads your event type directly inline with your other website content.
           </p>
         </div>
@@ -189,13 +148,16 @@ export default function MyApp() {
           }`}
           onClick={() => setSelectedOption('floating')}
         >
-          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
-            <img src="/lovable-uploads/b14abb00-0cea-4caa-98a1-967c3ee8bca9.png" alt="Floating Button" className="w-full h-full object-cover" />
+          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center relative">
+            <div className="w-full h-full bg-gray-200 rounded"></div>
+            <div className="absolute bottom-2 right-2 bg-blue-500 text-white px-2 py-1 rounded text-xs">
+              {buttonText}
+            </div>
           </div>
-          <h3 className="font-medium text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+          <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Floating pop-up button
           </h3>
-          <p className="text-sm text-center text-gray-600" style={{ fontSize: '12px' }}>
+          <p className="text-sm text-center" style={{ fontSize: '12px', color: '#384252' }}>
             Puts a floating button on your site that triggers a modal with your event type.
           </p>
         </div>
@@ -206,13 +168,16 @@ export default function MyApp() {
           }`}
           onClick={() => setSelectedOption('popup')}
         >
-          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
-            <img src="/lovable-uploads/54d544c0-30fe-47b1-91fc-98c0b25701b3.png" alt="Popup" className="w-full h-full object-cover" />
+          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center relative">
+            <div className="w-full h-full bg-gray-200 rounded"></div>
+            <div className="absolute bottom-2 left-2 bg-gray-600 text-white px-2 py-1 rounded text-xs">
+              I am a button that exists on your website
+            </div>
           </div>
-          <h3 className="font-medium text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+          <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Pop up via element click
           </h3>
-          <p className="text-sm text-center text-gray-600" style={{ fontSize: '12px' }}>
+          <p className="text-sm text-center" style={{ fontSize: '12px', color: '#384252' }}>
             Open your calendar as a dialog when someone clicks an element.
           </p>
         </div>
@@ -223,43 +188,50 @@ export default function MyApp() {
           }`}
           onClick={() => setSelectedOption('email')}
         >
-          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
-            <img src="/lovable-uploads/d9b9e85f-2f59-4dcc-b857-6810e9d2fcad.png" alt="Email Embed" className="w-full h-full object-cover" />
+          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center">
+            <div className="w-full h-full bg-white border border-gray-300 rounded p-2">
+              <div className="text-xs font-semibold mb-1">Product Hunt Chats</div>
+              <div className="text-xs text-gray-500 mb-2">Duration: 15 mins</div>
+              <div className="bg-blue-500 text-white text-xs px-2 py-1 rounded inline-block">
+                See all available times
+              </div>
+              <div className="text-xs text-gray-400 mt-2">Powered by OneHash Cal</div>
+            </div>
           </div>
-          <h3 className="font-medium text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+          <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Email Embed
           </h3>
-          <p className="text-sm text-center text-gray-600" style={{ fontSize: '12px' }}>
+          <p className="text-sm text-center" style={{ fontSize: '12px', color: '#384252' }}>
             Select a few available times and embed them in your Email
           </p>
         </div>
       </div>
 
       {/* Configuration based on selected option */}
-      <div className="border-t border-gray-200 pt-8">
+      <div className="border-t border-gray-200 pt-6">
         {selectedOption === 'inline' && (
-          <div className="space-y-8">
+          <div className="space-y-6">
             <div className="flex space-x-2">
               <ArrowLeft className="h-4 w-4 mt-1" />
               <div>
-                <h3 className="font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                <h3 className="font-semibold mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                   Inline Embed
                 </h3>
-                <p className="text-sm mb-4 text-gray-600" style={{ fontSize: '14px' }}>
+                <p className="text-sm mb-4" style={{ fontSize: '14px', color: '#384252' }}>
                   Loads your event type directly inline with your other website content.
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
                 <div>
                   <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                     Window sizing
                   </label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="block text-sm mb-1 text-gray-600" style={{ fontSize: '14px' }}>W</label>
+                      <label className="block text-sm mb-1" style={{ fontSize: '14px', color: '#384252' }}>W</label>
                       <input 
                         type="text" 
                         value={windowWidth}
@@ -269,7 +241,7 @@ export default function MyApp() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm mb-1 text-gray-600" style={{ fontSize: '14px' }}>H</label>
+                      <label className="block text-sm mb-1" style={{ fontSize: '14px', color: '#384252' }}>H</label>
                       <input 
                         type="text" 
                         value={windowHeight}
@@ -296,7 +268,7 @@ export default function MyApp() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <label className="text-gray-700" style={{ fontSize: '14px', color: '#384252' }}>Hide event type details</label>
+                  <label style={{ fontSize: '14px', color: '#384252' }}>Hide event type details</label>
                   <Switch 
                     checked={hideEventTypeDetails}
                     onCheckedChange={setHideEventTypeDetails}
@@ -351,19 +323,19 @@ export default function MyApp() {
               </div>
 
               {/* Preview */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <div className="bg-black rounded-lg p-6 text-white">
-                  <div className="flex justify-between items-center mb-6">
-                    <div className="flex items-center space-x-3">
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="bg-black rounded-lg p-4 text-white">
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="flex items-center space-x-2">
                       <div className="w-8 h-8 rounded-full bg-gray-600"></div>
                       <div>
                         <div className="text-sm">Sanskar Yadav</div>
-                        <div className="text-lg font-medium">Product Hunt Chats</div>
+                        <div className="text-lg font-semibold">Product Hunt Chats</div>
                       </div>
                     </div>
                     <div className="text-sm">July 2025</div>
                   </div>
-                  <div className="grid grid-cols-7 gap-1 text-xs text-center mb-3">
+                  <div className="grid grid-cols-7 gap-1 text-xs text-center mb-2">
                     {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => (
                       <div key={day} className="p-1">{day}</div>
                     ))}
@@ -382,21 +354,21 @@ export default function MyApp() {
         )}
 
         {selectedOption === 'floating' && (
-          <div className="space-y-8">
+          <div className="space-y-6">
             <div className="flex space-x-2">
               <ArrowLeft className="h-4 w-4 mt-1" />
               <div>
-                <h3 className="font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                <h3 className="font-semibold mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                   Floating pop-up button
                 </h3>
-                <p className="text-sm mb-4 text-gray-600" style={{ fontSize: '14px' }}>
+                <p className="text-sm mb-4" style={{ fontSize: '14px', color: '#384252' }}>
                   Puts a floating button on your site that triggers a modal with your event type.
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
                 <div>
                   <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                     Button text
@@ -411,7 +383,7 @@ export default function MyApp() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <label className="text-gray-700" style={{ fontSize: '14px', color: '#384252' }}>Display calendar icon</label>
+                  <label style={{ fontSize: '14px', color: '#384252' }}>Display calendar icon</label>
                   <Switch 
                     checked={showCalendarIcon}
                     onCheckedChange={setShowCalendarIcon}
@@ -435,7 +407,7 @@ export default function MyApp() {
                   </select>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                       Button color
@@ -489,7 +461,7 @@ export default function MyApp() {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <label className="text-gray-700" style={{ fontSize: '14px', color: '#384252' }}>Hide event type details</label>
+                  <label style={{ fontSize: '14px', color: '#384252' }}>Hide event type details</label>
                   <Switch 
                     checked={hideEventTypeDetails}
                     onCheckedChange={setHideEventTypeDetails}
@@ -512,7 +484,7 @@ export default function MyApp() {
               </div>
 
               {/* Preview */}
-              <div className="bg-black rounded-lg p-6 relative min-h-[400px]">
+              <div className="bg-black rounded-lg p-4 relative min-h-[400px]">
                 <div 
                   className="absolute rounded-lg px-4 py-2 text-white font-medium text-sm flex items-center space-x-2"
                   style={{
@@ -531,20 +503,20 @@ export default function MyApp() {
         )}
 
         {selectedOption === 'popup' && (
-          <div className="space-y-8">
+          <div className="space-y-6">
             <div className="flex space-x-2">
               <ArrowLeft className="h-4 w-4 mt-1" />
               <div>
-                <h3 className="font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                <h3 className="font-semibold mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                   Pop up via element click
                 </h3>
-                <p className="text-sm mb-4 text-gray-600" style={{ fontSize: '14px' }}>
+                <p className="text-sm mb-4" style={{ fontSize: '14px', color: '#384252' }}>
                   Open your calendar as a dialog when someone clicks an element.
                 </p>
               </div>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div>
                 <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
                 <select 
@@ -560,7 +532,7 @@ export default function MyApp() {
               </div>
 
               <div className="flex items-center justify-between">
-                <label className="text-gray-700" style={{ fontSize: '14px', color: '#384252' }}>Hide event type details</label>
+                <label style={{ fontSize: '14px', color: '#384252' }}>Hide event type details</label>
                 <Switch 
                   checked={hideEventTypeDetails}
                   onCheckedChange={setHideEventTypeDetails}
@@ -581,7 +553,7 @@ export default function MyApp() {
                 </select>
               </div>
 
-              <div className="bg-black rounded-lg p-6 flex items-center justify-center min-h-[200px]">
+              <div className="bg-black rounded-lg p-4 flex items-center justify-center min-h-[200px]">
                 <div className="bg-gray-600 text-white px-4 py-2 rounded text-sm">
                   I am a button that exists on your website
                 </div>
@@ -591,44 +563,28 @@ export default function MyApp() {
         )}
 
         {selectedOption === 'email' && (
-          <div className="space-y-8">
+          <div className="space-y-6">
             <div className="flex space-x-2">
               <ArrowLeft className="h-4 w-4 mt-1" />
               <div>
-                <h3 className="font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                <h3 className="font-semibold mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                   Email Embed
                 </h3>
-                <p className="text-sm mb-4 text-gray-600" style={{ fontSize: '14px' }}>
+                <p className="text-sm mb-4" style={{ fontSize: '14px', color: '#384252' }}>
                   Select a few available times and embed them in your Email
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-6">
-                <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
-                    Timezone
-                  </label>
-                  <select 
-                    value={selectedTimezone}
-                    onChange={(e) => setSelectedTimezone(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    style={{ fontSize: '14px' }}
-                  >
-                    {timezones.map(tz => (
-                      <option key={tz} value={tz}>{tz}</option>
-                    ))}
-                  </select>
-                </div>
-
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
                 <div>
                   <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                     Select Date
                   </label>
-                  <div className="text-lg font-medium mb-3">July 2025</div>
+                  <div className="text-lg font-semibold mb-2">July 2025</div>
                   
-                  <div className="grid grid-cols-7 gap-1 text-xs text-center mb-3">
+                  <div className="grid grid-cols-7 gap-1 text-xs text-center mb-2">
                     {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => (
                       <div key={day} className="p-2 font-medium">{day}</div>
                     ))}
@@ -657,7 +613,23 @@ export default function MyApp() {
                 </div>
 
                 <div>
-                  <div className="font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Fri 18</div>
+                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                    Timezone
+                  </label>
+                  <select 
+                    value={selectedTimezone}
+                    onChange={(e) => setSelectedTimezone(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                    style={{ fontSize: '14px' }}
+                  >
+                    {timezones.map(tz => (
+                      <option key={tz} value={tz}>{tz}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <div className="font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Fri 18</div>
                   <div className="space-y-2">
                     {['10:15am', '10:30am', '10:45am', '11:00am', '11:15am', '11:30am', '11:45am'].map(time => (
                       <div 
@@ -672,9 +644,9 @@ export default function MyApp() {
               </div>
 
               {/* Preview */}
-              <div className="bg-gray-50 rounded-lg p-6">
+              <div className="bg-gray-50 rounded-lg p-4">
                 <div className="bg-white border border-gray-200 rounded-lg p-4 max-w-sm">
-                  <h3 className="font-medium text-lg mb-2">Product Hunt Chats</h3>
+                  <h3 className="font-semibold text-lg mb-2">Product Hunt Chats</h3>
                   <p className="text-sm text-gray-600 mb-1">Duration: 15 mins</p>
                   <p className="text-sm text-gray-600 mb-4">Timezone: {selectedTimezone}</p>
                   <a 
@@ -691,37 +663,28 @@ export default function MyApp() {
         )}
 
         {/* Code Display */}
-        <div className="border-t border-gray-200 pt-8 mt-10">
-          <div className="flex items-center justify-between mb-6">
-            <Tabs value={codeType} onValueChange={setCodeType} className="w-full">
-              <div className="flex items-center justify-between">
-                <TabsList className="grid w-48 grid-cols-2">
-                  <TabsTrigger value="html">HTML</TabsTrigger>
-                  <TabsTrigger value="react">React</TabsTrigger>
-                </TabsList>
-                <button className="text-sm text-blue-600 hover:text-blue-700 flex items-center space-x-1">
-                  <span>📋 Preview</span>
-                </button>
-              </div>
+        <div className="border-t border-gray-200 pt-6 mt-8">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex space-x-4">
+              <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded font-medium">
+                HTML
+              </button>
+              <button className="px-4 py-2 text-gray-600 rounded">
+                React
+              </button>
+            </div>
+            <button className="text-sm text-blue-600 hover:text-blue-700 flex items-center space-x-1">
+              <span>📋 Preview</span>
+            </button>
+          </div>
 
-              <div className="mt-6">
-                <p className="text-sm mb-4 text-gray-600" style={{ fontSize: '14px' }}>
-                  Place this code in your HTML where you want your OneHash Cal widget to appear.
-                </p>
-                
-                <TabsContent value="html" className="bg-gray-50 rounded-lg p-4 mb-6">
-                  <div className="bg-white border border-gray-200 p-4 rounded text-sm font-mono overflow-x-auto">
-                    <pre className="text-gray-800">{getEmbedCode('html')}</pre>
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="react" className="bg-gray-50 rounded-lg p-4 mb-6">
-                  <div className="bg-white border border-gray-200 p-4 rounded text-sm font-mono overflow-x-auto">
-                    <pre className="text-gray-800">{getEmbedCode('react')}</pre>
-                  </div>
-                </TabsContent>
-              </div>
-            </Tabs>
+          <div className="bg-gray-50 rounded-lg p-4 mb-4">
+            <p className="text-sm mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+              Place this code in your HTML where you want your OneHash Cal widget to appear.
+            </p>
+            <div className="bg-gray-900 text-green-400 p-4 rounded text-sm font-mono overflow-x-auto">
+              <pre>{getEmbedCode()}</pre>
+            </div>
           </div>
 
           <div className="flex justify-end space-x-3">
