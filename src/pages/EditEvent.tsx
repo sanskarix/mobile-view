@@ -28,6 +28,11 @@ const tabs = [{
   name: 'Advanced',
   icon: Zap
 }, {
+  id: 'embed',
+  name: 'Embed',
+  icon: Settings
+},
+{
   id: 'recurring',
   name: 'Recurring',
   icon: RotateCcw
@@ -43,10 +48,6 @@ const tabs = [{
   id: 'webhooks',
   name: 'Webhooks',
   icon: Webhook
-}, {
-  id: 'embed',
-  name: 'Embed',
-  icon: Settings
 }];
 export const EditEvent = () => {
   const {
@@ -92,17 +93,17 @@ export const EditEvent = () => {
   };
   return <div className="min-h-screen bg-background">
       {/* Consolidated Header */}
-      <header className="h-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+      {/* <header className="h-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="h-full px-8 flex items-center justify-between w-full max-w-none">
           <div className="flex items-center space-x-4 mx-0">
             <button onClick={handleBack} className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors" title="Back to Event Types">
               <ArrowLeft className="h-4 w-4 mr-2" />
             </button>
             <h1 className="text-xl font-semibold text-foreground">{eventTitle}</h1>
-          </div>
+          </div> */}
 
           {/* Right-aligned content: Toggle | Save | Profile */}
-          <div className="flex items-center space-x-4 ml-auto">
+          {/* <div className="flex items-center space-x-4 ml-auto">
             <div className="flex items-center space-x-2">
               <Switch checked={eventEnabled} onCheckedChange={setEventEnabled} />
               <span className="text-sm text-muted-foreground">
@@ -116,10 +117,10 @@ export const EditEvent = () => {
               Save
             </button>
             
-            <div className="w-px h-6 bg-border"></div>
+            <div className="w-px h-6 bg-border"></div> */}
 
             {/* Profile */}
-            <div className="flex items-center space-x-3 px-4 py-2 hover:bg-muted rounded-lg transition-colors">
+            {/* <div className="flex items-center space-x-3 px-4 py-2 hover:bg-muted rounded-lg transition-colors">
               <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
                 <span className="text-sm font-medium text-primary-foreground">SY</span>
               </div>
@@ -127,7 +128,7 @@ export const EditEvent = () => {
             </div>
           </div>
         </div>
-      </header>
+      </header> */}
 
       {/* Left-aligned Horizontal Tabs with Underlines */}
       <div className="bg-background">

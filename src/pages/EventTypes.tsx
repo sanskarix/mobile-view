@@ -1,15 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Plus, MoreHorizontal, ExternalLink, Edit, Copy as CopyIcon, Code, Trash2, ArrowUp, ArrowDown, Search, Copy, GripVertical, Calendar, Clock, Users, Video, Coffee, Briefcase, GraduationCap, Heart, Zap, Target, User } from 'lucide-react';
+import { Plus, ExternalLink, Search, Copy, Calendar, Clock, Users, Video, Coffee, Briefcase, GraduationCap, Heart, Zap, Target, User } from 'lucide-react';
 import { CreateEventModal } from '../components/CreateEventModal';
 import { CreateTeamEventModal } from '../components/CreateTeamEventModal';
+import { DraggableEventTypes } from '../components/DraggableEventTypes';
 import { useNavigate } from 'react-router-dom';
-import { Switch } from '../components/ui/switch';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../components/ui/dropdown-menu';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../components/ui/tooltip';
 
 interface EventType {
   id: string;
@@ -54,7 +49,6 @@ export const EventTypes = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [eventStates, setEventStates] = useState<{[key: string]: boolean}>({});
   const [teamEvents, setTeamEvents] = useState<Team[]>([]);
-  const [draggedItem, setDraggedItem] = useState<string | null>(null);
   const [showNewDropdown, setShowNewDropdown] = useState(false);
   const newDropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -215,7 +209,7 @@ export const EventTypes = () => {
   };
 
   const handleCopyPublicLink = () => {
-    const publicUrl = selectedTeam === 'personal' ? 'https://cal.id/sanskar' : `https://cal.id/${currentTeam?.url}`;
+    const publicUrl = selectedTeam === 'personal' ? 'https://cal.id/sanskar' : `https://cal.id/teams/${currentTeam?.url}`;
     navigator.clipboard.writeText(publicUrl);
     setCopiedPublicLink(true);
     setTimeout(() => setCopiedPublicLink(false), 1500);
@@ -223,6 +217,14 @@ export const EventTypes = () => {
 
   const handleToggleEvent = (eventId: string, checked: boolean) => {
     setEventStates(prev => ({ ...prev, [eventId]: checked }));
+  };
+
+  const handleReorderEvents = (reorderedEvents: EventType[]) => {
+    setTeamEvents(prevTeams => prevTeams.map(team => 
+      team.id === selectedTeam 
+        ? { ...team, eventTypes: reorderedEvents }
+        : team
+    ));
   };
 
   useEffect(() => {
@@ -365,20 +367,47 @@ export const EventTypes = () => {
               />
             </div>
             
-            <div className="relative">
-              <button 
-                onClick={handleCopyPublicLink} 
-                className="flex items-center space-x-2 px-3 py-1.5 bg-muted/70 text-muted-foreground text-sm rounded-md hover:bg-muted transition-colors"
-                title="Copy public link"
-              >
-                <span className="text-sm">
-                  {selectedTeam === 'personal' ? 'cal.id/sanskar' : `cal.id/${currentTeam?.url}`}
-                </span>
-                <Copy className="h-4 w-4" />
-              </button>
+            <div className="relative flex items-center space-x-1 px-2 py-1 bg-muted/50 rounded text-xs text-muted-foreground">
+              <span className="text-sm">
+                {selectedTeam === 'personal' ? 'cal.id/sanskar' : `cal.id/teams/${currentTeam?.url}`}
+              </span>
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                  <button 
+                    onClick={handleCopyPublicLink} 
+                    className="p-1 hover:bg-muted rounded flex items-center justify-center"
+                  >
+                    <Copy className="h-4 w-4" />
+                  </button>
+                  </TooltipTrigger>
+                  <TooltipContent className="px-2 py-1 text-xs rounded-sm" side="bottom" sideOffset={6}>
+                    Copy
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => {
+                        const publicUrl = selectedTeam === 'personal' ? 'https://cal.id/sanskar' : `https://cal.id/teams/${currentTeam?.url}`;
+                        window.open(publicUrl, '_blank');
+                      }}
+                      className="p-1 hover:bg-muted rounded flex items-center justify-center"
+                      title="Open public page"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent className="px-2 py-1 text-xs rounded-sm" side="bottom" sideOffset={6}>
+                    Preview
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               {copiedPublicLink && (
-                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-foreground text-background text-xs rounded animate-fade-in whitespace-nowrap">
-                  Copied
+                <div className="absolute top-full mt-1 left-1/2 ml-2 px-2 py-1 bg-white text-black text-xs rounded border border-gray-200 shadow-md animate-fade-in whitespace-nowrap z-50">
+                  Copied!
                 </div>
               )}
             </div>
@@ -421,123 +450,20 @@ export const EventTypes = () => {
           </div>
         </div>
 
-        {/* Event Types List */}
-        <div className="space-y-2">
-          {filteredEvents.map(event => {
-            const isEventActive = eventStates[event.id] ?? event.isActive;
-            const IconComponent = event.icon;
-            return (
-              <div key={event.id} className="relative group animate-fade-in">
-                {/* Drag handle - positioned outside card on left */}
-                <GripVertical className="absolute -left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity cursor-move z-10" />
-                
-                <div 
-                  className={`bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer ${
-                    !isEventActive ? 'opacity-50' : ''
-                  }`}
-                  onClick={() => handleEventEdit(event.id)}
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start space-x-3 flex-1">
-                      <div className="h-10 w-10 rounded-lg bg-muted/50 flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="h-5 w-5 text-muted-foreground" />
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center mb-2 space-x-3">
-                          <h3 className="font-semibold text-foreground text-base">
-                            {event.title}
-                          </h3>
-                          
-                          {/* URL box with icons */}
-                          <div className="flex items-center space-x-1 px-2 py-1 bg-muted/50 rounded text-xs text-muted-foreground">
-                            <span>cal.id{event.url}</span>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleCopyLink(event.id, event.url);
-                              }}
-                              className="p-1 hover:bg-muted rounded flex items-center justify-center"
-                              title="Copy event link"
-                            >
-                              <Copy className="h-3 w-3" />
-                            </button>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                window.open(`https://cal.id${event.url}`, '_blank');
-                              }}
-                              className="p-1 hover:bg-muted rounded flex items-center justify-center"
-                              title="Preview event"
-                            >
-                              <ExternalLink className="h-3 w-3" />
-                            </button>
-                            {copiedLink === event.id && (
-                              <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-foreground text-background text-xs rounded animate-fade-in whitespace-nowrap">
-                                Copied
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        
-                        <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{event.description}</p>
-                        <div className="flex items-center">
-                          {event.durations?.map(duration => (
-                            <span key={duration} className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded mr-2">
-                              <Clock className="h-3 w-3 mr-1" />
-                              {duration}m
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center space-x-2 ml-4">
-                      {/* Enable toggle */}
-                      <Switch 
-                        checked={isEventActive} 
-                        onCheckedChange={checked => {
-                          handleToggleEvent(event.id, checked);
-                        }}
-                        onClick={e => e.stopPropagation()}
-                      />
-                      
-                      {/* Options dropdown */}
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <button
-                            onClick={(e) => e.stopPropagation()}
-                            className="p-2 hover:bg-muted rounded-lg transition-colors"
-                            title="More options"
-                          >
-                            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
-                          </button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48">
-                          <DropdownMenuItem onClick={() => handleEventEdit(event.id)}>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleDuplicateEvent(event.id)}>
-                            <CopyIcon className="h-4 w-4 mr-2" />
-                            Duplicate
-                          </DropdownMenuItem>
-                          <DropdownMenuItem 
-                            onClick={() => handleDeleteEvent(event.id)}
-                            className="text-destructive"
-                          >
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+        {/* Draggable Event Types List */}
+        <DraggableEventTypes
+          events={filteredEvents}
+          selectedTeam={selectedTeam}
+          currentTeam={currentTeam!}
+          eventStates={eventStates}
+          copiedLink={copiedLink}
+          onEventEdit={handleEventEdit}
+          onCopyLink={handleCopyLink}
+          onToggleEvent={handleToggleEvent}
+          onDuplicateEvent={handleDuplicateEvent}
+          onDeleteEvent={handleDeleteEvent}
+          onReorderEvents={handleReorderEvents}
+        />
 
         <CreateEventModal 
           isOpen={isCreateModalOpen} 

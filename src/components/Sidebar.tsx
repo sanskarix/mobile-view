@@ -1,7 +1,6 @@
 
-import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Calendar, Clock, Users, Settings, BarChart3, Workflow, FileText, Zap, Moon, Sun, Home, HelpCircle, MessageSquare, FileIcon, Mail } from 'lucide-react';
+import { Users, Settings, Workflow, Home, CalendarCheck, ScrollText, Clock2, Blocks, ListTree, ChartNoAxesColumnIncreasing } from 'lucide-react';
 
 interface SidebarProps {
   darkMode: boolean;
@@ -21,17 +20,17 @@ export const Sidebar = ({
     {
       name: 'Event Types',
       href: '/event-types',
-      icon: Calendar
+      icon: ScrollText
     }, 
     {
       name: 'Bookings',
       href: '/bookings',
-      icon: Clock
+      icon: CalendarCheck
     }, 
     {
       name: 'Availability',
       href: '/availability',
-      icon: BarChart3
+      icon: Clock2
     }, 
     {
       name: 'Teams',
@@ -41,12 +40,12 @@ export const Sidebar = ({
     {
       name: 'Apps',
       href: '/apps',
-      icon: Zap
+      icon: Blocks
     }, 
     {
       name: 'Routing Forms',
       href: '/routing-forms',
-      icon: FileText
+      icon: ListTree
     }, 
     {
       name: 'Workflows',
@@ -56,7 +55,7 @@ export const Sidebar = ({
     {
       name: 'Insights',
       href: '/insights',
-      icon: BarChart3
+      icon: ChartNoAxesColumnIncreasing
     },
     {
       name: 'Settings',
@@ -86,7 +85,7 @@ export const Sidebar = ({
               `group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
                 isActive 
                   ? 'bg-primary text-primary-foreground shadow-sm' 
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                  : 'text-muted-foreground hover:bg-[#DCE0E5] hover:text-foreground'
               }`
             }
           >
@@ -101,9 +100,23 @@ export const Sidebar = ({
         {/* Footer links */}
         <div className="space-y-2 text-xs text-muted-foreground">
           <div className="flex items-center justify-center space-x-2">
-            <button className="hover:text-foreground transition-colors">Privacy Policy</button>
-            <span>•</span>
-            <button className="hover:text-foreground transition-colors">Terms of Service</button>
+          <a
+            href="https://onehash.ai/legal/privacy-policy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-foreground transition-colors"
+          >
+            Privacy Policy
+          </a>            
+          <span>•</span>
+          <a
+            href="https://onehash.ai/legal/terms-of-services"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-foreground transition-colors"
+          >
+            Terms of Service
+          </a>
           </div>
           <div className="text-center">
             <span className="block">Version 1.0.0</span>
