@@ -366,23 +366,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           </div>}
 
         {selectedOption === 'floating' && <div className="space-y-8">
-            <div className="flex space-x-3">
-              <ArrowLeft className="h-5 w-5 mt-1" />
-              <div>
-                <h3 className="font-semibold mb-2" style={{
-              fontSize: '16px',
-              color: '#384252'
-            }}>
-                  Floating pop-up button
-                </h3>
-                <p className="text-sm mb-4" style={{
-              fontSize: '14px',
-              color: '#384252'
-            }}>
-                  Puts a floating button on your site that triggers a modal with your event type.
-                </p>
-              </div>
-            </div>
+            
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-6">
@@ -496,17 +480,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
               </div>
 
               {/* Preview */}
-              <div className="bg-black rounded-lg p-4 relative min-h-[300px] flex-shrink-0 max-w-sm mx-auto">
-                <div className="absolute rounded-lg px-4 py-2 text-white font-medium text-sm flex items-center space-x-2" style={{
-              backgroundColor: `#${buttonColor}`,
-              color: `#${textColor}`,
-              [buttonPosition.includes('bottom') ? 'bottom' : 'top']: '16px',
-              [buttonPosition.includes('right') ? 'right' : 'left']: '16px'
-            }}>
-                  {showCalendarIcon && <span>📅</span>}
-                  <span>{buttonText}</span>
-                </div>
-              </div>
+              
             </div>
           </div>}
 
