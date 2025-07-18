@@ -143,31 +143,31 @@ export default function MyApp() {
   return (
     <div className="p-0 max-w-none mx-auto space-y-6">
       {/* Header */}
-      <div className="mb-8">
-        <h2 className="font-semibold mb-2" style={{ fontSize: '20px', color: '#384252' }}>
+      <div className="mb-6">
+        <h2 className="font-medium mb-2" style={{ fontSize: '16px', color: '#384252' }}>
           How do you want to add OneHash Cal to your site?
         </h2>
-        <p className="text-muted-foreground" style={{ fontSize: '14px', color: '#384252' }}>
+        <p className="text-muted-foreground" style={{ fontSize: '14px', color: '#6b7280' }}>
           Choose one of the following ways to put OneHash Cal on your site.
         </p>
       </div>
 
       {/* Embed Options */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div 
-          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
+          className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
             selectedOption === 'inline' ? 'border-primary bg-primary/5' : 'border-border hover:border-border/60'
           }`}
           onClick={() => setSelectedOption('inline')}
         >
-          <div className="h-32 bg-muted rounded mb-4 flex items-center justify-center overflow-hidden">
+          <div className="h-24 bg-muted rounded mb-3 flex items-center justify-center overflow-hidden">
             <img 
-              src="/lovable-uploads/92491f6b-a294-4db7-b4eb-646336d2da2d.png" 
+              src="/lovable-uploads/93c84bf4-070c-447a-b501-3ddded022f95.png" 
               alt="Inline Embed" 
               className="w-full h-full object-cover"
             />
           </div>
-          <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+          <h3 className="font-medium text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Inline Embed
           </h3>
           <p className="text-center text-muted-foreground" style={{ fontSize: '12px', color: '#6b7280' }}>
@@ -176,19 +176,19 @@ export default function MyApp() {
         </div>
 
         <div 
-          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
+          className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
             selectedOption === 'floating' ? 'border-primary bg-primary/5' : 'border-border hover:border-border/60'
           }`}
           onClick={() => setSelectedOption('floating')}
         >
-          <div className="h-32 bg-muted rounded mb-4 flex items-center justify-center overflow-hidden">
+          <div className="h-24 bg-muted rounded mb-3 flex items-center justify-center overflow-hidden">
             <img 
-              src="/lovable-uploads/c399a0e4-4c10-49b7-8510-c419c5332297.png" 
+              src="/lovable-uploads/df2cc587-5c7e-4241-890d-cbe1182a4e66.png" 
               alt="Floating Button" 
               className="w-full h-full object-cover"
             />
           </div>
-          <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+          <h3 className="font-medium text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Floating pop-up button
           </h3>
           <p className="text-center text-muted-foreground" style={{ fontSize: '12px', color: '#6b7280' }}>
@@ -197,19 +197,19 @@ export default function MyApp() {
         </div>
 
         <div 
-          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
+          className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
             selectedOption === 'popup' ? 'border-primary bg-primary/5' : 'border-border hover:border-border/60'
           }`}
           onClick={() => setSelectedOption('popup')}
         >
-          <div className="h-32 bg-muted rounded mb-4 flex items-center justify-center overflow-hidden">
+          <div className="h-24 bg-muted rounded mb-3 flex items-center justify-center overflow-hidden">
             <img 
-              src="/lovable-uploads/adce374a-0ad2-48ce-b43a-6ef6b23a6353.png" 
+              src="/lovable-uploads/7948f6b9-d7b5-4056-a8d6-9b42fe74e2bf.png" 
               alt="Popup" 
               className="w-full h-full object-cover"
             />
           </div>
-          <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+          <h3 className="font-medium text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Pop up via element click
           </h3>
           <p className="text-center text-muted-foreground" style={{ fontSize: '12px', color: '#6b7280' }}>
@@ -218,19 +218,19 @@ export default function MyApp() {
         </div>
 
         <div 
-          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
+          className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
             selectedOption === 'email' ? 'border-primary bg-primary/5' : 'border-border hover:border-border/60'
           }`}
           onClick={() => setSelectedOption('email')}
         >
-          <div className="h-32 bg-muted rounded mb-4 flex items-center justify-center overflow-hidden">
+          <div className="h-24 bg-muted rounded mb-3 flex items-center justify-center overflow-hidden">
             <img 
-              src="/lovable-uploads/f8511c8d-3bfd-4fbb-9f0c-6ce1e7e50113.png" 
+              src="/lovable-uploads/f0f78f3b-01fc-4982-9459-d436f6ec0a10.png" 
               alt="Email Embed" 
               className="w-full h-full object-cover"
             />
           </div>
-          <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+          <h3 className="font-medium text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Email Embed
           </h3>
           <p className="text-center text-muted-foreground" style={{ fontSize: '12px', color: '#6b7280' }}>
@@ -240,13 +240,13 @@ export default function MyApp() {
       </div>
 
       {/* Configuration Content */}
-      <div className="border-t border-border pt-8">
+      <div className="border-t border-border pt-6">
         {selectedOption === 'inline' && (
           <div className="space-y-6">
-            <div className="flex space-x-2 mb-6">
+            <div className="flex space-x-2 mb-4">
               <ArrowLeft className="h-4 w-4 mt-1" />
               <div>
-                <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
+                <h3 className="font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                   Inline Embed
                 </h3>
                 <p className="text-muted-foreground" style={{ fontSize: '14px', color: '#6b7280' }}>
@@ -255,10 +255,10 @@ export default function MyApp() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="space-y-4">
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                     Window sizing
                   </label>
                   <div className="grid grid-cols-2 gap-3">
@@ -286,7 +286,7 @@ export default function MyApp() {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
+                  <label className="block mb-2" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
                   <select 
                     value={theme}
                     onChange={(e) => setTheme(e.target.value)}
@@ -308,7 +308,7 @@ export default function MyApp() {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
+                  <label className="block mb-2" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
                   <select 
                     value={layout}
                     onChange={(e) => setLayout(e.target.value)}
@@ -330,7 +330,7 @@ export default function MyApp() {
                       <div className="w-8 h-8 rounded-full bg-primary"></div>
                       <div>
                         <div style={{ fontSize: '12px', color: '#6b7280' }}>Sanskar Yadav</div>
-                        <div className="font-semibold" style={{ fontSize: '16px', color: '#384252' }}>Product Hunt Chats</div>
+                        <div className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>Product Hunt Chats</div>
                       </div>
                     </div>
                     <div style={{ fontSize: '12px', color: '#6b7280' }}>July 2025</div>
@@ -355,10 +355,10 @@ export default function MyApp() {
 
         {selectedOption === 'floating' && (
           <div className="space-y-6">
-            <div className="flex space-x-2 mb-6">
+            <div className="flex space-x-2 mb-4">
               <ArrowLeft className="h-4 w-4 mt-1" />
               <div>
-                <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
+                <h3 className="font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                   Floating pop-up button
                 </h3>
                 <p className="text-muted-foreground" style={{ fontSize: '14px', color: '#6b7280' }}>
@@ -367,10 +367,10 @@ export default function MyApp() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="space-y-4">
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                     Button text
                   </label>
                   <input 
@@ -391,7 +391,7 @@ export default function MyApp() {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                     Position of button
                   </label>
                   <select 
@@ -409,7 +409,7 @@ export default function MyApp() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                    <label className="block mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                       Button color
                     </label>
                     <div className="flex items-center space-x-2">
@@ -427,7 +427,7 @@ export default function MyApp() {
                     </div>
                   </div>
                   <div>
-                    <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                    <label className="block mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                       Text color
                     </label>
                     <div className="flex items-center space-x-2">
@@ -448,7 +448,7 @@ export default function MyApp() {
               </div>
 
               {/* Preview */}
-              <div className="bg-muted/30 rounded-lg p-4 relative min-h-[300px]">
+              <div className="bg-muted/30 rounded-lg p-4 relative min-h-[200px]">
                 <div 
                   className="absolute rounded-lg px-4 py-2 font-medium flex items-center space-x-2 cursor-pointer"
                   style={{
@@ -469,10 +469,10 @@ export default function MyApp() {
 
         {selectedOption === 'email' && (
           <div className="space-y-6">
-            <div className="flex space-x-2 mb-6">
+            <div className="flex space-x-2 mb-4">
               <ArrowLeft className="h-4 w-4 mt-1" />
               <div>
-                <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
+                <h3 className="font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                   Email Embed
                 </h3>
                 <p className="text-muted-foreground" style={{ fontSize: '14px', color: '#6b7280' }}>
@@ -481,10 +481,10 @@ export default function MyApp() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="space-y-4">
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                     Timezone
                   </label>
                   <select 
@@ -500,10 +500,10 @@ export default function MyApp() {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block mb-2" style={{ fontSize: '14px', color: '#384252' }}>
                     Select Date
                   </label>
-                  <div className="text-lg font-semibold mb-4">July 2025</div>
+                  <div className="text-lg font-medium mb-3">July 2025</div>
                   
                   <div className="grid grid-cols-7 gap-1 text-center mb-2" style={{ fontSize: '12px', color: '#6b7280' }}>
                     {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => (
@@ -552,7 +552,7 @@ export default function MyApp() {
               {/* Preview */}
               <div className="bg-muted/30 rounded-lg p-4">
                 <div className="bg-background border border-border rounded-lg p-6 max-w-sm">
-                  <h3 className="font-semibold mb-2" style={{ fontSize: '18px', color: '#384252' }}>Product Hunt Chats</h3>
+                  <h3 className="font-medium mb-2" style={{ fontSize: '16px', color: '#384252' }}>Product Hunt Chats</h3>
                   <p className="text-muted-foreground mb-1" style={{ fontSize: '14px', color: '#6b7280' }}>Duration: 15 mins</p>
                   <p className="text-muted-foreground mb-4" style={{ fontSize: '14px', color: '#6b7280' }}>Timezone: {selectedTimezone}</p>
                   <a 
@@ -569,9 +569,25 @@ export default function MyApp() {
           </div>
         )}
 
+        {selectedOption === 'popup' && (
+          <div className="space-y-6">
+            <div className="flex space-x-2 mb-4">
+              <ArrowLeft className="h-4 w-4 mt-1" />
+              <div>
+                <h3 className="font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                  Pop up via element click
+                </h3>
+                <p className="text-muted-foreground" style={{ fontSize: '14px', color: '#6b7280' }}>
+                  Open your calendar as a dialog when someone clicks an element.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Code Display */}
-        <div className="border-t border-border pt-8 mt-8">
-          <div className="flex items-center justify-between mb-6">
+        <div className="border-t border-border pt-6 mt-6">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex space-x-1">
               <button 
                 onClick={() => setActiveCodeTab('html')}
@@ -601,11 +617,11 @@ export default function MyApp() {
             </button>
           </div>
 
-          <div className="bg-muted/50 rounded-lg p-4 mb-6">
+          <div className="bg-muted/20 rounded-lg p-4 mb-4">
             <p className="mb-3" style={{ fontSize: '14px', color: '#384252' }}>
               Place this code in your {activeCodeTab === 'html' ? 'HTML' : 'React component'} where you want your OneHash Cal widget to appear.
             </p>
-            <div className="bg-background border border-border rounded-lg p-4 font-mono text-sm overflow-x-auto">
+            <div className="bg-gray-50 border border-border rounded-lg p-4 font-mono text-sm overflow-x-auto">
               <pre className="whitespace-pre-wrap" style={{ fontSize: '12px', color: '#384252' }}>
                 {getEmbedCode()}
               </pre>
