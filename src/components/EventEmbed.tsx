@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ArrowLeft, Copy } from 'lucide-react';
 import { Switch } from './ui/switch';
@@ -17,70 +18,122 @@ export const EventEmbed = () => {
   const [brandColorLight, setBrandColorLight] = useState('007ee5');
   const [brandColorDark, setBrandColorDark] = useState('fafafa');
   const [selectedTimezone, setSelectedTimezone] = useState('Asia/Calcutta');
+  const [codeType, setCodeType] = useState('HTML');
 
   const getEmbedCode = () => {
-    switch (selectedOption) {
-      case 'inline':
-        return `<!-- Cal inline embed code begins -->
-<div style="width:${windowWidth};height:${windowHeight};overflow:scroll" id="my-cal-inline"></div>
+    if (codeType === 'React') {
+      switch (selectedOption) {
+        case 'inline':
+          return `import Cal, { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
+
+export default function MyApp() {
+  useEffect(() => {
+    (async function () {
+      const cal = await getCalApi({
+        namespace: "product-hunt-chats",
+        embedLibUrl: "https://app.cal.id/embed-link/embed.js"
+      });
+      cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
+    })();
+  }, []);
+
+  return (
+    <Cal
+      namespace="product-hunt-chats"
+      calLink="sanskar/product-hunt-chats"
+      style={{ width: "100%", height: "100%", overflow: "scroll" }}
+      config={{ layout: "month_view" }}
+      calOrigin="https://cal.id"
+      embedJsUrl="https://app.cal.id/embed-link/embed.js"
+    />
+  );
+}`;
+        case 'floating':
+          return `import { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
+
+export default function MyApp() {
+  useEffect(() => {
+    (async function () {
+      const cal = await getCalApi({
+        namespace: "product-hunt-chats",
+        embedLibUrl: "https://app.cal.id/embed-link/embed.js"
+      });
+      cal("floatingButton", {
+        calLink: "sanskar/product-hunt-chats",
+        calOrigin: "https://cal.id",
+        config: { layout: "month_view" }
+      });
+      cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
+    })();
+  }, []);
+}`;
+        case 'popup':
+          return `import { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
+
+export default function MyApp() {
+  useEffect(() => {
+    (async function () {
+      const cal = await getCalApi({
+        namespace: "product-hunt-chats",
+        embedLibUrl: "https://app.cal.id/embed-link/embed.js"
+      });
+      cal("ui", { hideEventTypeDetails: false, layout: "month_view" });
+    })();
+  }, []);
+
+  return (
+    <button
+      data-cal-namespace="product-hunt-chats"
+      data-cal-link="sanskar/product-hunt-chats"
+      data-cal-origin="https://cal.id"
+      data-cal-config='{"layout":"month_view"}'
+    >
+      Click me
+    </button>
+  );
+}`;
+        default:
+          return '';
+      }
+    } else {
+      switch (selectedOption) {
+        case 'inline':
+          return `<div style="width:100%;height:100%;overflow:scroll" id="my-cal-inline"></div>
 <script type="text/javascript">
-  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document;
-    C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) {
-      cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A;
-      cal.loaded = true; } if (ar[0] === L) { const api = function () { p(cal, arguments); };
-      const namespace = ar[1]; api.q = cal.q; if(typeof namespace === "string"){
-        cal.ns[namespace] = cal.ns[namespace] || api;p(cal,
-        ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window,
-        "https://app.cal.id/embed-link/embed.js", "init");
-    Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
-    
-    Cal.ns["product-hunt-chats"]("inline", {
-      elementOrSelector:"#my-cal-inline",
-      config: {"layout":"${layout}"},
-      calLink: "${selectedTimezone !== 'Asia/Calcutta' ? `?tz=${selectedTimezone}` : ''}",
-      calOrigin: "https://app.cal.id/embed-link/embed.js"
-    });
-  </script>`;
+(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.id/embed-link/embed.js", "init");
+Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
+Cal.ns["product-hunt-chats"]("inline", {
+elementOrSelector:"#my-cal-inline",
+config: {"layout":"month_view"},
+calLink: "sanskar/product-hunt-chats",
+});
+Cal.ns["product-hunt-chats"]("ui, {"hideEventTypeDetails":false,"layout":"month_view"});
+</script>`;
 
-      case 'floating':
-        return `<!-- Cal floating-popup embed code begins -->
-<script type="text/javascript">
-  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document;
-    C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) {
-      cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A;
-      cal.loaded = true; } if (ar[0] === L) { const api = function () { p(cal, arguments); };
-      const namespace = ar[1]; api.q = cal.q; if(typeof namespace === "string"){
-        cal.ns[namespace] = cal.ns[namespace] || api;p(cal,
-        ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window,
-        "https://app.cal.id/embed-link/embed.js", "init");
-    Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
-    
-    Cal.ns["product-hunt-chats"]("floatingButton", {"calLink":"sanskar/product-hunt-chats","config":{"layout":"${layout}"}});
-    Cal.ns["product-hunt-chats"]("ui", {
-      "hideEventTypeDetails":${hideEventTypeDetails},"layout":"${layout}"
-    });
-  </script>`;
+        case 'floating':
+          return `<script type="text/javascript">
+(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.id/embed-link/embed.js", "init");
+Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
+Cal.ns["product-hunt-chats"]("floatingButton", {"calLink":"sanskar/product-hunt-chats","config":{"layout":"month_view"}});
+Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
+</script>`;
 
-      case 'popup':
-        return `<!-- Cal element-click embed code begins -->
-<script type="text/javascript">
-  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document;
-    C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) {
-      cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A;
-      cal.loaded = true; } if (ar[0] === L) { const api = function () { p(cal, arguments); };
-      const namespace = ar[1]; api.q = cal.q; if(typeof namespace === "string"){
-        cal.ns[namespace] = cal.ns[namespace] || api;p(cal,
-        ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window,
-        "https://app.cal.id/embed-link/embed.js", "init");
-    Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
+        case 'popup':
+          return `<script type="text/javascript">
+(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.id/embed-link/embed.js", "init");
+Cal("init", "product-hunt-chats", {origin:"https://cal.id"});
+// Important: Please add the following attributes to the element that should trigger the calendar to open upon clicking.
+// data-cal-link="sanskar/product-hunt-chats"
+// data-cal-namespace="product-hunt-chats"  
+// data-cal-config='{"layout":"month_view"}'
+Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
+</script>`;
 
-    // Important: Please add the following attributes to the element that should trigger the calendar to open upon clicking.
-    // data-cal-link="sanskar/product-hunt-chats"
-    // data-cal-namespace="product-hunt-chats"
-  </script>`;
-
-      case 'email':
-        return `<!-- Email embed code - simplified for email compatibility -->
+        case 'email':
+          return `<!-- Email embed code - simplified for email compatibility -->
 <div style="border: 1px solid #e1e5e9; border-radius: 8px; padding: 16px; max-width: 400px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
   <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 600;">Product Hunt Chats</h3>
   <p style="margin: 0 0 8px 0; color: #666; font-size: 14px;">Duration: 15 mins</p>
@@ -92,8 +145,9 @@ export const EventEmbed = () => {
   <p style="margin: 16px 0 0 0; font-size: 12px; color: #999;">Powered by OneHash Cal</p>
 </div>`;
 
-      default:
-        return '';
+        default:
+          return '';
+      }
     }
   };
 
@@ -112,10 +166,10 @@ export const EventEmbed = () => {
   ];
 
   return (
-    <div className="p-0 max-w-none mx-auto space-y-6" style={{ fontSize: '14px', color: '#384252' }}>
+    <div className="p-0 max-w-none mx-auto space-y-8" style={{ fontSize: '14px', color: '#384252' }}>
       {/* Header */}
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-2" style={{ fontSize: '20px', color: '#384252' }}>
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold mb-3" style={{ fontSize: '20px', color: '#384252' }}>
           How do you want to add OneHash Cal to your site?
         </h2>
         <p className="text-muted-foreground" style={{ fontSize: '14px', color: '#384252' }}>
@@ -124,15 +178,15 @@ export const EventEmbed = () => {
       </div>
 
       {/* Embed Options */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         <div 
           className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
             selectedOption === 'inline' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
           }`}
           onClick={() => setSelectedOption('inline')}
         >
-          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center">
-            <div className="w-16 h-16 bg-blue-500 rounded border-2 border-blue-600"></div>
+          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
+            <img src="/lovable-uploads/133eb298-18d9-432a-9021-0fb523e22ea1.png" alt="Inline Embed" className="w-full h-full object-cover" />
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Inline Embed
@@ -148,11 +202,8 @@ export const EventEmbed = () => {
           }`}
           onClick={() => setSelectedOption('floating')}
         >
-          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center relative">
-            <div className="w-full h-full bg-gray-200 rounded"></div>
-            <div className="absolute bottom-2 right-2 bg-blue-500 text-white px-2 py-1 rounded text-xs">
-              {buttonText}
-            </div>
+          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
+            <img src="/lovable-uploads/69196664-f03c-4fe1-9e86-212a6a594429.png" alt="Floating Button" className="w-full h-full object-cover" />
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Floating pop-up button
@@ -168,11 +219,8 @@ export const EventEmbed = () => {
           }`}
           onClick={() => setSelectedOption('popup')}
         >
-          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center relative">
-            <div className="w-full h-full bg-gray-200 rounded"></div>
-            <div className="absolute bottom-2 left-2 bg-gray-600 text-white px-2 py-1 rounded text-xs">
-              I am a button that exists on your website
-            </div>
+          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
+            <img src="/lovable-uploads/b7d986e8-f6b5-40e1-bb67-0cdd3abcfa79.png" alt="Pop up via element click" className="w-full h-full object-cover" />
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Pop up via element click
@@ -188,15 +236,8 @@ export const EventEmbed = () => {
           }`}
           onClick={() => setSelectedOption('email')}
         >
-          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center">
-            <div className="w-full h-full bg-white border border-gray-300 rounded p-2">
-              <div className="text-xs font-semibold mb-1">Product Hunt Chats</div>
-              <div className="text-xs text-gray-500 mb-2">Duration: 15 mins</div>
-              <div className="bg-blue-500 text-white text-xs px-2 py-1 rounded inline-block">
-                See all available times
-              </div>
-              <div className="text-xs text-gray-400 mt-2">Powered by OneHash Cal</div>
-            </div>
+          <div className="h-32 bg-gray-100 rounded mb-4 flex items-center justify-center overflow-hidden">
+            <img src="/lovable-uploads/773f0626-a678-4a35-a919-4e0fb1f2d469.png" alt="Email Embed" className="w-full h-full object-cover" />
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Email Embed
@@ -208,13 +249,13 @@ export const EventEmbed = () => {
       </div>
 
       {/* Configuration based on selected option */}
-      <div className="border-t border-gray-200 pt-6">
+      <div className="border-t border-gray-200 pt-8">
         {selectedOption === 'inline' && (
-          <div className="space-y-6">
-            <div className="flex space-x-2">
-              <ArrowLeft className="h-4 w-4 mt-1" />
+          <div className="space-y-8">
+            <div className="flex space-x-3">
+              <ArrowLeft className="h-5 w-5 mt-1" />
               <div>
-                <h3 className="font-semibold mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
                   Inline Embed
                 </h3>
                 <p className="text-sm mb-4" style={{ fontSize: '14px', color: '#384252' }}>
@@ -223,15 +264,15 @@ export const EventEmbed = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-6">
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
                     Window sizing
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm mb-1" style={{ fontSize: '14px', color: '#384252' }}>W</label>
+                      <label className="block text-sm mb-2" style={{ fontSize: '14px', color: '#384252' }}>W</label>
                       <input 
                         type="text" 
                         value={windowWidth}
@@ -241,7 +282,7 @@ export const EventEmbed = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm mb-1" style={{ fontSize: '14px', color: '#384252' }}>H</label>
+                      <label className="block text-sm mb-2" style={{ fontSize: '14px', color: '#384252' }}>H</label>
                       <input 
                         type="text" 
                         value={windowHeight}
@@ -254,7 +295,7 @@ export const EventEmbed = () => {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
                   <select 
                     value={theme}
                     onChange={(e) => setTheme(e.target.value)}
@@ -276,10 +317,10 @@ export const EventEmbed = () => {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
                     Brand Color (Light Theme)
                   </label>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-3">
                     <div 
                       className="w-8 h-8 rounded border"
                       style={{ backgroundColor: `#${brandColorLight}` }}
@@ -295,7 +336,7 @@ export const EventEmbed = () => {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
                     Brand Color (Dark Theme)
                   </label>
                   <input 
@@ -308,7 +349,7 @@ export const EventEmbed = () => {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
                   <select 
                     value={layout}
                     onChange={(e) => setLayout(e.target.value)}
@@ -323,7 +364,7 @@ export const EventEmbed = () => {
               </div>
 
               {/* Preview */}
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="bg-gray-50 rounded-lg p-6">
                 <div className="bg-black rounded-lg p-4 text-white">
                   <div className="flex justify-between items-center mb-4">
                     <div className="flex items-center space-x-2">
@@ -354,11 +395,11 @@ export const EventEmbed = () => {
         )}
 
         {selectedOption === 'floating' && (
-          <div className="space-y-6">
-            <div className="flex space-x-2">
-              <ArrowLeft className="h-4 w-4 mt-1" />
+          <div className="space-y-8">
+            <div className="flex space-x-3">
+              <ArrowLeft className="h-5 w-5 mt-1" />
               <div>
-                <h3 className="font-semibold mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
                   Floating pop-up button
                 </h3>
                 <p className="text-sm mb-4" style={{ fontSize: '14px', color: '#384252' }}>
@@ -367,10 +408,10 @@ export const EventEmbed = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-6">
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
                     Button text
                   </label>
                   <input 
@@ -391,7 +432,7 @@ export const EventEmbed = () => {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
                     Position of button
                   </label>
                   <select 
@@ -409,10 +450,10 @@ export const EventEmbed = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                    <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
                       Button color
                     </label>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-3">
                       <div 
                         className="w-8 h-8 rounded"
                         style={{ backgroundColor: `#${buttonColor}` }}
@@ -427,10 +468,10 @@ export const EventEmbed = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                    <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
                       Text color
                     </label>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-3">
                       <div 
                         className="w-8 h-8 rounded border"
                         style={{ backgroundColor: `#${textColor}` }}
@@ -447,7 +488,7 @@ export const EventEmbed = () => {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
                   <select 
                     value={theme}
                     onChange={(e) => setTheme(e.target.value)}
@@ -469,7 +510,7 @@ export const EventEmbed = () => {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
                   <select 
                     value={layout}
                     onChange={(e) => setLayout(e.target.value)}
@@ -503,11 +544,11 @@ export const EventEmbed = () => {
         )}
 
         {selectedOption === 'popup' && (
-          <div className="space-y-6">
-            <div className="flex space-x-2">
-              <ArrowLeft className="h-4 w-4 mt-1" />
+          <div className="space-y-8">
+            <div className="flex space-x-3">
+              <ArrowLeft className="h-5 w-5 mt-1" />
               <div>
-                <h3 className="font-semibold mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
                   Pop up via element click
                 </h3>
                 <p className="text-sm mb-4" style={{ fontSize: '14px', color: '#384252' }}>
@@ -516,9 +557,9 @@ export const EventEmbed = () => {
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div>
-                <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
+                <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
                 <select 
                   value={theme}
                   onChange={(e) => setTheme(e.target.value)}
@@ -540,7 +581,7 @@ export const EventEmbed = () => {
               </div>
 
               <div>
-                <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
+                <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
                 <select 
                   value={layout}
                   onChange={(e) => setLayout(e.target.value)}
@@ -563,11 +604,11 @@ export const EventEmbed = () => {
         )}
 
         {selectedOption === 'email' && (
-          <div className="space-y-6">
-            <div className="flex space-x-2">
-              <ArrowLeft className="h-4 w-4 mt-1" />
+          <div className="space-y-8">
+            <div className="flex space-x-3">
+              <ArrowLeft className="h-5 w-5 mt-1" />
               <div>
-                <h3 className="font-semibold mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
                   Email Embed
                 </h3>
                 <p className="text-sm mb-4" style={{ fontSize: '14px', color: '#384252' }}>
@@ -576,15 +617,15 @@ export const EventEmbed = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-6">
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
                     Select Date
                   </label>
-                  <div className="text-lg font-semibold mb-2">July 2025</div>
+                  <div className="text-lg font-semibold mb-3">July 2025</div>
                   
-                  <div className="grid grid-cols-7 gap-1 text-xs text-center mb-2">
+                  <div className="grid grid-cols-7 gap-1 text-xs text-center mb-3">
                     {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => (
                       <div key={day} className="p-2 font-medium">{day}</div>
                     ))}
@@ -613,7 +654,7 @@ export const EventEmbed = () => {
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
                     Timezone
                   </label>
                   <select 
@@ -629,7 +670,7 @@ export const EventEmbed = () => {
                 </div>
 
                 <div>
-                  <div className="font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Fri 18</div>
+                  <div className="font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Fri 18</div>
                   <div className="space-y-2">
                     {['10:15am', '10:30am', '10:45am', '11:00am', '11:15am', '11:30am', '11:45am'].map(time => (
                       <div 
@@ -644,7 +685,7 @@ export const EventEmbed = () => {
               </div>
 
               {/* Preview */}
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="bg-gray-50 rounded-lg p-6">
                 <div className="bg-white border border-gray-200 rounded-lg p-4 max-w-sm">
                   <h3 className="font-semibold text-lg mb-2">Product Hunt Chats</h3>
                   <p className="text-sm text-gray-600 mb-1">Duration: 15 mins</p>
@@ -663,13 +704,25 @@ export const EventEmbed = () => {
         )}
 
         {/* Code Display */}
-        <div className="border-t border-gray-200 pt-6 mt-8">
-          <div className="flex items-center justify-between mb-4">
+        <div className="border-t border-gray-200 pt-8 mt-10">
+          <div className="flex items-center justify-between mb-6">
             <div className="flex space-x-4">
-              <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded font-medium">
+              <button 
+                onClick={() => setCodeType('HTML')}
+                className={`px-4 py-2 rounded font-medium ${
+                  codeType === 'HTML' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'
+                }`}
+                style={{ fontSize: '14px' }}
+              >
                 HTML
               </button>
-              <button className="px-4 py-2 text-gray-600 rounded">
+              <button 
+                onClick={() => setCodeType('React')}
+                className={`px-4 py-2 rounded font-medium ${
+                  codeType === 'React' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'
+                }`}
+                style={{ fontSize: '14px' }}
+              >
                 React
               </button>
             </div>
@@ -678,11 +731,11 @@ export const EventEmbed = () => {
             </button>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-4 mb-4">
-            <p className="text-sm mb-2" style={{ fontSize: '14px', color: '#384252' }}>
+          <div className="bg-gray-50 rounded-lg p-4 mb-6">
+            <p className="text-sm mb-3" style={{ fontSize: '14px', color: '#384252' }}>
               Place this code in your HTML where you want your OneHash Cal widget to appear.
             </p>
-            <div className="bg-gray-900 text-green-400 p-4 rounded text-sm font-mono overflow-x-auto">
+            <div className="bg-gray-100 border border-gray-300 text-gray-800 p-4 rounded text-sm font-mono overflow-x-auto">
               <pre>{getEmbedCode()}</pre>
             </div>
           </div>
