@@ -522,23 +522,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           </div>}
 
         {selectedOption === 'email' && <div className="space-y-8">
-            <div className="flex space-x-3">
-              <ArrowLeft className="h-5 w-5 mt-1" />
-              <div>
-                <h3 className="font-semibold mb-2" style={{
-              fontSize: '16px',
-              color: '#384252'
-            }}>
-                  Email Embed
-                </h3>
-                <p className="text-sm mb-4" style={{
-              fontSize: '14px',
-              color: '#384252'
-            }}>
-                  Select a few available times and embed them in your Email
-                </p>
-              </div>
-            </div>
+
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-6">
