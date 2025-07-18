@@ -476,24 +476,6 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           </div>}
 
         {selectedOption === 'popup' && <div className="space-y-8">
-            <div className="flex space-x-3">
-              <ArrowLeft className="h-5 w-5 mt-1" />
-              <div>
-                <h3 className="font-semibold mb-2" style={{
-              fontSize: '16px',
-              color: '#384252'
-            }}>
-                  Pop up via element click
-                </h3>
-                <p className="text-sm mb-4" style={{
-              fontSize: '14px',
-              color: '#384252'
-            }}>
-                  Open your calendar as a dialog when someone clicks an element.
-                </p>
-              </div>
-            </div>
-
             <div className="max-w-2xl space-y-6">
               <div>
                 <label className="block font-medium mb-3" style={{
