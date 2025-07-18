@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Bold, Italic, Link, MapPin, Plus, X, Clock, Settings, Copy, ExternalLink, Code, Trash2 } from 'lucide-react';
+import { Switch } from './ui/switch';
 
 interface EventSetupProps {
   onChange?: () => void;
@@ -244,11 +245,11 @@ export const EventSetup = ({
           __html: formData.description
         }} onInput={e => handleFormChange('description', e.currentTarget.innerHTML)} />
         </div>
-        <div className="flex items-center mt-2">
-          <input type="checkbox" id="translate" className="mr-2" />
-          <label htmlFor="translate" className="text-sm text-gray-500">
+        <div className="flex items-center justify-between mt-2">
+          <label htmlFor="translate" className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>
             Translate description to the visitor's browser language using AI
           </label>
+          <Switch id="translate" />
         </div>
       </div>
 
@@ -272,14 +273,14 @@ export const EventSetup = ({
               className="p-3 hover:bg-muted transition-colors border-r border-border" 
               title="Copy URL"
             >
-              <Copy className="h-4 w-4 text-muted-foreground" />
+              <Copy className="h-4 w-4" style={{ color: '#384252' }} />
             </button>
             <button 
               onClick={handlePreviewUrl} 
               className="p-3 hover:bg-muted transition-colors rounded-r-lg" 
               title="Preview"
             >
-              <ExternalLink className="h-4 w-4 text-muted-foreground" />
+              <ExternalLink className="h-4 w-4" style={{ color: '#384252' }} />
             </button>
           </div>
           {copiedUrl && <div className="absolute bg-gray-800 text-white text-xs px-2 py-1 rounded ml-2 z-10">
@@ -346,11 +347,15 @@ export const EventSetup = ({
       </div>
 
       <div>
-        <div className="flex items-center">
-          <input type="checkbox" id="allowBookerToSelectDuration" checked={formData.allowBookerToSelectDuration} onChange={e => handleFormChange('allowBookerToSelectDuration', e.target.checked)} className="mr-3" />
-          <label htmlFor="allowBookerToSelectDuration" className="text-sm font-medium text-gray-700">
+        <div className="flex items-center justify-between">
+          <label htmlFor="allowBookerToSelectDuration" className="text-sm font-medium" style={{ fontSize: '14px', color: '#384252' }}>
             Allow booker to select duration
           </label>
+          <Switch 
+            id="allowBookerToSelectDuration" 
+            checked={formData.allowBookerToSelectDuration} 
+            onCheckedChange={value => handleFormChange('allowBookerToSelectDuration', value)} 
+          />
         </div>
       </div>
 

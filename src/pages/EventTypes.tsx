@@ -252,13 +252,33 @@ export const EventTypes = () => {
   };
 
   const handleDuplicateEvent = (eventId: string) => {
-    console.log('Duplicating event:', eventId);
-    // Implement duplicate functionality
+    const originalEvent = teamEvents.find(team => 
+      team.eventTypes?.some(event => event.id === eventId)
+    )?.eventTypes?.find(event => event.id === eventId);
+    
+    if (originalEvent) {
+      const newEventId = `${eventId}-copy-${Date.now()}`;
+      const duplicatedEvent: EventType = {
+        ...originalEvent,
+        id: newEventId,
+        title: `${originalEvent.title} (Copy)`,
+        url: `${originalEvent.url}-copy`,
+        bookingsToday: 0
+      };
+
+      setTeamEvents(prevTeams => prevTeams.map(team => {
+        const hasEvent = team.eventTypes?.some(event => event.id === eventId);
+        if (hasEvent) {
+          return { ...team, eventTypes: [...(team.eventTypes || []), duplicatedEvent] };
+        }
+        return team;
+      }));
+
+      setEventStates(prev => ({ ...prev, [newEventId]: true }));
+    }
   };
 
   const handleDeleteEvent = (eventId: string) => {
-    console.log('Deleting event:', eventId);
-    // Implement delete functionality
     setTeamEvents(prevTeams => prevTeams.map(team => ({
       ...team,
       eventTypes: team.eventTypes?.filter(event => event.id !== eventId) || []
@@ -409,7 +429,7 @@ export const EventTypes = () => {
             return (
               <div key={event.id} className="relative group animate-fade-in">
                 {/* Drag handle - positioned outside card on left */}
-                <GripVertical className="absolute -left-8 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity cursor-move z-10" />
+                <GripVertical className="absolute -left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity cursor-move z-10" />
                 
                 <div 
                   className={`bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer ${

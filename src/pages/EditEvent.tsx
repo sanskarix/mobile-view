@@ -10,6 +10,7 @@ import { EventApps } from '../components/EventApps';
 import { EventWorkflows } from '../components/EventWorkflows';
 import { EventWebhooks } from '../components/EventWebhooks';
 import { RecurringEvent } from '../components/RecurringEvent';
+import { EventEmbed } from '../components/EventEmbed';
 const tabs = [{
   id: 'setup',
   name: 'Event Setup',
@@ -42,6 +43,10 @@ const tabs = [{
   id: 'webhooks',
   name: 'Webhooks',
   icon: Webhook
+}, {
+  id: 'embed',
+  name: 'Embed',
+  icon: Settings
 }];
 export const EditEvent = () => {
   const {
@@ -79,6 +84,8 @@ export const EditEvent = () => {
         return <EventWorkflows />;
       case 'webhooks':
         return <EventWebhooks />;
+      case 'embed':
+        return <EventEmbed />;
       default:
         return <EventSetup />;
     }
