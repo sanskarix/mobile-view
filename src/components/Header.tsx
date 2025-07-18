@@ -86,6 +86,13 @@ export const Header = ({
       </div>
     );
     
+    if (isEventEditPage) return (
+      <div className="flex-1">
+        <h1 className="text-xl font-semibold text-foreground mb-1">Event Types</h1>
+        <p className="text-sm text-muted-foreground">Manage your event types and booking configurations.</p>
+      </div>
+    );
+    
     if (isBookingsPage) return (
       <div className="flex-1">
         <h1 className="text-xl font-semibold text-foreground mb-1">Bookings</h1>
