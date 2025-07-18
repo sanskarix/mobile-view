@@ -102,6 +102,15 @@ export const EventWorkflows = () => {
                       <span>•</span>
                       <span>{workflow.timing}</span>
                     </div>
+                                  <div className="flex items-center justify-between pt-3 border-t border-border">
+                <span style={{ fontSize: '14px', color: '#384252' }}>
+                  {activeWorkflows.includes(workflow.id) ? 'Enabled' : 'Disabled'}
+                </span>
+                <Switch 
+                  checked={activeWorkflows.includes(workflow.id)} 
+                  onCheckedChange={() => toggleWorkflow(workflow.id)} 
+                />
+              </div>
                   </div>
                 </div>
               </div>
