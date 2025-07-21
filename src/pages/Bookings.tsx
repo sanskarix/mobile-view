@@ -1,6 +1,5 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { Filter, Download, Search, Calendar, MapPin, Video, MoreHorizontal, Edit, UserPlus, Clock, X, Bold, Italic, Underline, Strikethrough, List, ListOrdered, Undo, Redo, Check, Copy, Eye, ChevronDown, ChevronUp, Mail, Globe, Trash2, Info, CheckCircle, XCircle, Plus, Rocket, Zap, Users, Palette, Briefcase, CalendarDays, UserCheck, Smartphone, MessageSquare, TrendingUp, Target, FileText, Settings, Monitor, Lightbulb, Shield, Coffee, BookOpen, Star, Heart, Headphones, Globe2, Mic, Camera, Phone, Wifi, Database, Server, Code, GitBranch, Package, Layers, Cloud, HardDrive, Cpu, Memory, Network, Lock, Key, Award, Trophy, Medal, Flag, Compass, Map, Navigation, Route, Signpost, Home, Building, Store, Factory, School, Hospital, Church, Library, Museum, Theater, Stadium, Hotel, Restaurant, ShoppingBag, Car, Bus, Train, Plane, Ship, Bike, Truck, Tractor, Helicopter, Rocket as RocketIcon, Satellite, Anchor, Waves, Mountain, Tree, Flower, Sun, Moon, Star as StarIcon, Cloud as CloudIcon, Rain, Snow, Wind, Thermometer, Umbrella, Sunglasses, Shirt, Pants, Shoes, Hat, Glasses, Watch, Ring, Necklace, Earrings, Bracelet, Wallet, Purse, Backpack, Suitcase, Briefcase as BriefcaseIcon, Laptop, Desktop, Tablet, Smartphone as SmartphoneIcon, Headphones as HeadphonesIcon, Speaker, Microphone, Camera as CameraIcon, Printer, Scanner, Keyboard, Mouse, Monitor as MonitorIcon, Tv, Radio, Battery, Plug, Lightbulb as LightbulbIcon, Flashlight, Candle, Fire, Flame, Droplet, Snowflake, Leaf, Flower2, Sprout, Seedling, Cactus, PalmTree, Evergreen, Deciduous, Bamboo, Mushroom, Apple, Banana, Orange, Grape, Strawberry, Cherry, Peach, Pear, Pineapple, Watermelon, Lemon, Lime, Coconut, Avocado, Tomato, Carrot, Corn, Pepper, Eggplant, Broccoli, Cabbage, Lettuce, Spinach, Onion, Garlic, Potato, Bread, Cheese, Meat, Fish, Egg, Milk, Butter, Honey, Sugar, Salt, Oil, Vinegar, Spice, Herb, Tea, Coffee as CoffeeIcon, Juice, Water, Wine, Beer, Cocktail, Cake, Cookie, Donut, Icecream, Candy, Chocolate, Pizza, Hamburger, Hotdog, Sandwich, Salad, Soup, Pasta, Rice, Noodle, Sushi, Taco, Burrito, Fries, Popcorn, Pretzel, Bagel, Muffin, Pancake, Waffle, Cereal, Oatmeal, Yogurt, Smoothie, Shake, Lollipop, Gum, Mint, Pill, Bandage, Thermometer as ThermometerIcon, Stethoscope, Syringe, Pill as PillIcon, Bandage as BandageIcon, Mask, Gloves, Soap, Toothbrush, Toothpaste, Shampoo, Conditioner, Lotion, Perfume, Lipstick, Mascara, Eyeshadow, Blush, Foundation, Powder, Brush, Comb, Mirror, Scissors, Razor, Tweezers, Nail, Polish, File, Clippers, Towel, Washcloth, Sponge, Bucket, Mop, Broom, Vacuum, Dustpan, Trash, Recycle, Compost, Laundry, Detergent, Fabric, Softener, Iron, Hanger, Clothesline, Basket, Hamper, Drawer, Closet, Shelf, Rack, Hook, Hanger as HangerIcon, Box, Bag, Container, Jar, Bottle, Can, Package as PackageIcon, Wrapper, Label, Sticker, Tape, Glue, Stapler, Paperclip, Rubber, Band, Elastic, String, Rope, Chain, Wire, Cable, Cord, Plug as PlugIcon, Socket, Switch, Button, Knob, Handle, Lever, Wheel, Gear, Screw, Nail as NailIcon, Hammer, Wrench, Screwdriver, Pliers, Saw, Drill, Ruler, Measuring, Tape as TapeIcon, Level, Square, Triangle, Circle, Rectangle, Pentagon, Hexagon, Octagon, Diamond, Oval, Heart as HeartIcon, Star as StarIcon2, Arrow, Line, Curve, Angle, Point, Dot, Dash, Slash, Backslash, Underscore, Hyphen, Plus as PlusIcon, Minus, Multiply, Divide, Equals, Percent, Dollar, Euro, Pound, Yen, Cent, Degree, At, Hash, Ampersand, Asterisk, Question, Exclamation, Period, Comma, Semicolon, Colon, Apostrophe, Quote, Parenthesis, Bracket, Brace, Less, Greater, Pipe, Tilde, Caret, Grave, Acute, Circumflex, Diaeresis, Cedilla, Macron, Breve, Ring, Ogonek, Stroke, Double, Acute as AcuteIcon, Grave as GraveIcon, Circumflex as CircumflexIcon, Tilde as TildeIcon, Diaeresis as DiaeresisIcon, Ring as RingIcon, Cedilla as CedillaIcon, Macron as MacronIcon, Breve as BreveIcon, Ogonek as OgonekIcon, Stroke as StrokeIcon, Double as DoubleIcon } from 'lucide-react';
+import { Filter, Download, Search, Calendar, MapPin, Video, MoreHorizontal, Edit, UserPlus, Clock, X, Bold, Italic, Underline, Strikethrough, List, ListOrdered, Undo, Redo, Check, Copy, Eye, ChevronDown, ChevronUp, Mail, Globe, Trash2, Info, CheckCircle, XCircle, Plus, Rocket, Zap, Users, Palette, Briefcase, CalendarDays, UserCheck, Smartphone, MessageSquare, TrendingUp, Target, FileText, Settings, Monitor, Lightbulb, Shield, Coffee, BookOpen, Star, Heart, Headphones, Mic, Camera, Phone, Wifi, Database, Server, Code, GitBranch, Package, Layers, Cloud, HardDrive, Cpu, Network, Lock, Key, Award, Trophy, Medal, Flag, Compass, Map, Navigation, Route, Signpost, Home, Building, Store, Factory, School, Hospital, Church, Library, Theater, Hotel, ShoppingBag, Car, Bus, Train, Plane, Ship, Bike, Truck, Tractor, Anchor, Waves, Mountain, Trees, Flower, Sun, Moon, Cloud as CloudIcon, Wind, Thermometer, Umbrella, Glasses, Watch, Necklace, Wallet, Backpack, Laptop, Tablet, Headphones as HeadphonesIcon, Speaker, Printer, Keyboard, Mouse, Tv, Radio, Battery, Plug, Lightbulb as LightbulbIcon, Flashlight, Flame, Droplet, Snowflake, Leaf, Flower2, Sprout, Palmtree, Apple, Banana, Grape, Cherry, Carrot, Egg, Milk, Fish, Cheese, Meat, Bread, Donut, Cookie, Cake, Pizza, Soup, Salad, Sandwich, Popcorn, Lollipop, Pill, Bandage, Thermometer as ThermometerIcon, Stethoscope, Syringe, Toothbrush, Toothpaste, Shampoo, Conditioner, Lotion, Perfume, Lipstick, Mascara, Eyeshadow, Blush, Foundation, Powder, Brush, Comb, Mirror, Scissors, Razor, Tweezers, Towel, Washcloth, Sponge, Bucket, Mop, Broom, Vacuum, Dustpan, Trash, Recycle, Compost, Laundry, Detergent, Iron, Hanger, Basket, Hamper, Drawer, Closet, Shelf, Rack, Hook, Box, Bag, Container, Jar, Bottle, Can, Wrapper, Label, Sticker, Tape, Glue, Stapler, Paperclip, String, Rope, Chain, Wire, Cable, Cord, Socket, Switch, Button, Knob, Handle, Lever, Wheel, Gear, Screw, Hammer, Wrench, Screwdriver, Pliers, Saw, Drill, Ruler, Level, Square, Triangle, Circle, Rectangle, Pentagon, Hexagon, Octagon, Diamond, Oval, Arrow, Line, Curve, Angle, Point, Dot, Dash, Slash, Backslash, Underscore, Hyphen, Minus, Multiply, Divide, Equals, Percent, Dollar, Euro, Pound, Yen, Cent, Degree, At, Hash, Ampersand, Asterisk, Question, Exclamation, Period, Comma, Semicolon, Colon, Apostrophe, Quote, Parenthesis, Bracket, Brace, Less, Greater, Pipe, Tilde, Caret, Grave, Acute, Circumflex, Diaeresis, Cedilla, Macron, Breve, Ogonek, Stroke, Double } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Switch } from '../components/ui/switch';
 import { Button } from '../components/ui/button';
@@ -480,6 +479,206 @@ const mockMeetings: Meeting[] = [
     eventType: 'Sales Strategy Meeting',
     status: 'upcoming',
     isToday: false
+  },
+  {
+    id: '13',
+    title: 'Executive Board Meeting',
+    date: 'Mon, 21 Jul',
+    time: '2:00pm',
+    endTime: '3:30pm',
+    duration: '90 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Catherine Lee',
+        email: 'catherine.lee@board.com',
+        timezone: 'America/New_York'
+      },
+      {
+        name: 'Michael Zhang',
+        email: 'michael.zhang@board.com',
+        timezone: 'Asia/Shanghai'
+      },
+      {
+        name: 'Sarah Williams',
+        email: 'sarah.williams@board.com',
+        timezone: 'Europe/London'
+      },
+      {
+        name: 'David Johnson',
+        email: 'david.johnson@board.com',
+        timezone: 'America/Los_Angeles'
+      },
+      {
+        name: 'Emma Rodriguez',
+        email: 'emma.rodriguez@board.com',
+        timezone: 'Europe/Madrid'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Teams',
+      logo: '📹'
+    },
+    eventType: 'Executive Board Meeting',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '14',
+    title: 'Innovation Workshop',
+    date: 'Tue, 22 Jul',
+    time: '10:00am',
+    endTime: '12:00pm',
+    duration: '120 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Alex Thompson',
+        email: 'alex.thompson@innovation.com',
+        timezone: 'America/New_York'
+      },
+      {
+        name: 'Sofia Martinez',
+        email: 'sofia.martinez@innovation.com',
+        timezone: 'Europe/Madrid'
+      },
+      {
+        name: 'James Wilson',
+        email: 'james.wilson@innovation.com',
+        timezone: 'America/Chicago'
+      },
+      {
+        name: 'Lily Chen',
+        email: 'lily.chen@innovation.com',
+        timezone: 'Asia/Singapore'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Zoom',
+      logo: '📹'
+    },
+    eventType: 'Innovation Workshop',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '15',
+    title: 'Partner Collaboration Call',
+    date: 'Tue, 22 Jul',
+    time: '3:00pm',
+    endTime: '4:00pm',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Robert Kim',
+        email: 'robert.kim@partner.com',
+        timezone: 'Asia/Seoul'
+      },
+      {
+        name: 'Maria Gonzalez',
+        email: 'maria.gonzalez@partner.com',
+        timezone: 'Europe/Madrid'
+      },
+      {
+        name: 'Chris Taylor',
+        email: 'chris.taylor@partner.com',
+        timezone: 'America/New_York'
+      },
+      {
+        name: 'Anna Petrov',
+        email: 'anna.petrov@partner.com',
+        timezone: 'Europe/Moscow'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Google Meet',
+      logo: '📹'
+    },
+    eventType: 'Partner Collaboration Call',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '16',
+    title: 'Training Session',
+    date: 'Wed, 23 Jul',
+    time: '9:00am',
+    endTime: '10:30am',
+    duration: '90 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Jennifer Smith',
+        email: 'jennifer.smith@training.com',
+        timezone: 'America/New_York'
+      },
+      {
+        name: 'Marco Silva',
+        email: 'marco.silva@training.com',
+        timezone: 'Europe/Lisbon'
+      },
+      {
+        name: 'Yuki Tanaka',
+        email: 'yuki.tanaka@training.com',
+        timezone: 'Asia/Tokyo'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Teams',
+      logo: '📹'
+    },
+    eventType: 'Training Session',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '17',
+    title: 'Budget Review Meeting',
+    date: 'Wed, 23 Jul',
+    time: '2:00pm',
+    endTime: '3:00pm',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Patrick O\'Brien',
+        email: 'patrick.obrien@finance.com',
+        timezone: 'America/New_York'
+      },
+      {
+        name: 'Sophie Laurent',
+        email: 'sophie.laurent@finance.com',
+        timezone: 'Europe/Paris'
+      },
+      {
+        name: 'Kevin Park',
+        email: 'kevin.park@finance.com',
+        timezone: 'Asia/Seoul'
+      },
+      {
+        name: 'Amanda Clarke',
+        email: 'amanda.clarke@finance.com',
+        timezone: 'Australia/Sydney'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Zoom',
+      logo: '📹'
+    },
+    eventType: 'Budget Review Meeting',
+    status: 'upcoming',
+    isToday: false
   }
 ];
 
@@ -885,6 +1084,61 @@ const allMeetings = {
 
 const teamNames = ['Personal', 'Development Team', 'Design Team', 'Marketing Team', 'Sales Team', 'Engineering Team', 'Product Team', 'Customer Success'];
 
+const getEventIcon = (eventType: string) => {
+  switch (eventType) {
+    case 'Product Hunt Chats':
+      return <Rocket className="h-5 w-5 text-primary" />;
+    case 'Discovery Call':
+      return <Search className="h-5 w-5 text-primary" />;
+    case 'Strategy Session':
+      return <Zap className="h-5 w-5 text-primary" />;
+    case 'Design Review':
+      return <Palette className="h-5 w-5 text-primary" />;
+    case 'Client Consultation':
+      return <Briefcase className="h-5 w-5 text-primary" />;
+    case 'Weekly Standup':
+      return <CalendarDays className="h-5 w-5 text-primary" />;
+    case 'Onboarding Call':
+      return <UserCheck className="h-5 w-5 text-primary" />;
+    case 'Product Demo':
+      return <Monitor className="h-5 w-5 text-primary" />;
+    case 'Team Strategy Session':
+      return <Users className="h-5 w-5 text-primary" />;
+    case 'Client Presentation':
+      return <FileText className="h-5 w-5 text-primary" />;
+    case 'Quarterly Review':
+      return <TrendingUp className="h-5 w-5 text-primary" />;
+    case 'Sprint Planning':
+      return <Target className="h-5 w-5 text-primary" />;
+    case 'Monthly Review':
+      return <Calendar className="h-5 w-5 text-primary" />;
+    case 'Team Sync':
+      return <MessageSquare className="h-5 w-5 text-primary" />;
+    case 'Marketing Campaign Review':
+      return <TrendingUp className="h-5 w-5 text-primary" />;
+    case 'Technical Architecture Discussion':
+      return <Settings className="h-5 w-5 text-primary" />;
+    case 'Customer Success Review':
+      return <Heart className="h-5 w-5 text-primary" />;
+    case 'Product Roadmap Planning':
+      return <Map className="h-5 w-5 text-primary" />;
+    case 'Sales Strategy Meeting':
+      return <TrendingUp className="h-5 w-5 text-primary" />;
+    case 'Executive Board Meeting':
+      return <Shield className="h-5 w-5 text-primary" />;
+    case 'Innovation Workshop':
+      return <Lightbulb className="h-5 w-5 text-primary" />;
+    case 'Partner Collaboration Call':
+      return <Users className="h-5 w-5 text-primary" />;
+    case 'Training Session':
+      return <BookOpen className="h-5 w-5 text-primary" />;
+    case 'Budget Review Meeting':
+      return <Calculator className="h-5 w-5 text-primary" />;
+    default:
+      return <Video className="h-5 w-5 text-primary" />;
+  }
+};
+
 export default function Bookings() {
   const [activeTab, setActiveTab] = useState('upcoming');
   const [showFilters, setShowFilters] = useState(false);
@@ -990,51 +1244,6 @@ export default function Bookings() {
       description: "Email copied to clipboard",
       duration: 2000,
     });
-  };
-
-  const getEventIcon = (eventType: string) => {
-    switch (eventType) {
-      case 'Product Hunt Chats':
-        return <Rocket className="h-5 w-5" />;
-      case 'Discovery Call':
-        return <Search className="h-5 w-5" />;
-      case 'Strategy Session':
-        return <Zap className="h-5 w-5" />;
-      case 'Design Review':
-        return <Palette className="h-5 w-5" />;
-      case 'Client Consultation':
-        return <Briefcase className="h-5 w-5" />;
-      case 'Weekly Standup':
-        return <CalendarDays className="h-5 w-5" />;
-      case 'Onboarding Call':
-        return <UserCheck className="h-5 w-5" />;
-      case 'Product Demo':
-        return <Monitor className="h-5 w-5" />;
-      case 'Team Strategy Session':
-        return <Users className="h-5 w-5" />;
-      case 'Client Presentation':
-        return <FileText className="h-5 w-5" />;
-      case 'Quarterly Review':
-        return <TrendingUp className="h-5 w-5" />;
-      case 'Sprint Planning':
-        return <Target className="h-5 w-5" />;
-      case 'Monthly Review':
-        return <Calendar className="h-5 w-5" />;
-      case 'Team Sync':
-        return <MessageSquare className="h-5 w-5" />;
-      case 'Marketing Campaign Review':
-        return <Zap className="h-5 w-5" />;
-      case 'Technical Architecture Discussion':
-        return <Settings className="h-5 w-5" />;
-      case 'Customer Success Review':
-        return <Heart className="h-5 w-5" />;
-      case 'Product Roadmap Planning':
-        return <Map className="h-5 w-5" />;
-      case 'Sales Strategy Meeting':
-        return <TrendingUp className="h-5 w-5" />;
-      default:
-        return <Video className="h-5 w-5" />;
-    }
   };
 
   const MeetingCard = ({ meeting }: { meeting: Meeting }) => {
@@ -1178,7 +1387,7 @@ export default function Bookings() {
 
     return (
       <div
-        className={`bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow animate-fade-in ${
+        className={`bg-card border border-border rounded-lg p-6 hover:shadow-md transition-all duration-200 animate-fade-in ${
           isHost ? 'cursor-pointer' : ''
         }`}
         onClick={() => {
@@ -1318,7 +1527,7 @@ export default function Bookings() {
           {showActionButtons && getActionButtons()}
         </div>
 
-        {/* Details button - moved to bottom right of card */}
+        {/* Details button - positioned at bottom right of card */}
         <div className="flex justify-end mt-4">
           {isHost ? (
             <button
@@ -1408,7 +1617,7 @@ export default function Bookings() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="w-44"
+                    className="w-48"
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedMeeting(meeting);
@@ -1421,7 +1630,7 @@ export default function Bookings() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-44"
+                      className="w-48"
                       style={{ backgroundColor: '#007ee5', color: 'white' }}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -1496,7 +1705,7 @@ export default function Bookings() {
 
         {/* Filters */}
         {showFilters && (
-          <div className="flex items-center space-x-4 p-4 bg-muted/50 rounded-lg transition-all duration-300 ease-in-out animate-fade-in transform translate-y-0">
+          <div className="flex items-center space-x-4 p-4 bg-muted/50 rounded-lg transition-all duration-300 ease-in-out animate-fade-in transform translate-y-0 opacity-0 animate-[fadeIn_0.3s_ease-in-out_forwards]">
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline" size="sm">Attendee: {filteredAttendee}</Button>
@@ -1646,21 +1855,33 @@ export default function Bookings() {
         {/* Meetings List */}
         <div className="space-y-6">
           {todayMeetings.length > 0 && (
-            <div className="space-y-3">
+            <div className="space-y-3 animate-[slideInUp_0.4s_ease-out]">
               <h2 className="text-sm font-medium text-muted-foreground">Today</h2>
               <div className="space-y-3">
-                {todayMeetings.map((meeting) => (
-                  <MeetingCard key={meeting.id} meeting={meeting} />
+                {todayMeetings.map((meeting, index) => (
+                  <div
+                    key={meeting.id}
+                    className="animate-[slideInUp_0.4s_ease-out]"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <MeetingCard meeting={meeting} />
+                  </div>
                 ))}
               </div>
             </div>
           )}
           
           {otherMeetings.length > 0 && (
-            <div className={`space-y-3 ${todayMeetings.length > 0 ? 'mt-6' : ''}`}>
+            <div className={`space-y-3 ${todayMeetings.length > 0 ? 'mt-6' : ''} animate-[slideInUp_0.4s_ease-out]`}>
               <div className="space-y-3">
-                {otherMeetings.map((meeting) => (
-                  <MeetingCard key={meeting.id} meeting={meeting} />
+                {otherMeetings.map((meeting, index) => (
+                  <div
+                    key={meeting.id}
+                    className="animate-[slideInUp_0.4s_ease-out]"
+                    style={{ animationDelay: `${(todayMeetings.length + index) * 0.1}s` }}
+                  >
+                    <MeetingCard meeting={meeting} />
+                  </div>
                 ))}
               </div>
             </div>
@@ -1790,12 +2011,12 @@ export default function Bookings() {
         {/* Cancel Selection Modal - First popup for recurring events */}
         {showCancelSelection && selectedMeeting && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-3xl shadow-xl">
+            <div className="bg-white rounded-lg p-6 w-full max-w-4xl shadow-xl">
               <h2 className="text-xl font-semibold mb-6 text-gray-900 text-center">Cancel Event</h2>
               
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-3 text-gray-900">Select the meetings you want to cancel</label>
-                <div className="space-y-2 max-h-80 overflow-y-auto">
+                <div className="space-y-2 max-h-96 overflow-y-auto">
                   <div className="flex items-center justify-between p-3 bg-gray-50 rounded border">
                     <span className="text-sm font-medium">Select All</span>
                     <Checkbox
