@@ -513,7 +513,7 @@ export default function Bookings() {
                         onMouseLeave={() => setShowRecurringHover(null)}
                         onClick={(e) => e.stopPropagation()}
                       >
-                        Every {meeting.recurringSchedule.interval} days for {meeting.recurringSchedule.totalMeetings} times
+                        Every {meeting.recurringSchedule.interval} days for {meeting.recurringSchedule.totalMeetings} occurances
                       </button>
                       
                       {showRecurringHover === meeting.id && (
