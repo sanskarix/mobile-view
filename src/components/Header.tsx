@@ -64,15 +64,15 @@ export const Header = ({
             <button onClick={handleBack} className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors" title="Back to Event Types">
               <ArrowLeft className="h-4 w-4 mr-2" />
             </button>
-            <h1 className="text-xl font-semibold text-foreground">{eventTitle}</h1>
+            <h1 className="text-xl font-semibold text-foreground">{eventData.title}</h1>
           </div>
 
           {/* Right-aligned content: Toggle | Save | Profile */}
           <div className="flex items-center space-x-4 ml-auto">
             <div className="flex items-center space-x-2">
-              <Switch checked={eventEnabled} onCheckedChange={setEventEnabled} />
+              <Switch checked={eventData.enabled} onCheckedChange={eventData.onEnabledChange} />
               <span className="text-sm text-muted-foreground">
-                {eventEnabled ? 'Enabled' : 'Disabled'}
+                {eventData.enabled ? 'Enabled' : 'Disabled'}
               </span>
             </div>
             
