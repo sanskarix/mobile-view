@@ -1,6 +1,5 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { Filter, Download, Search, Calendar, MapPin, Video, MoreHorizontal, Edit, UserPlus, Clock, X, Bold, Italic, Underline, Strikethrough, List, ListOrdered, Undo, Redo, Check, Copy, Eye, ChevronDown, ChevronUp, Mail, Globe, Trash2, Info, CheckCircle, XCircle, Plus } from 'lucide-react';
+import { Filter, Download, Search, Calendar, MapPin, Video, MoreHorizontal, Edit, UserPlus, Clock, X, Bold, Italic, Underline, Strikethrough, List, ListOrdered, Undo, Redo, Check, Copy, Eye, ChevronDown, ChevronUp, Mail, Globe, Trash2, Info, CheckCircle, XCircle, Plus, Users, MessageSquare, Target, Zap, Briefcase, GraduationCap, Heart, Rocket, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Switch } from '../components/ui/switch';
 import { Button } from '../components/ui/button';
@@ -100,6 +99,181 @@ const mockMeetings: Meeting[] = [
     eventType: 'Discovery Call',
     status: 'upcoming',
     isToday: true
+  },
+  {
+    id: '3',
+    title: 'Team Strategy Session',
+    date: 'Tue, 15 Jul',
+    time: '10:00am',
+    endTime: '11:00am',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Michael Johnson',
+        email: 'michael.j@company.com',
+        timezone: 'America/New_York'
+      },
+      {
+        name: 'Sarah Williams',
+        email: 'sarah.w@company.com',
+        timezone: 'America/Los_Angeles'
+      },
+      {
+        name: 'David Chen',
+        email: 'david.c@company.com',
+        timezone: 'Asia/Shanghai'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Teams',
+      logo: '📹'
+    },
+    eventType: 'Team Strategy Session',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '4',
+    title: 'Product Demo',
+    date: 'Tue, 15 Jul',
+    time: '3:00pm',
+    endTime: '4:00pm',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Lisa Thompson',
+        email: 'lisa.t@client.com',
+        timezone: 'Europe/London'
+      },
+      {
+        name: 'Robert Davis',
+        email: 'robert.d@client.com',
+        timezone: 'Europe/London'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Zoom',
+      logo: '📹'
+    },
+    eventType: 'Product Demo',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '5',
+    title: 'Client Consultation',
+    date: 'Wed, 16 Jul',
+    time: '11:00am',
+    endTime: '12:00pm',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Jennifer Wilson',
+        email: 'jennifer.w@enterprise.com',
+        timezone: 'America/Chicago'
+      },
+      {
+        name: 'Mark Anderson',
+        email: 'mark.a@enterprise.com',
+        timezone: 'America/Chicago'
+      },
+      {
+        name: 'Anna Martinez',
+        email: 'anna.m@enterprise.com',
+        timezone: 'America/Denver'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Google Meet',
+      logo: '📹'
+    },
+    eventType: 'Client Consultation',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '6',
+    title: 'Design Review',
+    date: 'Wed, 16 Jul',
+    time: '2:00pm',
+    endTime: '3:00pm',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Alex Turner',
+        email: 'alex.t@design.com',
+        timezone: 'Europe/Berlin'
+      },
+      {
+        name: 'Emma Clarke',
+        email: 'emma.c@design.com',
+        timezone: 'Europe/Paris'
+      },
+      {
+        name: 'James Wright',
+        email: 'james.w@design.com',
+        timezone: 'Europe/Madrid'
+      },
+      {
+        name: 'Sophie Miller',
+        email: 'sophie.m@design.com',
+        timezone: 'Europe/Rome'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Teams',
+      logo: '📹'
+    },
+    eventType: 'Design Review',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '7',
+    title: 'Sales Pipeline Review',
+    date: 'Thu, 17 Jul',
+    time: '9:00am',
+    endTime: '10:00am',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Carlos Rodriguez',
+        email: 'carlos.r@sales.com',
+        timezone: 'America/Mexico_City'
+      },
+      {
+        name: 'Rachel Green',
+        email: 'rachel.g@sales.com',
+        timezone: 'America/New_York'
+      },
+      {
+        name: 'Tom Wilson',
+        email: 'tom.w@sales.com',
+        timezone: 'America/Los_Angeles'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Zoom',
+      logo: '📹'
+    },
+    eventType: 'Sales Pipeline Review',
+    status: 'upcoming',
+    isToday: false
   }
 ];
 
@@ -111,8 +285,8 @@ const unconfirmedMeetings: Meeting[] = [
     time: '10:00am',
     endTime: '10:30am',
     duration: '30 minutes',
-    host: 'Alex Chen',
-    isHost: false,
+    host: 'You',
+    isHost: true,
     attendees: [
       {
         name: 'Alex Chen',
@@ -136,8 +310,8 @@ const unconfirmedMeetings: Meeting[] = [
     time: '3:00pm',
     endTime: '4:00pm',
     duration: '60 minutes',
-    host: 'Sarah Wilson',
-    isHost: false,
+    host: 'You',
+    isHost: true,
     attendees: [
       {
         name: 'Sarah Wilson',
@@ -447,23 +621,27 @@ export default function Bookings() {
   const getEventIcon = (eventType: string) => {
     switch (eventType) {
       case 'Product Hunt Chats':
-        return '🚀';
+        return <Rocket className="h-5 w-5 text-primary" />;
       case 'Discovery Call':
-        return '🔍';
+        return <Search className="h-5 w-5 text-primary" />;
       case 'Strategy Session':
-        return '📊';
+        return <Target className="h-5 w-5 text-primary" />;
       case 'Design Review':
-        return '🎨';
+        return <Eye className="h-5 w-5 text-primary" />;
       case 'Client Consultation':
-        return '💼';
+        return <Briefcase className="h-5 w-5 text-primary" />;
       case 'Weekly Standup':
-        return '📅';
+        return <Calendar className="h-5 w-5 text-primary" />;
       case 'Onboarding Call':
-        return '👋';
+        return <GraduationCap className="h-5 w-5 text-primary" />;
       case 'Product Demo':
-        return '📱';
+        return <Video className="h-5 w-5 text-primary" />;
+      case 'Team Strategy Session':
+        return <Users className="h-5 w-5 text-primary" />;
+      case 'Sales Pipeline Review':
+        return <Zap className="h-5 w-5 text-primary" />;
       default:
-        return '📹';
+        return <Video className="h-5 w-5 text-primary" />;
     }
   };
 
@@ -621,7 +799,7 @@ export default function Bookings() {
           <div className="flex items-start space-x-4 flex-1">
             {/* Icon */}
             <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-lg">
+              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
                 {getEventIcon(meeting.eventType)}
               </div>
             </div>
@@ -741,7 +919,7 @@ export default function Bookings() {
                   )}
                 </div>
 
-                {/* Details button or Attendee label - moved to extreme right */}
+                {/* Details button or Host label - moved to extreme right */}
                 <div className="ml-auto">
                   {isHost ? (
                     <button
@@ -755,7 +933,7 @@ export default function Bookings() {
                       {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                     </button>
                   ) : (
-                    <span className="text-sm text-muted-foreground">Attendee</span>
+                    <span className="text-sm text-muted-foreground">Host</span>
                   )}
                 </div>
               </div>
@@ -837,8 +1015,8 @@ export default function Bookings() {
                 <div className="flex flex-col items-end space-y-2">
                   <Button
                     variant="outline"
-                    size="sm"
-                    className="w-32"
+                    size="default"
+                    className="w-40"
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedMeeting(meeting);
@@ -850,8 +1028,8 @@ export default function Bookings() {
                   {meeting.isToday && isCurrentTime(meeting.time) && (
                     <Button
                       variant="outline"
-                      size="sm"
-                      className="w-32"
+                      size="default"
+                      className="w-40"
                       style={{ backgroundColor: '#007ee5', color: 'white' }}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -1217,15 +1395,15 @@ export default function Bookings() {
           </div>
         )}
 
-        {/* Cancel Selection Modal - First popup for recurring events */}
+        {/* Cancel Selection Modal - First popup for recurring events - Made bigger */}
         {showCancelSelection && selectedMeeting && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-xl">
+            <div className="bg-white rounded-lg p-6 w-full max-w-2xl shadow-xl">
               <h2 className="text-xl font-semibold mb-6 text-gray-900 text-center">Cancel Event</h2>
               
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-3 text-gray-900">Select the meetings you want to cancel</label>
-                <div className="space-y-2 max-h-48 overflow-y-auto">
+                <div className="space-y-2 max-h-64 overflow-y-auto">
                   <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
                     <span className="text-sm font-medium">Select All</span>
                     <Checkbox
