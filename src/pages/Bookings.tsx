@@ -703,15 +703,6 @@ export default function Bookings() {
                     </div>
                   )}
                 </div>
-                
-                {/* Details button */}
-                <button 
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  onClick={() => setExpandedMeeting(isExpanded ? null : meeting.id)}
-                >
-                  <span>Details</span>
-                  {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </button>
               </div>
             </div>
           </div>
