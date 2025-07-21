@@ -1,6 +1,5 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { Filter, Download, Search, Calendar, MapPin, Video, MoreHorizontal, Edit, UserPlus, Clock, X, Bold, Italic, Underline, Strikethrough, List, ListOrdered, Undo, Redo, Check, Copy, Eye, ChevronDown, ChevronUp, Mail, Globe, Trash2, Info, CheckCircle, XCircle, Plus } from 'lucide-react';
+import { Filter, Download, Search, Calendar, MapPin, Video, MoreHorizontal, Edit, UserPlus, Clock, X, Bold, Italic, Underline, Strikethrough, List, ListOrdered, Undo, Redo, Check, Copy, Eye, ChevronDown, ChevronUp, Mail, Globe, Trash2, Info, CheckCircle, XCircle, Plus, Rocket, Zap, Users, Palette, Briefcase, CalendarDays, UserCheck, Smartphone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Switch } from '../components/ui/switch';
 import { Button } from '../components/ui/button';
@@ -100,6 +99,176 @@ const mockMeetings: Meeting[] = [
     eventType: 'Discovery Call',
     status: 'upcoming',
     isToday: true
+  },
+  {
+    id: '3',
+    title: 'Team Strategy Session',
+    date: 'Tue, 15 Jul',
+    time: '10:00am',
+    endTime: '11:00am',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Alex Chen',
+        email: 'alex.chen@company.com',
+        timezone: 'Asia/Singapore'
+      },
+      {
+        name: 'Maria Garcia',
+        email: 'maria.garcia@company.com',
+        timezone: 'Europe/Madrid'
+      },
+      {
+        name: 'John Smith',
+        email: 'john.smith@company.com',
+        timezone: 'America/New_York'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Teams',
+      logo: '📹'
+    },
+    eventType: 'Team Strategy Session',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '4',
+    title: 'Design Review',
+    date: 'Wed, 16 Jul',
+    time: '2:00pm',
+    endTime: '3:00pm',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Sarah Wilson',
+        email: 'sarah.wilson@design.com',
+        timezone: 'America/Los_Angeles'
+      },
+      {
+        name: 'David Kim',
+        email: 'david.kim@design.com',
+        timezone: 'Asia/Seoul'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Zoom',
+      logo: '📹'
+    },
+    eventType: 'Design Review',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '5',
+    title: 'Client Presentation',
+    date: 'Thu, 17 Jul',
+    time: '3:00pm',
+    endTime: '4:00pm',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Michael Brown',
+        email: 'michael.brown@client.com',
+        timezone: 'America/Chicago'
+      },
+      {
+        name: 'Lisa Johnson',
+        email: 'lisa.johnson@client.com',
+        timezone: 'America/Chicago'
+      },
+      {
+        name: 'Robert Davis',
+        email: 'robert.davis@client.com',
+        timezone: 'America/Chicago'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Google Meet',
+      logo: '📹'
+    },
+    eventType: 'Client Presentation',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '6',
+    title: 'Product Demo',
+    date: 'Fri, 18 Jul',
+    time: '1:00pm',
+    endTime: '2:00pm',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Jennifer Lee',
+        email: 'jennifer.lee@prospect.com',
+        timezone: 'America/Los_Angeles'
+      },
+      {
+        name: 'Tom Wilson',
+        email: 'tom.wilson@prospect.com',
+        timezone: 'America/Los_Angeles'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Zoom',
+      logo: '📹'
+    },
+    eventType: 'Product Demo',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '7',
+    title: 'Quarterly Review',
+    date: 'Fri, 18 Jul',
+    time: '4:00pm',
+    endTime: '5:00pm',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Amanda Taylor',
+        email: 'amanda.taylor@company.com',
+        timezone: 'America/New_York'
+      },
+      {
+        name: 'Kevin Zhang',
+        email: 'kevin.zhang@company.com',
+        timezone: 'Asia/Shanghai'
+      },
+      {
+        name: 'Rachel Green',
+        email: 'rachel.green@company.com',
+        timezone: 'Europe/London'
+      },
+      {
+        name: 'Mark Thompson',
+        email: 'mark.thompson@company.com',
+        timezone: 'America/Denver'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Teams',
+      logo: '📹'
+    },
+    eventType: 'Quarterly Review',
+    status: 'upcoming',
+    isToday: false
   }
 ];
 
@@ -111,8 +280,8 @@ const unconfirmedMeetings: Meeting[] = [
     time: '10:00am',
     endTime: '10:30am',
     duration: '30 minutes',
-    host: 'Alex Chen',
-    isHost: false,
+    host: 'You',
+    isHost: true,
     attendees: [
       {
         name: 'Alex Chen',
@@ -136,8 +305,8 @@ const unconfirmedMeetings: Meeting[] = [
     time: '3:00pm',
     endTime: '4:00pm',
     duration: '60 minutes',
-    host: 'Sarah Wilson',
-    isHost: false,
+    host: 'You',
+    isHost: true,
     attendees: [
       {
         name: 'Sarah Wilson',
@@ -268,6 +437,174 @@ const recurringMeetings: Meeting[] = [
     eventType: 'Weekly Standup',
     status: 'recurring',
     isToday: true
+  },
+  {
+    id: 'recur-3',
+    title: 'Sprint Planning',
+    date: 'Tue, 15 Jul',
+    time: '10:00am',
+    endTime: '11:00am',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    recurringSchedule: {
+      interval: 14,
+      totalMeetings: 5,
+      meetings: [
+        {
+          date: '15 July 2025',
+          time: '10:00am',
+          completed: false
+        },
+        {
+          date: '29 July 2025',
+          time: '10:00am',
+          completed: false
+        },
+        {
+          date: '12 August 2025',
+          time: '10:00am',
+          completed: false
+        },
+        {
+          date: '26 August 2025',
+          time: '10:00am',
+          completed: false
+        },
+        {
+          date: '9 September 2025',
+          time: '10:00am',
+          completed: false
+        }
+      ]
+    },
+    attendees: [
+      {
+        name: 'Alex Chen',
+        email: 'alex.chen@dev.com',
+        timezone: 'Asia/Singapore'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Teams',
+      logo: '📹'
+    },
+    eventType: 'Sprint Planning',
+    status: 'recurring',
+    isToday: false
+  },
+  {
+    id: 'recur-4',
+    title: 'Monthly Review',
+    date: 'Wed, 16 Jul',
+    time: '2:00pm',
+    endTime: '3:00pm',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    recurringSchedule: {
+      interval: 30,
+      totalMeetings: 5,
+      meetings: [
+        {
+          date: '16 July 2025',
+          time: '2:00pm',
+          completed: false
+        },
+        {
+          date: '15 August 2025',
+          time: '2:00pm',
+          completed: false
+        },
+        {
+          date: '14 September 2025',
+          time: '2:00pm',
+          completed: false
+        },
+        {
+          date: '14 October 2025',
+          time: '2:00pm',
+          completed: false
+        },
+        {
+          date: '13 November 2025',
+          time: '2:00pm',
+          completed: false
+        }
+      ]
+    },
+    attendees: [
+      {
+        name: 'Sarah Wilson',
+        email: 'sarah.wilson@company.com',
+        timezone: 'America/Los_Angeles'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Zoom',
+      logo: '📹'
+    },
+    eventType: 'Monthly Review',
+    status: 'recurring',
+    isToday: false
+  },
+  {
+    id: 'recur-5',
+    title: 'Team Sync',
+    date: 'Thu, 17 Jul',
+    time: '1:00pm',
+    endTime: '1:30pm',
+    duration: '30 minutes',
+    host: 'You',
+    isHost: true,
+    recurringSchedule: {
+      interval: 7,
+      totalMeetings: 5,
+      meetings: [
+        {
+          date: '17 July 2025',
+          time: '1:00pm',
+          completed: false
+        },
+        {
+          date: '24 July 2025',
+          time: '1:00pm',
+          completed: false
+        },
+        {
+          date: '31 July 2025',
+          time: '1:00pm',
+          completed: false
+        },
+        {
+          date: '7 August 2025',
+          time: '1:00pm',
+          completed: false
+        },
+        {
+          date: '14 August 2025',
+          time: '1:00pm',
+          completed: false
+        }
+      ]
+    },
+    attendees: [
+      {
+        name: 'David Kim',
+        email: 'david.kim@team.com',
+        timezone: 'Asia/Seoul'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Google Meet',
+      logo: '📹'
+    },
+    eventType: 'Team Sync',
+    status: 'recurring',
+    isToday: false
   }
 ];
 
@@ -447,23 +784,35 @@ export default function Bookings() {
   const getEventIcon = (eventType: string) => {
     switch (eventType) {
       case 'Product Hunt Chats':
-        return '🚀';
+        return <Rocket className="h-5 w-5" />;
       case 'Discovery Call':
-        return '🔍';
+        return <Search className="h-5 w-5" />;
       case 'Strategy Session':
-        return '📊';
+        return <Zap className="h-5 w-5" />;
       case 'Design Review':
-        return '🎨';
+        return <Palette className="h-5 w-5" />;
       case 'Client Consultation':
-        return '💼';
+        return <Briefcase className="h-5 w-5" />;
       case 'Weekly Standup':
-        return '📅';
+        return <CalendarDays className="h-5 w-5" />;
       case 'Onboarding Call':
-        return '👋';
+        return <UserCheck className="h-5 w-5" />;
       case 'Product Demo':
-        return '📱';
+        return <Smartphone className="h-5 w-5" />;
+      case 'Team Strategy Session':
+        return <Users className="h-5 w-5" />;
+      case 'Client Presentation':
+        return <Briefcase className="h-5 w-5" />;
+      case 'Quarterly Review':
+        return <CalendarDays className="h-5 w-5" />;
+      case 'Sprint Planning':
+        return <Zap className="h-5 w-5" />;
+      case 'Monthly Review':
+        return <CalendarDays className="h-5 w-5" />;
+      case 'Team Sync':
+        return <Users className="h-5 w-5" />;
       default:
-        return '📹';
+        return <Video className="h-5 w-5" />;
     }
   };
 
@@ -608,7 +957,7 @@ export default function Bookings() {
 
     return (
       <div
-        className={`bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow ${
+        className={`bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow animate-fade-in ${
           isHost ? 'cursor-pointer' : ''
         }`}
         onClick={() => {
@@ -621,7 +970,7 @@ export default function Bookings() {
           <div className="flex items-start space-x-4 flex-1">
             {/* Icon */}
             <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center text-lg">
+              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
                 {getEventIcon(meeting.eventType)}
               </div>
             </div>
@@ -740,30 +1089,30 @@ export default function Bookings() {
                     </div>
                   )}
                 </div>
-
-                {/* Details button or Attendee label - moved to extreme right */}
-                <div className="ml-auto">
-                  {isHost ? (
-                    <button
-                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setExpandedMeeting(isExpanded ? null : meeting.id);
-                      }}
-                    >
-                      <span>Details</span>
-                      {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                    </button>
-                  ) : (
-                    <span className="text-sm text-muted-foreground">Attendee</span>
-                  )}
-                </div>
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
           {showActionButtons && getActionButtons()}
+        </div>
+
+        {/* Details button - moved to bottom right of card */}
+        <div className="flex justify-end mt-4">
+          {isHost ? (
+            <button
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                setExpandedMeeting(isExpanded ? null : meeting.id);
+              }}
+            >
+              <span>Details</span>
+              {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </button>
+          ) : (
+            <span className="text-sm text-muted-foreground">Attendee</span>
+          )}
         </div>
 
         {/* Expanded Details */}
@@ -838,7 +1187,7 @@ export default function Bookings() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="w-32"
+                    className="w-40"
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedMeeting(meeting);
@@ -851,7 +1200,7 @@ export default function Bookings() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-32"
+                      className="w-40"
                       style={{ backgroundColor: '#007ee5', color: 'white' }}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -881,7 +1230,7 @@ export default function Bookings() {
         {/* Header with Tabs and Action Buttons */}
         <div className="flex items-center justify-between">
           {/* Tabs - Updated styling to match teams tabs */}
-          <div className="flex border-b border-border">
+          <div className="flex border-b border-border bg-muted/30 rounded-t-lg">
             {[
               { value: 'upcoming', label: 'Upcoming' },
               { value: 'unconfirmed', label: 'Unconfirmed' },
@@ -892,10 +1241,10 @@ export default function Bookings() {
               <button
                 key={tab.value}
                 onClick={() => setActiveTab(tab.value)}
-                className={`px-4 py-2 text-sm font-medium transition-colors relative ${
+                className={`px-6 py-3 text-sm font-medium transition-all duration-300 ease-in-out animate-fade-in relative ${
                   activeTab === tab.value
-                    ? 'text-foreground border-b-2 border-primary'
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? 'text-foreground bg-background border-b-2 border-primary rounded-t-lg'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                 }`}
               >
                 {tab.label}
@@ -926,7 +1275,7 @@ export default function Bookings() {
 
         {/* Filters */}
         {showFilters && (
-          <div className="flex items-center space-x-4 p-4 bg-muted/50 rounded-lg transition-all duration-300 ease-in-out animate-fade-in">
+          <div className="flex items-center space-x-4 p-4 bg-muted/50 rounded-lg transition-all duration-300 ease-in-out animate-fade-in transform translate-y-0">
             <Popover>
               <PopoverTrigger asChild>
                 <Button variant="outline" size="sm">Attendee: {filteredAttendee}</Button>
@@ -1220,13 +1569,13 @@ export default function Bookings() {
         {/* Cancel Selection Modal - First popup for recurring events */}
         {showCancelSelection && selectedMeeting && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-xl">
+            <div className="bg-white rounded-lg p-6 w-full max-w-2xl shadow-xl">
               <h2 className="text-xl font-semibold mb-6 text-gray-900 text-center">Cancel Event</h2>
               
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-3 text-gray-900">Select the meetings you want to cancel</label>
-                <div className="space-y-2 max-h-48 overflow-y-auto">
-                  <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded border">
                     <span className="text-sm font-medium">Select All</span>
                     <Checkbox
                       checked={selectedRecurringDates.length === selectedMeeting.recurringSchedule?.meetings.length}
@@ -1242,7 +1591,7 @@ export default function Bookings() {
                   {selectedMeeting.recurringSchedule?.meetings.map((meeting, index) => {
                     const dateTime = `${meeting.date} • ${meeting.time}`;
                     return (
-                      <div key={index} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
+                      <div key={index} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded border">
                         <span className="text-sm">{dateTime}</span>
                         <Checkbox
                           checked={selectedRecurringDates.includes(dateTime)}
