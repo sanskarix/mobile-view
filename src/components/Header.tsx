@@ -59,39 +59,15 @@ export const Header = ({
   const renderPageContent = () => {
     if (isEventEditPage && eventData) {
       return (
-        <div className="h-full px-8 flex items-center justify-between w-full max-w-none">
-          <div className="flex items-center space-x-4 mx-0">
-            <button onClick={handleBack} className="flex items-center text-sm text-muted-foreground hover:text-foreground transition-colors" title="Back to Event Types">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-            </button>
-            <h1 className="text-xl font-semibold text-foreground">{eventTitle}</h1>
-          </div>
-
-          {/* Right-aligned content: Toggle | Save | Profile */}
-          <div className="flex items-center space-x-4 ml-auto">
-            <div className="flex items-center space-x-2">
-              <Switch checked={eventEnabled} onCheckedChange={setEventEnabled} />
-              <span className="text-sm text-muted-foreground">
-                {eventEnabled ? 'Enabled' : 'Disabled'}
-              </span>
-            </div>
-            
-            <div className="w-px h-6 bg-border"></div>
-            
-            <button onClick={handleSave} className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
-              Save
-            </button>
-            
-            <div className="w-px h-6 bg-border"></div>
-
-            {/* Profile */}
-            <div className="flex items-center space-x-3 px-4 py-2 hover:bg-muted rounded-lg transition-colors">
-              <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-                <span className="text-sm font-medium text-primary-foreground">SY</span>
-              </div>
-              <span className="text-sm font-medium text-foreground">Sanskar Yadav</span>
-            </div>
-          </div>
+        <div className="flex items-center space-x-4">
+          <button 
+            onClick={handleBack} 
+            className="flex items-center text-muted-foreground hover:text-foreground transition-colors" 
+            title="Back to Event Types"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+          <h1 className="text-xl font-semibold text-foreground">{eventData.title}</h1>
         </div>
       );
     }
