@@ -255,7 +255,7 @@ export const EventSetup = ({
           </span>
           <input type="text" value={formData.url} onChange={e => handleFormChange('url', e.target.value)} className="flex-1 px-4 py-3 border border-border focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm" />
           <div className="flex items-center border border-l-0 border-border rounded-r-lg bg-background">
-            <button onClick={handleCopyUrl} className="p-3 hover:bg-muted transition-colors border-r border-border" title="Copy URL">
+            <button onClick={handleCopyUrl} title="Copy URL" className="p-3.5 transition-colors border-r border-border bg-[64748B] bg-inherit">
               <Copy className="h-4 w-4" style={{
               color: '#384252'
             }} />
