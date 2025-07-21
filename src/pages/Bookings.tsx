@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Filter, Download, Search, Calendar, MapPin, Video, MoreHorizontal, Edit, UserPlus, Clock, X, Bold, Italic, Underline, Strikethrough, List, ListOrdered, Undo, Redo, Check, Copy, Eye, ChevronDown, ChevronUp, Mail, Globe } from 'lucide-react';
+import { Filter, Download, Search, Calendar, MapPin, Video, MoreHorizontal, Edit, UserPlus, Clock, X, Bold, Italic, Underline, Strikethrough, List, ListOrdered, Undo, Redo, Check, Copy, Eye, ChevronDown, ChevronUp, Mail, Globe, Users, Phone, MessageSquare, Zap, Target, Briefcase } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Switch } from '../components/ui/switch';
 import { Button } from '../components/ui/button';
@@ -9,6 +9,7 @@ import { Checkbox } from '../components/ui/checkbox';
 import { AddGuestsModal } from '../components/AddGuestsModal';
 import { useToast } from '../hooks/use-toast';
 import type { DateRange } from 'react-day-picker';
+
 interface Meeting {
   id: string;
   title: string;
@@ -35,6 +36,7 @@ interface Meeting {
   duration?: string;
   recurringDates?: string[];
 }
+
 const mockMeetings: Meeting[] = [
 // Upcoming meetings - 15 total
 {
@@ -528,8 +530,49 @@ const generateMeetingsForStatus = (status: Meeting['status'], count: number = 15
     recurringDates: status === 'recurring' ? ['Mon, 14 Jul • 9:00am - 9:30am', 'Tue, 15 Jul • 9:00am - 9:30am', 'Wed, 16 Jul • 9:00am - 9:30am', 'Thu, 17 Jul • 9:00am - 9:30am', 'Fri, 18 Jul • 9:00am - 9:30am'] : undefined
   }));
 };
+
 const allMeetings = [...mockMeetings, ...generateMeetingsForStatus('unconfirmed'), ...generateMeetingsForStatus('recurring'), ...generateMeetingsForStatus('past'), ...generateMeetingsForStatus('canceled')];
+
 const teamNames = ['Personal', 'Development Team', 'Design Team', 'Marketing Team', 'Sales Team', 'Engineering Team', 'Product Team', 'Customer Success'];
+
+// Function to get icon for meeting type
+const getEventIcon = (eventType: string) => {
+  switch (eventType.toLowerCase()) {
+    case 'product hunt chats':
+      return MessageSquare;
+    case 'discovery call':
+      return Search;
+    case 'strategy session':
+      return Target;
+    case 'product demo':
+      return Zap;
+    case 'design review':
+      return Edit;
+    case 'team standup':
+      return Users;
+    case 'client presentation':
+      return Briefcase;
+    case 'weekly sync':
+      return Clock;
+    case 'tech discussion':
+      return MessageSquare;
+    case 'strategy planning':
+      return Target;
+    case 'product roadmap':
+      return MapPin;
+    case 'marketing review':
+      return Edit;
+    case 'engineering sync':
+      return Users;
+    case 'design workshop':
+      return Edit;
+    case 'final review':
+      return Check;
+    default:
+      return Calendar;
+  }
+};
+
 export default function Bookings() {
   const [activeTab, setActiveTab] = useState('upcoming');
   const [showFilters, setShowFilters] = useState(false);
@@ -548,33 +591,38 @@ export default function Bookings() {
   const [showAttendeeDetails, setShowAttendeeDetails] = useState<string | null>(null);
   const [selectedRecurringDates, setSelectedRecurringDates] = useState<string[]>([]);
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+
   const todayMeetings = allMeetings.filter(m => m.status === activeTab && m.isToday);
   const otherMeetings = allMeetings.filter(m => m.status === activeTab && !m.isToday);
+
   const handleExport = () => {
     toast({
       description: "Export successful: Your bookings will be sent to your email shortly.",
       duration: 3000
     });
   };
+
   const handleReschedule = () => {
     navigate('/scheduling-coming-soon');
   };
+
   const handleCancelEvent = (meeting: Meeting) => {
     setSelectedMeeting(meeting);
     setShowCancelConfirm(true);
   };
+
   const handleMarkNoShow = (meeting: Meeting) => {
     setSelectedMeeting(meeting);
     setShowNoShow(true);
   };
+
   const isCurrentTime = (time: string) => {
     const currentHour = new Date().getHours();
     const meetingHour = parseInt(time.split(':')[0]);
     return currentHour > meetingHour;
   };
+
   const getAttendeeDisplay = (meeting: Meeting) => {
     const attendees = meeting.attendees;
     if (attendees.length === 0) return null;
@@ -585,6 +633,7 @@ export default function Bookings() {
       moreCount: attendees.length - 2
     };
   };
+
   const getAllAttendees = () => {
     const allAttendees = new Set<string>();
     allMeetings.forEach(meeting => {
@@ -594,6 +643,7 @@ export default function Bookings() {
     });
     return Array.from(allAttendees);
   };
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
@@ -601,139 +651,190 @@ export default function Bookings() {
       duration: 2000
     });
   };
-  const MeetingCard = ({
-    meeting
-  }: {
-    meeting: Meeting;
-  }) => {
+
+  const MeetingCard = ({ meeting }: { meeting: Meeting }) => {
     const isExpanded = expandedMeeting === meeting.id;
     const attendeeDisplay = getAttendeeDisplay(meeting);
     const showActionButtons = meeting.status !== 'past' && meeting.status !== 'canceled';
     const showExpandedActions = meeting.status !== 'past' && meeting.status !== 'canceled';
-    return <div className="bg-white border border-gray-200 rounded-lg overflow-visible shadow-sm hover:shadow-md transition-all duration-200">
+    const IconComponent = getEventIcon(meeting.eventType);
+
+    return (
+      <div className="bg-white border border-gray-200 rounded-lg overflow-visible shadow-sm hover:shadow-md transition-all duration-200">
         <div className="p-4">
           {/* Default Card View */}
           <div className="flex justify-between items-start">
-            <div className="flex-1 cursor-pointer" onClick={() => setExpandedMeeting(isExpanded ? null : meeting.id)}>
+            <div className="flex-1">
               <div className="flex items-start justify-between mb-3">
-                <div className="flex items-start gap-3">
-                  <div className="text-sm text-gray-600">
-                    {meeting.isToday ? 'Today' : meeting.date} • {meeting.time} - {meeting.endTime}
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+                    <IconComponent className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-gray-600">
+                      {meeting.isToday ? 'Today' : meeting.date} • {meeting.time} - {meeting.endTime}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2 mb-3 ml-13">
                 <h3 className={`text-lg font-medium ${meeting.status === 'canceled' ? 'line-through text-gray-500' : 'text-gray-900'}`}>
                   {meeting.title}
                 </h3>
                 <span className="text-gray-400">•</span>
                 <div className="flex items-center gap-1">
-                  {attendeeDisplay && <div className="relative">
-                      {typeof attendeeDisplay === 'object' ? <div className="flex items-center gap-1">
+                  {attendeeDisplay && (
+                    <div className="relative">
+                      {typeof attendeeDisplay === 'object' ? (
+                        <div className="flex items-center gap-1">
                           <span className="text-sm text-gray-600">{attendeeDisplay.display}</span>
-                          <button className="text-sm text-gray-600 hover:text-gray-800 font-medium" onClick={e => {
-                      e.stopPropagation();
-                      setShowAttendeesDropdown(showAttendeesDropdown === meeting.id ? null : meeting.id);
-                    }}>
+                          <button
+                            className="text-sm text-gray-600 hover:text-gray-800 font-medium"
+                            onClick={e => {
+                              e.stopPropagation();
+                              setShowAttendeesDropdown(showAttendeesDropdown === meeting.id ? null : meeting.id);
+                            }}
+                          >
                             + {attendeeDisplay.moreCount} More
                           </button>
-                        </div> : <button className="text-sm text-gray-600 hover:text-gray-800 font-medium" onClick={e => {
-                    e.stopPropagation();
-                    copyToClipboard(meeting.attendees[0].email);
-                  }}>
+                        </div>
+                      ) : (
+                        <button
+                          className="text-sm text-gray-600 hover:text-gray-800 font-medium"
+                          onClick={e => {
+                            e.stopPropagation();
+                            copyToClipboard(meeting.attendees[0].email);
+                          }}
+                        >
                           {attendeeDisplay}
-                        </button>}
+                        </button>
+                      )}
                       
-                      {showAttendeesDropdown === meeting.id && typeof attendeeDisplay === 'object' && <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-50 min-w-48">
+                      {showAttendeesDropdown === meeting.id && typeof attendeeDisplay === 'object' && (
+                        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-50 min-w-48">
                           <div className="p-2">
                             <div className="text-xs font-medium text-gray-500 mb-2">All Attendees</div>
-                            {meeting.attendees.map((attendee, index) => <button key={index} className="w-full text-left text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-50 py-1 px-2 rounded" onClick={e => {
-                        e.stopPropagation();
-                        copyToClipboard(attendee.email);
-                        setShowAttendeesDropdown(null);
-                      }}>
-                                {attendee.name}
-                              </button>)}
+                            {meeting.attendees.map((attendee, index) => (
+                              <div key={index} className="flex items-center justify-between py-1 px-2 hover:bg-gray-50 rounded">
+                                <button
+                                  className="text-sm text-gray-600 hover:text-gray-800"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    copyToClipboard(attendee.email);
+                                    setShowAttendeesDropdown(null);
+                                  }}
+                                >
+                                  {attendee.name}
+                                </button>
+                                <button
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    copyToClipboard(attendee.email);
+                                  }}
+                                  className="text-gray-400 hover:text-gray-600"
+                                >
+                                  <Copy className="h-3 w-3" />
+                                </button>
+                              </div>
+                            ))}
                           </div>
-                        </div>}
-                    </div>}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 
               {/* Location */}
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between ml-13">
                 <div className="flex items-center space-x-2">
-                  {meeting.location.type === 'online' ? <button className="flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-800 transition-colors">
+                  {meeting.location.type === 'online' ? (
+                    <button className="flex items-center space-x-2 text-sm text-blue-600 hover:text-blue-800 transition-colors">
                       <Video className="h-4 w-4" />
                       <span>Join {meeting.location.name}</span>
-                    </button> : <div className="flex items-center space-x-2 text-sm text-gray-600">
+                    </button>
+                  ) : (
+                    <div className="flex items-center space-x-2 text-sm text-gray-600">
                       <MapPin className="h-4 w-4" />
                       <span>{meeting.location.address}</span>
-                    </div>}
+                    </div>
+                  )}
                 </div>
                 
                 {/* Details button moved to bottom right */}
-                <div className="flex items-center gap-2 text-sm text-gray-500 px-0 py-0 my-0 mx-0">
+                <button
+                  className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                  onClick={() => setExpandedMeeting(isExpanded ? null : meeting.id)}
+                >
                   <span>Details</span>
                   {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </div>
+                </button>
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex items-center space-x-2 ml-4">
-              {showActionButtons && <>
+              {showActionButtons && (
+                <>
                   <Button variant="outline" size="sm" onClick={e => {
-                e.stopPropagation();
-                handleReschedule();
-              }}>
+                    e.stopPropagation();
+                    handleReschedule();
+                  }}>
                     Reschedule
                   </Button>
                   <Button variant="outline" size="sm" onClick={e => {
-                e.stopPropagation();
-                handleCancelEvent(meeting);
-              }}>
+                    e.stopPropagation();
+                    handleCancelEvent(meeting);
+                  }}>
                     Cancel
                   </Button>
                   <div className="relative">
                     <Button variant="outline" size="sm" onClick={e => {
-                  e.stopPropagation();
-                  setShowEditDropdown(showEditDropdown === meeting.id ? null : meeting.id);
-                }}>
+                      e.stopPropagation();
+                      setShowEditDropdown(showEditDropdown === meeting.id ? null : meeting.id);
+                    }}>
                       Edit
                     </Button>
-                    {showEditDropdown === meeting.id && <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-50 min-w-48">
-                        <button className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2" onClick={e => {
-                    e.stopPropagation();
-                    setSelectedMeeting(meeting);
-                    setShowEditLocation(true);
-                    setShowEditDropdown(null);
-                  }}>
+                    {showEditDropdown === meeting.id && (
+                      <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-50 min-w-48">
+                        <button
+                          className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                          onClick={e => {
+                            e.stopPropagation();
+                            setSelectedMeeting(meeting);
+                            setShowEditLocation(true);
+                            setShowEditDropdown(null);
+                          }}
+                        >
                           <MapPin className="h-4 w-4" />
                           Edit location
                         </button>
-                        <button className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2" onClick={e => {
-                    e.stopPropagation();
-                    setSelectedMeeting(meeting);
-                    setShowAddGuests(true);
-                    setShowEditDropdown(null);
-                  }}>
+                        <button
+                          className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                          onClick={e => {
+                            e.stopPropagation();
+                            setSelectedMeeting(meeting);
+                            setShowAddGuests(true);
+                            setShowEditDropdown(null);
+                          }}
+                        >
                           <UserPlus className="h-4 w-4" />
                           Add guests
                         </button>
-                      </div>}
+                      </div>
+                    )}
                   </div>
-                </>}
+                </>
+              )}
             </div>
           </div>
 
           {/* Expanded Details */}
-          {isExpanded && <div className="mt-4 pt-4 border-t border-gray-200 animate-fade-in">
-              <div className="grid grid-cols-2 gap-8">
+          {isExpanded && (
+            <div className="mt-4 pt-4 border-t border-gray-200 animate-fade-in" style={{ backgroundColor: '#f1f5f980' }}>
+              <div className="grid grid-cols-2 gap-8 p-4 rounded-lg">
                 <div className="space-y-4">
-                  
-                  
                   <div>
                     <div className="text-sm font-medium text-gray-900 mb-1">Duration</div>
                     <div className="text-sm text-gray-600">{meeting.duration}</div>
@@ -747,83 +848,120 @@ export default function Bookings() {
                       <span>{meeting.attendees[0]?.timezone}</span>
                       <span>•</span>
                       <span>{meeting.attendees[0]?.email}</span>
-                      <button onClick={() => copyToClipboard(meeting.attendees[0]?.email)} className="ml-1 text-gray-400 hover:text-gray-600">
+                      <button
+                        onClick={() => copyToClipboard(meeting.attendees[0]?.email)}
+                        className="ml-1 text-gray-400 hover:text-gray-600"
+                      >
                         <Copy className="h-3 w-3" />
                       </button>
                     </div>
                   </div>
 
-                  {meeting.attendees.length > 1 && <div>
+                  {meeting.attendees.length > 1 && (
+                    <div>
                       <div className="text-sm font-medium text-gray-900 mb-2">Attendees</div>
                       <div className="flex flex-wrap gap-2">
-                        {meeting.attendees.slice(1).map((attendee, index) => <div key={index} className="relative">
-                            <button className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-gray-200 hover:shadow-sm transition-all" onClick={() => setShowAttendeeDetails(showAttendeeDetails === `${meeting.id}-${index}` ? null : `${meeting.id}-${index}`)}>
+                        {meeting.attendees.slice(1).map((attendee, index) => (
+                          <div key={index} className="relative">
+                            <button
+                              className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-gray-200 hover:shadow-sm transition-all"
+                              onClick={() => setShowAttendeeDetails(showAttendeeDetails === `${meeting.id}-${index}` ? null : `${meeting.id}-${index}`)}
+                            >
                               {attendee.name.split(' ')[0]}
                             </button>
-                            {showAttendeeDetails === `${meeting.id}-${index}` && <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-50 min-w-64">
+                            {showAttendeeDetails === `${meeting.id}-${index}` && (
+                              <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-50 min-w-64">
                                 <div className="p-3 space-y-2">
-                                  <div className="flex items-center gap-2">
-                                    <Mail className="h-4 w-4 text-gray-400" />
-                                    <span className="text-sm text-gray-600">{attendee.email}</span>
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                      <Mail className="h-4 w-4 text-gray-400" />
+                                      <span className="text-sm text-gray-600">{attendee.email}</span>
+                                    </div>
+                                    <button
+                                      onClick={() => copyToClipboard(attendee.email)}
+                                      className="text-gray-400 hover:text-gray-600"
+                                    >
+                                      <Copy className="h-3 w-3" />
+                                    </button>
                                   </div>
                                   <div className="flex items-center gap-2">
                                     <Globe className="h-4 w-4 text-gray-400" />
                                     <span className="text-sm text-gray-600">{attendee.timezone}</span>
                                   </div>
                                 </div>
-                              </div>}
-                          </div>)}
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
-                    </div>}
+                    </div>
+                  )}
                 </div>
 
                 {/* Action Buttons for Expanded View */}
-                {showExpandedActions && <div className="flex flex-col items-end space-y-2">
+                {showExpandedActions && (
+                  <div className="flex flex-col items-end space-y-2">
                     <Button variant="outline" size="sm" className="w-32" onClick={e => {
-                e.stopPropagation();
-                setSelectedMeeting(meeting);
-                setShowMeetingNotes(true);
-              }}>
+                      e.stopPropagation();
+                      setSelectedMeeting(meeting);
+                      setShowMeetingNotes(true);
+                    }}>
                       Meeting Notes
                     </Button>
-                    {meeting.isToday && isCurrentTime(meeting.time) && <Button variant="outline" size="sm" className="w-32" onClick={e => {
-                e.stopPropagation();
-                handleMarkNoShow(meeting);
-              }}>
+                    {meeting.isToday && isCurrentTime(meeting.time) && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-32"
+                        style={{ backgroundColor: '#007ee5', color: 'white' }}
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleMarkNoShow(meeting);
+                        }}
+                      >
                         Mark as No-Show
-                      </Button>}
-                  </div>}
+                      </Button>
+                    )}
+                  </div>
+                )}
               </div>
-            </div>}
+            </div>
+          )}
         </div>
-      </div>;
+      </div>
+    );
   };
-  return <div className="px-6 pt-3 pb-6 space-y-4 w-full max-w-full">
+
+  return (
+    <div className="px-6 pt-3 pb-6 space-y-4 w-full max-w-full">
       {/* Overlay for popups */}
-      {(showMeetingNotes || showCancelConfirm || showNoShow || showEditLocation || showAddGuests) && <div className="fixed inset-0 bg-black/50 z-40" />}
+      {(showMeetingNotes || showCancelConfirm || showNoShow || showEditLocation || showAddGuests) && (
+        <div className="fixed inset-0 bg-black/50 z-40" />
+      )}
 
       {/* Header with Tabs and Action Buttons */}
       <div className="flex items-center justify-between">
         {/* Tabs */}
         <div className="flex">
-          {[{
-          value: 'upcoming',
-          label: 'Upcoming'
-        }, {
-          value: 'unconfirmed',
-          label: 'Unconfirmed'
-        }, {
-          value: 'recurring',
-          label: 'Recurring'
-        }, {
-          value: 'past',
-          label: 'Past'
-        }, {
-          value: 'canceled',
-          label: 'Canceled'
-        }].map(tab => <button key={tab.value} onClick={() => setActiveTab(tab.value)} className={`px-4 py-2 text-sm font-medium transition-colors ${activeTab === tab.value ? 'text-primary border-b-2 border-primary' : 'text-gray-700 hover:text-gray-900'}`}>
+          {[
+            { value: 'upcoming', label: 'Upcoming' },
+            { value: 'unconfirmed', label: 'Unconfirmed' },
+            { value: 'recurring', label: 'Recurring' },
+            { value: 'past', label: 'Past' },
+            { value: 'canceled', label: 'Canceled' }
+          ].map(tab => (
+            <button
+              key={tab.value}
+              onClick={() => setActiveTab(tab.value)}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
+                activeTab === tab.value
+                  ? 'text-primary border-b-2 border-primary'
+                  : 'text-gray-700 hover:text-gray-900'
+              }`}
+            >
               {tab.label}
-            </button>)}
+            </button>
+          ))}
         </div>
         
         {/* Action Buttons */}
@@ -840,7 +978,8 @@ export default function Bookings() {
       </div>
 
       {/* Filters */}
-      {showFilters && <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg transition-all duration-300 ease-in-out animate-fade-in">
+      {showFilters && (
+        <div className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg transition-all duration-300 ease-in-out animate-fade-in">
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm">Attendee: All</Button>
@@ -849,12 +988,18 @@ export default function Bookings() {
               <div className="space-y-3">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <input type="text" placeholder="Search" className="w-full pl-10 pr-4 py-2 border border-border rounded-md text-sm" />
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    className="w-full pl-10 pr-4 py-2 border border-border rounded-md text-sm"
+                  />
                 </div>
-                {getAllAttendees().map((attendee, index) => <div key={index} className="flex items-center justify-between">
+                {getAllAttendees().map((attendee, index) => (
+                  <div key={index} className="flex items-center justify-between">
                     <span className="text-sm">{attendee}</span>
                     <Checkbox />
-                  </div>)}
+                  </div>
+                ))}
               </div>
             </PopoverContent>
           </Popover>
@@ -905,10 +1050,12 @@ export default function Bookings() {
                   <span className="text-sm">All</span>
                   <Checkbox />
                 </div>
-                {teamNames.map((team, index) => <div key={index} className="flex items-center justify-between">
+                {teamNames.map((team, index) => (
+                  <div key={index} className="flex items-center justify-between">
                     <span className="text-sm">{team}</span>
                     <Checkbox />
-                  </div>)}
+                  </div>
+                ))}
               </div>
             </PopoverContent>
           </Popover>
@@ -917,46 +1064,67 @@ export default function Bookings() {
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm">
                 <Calendar className="h-4 w-4 mr-2" />
-                {dateRange?.from ? dateRange.to ? `${dateRange.from.toLocaleDateString()} - ${dateRange.to.toLocaleDateString()}` : dateRange.from.toLocaleDateString() : "Pick a date range"}
+                {dateRange?.from
+                  ? dateRange.to
+                    ? `${dateRange.from.toLocaleDateString()} - ${dateRange.to.toLocaleDateString()}`
+                    : dateRange.from.toLocaleDateString()
+                  : "Pick a date range"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <CalendarComponent mode="range" selected={dateRange} onSelect={setDateRange} className="rounded-md border pointer-events-auto" />
+              <CalendarComponent
+                mode="range"
+                selected={dateRange}
+                onSelect={setDateRange}
+                className="rounded-md border pointer-events-auto"
+              />
             </PopoverContent>
           </Popover>
 
           <Button variant="ghost" size="sm">Clear all filters</Button>
-        </div>}
+        </div>
+      )}
 
       {/* Meetings List */}
       <div className="space-y-6">
-        {todayMeetings.length > 0 && <div className="space-y-3">
-            
+        {todayMeetings.length > 0 && (
+          <div className="space-y-3">
+            <h3 className="text-lg font-medium text-gray-900">Today</h3>
             <div className="space-y-3">
-              {todayMeetings.map(meeting => <MeetingCard key={meeting.id} meeting={meeting} />)}
+              {todayMeetings.map(meeting => (
+                <MeetingCard key={meeting.id} meeting={meeting} />
+              ))}
             </div>
-          </div>}
+          </div>
+        )}
         
-        {otherMeetings.length > 0 && <div className={`space-y-3 ${todayMeetings.length > 0 ? 'mt-6' : ''}`}>
-            {activeTab === 'recurring' && otherMeetings.length > 0}
-            {activeTab === 'past' && otherMeetings.length > 0}
-            {activeTab === 'canceled' && otherMeetings.length > 0}
-            {activeTab === 'unconfirmed' && otherMeetings.length > 0}
+        {otherMeetings.length > 0 && (
+          <div className={`space-y-3 ${todayMeetings.length > 0 ? 'mt-6' : ''}`}>
             <div className="space-y-3">
-              {otherMeetings.map(meeting => <MeetingCard key={meeting.id} meeting={meeting} />)}
+              {otherMeetings.map(meeting => (
+                <MeetingCard key={meeting.id} meeting={meeting} />
+              ))}
             </div>
-          </div>}
+          </div>
+        )}
 
-        {todayMeetings.length === 0 && otherMeetings.length === 0 && <div className="text-center py-8 text-gray-500">
+        {todayMeetings.length === 0 && otherMeetings.length === 0 && (
+          <div className="text-center py-8 text-gray-500">
             No {activeTab} bookings
-          </div>}
+          </div>
+        )}
       </div>
 
       {/* Add Guests Modal */}
-      <AddGuestsModal isOpen={showAddGuests} onClose={() => setShowAddGuests(false)} onAdd={emails => console.log('Add guests:', emails)} />
+      <AddGuestsModal
+        isOpen={showAddGuests}
+        onClose={() => setShowAddGuests(false)}
+        onAdd={emails => console.log('Add guests:', emails)}
+      />
 
       {/* Meeting Notes Modal */}
-      {showMeetingNotes && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      {showMeetingNotes && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-2xl shadow-xl">
             <h2 className="text-xl font-semibold mb-2">Meeting Notes</h2>
             <p className="text-sm text-gray-600 mb-6">Add notes to your meeting</p>
@@ -972,7 +1140,12 @@ export default function Bookings() {
                 <Button variant="ghost" size="sm"><Undo className="h-4 w-4" /></Button>
                 <Button variant="ghost" size="sm"><Redo className="h-4 w-4" /></Button>
               </div>
-              <textarea value={meetingNotes} onChange={e => setMeetingNotes(e.target.value)} className="w-full h-32 p-4 border border-gray-200 rounded-b-md border-t-0 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Add your meeting notes here..." />
+              <textarea
+                value={meetingNotes}
+                onChange={e => setMeetingNotes(e.target.value)}
+                className="w-full h-32 p-4 border border-gray-200 rounded-b-md border-t-0 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Add your meeting notes here..."
+              />
             </div>
             
             <div className="flex justify-end space-x-3">
@@ -984,38 +1157,141 @@ export default function Bookings() {
               </Button>
             </div>
           </div>
-        </div>}
+        </div>
+      )}
 
       {/* Cancel Event Modal */}
-      {showCancelConfirm && selectedMeeting && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      {showCancelConfirm && selectedMeeting && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-xl">
-            <h2 className="text-xl font-semibold mb-6 text-gray-900">Cancel Event</h2>
+            <h2 className="text-xl font-semibold mb-2 text-gray-900">Cancel Event</h2>
+            <p className="text-sm text-gray-600 mb-6">We sent an email with a calendar invitation with the details to everyone</p>
             
-            {selectedMeeting.status === 'recurring' && selectedMeeting.recurringDates ? <div className="mb-6">
+            {/* Host and Attendees Section */}
+            <div className="mb-6">
+              <div className="space-y-3">
+                {/* Host */}
+                <div className="flex items-center gap-2">
+                  <button className="flex items-center gap-2 px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-gray-200 transition-all">
+                    <span>You</span>
+                    <span className="px-2 py-0.5 text-xs rounded-full" style={{ backgroundColor: '#007ee5', color: 'white' }}>
+                      Host
+                    </span>
+                  </button>
+                  
+                  {/* Team attendees (first attendee as team member) */}
+                  {selectedMeeting.attendees.slice(0, 1).map((attendee, index) => (
+                    <div key={index} className="relative">
+                      <button
+                        className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-gray-200 transition-all"
+                        onMouseEnter={() => setShowAttendeeDetails(`cancel-${selectedMeeting.id}-${index}`)}
+                        onMouseLeave={() => setShowAttendeeDetails(null)}
+                      >
+                        {attendee.name.split(' ')[0]}
+                      </button>
+                      {showAttendeeDetails === `cancel-${selectedMeeting.id}-${index}` && (
+                        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-50 min-w-64">
+                          <div className="p-3 space-y-2">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <Mail className="h-4 w-4 text-gray-400" />
+                                <span className="text-sm text-gray-600">{attendee.email}</span>
+                              </div>
+                              <button
+                                onClick={() => copyToClipboard(attendee.email)}
+                                className="text-gray-400 hover:text-gray-600"
+                              >
+                                <Copy className="h-3 w-3" />
+                              </button>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Globe className="h-4 w-4 text-gray-400" />
+                              <span className="text-sm text-gray-600">{attendee.timezone}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Guests */}
+                {selectedMeeting.attendees.length > 1 && (
+                  <div className="flex items-center gap-2">
+                    {selectedMeeting.attendees.slice(1).map((attendee, index) => (
+                      <div key={index} className="relative">
+                        <button
+                          className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-gray-200 transition-all"
+                          onMouseEnter={() => setShowAttendeeDetails(`cancel-guest-${selectedMeeting.id}-${index}`)}
+                          onMouseLeave={() => setShowAttendeeDetails(null)}
+                        >
+                          {attendee.name.split(' ')[0]}
+                        </button>
+                        {showAttendeeDetails === `cancel-guest-${selectedMeeting.id}-${index}` && (
+                          <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-50 min-w-64">
+                            <div className="p-3 space-y-2">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                  <Mail className="h-4 w-4 text-gray-400" />
+                                  <span className="text-sm text-gray-600">{attendee.email}</span>
+                                </div>
+                                <button
+                                  onClick={() => copyToClipboard(attendee.email)}
+                                  className="text-gray-400 hover:text-gray-600"
+                                >
+                                  <Copy className="h-3 w-3" />
+                                </button>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Globe className="h-4 w-4 text-gray-400" />
+                                <span className="text-sm text-gray-600">{attendee.timezone}</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {selectedMeeting.status === 'recurring' && selectedMeeting.recurringDates ? (
+              <div className="mb-6">
                 <label className="block text-sm font-medium mb-3 text-gray-900">Select the meetings you want to cancel</label>
                 <div className="space-y-2 max-h-48 overflow-y-auto">
                   <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
                     <span className="text-sm font-medium">Select All</span>
-                    <Checkbox checked={selectedRecurringDates.length === selectedMeeting.recurringDates.length} onCheckedChange={checked => {
-                if (checked) {
-                  setSelectedRecurringDates(selectedMeeting.recurringDates || []);
-                } else {
-                  setSelectedRecurringDates([]);
-                }
-              }} />
+                    <Checkbox
+                      checked={selectedRecurringDates.length === selectedMeeting.recurringDates.length}
+                      onCheckedChange={checked => {
+                        if (checked) {
+                          setSelectedRecurringDates(selectedMeeting.recurringDates || []);
+                        } else {
+                          setSelectedRecurringDates([]);
+                        }
+                      }}
+                    />
                   </div>
-                  {selectedMeeting.recurringDates.map((date, index) => <div key={index} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
+                  {selectedMeeting.recurringDates.map((date, index) => (
+                    <div key={index} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
                       <span className="text-sm">{date}</span>
-                      <Checkbox checked={selectedRecurringDates.includes(date)} onCheckedChange={checked => {
-                if (checked) {
-                  setSelectedRecurringDates([...selectedRecurringDates, date]);
-                } else {
-                  setSelectedRecurringDates(selectedRecurringDates.filter(d => d !== date));
-                }
-              }} />
-                    </div>)}
+                      <Checkbox
+                        checked={selectedRecurringDates.includes(date)}
+                        onCheckedChange={checked => {
+                          if (checked) {
+                            setSelectedRecurringDates([...selectedRecurringDates, date]);
+                          } else {
+                            setSelectedRecurringDates(selectedRecurringDates.filter(d => d !== date));
+                          }
+                        }}
+                      />
+                    </div>
+                  ))}
                 </div>
-              </div> : <div className="space-y-3 mb-6 p-4 bg-gray-50 rounded-lg">
+              </div>
+            ) : (
+              <div className="space-y-3 mb-6 p-4 bg-gray-50 rounded-lg">
                 <div className="flex gap-3">
                   <span className="font-medium text-gray-600 min-w-16">Event:</span>
                   <span className="text-gray-900">{selectedMeeting.eventType}</span>
@@ -1032,46 +1308,55 @@ export default function Bookings() {
                   <span className="font-medium text-gray-600 min-w-16">Where:</span>
                   <span className="text-gray-900">{selectedMeeting.location.name}</span>
                 </div>
-              </div>}
+              </div>
+            )}
 
             <div className="mb-6">
               <label className="block text-sm font-medium mb-3 text-gray-900">Reason for cancellation (optional)</label>
-              <textarea value={cancelReason} onChange={e => setCancelReason(e.target.value)} className="w-full h-24 p-3 border border-gray-200 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Why are you cancelling?" />
+              <textarea
+                value={cancelReason}
+                onChange={e => setCancelReason(e.target.value)}
+                className="w-full h-24 p-3 border border-gray-200 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Why are you cancelling?"
+              />
             </div>
             
             <div className="flex justify-end space-x-3">
               <Button variant="outline" onClick={() => {
-            setShowCancelConfirm(false);
-            setSelectedMeeting(null);
-            setCancelReason('');
-            setSelectedRecurringDates([]);
-          }}>
+                setShowCancelConfirm(false);
+                setSelectedMeeting(null);
+                setCancelReason('');
+                setSelectedRecurringDates([]);
+              }}>
                 Keep Event
               </Button>
               <Button variant="destructive" onClick={() => {
-            setShowCancelConfirm(false);
-            setSelectedMeeting(null);
-            setCancelReason('');
-            setSelectedRecurringDates([]);
-            toast({
-              description: "Event cancelled successfully.",
-              duration: 3000
-            });
-          }}>
+                setShowCancelConfirm(false);
+                setSelectedMeeting(null);
+                setCancelReason('');
+                setSelectedRecurringDates([]);
+                toast({
+                  description: "Event cancelled successfully.",
+                  duration: 3000
+                });
+              }}>
                 Cancel Event
               </Button>
             </div>
           </div>
-        </div>}
+        </div>
+      )}
 
       {/* No Show Modal */}
-      {showNoShow && selectedMeeting && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      {showNoShow && selectedMeeting && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
             <h2 className="text-xl font-semibold mb-2">Mark as No-Show</h2>
             <p className="text-sm text-gray-600 mb-6">Select attendees to mark as no-show</p>
             
             <div className="space-y-4 mb-6">
-              {selectedMeeting.attendees.map((attendee, index) => <div key={index} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
+              {selectedMeeting.attendees.map((attendee, index) => (
+                <div key={index} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
                   <div className="flex items-center space-x-3">
                     <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
                       <span className="text-sm font-medium text-white">
@@ -1081,7 +1366,8 @@ export default function Bookings() {
                     <span className="text-sm font-medium">{attendee.name}</span>
                   </div>
                   <Checkbox />
-                </div>)}
+                </div>
+              ))}
             </div>
             
             <div className="flex justify-end space-x-3">
@@ -1093,10 +1379,12 @@ export default function Bookings() {
               </Button>
             </div>
           </div>
-        </div>}
+        </div>
+      )}
 
       {/* Edit Location Modal */}
-      {showEditLocation && selectedMeeting && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      {showEditLocation && selectedMeeting && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
             <h2 className="text-xl font-semibold mb-2">Edit Location</h2>
             <p className="text-sm text-gray-600 mb-6">
@@ -1121,6 +1409,8 @@ export default function Bookings() {
               </Button>
             </div>
           </div>
-        </div>}
-    </div>;
+        </div>
+      )}
+    </div>
+  );
 }
