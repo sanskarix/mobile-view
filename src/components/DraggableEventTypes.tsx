@@ -32,6 +32,7 @@ import {
   Copy, 
   GripVertical 
 } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import { Switch } from './ui/switch';
 import {
   DropdownMenu,
@@ -50,6 +51,8 @@ interface EventType {
   bookingsToday: number;
   isActive: boolean;
   icon: any;
+  iconName?: string;
+  iconColor?: string;
 }
 
 interface Team {
@@ -71,6 +74,7 @@ interface DraggableEventCardProps {
   onToggleEvent: (eventId: string, checked: boolean) => void;
   onDuplicateEvent: (eventId: string) => void;
   onDeleteEvent: (eventId: string) => void;
+  onIconClick: (eventId: string, currentIcon: string, currentColor: string) => void;
   isDragging?: boolean;
 }
 
@@ -85,6 +89,7 @@ const DraggableEventCard: React.FC<DraggableEventCardProps> = ({
   onToggleEvent,
   onDuplicateEvent,
   onDeleteEvent,
+  onIconClick,
   isDragging = false,
 }) => {
   const {
@@ -101,7 +106,12 @@ const DraggableEventCard: React.FC<DraggableEventCardProps> = ({
     transition,
   };
 
-  const IconComponent = event.icon;
+  // Get icon component from icon name or fallback to the stored icon
+  const IconComponent = event.iconName 
+    ? LucideIcons[event.iconName as keyof typeof LucideIcons] as React.ComponentType<any>
+    : event.icon;
+
+  const iconColor = event.iconColor || '#6366f1';
 
   const cardContent = (
     <div className="relative flex items-center">
@@ -124,9 +134,25 @@ const DraggableEventCard: React.FC<DraggableEventCardProps> = ({
       >
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-3 flex-1">
-            <div className="h-10 w-10 rounded-lg bg-muted/50 flex items-center justify-center flex-shrink-0">
-              <IconComponent className="h-5 w-5 text-muted-foreground" />
-            </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onIconClick(event.id, event.iconName || 'Calendar', iconColor);
+                  }}
+                  className="h-10 w-10 rounded-lg bg-muted/50 flex items-center justify-center flex-shrink-0 hover:bg-muted/70 transition-colors group/icon"
+                >
+                  <IconComponent 
+                    className="h-5 w-5 group-hover/icon:scale-110 transition-transform" 
+                    style={{ color: iconColor }}
+                  />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="top" sideOffset={6}>
+                <p className="text-xs">Click to change icon</p>
+              </TooltipContent>
+            </Tooltip>
             
             <div className="flex-1 min-w-0">
               <div className="flex items-center mb-2 space-x-3">
@@ -270,6 +296,7 @@ interface DraggableEventTypesProps {
   onDuplicateEvent: (eventId: string) => void;
   onDeleteEvent: (eventId: string) => void;
   onReorderEvents: (events: EventType[]) => void;
+  onIconClick: (eventId: string, currentIcon: string, currentColor: string) => void;
 }
 
 export const DraggableEventTypes: React.FC<DraggableEventTypesProps> = ({
@@ -284,6 +311,7 @@ export const DraggableEventTypes: React.FC<DraggableEventTypesProps> = ({
   onDuplicateEvent,
   onDeleteEvent,
   onReorderEvents,
+  onIconClick,
 }) => {
   const [activeId, setActiveId] = React.useState<UniqueIdentifier | null>(null);
   const [reorderedEvents, setReorderedEvents] = React.useState(events);
@@ -370,6 +398,7 @@ export const DraggableEventTypes: React.FC<DraggableEventTypesProps> = ({
                 onToggleEvent={onToggleEvent}
                 onDuplicateEvent={onDuplicateEvent}
                 onDeleteEvent={onDeleteEvent}
+                onIconClick={onIconClick}
               />
             );
           })}
@@ -382,7 +411,17 @@ export const DraggableEventTypes: React.FC<DraggableEventTypesProps> = ({
             <div className="flex items-start justify-between">
               <div className="flex items-start space-x-3 flex-1">
                 <div className="h-10 w-10 rounded-lg bg-muted/50 flex items-center justify-center flex-shrink-0">
-                  <activeEvent.icon className="h-5 w-5 text-muted-foreground" />
+                  {(() => {
+                    const IconComponent = activeEvent.iconName 
+                      ? LucideIcons[activeEvent.iconName as keyof typeof LucideIcons] as React.ComponentType<any>
+                      : activeEvent.icon;
+                    return IconComponent ? (
+                      <IconComponent 
+                        className="h-5 w-5" 
+                        style={{ color: activeEvent.iconColor || '#6366f1' }}
+                      />
+                    ) : null;
+                  })()}
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-foreground text-base mb-2">

@@ -10,6 +10,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../com
 import { AddGuestsModal } from '../components/AddGuestsModal';
 import { useToast } from '../hooks/use-toast';
 import type { DateRange } from 'react-day-picker';
+import type { HeaderMeta } from '../components/Layout';
+import { useOutletContext } from 'react-router-dom';
+
 
 interface Meeting {
   id: string;
@@ -535,6 +538,8 @@ export default function Bookings() {
   const [filteredHost, setFilteredHost] = useState('All');
   const [filteredEventType, setFilteredEventType] = useState('All');
   const [filteredTeam, setFilteredTeam] = useState('All');
+  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
+  
   
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -1048,9 +1053,16 @@ export default function Bookings() {
     );
   };
 
+  useEffect(() => {
+    setHeaderMeta({
+      title: 'Bookings',
+      description: 'View and manage all your scheduled appointments.'
+    });
+  }, [setHeaderMeta]);
+
   return (
     <TooltipProvider>
-      <div className="px-6 pt-3 pb-6 space-y-4 w-full max-w-full">
+      <div className="px-8 pt-3 pb-6 space-y-4 w-full max-w-full">
         {/* Overlay for popups */}
         {(showMeetingNotes || showCancelConfirm || showCancelSelection || showNoShow || showEditLocation || showAddGuests) && (
           <div className="fixed inset-0 bg-black/50 z-40" />

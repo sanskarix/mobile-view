@@ -34,6 +34,7 @@ import { Teams } from "./pages/Teams";
 import { RoutingForms } from "./pages/RoutingForms";
 import { EditRoutingForm } from "./pages/EditRoutingForm";
 import Home from "./pages/Home";
+import { HeaderProvider } from "./contexts/HeaderContext";
 
 const queryClient = new QueryClient();
 
@@ -42,49 +43,51 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="event-types" element={<EventTypes />} />
-            <Route path="event/:eventId/:tab" element={<EditEvent />} />
-            <Route path="bookings" element={<Bookings />} />
-            <Route path="availability" element={<Availability />} />
-            <Route path="availability/:scheduleId" element={<EditAvailability />} />
-            <Route path="scheduling-coming-soon" element={<SchedulingComingSoon />} />
-            <Route path="teams" element={<Teams />} />
-            <Route path="apps" element={<div className="p-8">Apps page coming soon</div>} />
-            <Route path="routing-forms" element={<RoutingForms />} />
-            <Route path="routing-forms/:formId/edit" element={<EditRoutingForm />} />
-            <Route path="workflows" element={<div className="p-8">Workflows page coming soon</div>} />
-            <Route path="insights" element={<div className="p-8">Insights page coming soon</div>} />
-          </Route>
-          
-          <Route path="/settings" element={<Settings />}>
-            <Route path="profile" element={<Profile />} />
-            <Route path="general" element={<General />} />
-            <Route path="calendars" element={<Calendars />} />
-            <Route path="conferencing" element={<Conferencing />} />
-            <Route path="appearance" element={<Appearance />} />
-            <Route path="out-of-office" element={<OutOfOffice />} />
-            <Route path="security/password" element={<Password />} />
-            <Route path="security/impersonation" element={<Impersonation />} />
-            <Route path="import/calendly" element={<ImportCalendly />} />
-            <Route path="developer/webhooks" element={<Webhooks />} />
-            <Route path="developer/api-keys" element={<ApiKeys />} />
-            <Route path="teams/new" element={<TeamNew />} />
-            <Route path="teams/:teamId" element={<TeamDetail />} />
-            <Route path="teams/:teamId/:section" element={<TeamDetail />} />
-            <Route path="teams/:teamId/profile" element={<TeamProfile />} />
-            <Route path="teams/:teamId/members" element={<TeamMembers />} />
-            <Route path="teams/:teamId/event-types" element={<TeamEventTypes />} />
-            <Route path="teams/:teamId/appearance" element={<TeamAppearance />} />
-            <Route path="teams/:teamId/booking-limits" element={<TeamBookingLimits />} />
-          </Route>
-          
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <HeaderProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="event-types" element={<EventTypes />} />
+              <Route path="event/:eventId/:tab" element={<EditEvent />} />
+              <Route path="bookings" element={<Bookings />} />
+              <Route path="availability" element={<Availability />} />
+              <Route path="availability/:scheduleId" element={<EditAvailability />} />
+              <Route path="scheduling-coming-soon" element={<SchedulingComingSoon />} />
+              <Route path="teams" element={<Teams />} />
+              <Route path="apps" element={<div className="p-8">Apps page coming soon</div>} />
+              <Route path="routing-forms" element={<RoutingForms />} />
+              <Route path="routing-forms/:formId/edit" element={<EditRoutingForm />} />
+              <Route path="workflows" element={<div className="p-8">Workflows page coming soon</div>} />
+              <Route path="insights" element={<div className="p-8">Insights page coming soon</div>} />
+            </Route>
+            
+            <Route path="/settings" element={<Settings />}>
+              <Route path="profile" element={<Profile />} />
+              <Route path="general" element={<General />} />
+              <Route path="calendars" element={<Calendars />} />
+              <Route path="conferencing" element={<Conferencing />} />
+              <Route path="appearance" element={<Appearance />} />
+              <Route path="out-of-office" element={<OutOfOffice />} />
+              <Route path="security/password" element={<Password />} />
+              <Route path="security/impersonation" element={<Impersonation />} />
+              <Route path="import/calendly" element={<ImportCalendly />} />
+              <Route path="developer/webhooks" element={<Webhooks />} />
+              <Route path="developer/api-keys" element={<ApiKeys />} />
+              <Route path="teams/new" element={<TeamNew />} />
+              <Route path="teams/:teamId" element={<TeamDetail />} />
+              <Route path="teams/:teamId/:section" element={<TeamDetail />} />
+              <Route path="teams/:teamId/profile" element={<TeamProfile />} />
+              <Route path="teams/:teamId/members" element={<TeamMembers />} />
+              <Route path="teams/:teamId/event-types" element={<TeamEventTypes />} />
+              <Route path="teams/:teamId/appearance" element={<TeamAppearance />} />
+              <Route path="teams/:teamId/booking-limits" element={<TeamBookingLimits />} />
+            </Route>
+            
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </HeaderProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
