@@ -1,5 +1,6 @@
+
 import React, { useState, useRef, useEffect } from 'react';
-import { Filter, Download, Search, Calendar, MapPin, Video, MoreHorizontal, Edit, UserPlus, Clock, X, Bold, Italic, Underline, Strikethrough, List, ListOrdered, Undo, Redo, Check, Copy, Eye, ChevronDown, ChevronUp, Mail, Globe, Trash2, Info, CheckCircle, XCircle, Plus, Rocket, Zap, Users, Palette, Briefcase, CalendarDays, UserCheck, Smartphone } from 'lucide-react';
+import { Filter, Download, Search, Calendar, MapPin, Video, MoreHorizontal, Edit, UserPlus, Clock, X, Bold, Italic, Underline, Strikethrough, List, ListOrdered, Undo, Redo, Check, Copy, Eye, ChevronDown, ChevronUp, Mail, Globe, Trash2, Info, CheckCircle, XCircle, Plus, Rocket, Zap, Users, Palette, Briefcase, CalendarDays, UserCheck, Smartphone, MessageSquare, TrendingUp, Target, FileText, Settings, Monitor, Lightbulb, Shield, Coffee, BookOpen, Star, Heart, Headphones, Globe2, Mic, Camera, Phone, Wifi, Database, Server, Code, GitBranch, Package, Layers, Cloud, HardDrive, Cpu, Memory, Network, Lock, Key, Award, Trophy, Medal, Flag, Compass, Map, Navigation, Route, Signpost, Home, Building, Store, Factory, School, Hospital, Church, Library, Museum, Theater, Stadium, Hotel, Restaurant, ShoppingBag, Car, Bus, Train, Plane, Ship, Bike, Truck, Tractor, Helicopter, Rocket as RocketIcon, Satellite, Anchor, Waves, Mountain, Tree, Flower, Sun, Moon, Star as StarIcon, Cloud as CloudIcon, Rain, Snow, Wind, Thermometer, Umbrella, Sunglasses, Shirt, Pants, Shoes, Hat, Glasses, Watch, Ring, Necklace, Earrings, Bracelet, Wallet, Purse, Backpack, Suitcase, Briefcase as BriefcaseIcon, Laptop, Desktop, Tablet, Smartphone as SmartphoneIcon, Headphones as HeadphonesIcon, Speaker, Microphone, Camera as CameraIcon, Printer, Scanner, Keyboard, Mouse, Monitor as MonitorIcon, Tv, Radio, Battery, Plug, Lightbulb as LightbulbIcon, Flashlight, Candle, Fire, Flame, Droplet, Snowflake, Leaf, Flower2, Sprout, Seedling, Cactus, PalmTree, Evergreen, Deciduous, Bamboo, Mushroom, Apple, Banana, Orange, Grape, Strawberry, Cherry, Peach, Pear, Pineapple, Watermelon, Lemon, Lime, Coconut, Avocado, Tomato, Carrot, Corn, Pepper, Eggplant, Broccoli, Cabbage, Lettuce, Spinach, Onion, Garlic, Potato, Bread, Cheese, Meat, Fish, Egg, Milk, Butter, Honey, Sugar, Salt, Oil, Vinegar, Spice, Herb, Tea, Coffee as CoffeeIcon, Juice, Water, Wine, Beer, Cocktail, Cake, Cookie, Donut, Icecream, Candy, Chocolate, Pizza, Hamburger, Hotdog, Sandwich, Salad, Soup, Pasta, Rice, Noodle, Sushi, Taco, Burrito, Fries, Popcorn, Pretzel, Bagel, Muffin, Pancake, Waffle, Cereal, Oatmeal, Yogurt, Smoothie, Shake, Lollipop, Gum, Mint, Pill, Bandage, Thermometer as ThermometerIcon, Stethoscope, Syringe, Pill as PillIcon, Bandage as BandageIcon, Mask, Gloves, Soap, Toothbrush, Toothpaste, Shampoo, Conditioner, Lotion, Perfume, Lipstick, Mascara, Eyeshadow, Blush, Foundation, Powder, Brush, Comb, Mirror, Scissors, Razor, Tweezers, Nail, Polish, File, Clippers, Towel, Washcloth, Sponge, Bucket, Mop, Broom, Vacuum, Dustpan, Trash, Recycle, Compost, Laundry, Detergent, Fabric, Softener, Iron, Hanger, Clothesline, Basket, Hamper, Drawer, Closet, Shelf, Rack, Hook, Hanger as HangerIcon, Box, Bag, Container, Jar, Bottle, Can, Package as PackageIcon, Wrapper, Label, Sticker, Tape, Glue, Stapler, Paperclip, Rubber, Band, Elastic, String, Rope, Chain, Wire, Cable, Cord, Plug as PlugIcon, Socket, Switch, Button, Knob, Handle, Lever, Wheel, Gear, Screw, Nail as NailIcon, Hammer, Wrench, Screwdriver, Pliers, Saw, Drill, Ruler, Measuring, Tape as TapeIcon, Level, Square, Triangle, Circle, Rectangle, Pentagon, Hexagon, Octagon, Diamond, Oval, Heart as HeartIcon, Star as StarIcon2, Arrow, Line, Curve, Angle, Point, Dot, Dash, Slash, Backslash, Underscore, Hyphen, Plus as PlusIcon, Minus, Multiply, Divide, Equals, Percent, Dollar, Euro, Pound, Yen, Cent, Degree, At, Hash, Ampersand, Asterisk, Question, Exclamation, Period, Comma, Semicolon, Colon, Apostrophe, Quote, Parenthesis, Bracket, Brace, Less, Greater, Pipe, Tilde, Caret, Grave, Acute, Circumflex, Diaeresis, Cedilla, Macron, Breve, Ring, Ogonek, Stroke, Double, Acute as AcuteIcon, Grave as GraveIcon, Circumflex as CircumflexIcon, Tilde as TildeIcon, Diaeresis as DiaeresisIcon, Ring as RingIcon, Cedilla as CedillaIcon, Macron as MacronIcon, Breve as BreveIcon, Ogonek as OgonekIcon, Stroke as StrokeIcon, Double as DoubleIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Switch } from '../components/ui/switch';
 import { Button } from '../components/ui/button';
@@ -267,6 +268,216 @@ const mockMeetings: Meeting[] = [
       logo: '📹'
     },
     eventType: 'Quarterly Review',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '8',
+    title: 'Marketing Campaign Review',
+    date: 'Sat, 19 Jul',
+    time: '10:00am',
+    endTime: '11:00am',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Sophie Martinez',
+        email: 'sophie.martinez@marketing.com',
+        timezone: 'America/Los_Angeles'
+      },
+      {
+        name: 'Oliver Johnson',
+        email: 'oliver.johnson@marketing.com',
+        timezone: 'Europe/London'
+      },
+      {
+        name: 'Emma Williams',
+        email: 'emma.williams@marketing.com',
+        timezone: 'America/New_York'
+      },
+      {
+        name: 'Lucas Brown',
+        email: 'lucas.brown@marketing.com',
+        timezone: 'Australia/Sydney'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Zoom',
+      logo: '📹'
+    },
+    eventType: 'Marketing Campaign Review',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '9',
+    title: 'Technical Architecture Discussion',
+    date: 'Sat, 19 Jul',
+    time: '2:00pm',
+    endTime: '3:30pm',
+    duration: '90 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Daniel Rodriguez',
+        email: 'daniel.rodriguez@tech.com',
+        timezone: 'America/Los_Angeles'
+      },
+      {
+        name: 'Isabella Chen',
+        email: 'isabella.chen@tech.com',
+        timezone: 'Asia/Singapore'
+      },
+      {
+        name: 'Ethan Davis',
+        email: 'ethan.davis@tech.com',
+        timezone: 'America/Chicago'
+      },
+      {
+        name: 'Ava Wilson',
+        email: 'ava.wilson@tech.com',
+        timezone: 'Europe/Berlin'
+      },
+      {
+        name: 'Mason Taylor',
+        email: 'mason.taylor@tech.com',
+        timezone: 'America/New_York'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Teams',
+      logo: '📹'
+    },
+    eventType: 'Technical Architecture Discussion',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '10',
+    title: 'Customer Success Review',
+    date: 'Sun, 20 Jul',
+    time: '11:00am',
+    endTime: '12:00pm',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Grace Anderson',
+        email: 'grace.anderson@support.com',
+        timezone: 'America/Denver'
+      },
+      {
+        name: 'Nathan White',
+        email: 'nathan.white@support.com',
+        timezone: 'Europe/London'
+      },
+      {
+        name: 'Chloe Garcia',
+        email: 'chloe.garcia@support.com',
+        timezone: 'America/Los_Angeles'
+      },
+      {
+        name: 'Ryan Martinez',
+        email: 'ryan.martinez@support.com',
+        timezone: 'Asia/Tokyo'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Google Meet',
+      logo: '📹'
+    },
+    eventType: 'Customer Success Review',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '11',
+    title: 'Product Roadmap Planning',
+    date: 'Sun, 20 Jul',
+    time: '3:00pm',
+    endTime: '4:30pm',
+    duration: '90 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Logan Thompson',
+        email: 'logan.thompson@product.com',
+        timezone: 'America/New_York'
+      },
+      {
+        name: 'Aria Johnson',
+        email: 'aria.johnson@product.com',
+        timezone: 'Europe/Paris'
+      },
+      {
+        name: 'Carter Miller',
+        email: 'carter.miller@product.com',
+        timezone: 'America/Chicago'
+      },
+      {
+        name: 'Zoe Davis',
+        email: 'zoe.davis@product.com',
+        timezone: 'Asia/Seoul'
+      },
+      {
+        name: 'Eli Wilson',
+        email: 'eli.wilson@product.com',
+        timezone: 'Australia/Melbourne'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Zoom',
+      logo: '📹'
+    },
+    eventType: 'Product Roadmap Planning',
+    status: 'upcoming',
+    isToday: false
+  },
+  {
+    id: '12',
+    title: 'Sales Strategy Meeting',
+    date: 'Mon, 21 Jul',
+    time: '9:00am',
+    endTime: '10:00am',
+    duration: '60 minutes',
+    host: 'You',
+    isHost: true,
+    attendees: [
+      {
+        name: 'Liam Brown',
+        email: 'liam.brown@sales.com',
+        timezone: 'America/Los_Angeles'
+      },
+      {
+        name: 'Maya Singh',
+        email: 'maya.singh@sales.com',
+        timezone: 'Asia/Mumbai'
+      },
+      {
+        name: 'Jackson Lee',
+        email: 'jackson.lee@sales.com',
+        timezone: 'America/New_York'
+      },
+      {
+        name: 'Luna Martinez',
+        email: 'luna.martinez@sales.com',
+        timezone: 'Europe/Madrid'
+      }
+    ],
+    location: {
+      type: 'online',
+      name: 'Teams',
+      logo: '📹'
+    },
+    eventType: 'Sales Strategy Meeting',
     status: 'upcoming',
     isToday: false
   }
@@ -798,19 +1009,29 @@ export default function Bookings() {
       case 'Onboarding Call':
         return <UserCheck className="h-5 w-5" />;
       case 'Product Demo':
-        return <Smartphone className="h-5 w-5" />;
+        return <Monitor className="h-5 w-5" />;
       case 'Team Strategy Session':
         return <Users className="h-5 w-5" />;
       case 'Client Presentation':
-        return <Briefcase className="h-5 w-5" />;
+        return <FileText className="h-5 w-5" />;
       case 'Quarterly Review':
-        return <CalendarDays className="h-5 w-5" />;
+        return <TrendingUp className="h-5 w-5" />;
       case 'Sprint Planning':
-        return <Zap className="h-5 w-5" />;
+        return <Target className="h-5 w-5" />;
       case 'Monthly Review':
-        return <CalendarDays className="h-5 w-5" />;
+        return <Calendar className="h-5 w-5" />;
       case 'Team Sync':
-        return <Users className="h-5 w-5" />;
+        return <MessageSquare className="h-5 w-5" />;
+      case 'Marketing Campaign Review':
+        return <Zap className="h-5 w-5" />;
+      case 'Technical Architecture Discussion':
+        return <Settings className="h-5 w-5" />;
+      case 'Customer Success Review':
+        return <Heart className="h-5 w-5" />;
+      case 'Product Roadmap Planning':
+        return <Map className="h-5 w-5" />;
+      case 'Sales Strategy Meeting':
+        return <TrendingUp className="h-5 w-5" />;
       default:
         return <Video className="h-5 w-5" />;
     }
@@ -1041,7 +1262,7 @@ export default function Bookings() {
                 {meeting.isToday ? 'Today' : meeting.date} • {meeting.time} - {meeting.endTime}
               </div>
 
-              {/* Location/Meeting Link and Details button in same line */}
+              {/* Location/Meeting Link */}
               <div className="flex items-center justify-between">
                 <div className="flex flex-col space-y-2">
                   <div className="flex items-center space-x-2">
@@ -1117,7 +1338,7 @@ export default function Bookings() {
 
         {/* Expanded Details */}
         {isExpanded && isHost && (
-          <div className="mt-4 pt-4 border-t border-border animate-fade-in bg-[#f1f5f980] -mx-6 -mb-6 px-6 py-4 rounded-b-lg">
+          <div className="mt-4 pt-4 border-t border-border animate-fade-in bg-muted/30 -mx-6 px-6 py-4 rounded-b-lg -mb-6">
             <div className="grid grid-cols-2 gap-8">
               <div className="space-y-4">
                 <div>
@@ -1187,7 +1408,7 @@ export default function Bookings() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="w-40"
+                    className="w-44"
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedMeeting(meeting);
@@ -1200,7 +1421,7 @@ export default function Bookings() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="w-40"
+                      className="w-44"
                       style={{ backgroundColor: '#007ee5', color: 'white' }}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -1569,12 +1790,12 @@ export default function Bookings() {
         {/* Cancel Selection Modal - First popup for recurring events */}
         {showCancelSelection && selectedMeeting && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-2xl shadow-xl">
+            <div className="bg-white rounded-lg p-6 w-full max-w-3xl shadow-xl">
               <h2 className="text-xl font-semibold mb-6 text-gray-900 text-center">Cancel Event</h2>
               
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-3 text-gray-900">Select the meetings you want to cancel</label>
-                <div className="space-y-2 max-h-64 overflow-y-auto">
+                <div className="space-y-2 max-h-80 overflow-y-auto">
                   <div className="flex items-center justify-between p-3 bg-gray-50 rounded border">
                     <span className="text-sm font-medium">Select All</span>
                     <Checkbox
@@ -1819,18 +2040,18 @@ export default function Bookings() {
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-2">Meeting Location</label>
                 <select className="w-full p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option value="google-meet">📹 Google Meet</option>
-                  <option value="zoom">📹 Zoom</option>
-                  <option value="teams">📹 Microsoft Teams</option>
-                  <option value="webex">📹 Cisco Webex</option>
-                  <option value="gotomeeting">📹 GoToMeeting</option>
-                  <option value="jitsi">📹 Jitsi Meet</option>
-                  <option value="around">📹 Around</option>
-                  <option value="riverside">📹 Riverside.fm</option>
-                  <option value="whereby">📹 Whereby</option>
-                  <option value="in-person">📍 In-person meeting</option>
-                  <option value="phone">📞 Phone call</option>
-                  <option value="custom">🔗 Custom link</option>
+                  <option value="google-meet">Google Meet</option>
+                  <option value="zoom">Zoom</option>
+                  <option value="teams">Microsoft Teams</option>
+                  <option value="webex">Cisco Webex</option>
+                  <option value="gotomeeting">GoToMeeting</option>
+                  <option value="jitsi">Jitsi Meet</option>
+                  <option value="around">Around</option>
+                  <option value="riverside">Riverside.fm</option>
+                  <option value="whereby">Whereby</option>
+                  <option value="in-person">In-person meeting</option>
+                  <option value="phone">Phone call</option>
+                  <option value="custom">Custom link</option>
                 </select>
               </div>
               
