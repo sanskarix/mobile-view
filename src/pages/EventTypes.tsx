@@ -328,7 +328,7 @@ export const EventTypes = () => {
                   <button
                     key={team.id}
                     onClick={() => setSelectedTeam(team.id)}
-                    className={`py-4 px-6 border-b-0 font-medium text-sm whitespace-nowrap transition-colors ${
+                    className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
                       selectedTeam === team.id
                         ? 'border-primary text-primary'
                         : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
