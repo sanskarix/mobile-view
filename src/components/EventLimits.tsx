@@ -1,490 +1,368 @@
 
 import React, { useState } from 'react';
-import { Plus, ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Switch } from './ui/switch';
+import { Separator } from './ui/separator';
 
 export const EventLimits = () => {
   const [settings, setSettings] = useState({
-    beforeEvent: {
-      bufferTime: 'no-buffer',
-      minimumNotice: {
-        value: 2,
-        unit: 'hours'
-      }
-    },
-    afterEvent: {
-      bufferTime: 'no-buffer',
-      timeSlotIntervals: 'default'
-    },
-    limitBookingFrequency: {
-      enabled: false,
-      limit: 1,
-      period: 'per-day',
-      limits: [{
-        limit: 1,
-        period: 'per-day'
-      }]
-    },
-    showFirstSlotOnly: {
-      enabled: false
-    },
-    limitTotalBookingDuration: {
-      enabled: false,
-      duration: 60,
-      unit: 'minutes',
-      period: 'per-day',
-      limits: [{
-        duration: 60,
-        unit: 'minutes',
-        period: 'per-day'
-      }]
-    },
-    limitFutureBookings: {
-      enabled: false,
-      option: 'days', // 'days' or 'dateRange'
-      days: 30,
-      type: 'business-days',
-      alwaysAvailable: true,
-      dateRange: {
-        start: 'Jul 10, 2025',
-        end: 'Jul 10, 2025'
-      }
-    },
-    offsetStartTimes: {
-      enabled: false,
-      offset: 0,
-      unit: 'minutes'
-    }
+    enableLimits: false,
+    maxEventsPerDay: 1,
+    maxEventsRolling: 1,
+    rollingPeriod: 1,
+    rollingPeriodUnit: 'day',
+    beforeEventBuffer: 0,
+    beforeEventUnit: 'minutes',
+    afterEventBuffer: 0,
+    afterEventUnit: 'minutes',
+    minimumNotice: 0,
+    minimumNoticeUnit: 'minutes',
+    timeSlotInterval: 15,
+    timeSlotUnit: 'minutes',
+    limitFutureBookings: false,
+    futureBookingsDays: 30,
+    futureBookingsUnit: 'business',
+    futureBookingsAlwaysAvailable: false,
+    dateRangeOption: false
   });
 
-  const updateSetting = (section: string, field: string, value: any) => {
-    setSettings(prev => ({
+  const [dropdownStates, setDropdownStates] = useState<Record<string, boolean>>({});
+
+  const toggleDropdown = (key: string) => {
+    setDropdownStates(prev => ({
       ...prev,
-      [section]: {
-        ...prev[section as keyof typeof prev],
-        [field]: value
-      }
+      [key]: !prev[key]
     }));
   };
 
-  const addBookingLimit = () => {
-    const newLimit = {
-      limit: 1,
-      period: 'per-day'
-    };
-    updateSetting('limitBookingFrequency', 'limits', [...settings.limitBookingFrequency.limits, newLimit]);
+  const handleChange = (key: string, value: any) => {
+    setSettings(prev => ({
+      ...prev,
+      [key]: value
+    }));
   };
 
-  const addDurationLimit = () => {
-    const newLimit = {
-      duration: 60,
-      unit: 'minutes',
-      period: 'per-day'
-    };
-    updateSetting('limitTotalBookingDuration', 'limits', [...settings.limitTotalBookingDuration.limits, newLimit]);
+  const CustomSelect = ({ 
+    value, 
+    options, 
+    onChange, 
+    placeholder, 
+    dropdownKey 
+  }: { 
+    value: string; 
+    options: { value: string; label: string }[]; 
+    onChange: (value: string) => void; 
+    placeholder?: string;
+    dropdownKey: string;
+  }) => {
+    const isOpen = dropdownStates[dropdownKey] || false;
+    const selectedOption = options.find(opt => opt.value === value);
+
+    return (
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => toggleDropdown(dropdownKey)}
+          className="w-full h-10 px-3 border border-border rounded-md bg-background text-left flex items-center justify-between hover:bg-muted/50 transition-colors text-sm"
+        >
+          <span className={selectedOption ? 'text-foreground' : 'text-muted-foreground'}>
+            {selectedOption ? selectedOption.label : placeholder}
+          </span>
+          {isOpen ? (
+            <ChevronUp className="h-4 w-4 text-muted-foreground" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+          )}
+        </button>
+
+        {isOpen && (
+          <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 max-h-60 overflow-y-auto">
+            {options.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => {
+                  onChange(option.value);
+                  toggleDropdown(dropdownKey);
+                }}
+                className="w-full px-3 py-2 text-left text-sm hover:bg-muted transition-colors text-foreground"
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    );
   };
+
+  const unitOptions = [
+    { value: 'minutes', label: 'Minutes' },
+    { value: 'hours', label: 'Hours' },
+    { value: 'days', label: 'Days' }
+  ];
+
+  const periodOptions = [
+    { value: 'day', label: 'Day' },
+    { value: 'week', label: 'Week' },
+    { value: 'month', label: 'Month' }
+  ];
+
+  const futureBookingsUnitOptions = [
+    { value: 'business', label: 'Business days' },
+    { value: 'calendar', label: 'Calendar days' }
+  ];
 
   return (
-    <div className="p-0 max-w-none mx-auto space-y-6">
-      {/* Before Event & After Event - Side by Side */}
-      <div className="border border-border rounded-lg p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Before Event */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-foreground" style={{ fontSize: '14px', color: '#384252' }}>Before event</h3>
-            
+    <div className="p-0 max-w-none mx-auto space-y-8 border border-border rounded-lg p-6" style={{
+      fontSize: '14px',
+      color: '#384252'
+    }}>
+      {/* Enable limits toggle */}
+      <div className="flex items-center justify-between border-b border-border pb-6">
+        <div>
+          <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
+            Limit bookings per day
+          </h3>
+          <p style={{ fontSize: '14px', color: '#384252' }}>
+            Limit how many bookings can be scheduled per day
+          </p>
+        </div>
+        <Switch 
+          checked={settings.enableLimits} 
+          onCheckedChange={(value) => handleChange('enableLimits', value)} 
+        />
+      </div>
+
+      {settings.enableLimits && (
+        <div className="space-y-6 border border-border rounded-lg p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Buffer time</label>
-              <div className="relative">
-                <select 
-                  value={settings.beforeEvent.bufferTime} 
-                  onChange={e => updateSetting('beforeEvent', 'bufferTime', e.target.value)} 
-                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background appearance-none h-10"
-                  style={{ fontSize: '14px', color: '#384252' }}
-                >
-                  <option value="no-buffer">No buffer time</option>
-                  <option value="15">15 minutes</option>
-                  <option value="30">30 minutes</option>
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-              </div>
+              <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                Maximum events per day
+              </label>
+              <input
+                type="number"
+                value={settings.maxEventsPerDay}
+                onChange={(e) => handleChange('maxEventsPerDay', parseInt(e.target.value))}
+                className="w-full h-10 px-3 border border-border rounded-md text-sm"
+                min="1"
+              />
             </div>
-            
             <div>
-              <label className="block text-sm font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Minimum Notice</label>
+              <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                Maximum events in rolling period
+              </label>
               <div className="flex space-x-2">
-                <input 
-                  type="number" 
-                  value={settings.beforeEvent.minimumNotice.value} 
-                  onChange={e => updateSetting('beforeEvent', 'minimumNotice', {
-                    ...settings.beforeEvent.minimumNotice,
-                    value: parseInt(e.target.value)
-                  })} 
-                  className="flex-1 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
-                  style={{ fontSize: '14px', color: '#384252' }}
+                <input
+                  type="number"
+                  value={settings.maxEventsRolling}
+                  onChange={(e) => handleChange('maxEventsRolling', parseInt(e.target.value))}
+                  className="w-20 h-10 px-3 border border-border rounded-md text-sm"
+                  min="1"
                 />
-                <div className="relative">
-                  <select 
-                    value={settings.beforeEvent.minimumNotice.unit} 
-                    onChange={e => updateSetting('beforeEvent', 'minimumNotice', {
-                      ...settings.beforeEvent.minimumNotice,
-                      unit: e.target.value
-                    })} 
-                    className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring appearance-none h-10"
-                    style={{ fontSize: '14px', color: '#384252' }}
-                  >
-                    <option value="hours">Hours</option>
-                    <option value="days">Days</option>
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                </div>
+                <input
+                  type="number"
+                  value={settings.rollingPeriod}
+                  onChange={(e) => handleChange('rollingPeriod', parseInt(e.target.value))}
+                  className="w-20 h-10 px-3 border border-border rounded-md text-sm"
+                  min="1"
+                />
+                <CustomSelect
+                  value={settings.rollingPeriodUnit}
+                  options={periodOptions}
+                  onChange={(value) => handleChange('rollingPeriodUnit', value)}
+                  dropdownKey="rollingPeriodUnit"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Buffer times section with side-by-side layout */}
+      <div className="border border-border rounded-lg p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Before event section */}
+          <div className="space-y-6">
+            <h3 className="font-semibold mb-4" style={{ fontSize: '16px', color: '#384252' }}>
+              Before event
+            </h3>
+            
+            <div>
+              <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                Buffer time
+              </label>
+              <div className="flex space-x-2">
+                <input
+                  type="number"
+                  value={settings.beforeEventBuffer}
+                  onChange={(e) => handleChange('beforeEventBuffer', parseInt(e.target.value))}
+                  className="w-20 h-10 px-3 border border-border rounded-md text-sm"
+                  min="0"
+                />
+                <CustomSelect
+                  value={settings.beforeEventUnit}
+                  options={unitOptions}
+                  onChange={(value) => handleChange('beforeEventUnit', value)}
+                  dropdownKey="beforeEventUnit"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                Minimum notice
+              </label>
+              <div className="flex space-x-2">
+                <input
+                  type="number"
+                  value={settings.minimumNotice}
+                  onChange={(e) => handleChange('minimumNotice', parseInt(e.target.value))}
+                  className="w-20 h-10 px-3 border border-border rounded-md text-sm"
+                  min="0"
+                />
+                <CustomSelect
+                  value={settings.minimumNoticeUnit}
+                  options={unitOptions}
+                  onChange={(value) => handleChange('minimumNoticeUnit', value)}
+                  dropdownKey="minimumNoticeUnit"
+                />
               </div>
             </div>
           </div>
 
-          {/* After Event */}
-          <div className="space-y-4">
-            <h3 className="font-semibold" style={{ fontSize: '14px', color: '#384252' }}>After event</h3>
+          <Separator orientation="vertical" className="hidden lg:block" />
+
+          {/* After event section */}
+          <div className="space-y-6">
+            <h3 className="font-semibold mb-4" style={{ fontSize: '16px', color: '#384252' }}>
+              After event
+            </h3>
             
             <div>
-              <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Buffer time</label>
-              <div className="relative">
-                <select 
-                  value={settings.afterEvent.bufferTime} 
-                  onChange={e => updateSetting('afterEvent', 'bufferTime', e.target.value)} 
-                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring appearance-none h-10"
-                  style={{ fontSize: '14px', color: '#384252' }}
-                >
-                  <option value="no-buffer">No buffer time</option>
-                  <option value="15">15 minutes</option>
-                  <option value="30">30 minutes</option>
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                Buffer time
+              </label>
+              <div className="flex space-x-2">
+                <input
+                  type="number"
+                  value={settings.afterEventBuffer}
+                  onChange={(e) => handleChange('afterEventBuffer', parseInt(e.target.value))}
+                  className="w-20 h-10 px-3 border border-border rounded-md text-sm"
+                  min="0"
+                />
+                <CustomSelect
+                  value={settings.afterEventUnit}
+                  options={unitOptions}
+                  onChange={(value) => handleChange('afterEventUnit', value)}
+                  dropdownKey="afterEventUnit"
+                />
               </div>
             </div>
-            
+
             <div>
-              <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Time-slot intervals</label>
-              <div className="relative">
-                <select 
-                  value={settings.afterEvent.timeSlotIntervals} 
-                  onChange={e => updateSetting('afterEvent', 'timeSlotIntervals', e.target.value)} 
-                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring appearance-none h-10"
-                  style={{ fontSize: '14px', color: '#384252' }}
-                >
-                  <option value="default">Use event length (default)</option>
-                  <option value="15">15 minutes</option>
-                  <option value="30">30 minutes</option>
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+              <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                Time-slot intervals
+              </label>
+              <div className="flex space-x-2">
+                <input
+                  type="number"
+                  value={settings.timeSlotInterval}
+                  onChange={(e) => handleChange('timeSlotInterval', parseInt(e.target.value))}
+                  className="w-20 h-10 px-3 border border-border rounded-md text-sm"
+                  min="1"
+                />
+                <CustomSelect
+                  value={settings.timeSlotUnit}
+                  options={unitOptions}
+                  onChange={(value) => handleChange('timeSlotUnit', value)}
+                  dropdownKey="timeSlotUnit"
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Limit Booking Frequency */}
+      {/* Limit future bookings */}
       <div className="border border-border rounded-lg p-6">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="font-semibold" style={{ fontSize: '14px', color: '#384252' }}>Limit booking frequency</h3>
-            <p className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>Limit how many times this event can be booked</p>
-          </div>
-          <Switch checked={settings.limitBookingFrequency.enabled} onCheckedChange={checked => updateSetting('limitBookingFrequency', 'enabled', checked)} />
-        </div>
-        
-        {settings.limitBookingFrequency.enabled && (
-          <div className="space-y-4">
-            {settings.limitBookingFrequency.limits.map((limit, index) => (
-              <div key={index} className="flex items-center space-x-2">
-                <input 
-                  type="number" 
-                  value={limit.limit} 
-                  onChange={e => {
-                    const newLimits = [...settings.limitBookingFrequency.limits];
-                    newLimits[index] = {
-                      ...limit,
-                      limit: parseInt(e.target.value)
-                    };
-                    updateSetting('limitBookingFrequency', 'limits', newLimits);
-                  }} 
-                  className="w-20 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
-                  style={{ fontSize: '14px', color: '#384252' }}
-                />
-                <div className="relative">
-                  <select 
-                    value={limit.period} 
-                    onChange={e => {
-                      const newLimits = [...settings.limitBookingFrequency.limits];
-                      newLimits[index] = {
-                        ...limit,
-                        period: e.target.value
-                      };
-                      updateSetting('limitBookingFrequency', 'limits', newLimits);
-                    }} 
-                    className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring appearance-none h-10"
-                    style={{ fontSize: '14px', color: '#384252' }}
-                  >
-                    <option value="per-day">Per day</option>
-                    <option value="per-week">Per week</option>
-                    <option value="per-month">Per month</option>
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                </div>
-              </div>
-            ))}
-            <button 
-              onClick={addBookingLimit} 
-              className="text-primary hover:text-primary/80 flex items-center text-sm"
-              style={{ fontSize: '14px' }}
-            >
-              <Plus className="h-4 w-4 mr-1" />
-              Add Limit
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Show First Slot Only */}
-      <div className="border border-border rounded-lg p-6">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <h3 className="font-semibold mb-2" style={{ fontSize: '14px', color: '#384252' }}>Only show the first slot of each day as available</h3>
-            <p className="text-sm max-w-3xl" style={{ fontSize: '14px', color: '#384252' }}>
-              This will limit your availability for this event type to one slot per day, scheduled at the earliest available time.
+            <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
+              Limit future bookings
+            </h3>
+            <p style={{ fontSize: '14px', color: '#384252' }}>
+              Limit how far in advance people can book
             </p>
           </div>
-          <Switch checked={settings.showFirstSlotOnly.enabled} onCheckedChange={checked => updateSetting('showFirstSlotOnly', 'enabled', checked)} />
+          <Switch 
+            checked={settings.limitFutureBookings} 
+            onCheckedChange={(value) => handleChange('limitFutureBookings', value)} 
+          />
         </div>
-      </div>
 
-      {/* Limit Total Booking Duration */}
-      <div className="border border-border rounded-lg p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h3 className="font-semibold" style={{ fontSize: '14px', color: '#384252' }}>Limit total booking duration</h3>
-            <p className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>Limit total amount of time that this event can be booked</p>
-          </div>
-          <Switch checked={settings.limitTotalBookingDuration.enabled} onCheckedChange={checked => updateSetting('limitTotalBookingDuration', 'enabled', checked)} />
-        </div>
-        
-        {settings.limitTotalBookingDuration.enabled && (
-          <div className="space-y-4">
-            {settings.limitTotalBookingDuration.limits.map((limit, index) => (
-              <div key={index} className="flex items-center space-x-2">
-                <input 
-                  type="number" 
-                  value={limit.duration} 
-                  onChange={e => {
-                    const newLimits = [...settings.limitTotalBookingDuration.limits];
-                    newLimits[index] = {
-                      ...limit,
-                      duration: parseInt(e.target.value)
-                    };
-                    updateSetting('limitTotalBookingDuration', 'limits', newLimits);
-                  }} 
-                  className="w-20 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
-                  style={{ fontSize: '14px', color: '#384252' }}
-                />
-                <div className="relative">
-                  <select 
-                    value={limit.unit} 
-                    onChange={e => {
-                      const newLimits = [...settings.limitTotalBookingDuration.limits];
-                      newLimits[index] = {
-                        ...limit,
-                        unit: e.target.value
-                      };
-                      updateSetting('limitTotalBookingDuration', 'limits', newLimits);
-                    }} 
-                    className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring appearance-none h-10"
-                    style={{ fontSize: '14px', color: '#384252' }}
-                  >
-                    <option value="minutes">Minutes</option>
-                    <option value="hours">Hours</option>
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                </div>
-                <div className="relative">
-                  <select 
-                    value={limit.period} 
-                    onChange={e => {
-                      const newLimits = [...settings.limitTotalBookingDuration.limits];
-                      newLimits[index] = {
-                        ...limit,
-                        period: e.target.value
-                      };
-                      updateSetting('limitTotalBookingDuration', 'limits', newLimits);
-                    }} 
-                    className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring appearance-none h-10"
-                    style={{ fontSize: '14px', color: '#384252' }}
-                  >
-                    <option value="per-day">Per day</option>
-                    <option value="per-week">Per week</option>
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                </div>
-              </div>
-            ))}
-            <button 
-              onClick={addDurationLimit} 
-              className="text-primary hover:text-primary/80 flex items-center text-sm"
-              style={{ fontSize: '14px' }}
-            >
-              <Plus className="h-4 w-4 mr-1" />
-              Add Limit
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Limit Future Bookings */}
-      <div className="border border-border rounded-lg p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h3 className="font-semibold" style={{ fontSize: '14px', color: '#384252' }}>Limit future bookings</h3>
-            <p className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>Limit how far in the future this event can be booked</p>
-          </div>
-          <Switch checked={settings.limitFutureBookings.enabled} onCheckedChange={checked => updateSetting('limitFutureBookings', 'enabled', checked)} />
-        </div>
-        
-        {settings.limitFutureBookings.enabled && (
-          <div className="space-y-4">
+        {settings.limitFutureBookings && (
+          <div className="space-y-6">
             {/* Option selector */}
             <div className="space-y-4">
               <div className="flex items-center space-x-2">
-                <input 
-                  type="radio" 
-                  id="days-option" 
-                  name="futureBookingOption" 
-                  checked={settings.limitFutureBookings.option === 'days'}
-                  onChange={() => updateSetting('limitFutureBookings', 'option', 'days')}
+                <input
+                  type="radio"
+                  id="option1"
+                  name="futureBookingOption"
+                  checked={!settings.dateRangeOption}
+                  onChange={() => handleChange('dateRangeOption', false)}
+                  className="w-4 h-4"
                 />
-                <label htmlFor="days-option" className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>
-                  Days into the future
+                <label htmlFor="option1" className="flex items-center space-x-2" style={{ fontSize: '14px', color: '#384252' }}>
+                  <input
+                    type="number"
+                    value={settings.futureBookingsDays}
+                    onChange={(e) => handleChange('futureBookingsDays', parseInt(e.target.value))}
+                    className="w-16 h-8 px-2 border border-border rounded text-sm"
+                    min="1"
+                    disabled={settings.dateRangeOption}
+                  />
+                  <CustomSelect
+                    value={settings.futureBookingsUnit}
+                    options={futureBookingsUnitOptions}
+                    onChange={(value) => handleChange('futureBookingsUnit', value)}
+                    dropdownKey="futureBookingsUnit"
+                  />
+                  <span>into the future.</span>
                 </label>
               </div>
               
-              {settings.limitFutureBookings.option === 'days' && (
-                <div className="ml-6 space-y-3">
-                  <div className="flex items-center space-x-2">
-                    <input 
-                      type="number" 
-                      value={settings.limitFutureBookings.days} 
-                      onChange={e => updateSetting('limitFutureBookings', 'days', parseInt(e.target.value))} 
-                      className="w-20 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
-                      style={{ fontSize: '14px', color: '#384252' }}
-                    />
-                    <div className="relative">
-                      <select 
-                        value={settings.limitFutureBookings.type} 
-                        onChange={e => updateSetting('limitFutureBookings', 'type', e.target.value)} 
-                        className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring appearance-none h-10"
-                        style={{ fontSize: '14px', color: '#384252' }}
-                      >
-                        <option value="business-days">business days</option>
-                        <option value="calendar-days">calendar days</option>
-                      </select>
-                      <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                    </div>
-                    <span className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>into the future</span>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <input 
-                      type="checkbox" 
-                      id="always-available" 
-                      checked={settings.limitFutureBookings.alwaysAvailable} 
-                      onChange={e => updateSetting('limitFutureBookings', 'alwaysAvailable', e.target.checked)}
-                    />
-                    <label htmlFor="always-available" className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>
-                      Always {settings.limitFutureBookings.days} days available
-                    </label>
-                  </div>
-                </div>
-              )}
-              
+              <div className="ml-6">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={settings.futureBookingsAlwaysAvailable}
+                    onChange={(e) => handleChange('futureBookingsAlwaysAvailable', e.target.checked)}
+                    className="w-4 h-4"
+                    disabled={settings.dateRangeOption}
+                  />
+                  <span style={{ fontSize: '14px', color: '#384252' }}>
+                    Always {settings.futureBookingsDays} days available ({settings.futureBookingsDays} will be updated realtime)
+                  </span>
+                </label>
+              </div>
+
               <div className="flex items-center space-x-2">
-                <input 
-                  type="radio" 
-                  id="date-range-option" 
-                  name="futureBookingOption" 
-                  checked={settings.limitFutureBookings.option === 'dateRange'}
-                  onChange={() => updateSetting('limitFutureBookings', 'option', 'dateRange')}
+                <input
+                  type="radio"
+                  id="option2"
+                  name="futureBookingOption"
+                  checked={settings.dateRangeOption}
+                  onChange={() => handleChange('dateRangeOption', true)}
+                  className="w-4 h-4"
                 />
-                <label htmlFor="date-range-option" className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>
+                <label htmlFor="option2" style={{ fontSize: '14px', color: '#384252' }}>
                   Within a date range
                 </label>
               </div>
-              
-              {settings.limitFutureBookings.option === 'dateRange' && (
-                <div className="ml-6">
-                  <div className="flex items-center space-x-2">
-                    <input 
-                      type="text" 
-                      value={settings.limitFutureBookings.dateRange.start} 
-                      onChange={e => updateSetting('limitFutureBookings', 'dateRange', {
-                        ...settings.limitFutureBookings.dateRange,
-                        start: e.target.value
-                      })} 
-                      className="flex-1 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
-                      style={{ fontSize: '14px', color: '#384252' }}
-                    />
-                    <span className="text-muted-foreground" style={{ fontSize: '14px', color: '#384252' }}>-</span>
-                    <input 
-                      type="text" 
-                      value={settings.limitFutureBookings.dateRange.end} 
-                      onChange={e => updateSetting('limitFutureBookings', 'dateRange', {
-                        ...settings.limitFutureBookings.dateRange,
-                        end: e.target.value
-                      })} 
-                      className="flex-1 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
-                      style={{ fontSize: '14px', color: '#384252' }}
-                    />
-                  </div>
-                </div>
-              )}
             </div>
-          </div>
-        )}
-      </div>
-
-      {/* Offset Start Times */}
-      <div className="border border-border rounded-lg p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h3 className="font-semibold" style={{ fontSize: '14px', color: '#384252' }}>Offset start times</h3>
-            <p className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>Offset timeslots shown to bookers by a specified number of minutes</p>
-          </div>
-          <Switch checked={settings.offsetStartTimes.enabled} onCheckedChange={checked => updateSetting('offsetStartTimes', 'enabled', checked)} />
-        </div>
-        
-        {settings.offsetStartTimes.enabled && (
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <span className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>Offset by</span>
-              <input 
-                type="number" 
-                value={settings.offsetStartTimes.offset} 
-                onChange={e => updateSetting('offsetStartTimes', 'offset', parseInt(e.target.value))} 
-                className="w-20 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
-                style={{ fontSize: '14px', color: '#384252' }}
-              />
-              <div className="relative">
-                <select 
-                  value={settings.offsetStartTimes.unit} 
-                  onChange={e => updateSetting('offsetStartTimes', 'unit', e.target.value)} 
-                  className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring appearance-none h-10"
-                  style={{ fontSize: '14px', color: '#384252' }}
-                >
-                  <option value="minutes">Minutes</option>
-                </select>
-                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-              </div>
-            </div>
-            <p className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>
-              e.g. this will show time slots to your bookers at {9 + settings.offsetStartTimes.offset / 60}:00 AM instead of 9:00 AM
-            </p>
           </div>
         )}
       </div>

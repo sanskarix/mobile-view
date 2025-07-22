@@ -95,9 +95,7 @@ export const EditEvent = () => {
           title: 'Edit Event',
           description: 'Configure event details, availability and integrations.',
           enabled,
-          onEnabledChange: (enabled: boolean) => {
-            setHeaderMeta(prev => ({ ...prev, enabled }));
-          }
+          onEnabledChange: () => {}
         });
       }
     });
