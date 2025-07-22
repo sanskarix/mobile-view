@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Bold, Italic, Link, MapPin, Plus, X, Clock, Settings, Copy, ExternalLink, Code, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Switch } from './ui/switch';
@@ -20,7 +19,7 @@ export const EventSetup = ({ onChange }: EventSetupProps) => {
     customDuration: '',
     showCustomDuration: false,
     durationInput: '',
-    showDurationSuggestions: false
+    showDurationSuggestions: true // Show by default
   });
 
   const [showLinkInput, setShowLinkInput] = useState(false);
@@ -36,26 +35,6 @@ export const EventSetup = ({ onChange }: EventSetupProps) => {
   });
 
   const availableDurations = ['5', '10', '15', '20', '25', '30', '45', '50', '60', '75', '80', '90', '120'];
-
-  const locationOptions = [
-    { value: 'conferencing', label: 'Conferencing', type: 'header' as const },
-    { value: 'zoom', label: 'Zoom', type: 'option' as const, icon: '🎥' },
-    { value: 'google-meet', label: 'Google Meet', type: 'option' as const, icon: 'GM' },
-    { value: 'teams', label: 'Microsoft Teams', type: 'option' as const, icon: 'MT' },
-    { value: 'facetime', label: 'FaceTime', type: 'option' as const, icon: '📞' },
-    { value: 'phone', label: 'Phone', type: 'header' as const },
-    { value: 'attendee-phone', label: 'Attendee phone number', type: 'option' as const, icon: '📱' },
-    { value: 'organizer-phone', label: 'Organizer phone number', type: 'option' as const, icon: '☎️' },
-    { value: 'others', label: 'Others', type: 'header' as const },
-    { value: 'link-meeting', label: 'Link meeting', type: 'option' as const, icon: '🔗' },
-    { value: 'attendee-location', label: 'Custom attendee location', type: 'option' as const, icon: '📍' },
-    { value: 'in-person', label: 'In Person', type: 'option' as const, icon: '🏢' }
-  ];
-
-  const defaultDurationOptions = formData.durations.map(duration => ({
-    value: duration,
-    label: `${duration} mins`
-  }));
 
   const handleFormChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -76,7 +55,7 @@ export const EventSetup = ({ onChange }: EventSetupProps) => {
     setFormData(prev => ({
       ...prev,
       durationInput: value,
-      showDurationSuggestions: value.length > 0
+      showDurationSuggestions: value.length > 0 || true
     }));
   };
 
@@ -86,7 +65,6 @@ export const EventSetup = ({ onChange }: EventSetupProps) => {
       setFormData(prev => ({
         ...prev,
         durationInput: '',
-        showDurationSuggestions: false
       }));
     }
   };
@@ -98,10 +76,29 @@ export const EventSetup = ({ onChange }: EventSetupProps) => {
 
   const getSuggestedDurations = () => {
     return availableDurations.filter(duration => 
-      !formData.durations.includes(duration) && 
-      duration.includes(formData.durationInput)
+      !formData.durations.includes(duration)
     );
   };
+
+  const locationOptions = [
+    { value: 'conferencing', label: 'Conferencing', type: 'header' as const },
+    { value: 'zoom', label: 'Zoom', type: 'option' as const, icon: '🎥' },
+    { value: 'google-meet', label: 'Google Meet', type: 'option' as const, icon: 'GM' },
+    { value: 'teams', label: 'Microsoft Teams', type: 'option' as const, icon: 'MT' },
+    { value: 'facetime', label: 'FaceTime', type: 'option' as const, icon: '📞' },
+    { value: 'phone', label: 'Phone', type: 'header' as const },
+    { value: 'attendee-phone', label: 'Attendee phone number', type: 'option' as const, icon: '📱' },
+    { value: 'organizer-phone', label: 'Organizer phone number', type: 'option' as const, icon: '☎️' },
+    { value: 'others', label: 'Others', type: 'header' as const },
+    { value: 'link-meeting', label: 'Link meeting', type: 'option' as const, icon: '🔗' },
+    { value: 'attendee-location', label: 'Custom attendee location', type: 'option' as const, icon: '📍' },
+    { value: 'in-person', label: 'In Person', type: 'option' as const, icon: '🏢' }
+  ];
+
+  const defaultDurationOptions = formData.durations.map(duration => ({
+    value: duration,
+    label: `${duration} mins`
+  }));
 
   const renderLocationDetails = () => {
     if (['zoom', 'facetime', 'link-meeting'].includes(formData.location)) {
@@ -318,22 +315,39 @@ export const EventSetup = ({ onChange }: EventSetupProps) => {
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-4">Available durations</label>
         
-        {/* Duration Input with Suggestions */}
+        {/* Duration Input with Tags */}
         <div className="relative mb-4">
-          <input
-            type="text"
-            value={formData.durationInput}
-            onChange={e => handleDurationInputChange(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === 'Enter' && formData.durationInput) {
-                addDurationFromInput(formData.durationInput);
-              }
-            }}
-            placeholder="Enter duration in minutes (e.g., 15, 30, 45)"
-            className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background text-sm h-10"
-          />
+          <div className="w-full min-h-10 px-3 py-2 border border-border rounded-lg focus-within:ring-2 focus-within:ring-ring bg-background flex flex-wrap gap-2 items-center">
+            {/* Duration Tags inside input */}
+            {formData.durations.map(duration => (
+              <div key={duration} className="flex items-center space-x-1 px-2 py-1 text-sm rounded bg-gray-100 text-gray-700">
+                <Clock className="h-3 w-3" />
+                <span>{duration} mins</span>
+                <button
+                  onClick={() => removeDuration(duration)}
+                  className="w-3 h-3 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs"
+                >
+                  <X className="h-2 w-2" />
+                </button>
+              </div>
+            ))}
+            
+            <input
+              type="text"
+              value={formData.durationInput}
+              onChange={e => handleDurationInputChange(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && formData.durationInput) {
+                  addDurationFromInput(formData.durationInput);
+                }
+              }}
+              placeholder={formData.durations.length === 0 ? "Enter duration in minutes (e.g., 15, 30, 45)" : ""}
+              className="flex-1 min-w-0 outline-none bg-transparent text-sm"
+            />
+          </div>
           
-          {formData.showDurationSuggestions && formData.durationInput && getSuggestedDurations().length > 0 && (
+          {/* Always show suggestions dropdown */}
+          {getSuggestedDurations().length > 0 && (
             <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-10 max-h-32 overflow-y-auto">
               {getSuggestedDurations().map(duration => (
                 <button
@@ -346,22 +360,6 @@ export const EventSetup = ({ onChange }: EventSetupProps) => {
               ))}
             </div>
           )}
-        </div>
-
-        {/* Duration Bubbles */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {formData.durations.map(duration => (
-            <div key={duration} className="relative flex items-center space-x-1 px-3 py-2 text-sm rounded border bg-primary/10 border-primary text-primary group">
-              <Clock className="h-3 w-3" />
-              <span>{duration} mins</span>
-              <button
-                onClick={() => removeDuration(duration)}
-                className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <X className="h-2 w-2" />
-              </button>
-            </div>
-          ))}
         </div>
         
         {!formData.showCustomDuration ? (
