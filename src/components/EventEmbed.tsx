@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Copy, Eye } from 'lucide-react';
 import { Switch } from './ui/switch';
@@ -136,6 +135,80 @@ export const EventEmbed = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(generateEmbedCode());
+  };
+
+  const renderPreview = () => {
+    switch (embedType) {
+      case 'inline':
+        return (
+          <div className="w-full h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary rounded-lg mx-auto mb-4 flex items-center justify-center">
+                <Eye className="h-8 w-8 text-primary-foreground" />
+              </div>
+              <p className="text-sm text-gray-600">Inline Calendar Preview</p>
+              <p className="text-xs text-gray-400 mt-1">Theme: {embedSettings.theme} | Layout: {embedSettings.layout}</p>
+            </div>
+          </div>
+        );
+      case 'floating':
+        return (
+          <div className="relative w-full h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+            <div className="absolute bottom-4 right-4">
+              <button 
+                className="px-4 py-2 rounded-lg shadow-lg text-sm font-medium"
+                style={{ 
+                  backgroundColor: `#${embedSettings.buttonColor}`, 
+                  color: `#${embedSettings.textColor}` 
+                }}
+              >
+                {embedSettings.displayCalendarIcon && '📅 '}
+                {embedSettings.buttonText}
+              </button>
+            </div>
+            <div className="absolute top-4 left-4">
+              <p className="text-xs text-gray-500">Floating Button Preview</p>
+              <p className="text-xs text-gray-400">Position: {embedSettings.position}</p>
+            </div>
+          </div>
+        );
+      case 'popup':
+        return (
+          <div className="w-full h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+            <div className="text-center">
+              <button 
+                className="px-6 py-3 bg-primary text-primary-foreground rounded-lg text-sm font-medium mb-4"
+              >
+                {embedSettings.buttonText}
+              </button>
+              <p className="text-sm text-gray-600">Pop-up Trigger Preview</p>
+              <p className="text-xs text-gray-400 mt-1">Size: {embedSettings.windowWidth}% × {embedSettings.windowHeight}%</p>
+            </div>
+          </div>
+        );
+      case 'email':
+        return (
+          <div className="w-full h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+            <div className="text-center">
+              <a
+                href="#"
+                className="inline-block px-6 py-3 rounded-lg text-sm font-medium mb-4"
+                style={{ 
+                  backgroundColor: `#${embedSettings.buttonColor}`, 
+                  color: `#${embedSettings.textColor}`,
+                  textDecoration: 'none'
+                }}
+              >
+                {embedSettings.buttonText}
+              </a>
+              <p className="text-sm text-gray-600">Email Button Preview</p>
+              <p className="text-xs text-gray-400 mt-1">Ready for email campaigns</p>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
   };
 
   const renderEmbedOptions = () => {
@@ -419,53 +492,68 @@ export const EventEmbed = () => {
   };
 
   return (
-    <div className="p-0 max-w-none mx-auto space-y-6">
-      {/* Embed Type Selection */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { key: 'inline', label: 'Inline' },
-          { key: 'floating', label: 'Floating Button' },
-          { key: 'popup', label: 'Pop up' },
-          { key: 'email', label: 'Email' }
-        ].map(type => (
-          <button
-            key={type.key}
-            onClick={() => setEmbedType(type.key)}
-            className={`p-4 border-2 rounded-lg text-center transition-all ${
-              embedType === type.key
-                ? 'border-primary bg-primary/10 text-primary'
-                : 'border-gray-200 hover:border-gray-300'
-            }`}
-          >
-            <span className="font-medium text-sm">{type.label}</span>
-          </button>
-        ))}
-      </div>
+    <div className="p-0 max-w-none mx-auto">
+      <div className="flex gap-8">
+        {/* Left Side - Main Content */}
+        <div className="w-1/2 space-y-6">
+          {/* Embed Type Selection */}
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { key: 'inline', label: 'Inline' },
+              { key: 'floating', label: 'Floating Button' },
+              { key: 'popup', label: 'Pop up' },
+              { key: 'email', label: 'Email' }
+            ].map(type => (
+              <button
+                key={type.key}
+                onClick={() => setEmbedType(type.key)}
+                className={`p-4 border-2 rounded-lg text-center transition-all ${
+                  embedType === type.key
+                    ? 'border-primary bg-primary/10 text-primary'
+                    : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <span className="font-medium text-sm">{type.label}</span>
+              </button>
+            ))}
+          </div>
 
-      {/* Embed Options */}
-      {renderEmbedOptions()}
+          {/* Embed Options */}
+          {renderEmbedOptions()}
 
-      {/* Generated Code */}
-      <div className="border rounded-lg p-4">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="font-medium">Generated Code</h3>
-          <div className="flex space-x-2">
-            <button
-              onClick={copyToClipboard}
-              className="flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm transition-colors"
-            >
-              <Copy className="h-4 w-4 mr-1" />
-              Copy
-            </button>
-            <button className="flex items-center px-3 py-2 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90 transition-colors">
-              <Eye className="h-4 w-4 mr-1" />
-              Preview
-            </button>
+          {/* Generated Code */}
+          <div className="border rounded-lg p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-medium">Generated Code</h3>
+              <div className="flex space-x-2">
+                <button
+                  onClick={copyToClipboard}
+                  className="flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm transition-colors"
+                >
+                  <Copy className="h-4 w-4 mr-1" />
+                  Copy
+                </button>
+                <button className="flex items-center px-3 py-2 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90 transition-colors">
+                  <Eye className="h-4 w-4 mr-1" />
+                  Preview
+                </button>
+              </div>
+            </div>
+            <pre className="bg-gray-50 p-4 rounded text-xs overflow-x-auto">
+              <code>{generateEmbedCode()}</code>
+            </pre>
           </div>
         </div>
-        <pre className="bg-gray-50 p-4 rounded text-xs overflow-x-auto">
-          <code>{generateEmbedCode()}</code>
-        </pre>
+
+        {/* Right Side - Preview */}
+        <div className="w-1/2">
+          <div className="sticky top-0">
+            <h3 className="font-medium mb-4">Preview</h3>
+            <div className="border rounded-lg p-4 bg-white">
+              {renderPreview()}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,10 +1,19 @@
-
 import React, { useState } from 'react';
 import { Switch } from './ui/switch';
 import { CustomSelect } from './ui/custom-select';
 
 export const EventLimits = () => {
   const [settings, setSettings] = useState({
+    // New Before Event Settings
+    beforeEventBufferTime: 'no-buffer',
+    minimumNoticeValue: '2',
+    minimumNoticeUnit: 'hours',
+    
+    // New After Event Settings  
+    afterEventBufferTime: 'no-buffer',
+    timeSlotIntervals: 'default',
+    
+    // Existing settings
     minimumNotice: false,
     minimumNoticeValue: '120',
     minimumNoticeUnit: 'minutes',
@@ -31,6 +40,23 @@ export const EventLimits = () => {
     setSettings(prev => ({ ...prev, [setting]: value }));
   };
 
+  const bufferTimeOptions = [
+    { value: 'no-buffer', label: 'No buffer time' },
+    { value: '15', label: '15 mins' },
+    { value: '20', label: '20 mins' }
+  ];
+
+  const minimumNoticeUnitOptions = [
+    { value: 'hours', label: 'hours' },
+    { value: 'days', label: 'days' }
+  ];
+
+  const timeSlotOptions = [
+    { value: 'default', label: 'Use event length (default)' },
+    { value: '15', label: '15 mins' },
+    { value: '30', label: '30 mins' }
+  ];
+
   const timeUnitOptions = [
     { value: 'minutes', label: 'Minutes' },
     { value: 'hours', label: 'Hours' },
@@ -44,40 +70,111 @@ export const EventLimits = () => {
 
   return (
     <div className="p-0 max-w-none mx-auto space-y-8" style={{ fontSize: '14px', color: '#384252' }}>
-      {/* Minimum booking notice */}
-      <div className="flex items-center justify-between">
-        <div className="flex-1">
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <h3 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>
-                Minimum booking notice
-              </h3>
-              <p style={{ fontSize: '14px', color: '#384252' }}>
-                Require a minimum amount of time before the meeting to book a slot
-              </p>
-            </div>
-            <Switch
-              checked={settings.minimumNotice}
-              onCheckedChange={value => handleToggle('minimumNotice', value)}
-            />
-          </div>
+      {/* New Before/After Event Sections */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Before event section */}
+        <div>
+          <h3 className="font-medium text-lg mb-4" style={{ fontSize: '18px', color: '#384252' }}>
+            Before event
+          </h3>
           
-          {settings.minimumNotice && (
-            <div className="mt-4 flex items-center space-x-2">
-              <input
-                type="number"
-                value={settings.minimumNoticeValue}
-                onChange={e => handleValueChange('minimumNoticeValue', e.target.value)}
-                className="w-20 px-3 py-2 border border-border rounded-lg text-sm bg-background"
-              />
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Buffer time</label>
               <CustomSelect
-                value={settings.minimumNoticeUnit}
-                onValueChange={value => handleValueChange('minimumNoticeUnit', value)}
-                options={timeUnitOptions}
-                className="w-32"
+                value={settings.beforeEventBufferTime}
+                onValueChange={value => handleValueChange('beforeEventBufferTime', value)}
+                options={bufferTimeOptions}
+                className="w-full"
               />
             </div>
-          )}
+            
+            <div>
+              <label className="block text-sm font-medium mb-2">Minimum Notice</label>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="number"
+                  value={settings.minimumNoticeValue}
+                  onChange={e => handleValueChange('minimumNoticeValue', e.target.value)}
+                  className="w-20 px-3 py-2 border border-border rounded-lg text-sm bg-background"
+                />
+                <CustomSelect
+                  value={settings.minimumNoticeUnit}
+                  onValueChange={value => handleValueChange('minimumNoticeUnit', value)}
+                  options={minimumNoticeUnitOptions}
+                  className="w-24"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* After event section */}
+        <div>
+          <h3 className="font-medium text-lg mb-4" style={{ fontSize: '18px', color: '#384252' }}>
+            After event
+          </h3>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Buffer time</label>
+              <CustomSelect
+                value={settings.afterEventBufferTime}
+                onValueChange={value => handleValueChange('afterEventBufferTime', value)}
+                options={bufferTimeOptions}
+                className="w-full"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium mb-2">Time-slot intervals</label>
+              <CustomSelect
+                value={settings.timeSlotIntervals}
+                onValueChange={value => handleValueChange('timeSlotIntervals', value)}
+                options={timeSlotOptions}
+                className="w-full"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-gray-200 pt-8">
+        {/* Minimum booking notice */}
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <h3 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>
+                  Minimum booking notice
+                </h3>
+                <p style={{ fontSize: '14px', color: '#384252' }}>
+                  Require a minimum amount of time before the meeting to book a slot
+                </p>
+              </div>
+              <Switch
+                checked={settings.minimumNotice}
+                onCheckedChange={value => handleToggle('minimumNotice', value)}
+              />
+            </div>
+            
+            {settings.minimumNotice && (
+              <div className="mt-4 flex items-center space-x-2">
+                <input
+                  type="number"
+                  value={settings.minimumNoticeValue}
+                  onChange={e => handleValueChange('minimumNoticeValue', e.target.value)}
+                  className="w-20 px-3 py-2 border border-border rounded-lg text-sm bg-background"
+                />
+                <CustomSelect
+                  value={settings.minimumNoticeUnit}
+                  onValueChange={value => handleValueChange('minimumNoticeUnit', value)}
+                  options={timeUnitOptions}
+                  className="w-32"
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

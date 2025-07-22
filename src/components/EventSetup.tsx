@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Bold, Italic, Link, MapPin, Plus, X, Clock, Settings, Copy, ExternalLink, Code, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Switch } from './ui/switch';
 import { CustomSelect } from './ui/custom-select';
@@ -20,7 +19,7 @@ export const EventSetup = ({ onChange }: EventSetupProps) => {
     customDuration: '',
     showCustomDuration: false,
     durationInput: '',
-    showDurationSuggestions: false
+    showDurationDropdown: false
   });
 
   const [showLinkInput, setShowLinkInput] = useState(false);
@@ -36,6 +35,7 @@ export const EventSetup = ({ onChange }: EventSetupProps) => {
   });
 
   const availableDurations = ['5', '10', '15', '20', '25', '30', '45', '50', '60', '75', '80', '90', '120'];
+  const durationDropdownRef = useRef<HTMLDivElement>(null);
 
   const locationOptions = [
     { value: 'conferencing', label: 'Conferencing', type: 'header' as const },
@@ -72,22 +72,10 @@ export const EventSetup = ({ onChange }: EventSetupProps) => {
     window.open(`https://cal.id/sanskar/${formData.url}`, '_blank');
   };
 
-  const handleDurationInputChange = (value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      durationInput: value,
-      showDurationSuggestions: value.length > 0
-    }));
-  };
-
-  const addDurationFromInput = (duration: string) => {
+  const addDuration = (duration: string) => {
     if (duration && !formData.durations.includes(duration)) {
       handleFormChange('durations', [...formData.durations, duration]);
-      setFormData(prev => ({
-        ...prev,
-        durationInput: '',
-        showDurationSuggestions: false
-      }));
+      setFormData(prev => ({ ...prev, showDurationDropdown: false }));
     }
   };
 
@@ -96,12 +84,27 @@ export const EventSetup = ({ onChange }: EventSetupProps) => {
     handleFormChange('durations', newDurations);
   };
 
-  const getSuggestedDurations = () => {
+  const getRecommendedDurations = () => {
     return availableDurations.filter(duration => 
-      !formData.durations.includes(duration) && 
-      duration.includes(formData.durationInput)
+      !formData.durations.includes(duration)
     );
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (durationDropdownRef.current && !durationDropdownRef.current.contains(event.target as Node)) {
+        setFormData(prev => ({ ...prev, showDurationDropdown: false }));
+      }
+    };
+
+    if (formData.showDurationDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [formData.showDurationDropdown]);
 
   const renderLocationDetails = () => {
     if (['zoom', 'facetime', 'link-meeting'].includes(formData.location)) {
@@ -318,89 +321,66 @@ export const EventSetup = ({ onChange }: EventSetupProps) => {
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-4">Available durations</label>
         
-        {/* Duration Input with Suggestions */}
-        <div className="relative mb-4">
-          <input
-            type="text"
-            value={formData.durationInput}
-            onChange={e => handleDurationInputChange(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === 'Enter' && formData.durationInput) {
-                addDurationFromInput(formData.durationInput);
-              }
-            }}
-            placeholder="Enter duration in minutes (e.g., 15, 30, 45)"
-            className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background text-sm h-10"
-          />
+        {/* Duration Input Field with Inline Tags */}
+        <div className="relative" ref={durationDropdownRef}>
+          <div 
+            className="w-full min-h-[40px] px-3 py-2 border border-border rounded-lg focus-within:ring-2 focus-within:ring-ring bg-background cursor-text flex flex-wrap items-center gap-2"
+            onClick={() => setFormData(prev => ({ ...prev, showDurationDropdown: !prev.showDurationDropdown }))}
+          >
+            {/* Selected Duration Tags */}
+            {formData.durations.map(duration => (
+              <span
+                key={duration}
+                className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-700 text-sm rounded border"
+              >
+                {duration} mins
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeDuration(duration);
+                  }}
+                  className="ml-1 text-gray-500 hover:text-gray-700"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </span>
+            ))}
+            
+            {/* Placeholder text when empty */}
+            {formData.durations.length === 0 && (
+              <span className="text-gray-400 text-sm">Select durations...</span>
+            )}
+            
+            {/* Dropdown Arrow */}
+            <div className="ml-auto">
+              {formData.showDurationDropdown ? (
+                <ChevronUp className="h-4 w-4 text-gray-400" />
+              ) : (
+                <ChevronDown className="h-4 w-4 text-gray-400" />
+              )}
+            </div>
+          </div>
           
-          {formData.showDurationSuggestions && formData.durationInput && getSuggestedDurations().length > 0 && (
-            <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-10 max-h-32 overflow-y-auto">
-              {getSuggestedDurations().map(duration => (
+          {/* Recommendations Dropdown */}
+          {formData.showDurationDropdown && (
+            <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-border rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+              {getRecommendedDurations().map(duration => (
                 <button
                   key={duration}
-                  onClick={() => addDurationFromInput(duration)}
-                  className="w-full text-left px-3 py-2 hover:bg-muted text-sm"
+                  onClick={() => addDuration(duration)}
+                  className="w-full text-left px-3 py-2 hover:bg-gray-50 text-sm"
                 >
                   {duration} mins
                 </button>
               ))}
+              {getRecommendedDurations().length === 0 && (
+                <div className="px-3 py-2 text-sm text-gray-500">
+                  No more duration options
+                </div>
+              )}
             </div>
           )}
         </div>
-
-        {/* Duration Bubbles */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {formData.durations.map(duration => (
-            <div key={duration} className="relative flex items-center space-x-1 px-3 py-2 text-sm rounded border bg-primary/10 border-primary text-primary group">
-              <Clock className="h-3 w-3" />
-              <span>{duration} mins</span>
-              <button
-                onClick={() => removeDuration(duration)}
-                className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <X className="h-2 w-2" />
-              </button>
-            </div>
-          ))}
-        </div>
-        
-        {!formData.showCustomDuration ? (
-          <button
-            onClick={() => setFormData(prev => ({ ...prev, showCustomDuration: true }))}
-            className="text-sm text-primary hover:text-primary/80 flex items-center transition-colors"
-          >
-            <Plus className="h-4 w-4 mr-1" />
-            Add custom duration
-          </button>
-        ) : (
-          <div className="flex items-center space-x-2">
-            <input
-              type="number"
-              value={formData.customDuration}
-              onChange={e => setFormData(prev => ({ ...prev, customDuration: e.target.value }))}
-              placeholder="Duration"
-              className="w-24 px-3 py-2 border border-border rounded text-sm bg-background h-10"
-            />
-            <span className="text-sm">mins</span>
-            <button
-              onClick={() => {
-                if (formData.customDuration && !formData.durations.includes(formData.customDuration)) {
-                  handleFormChange('durations', [...formData.durations, formData.customDuration]);
-                  setFormData(prev => ({ ...prev, showCustomDuration: false, customDuration: '' }));
-                }
-              }}
-              className="px-3 py-2 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90 transition-colors h-10"
-            >
-              Add
-            </button>
-            <button
-              onClick={() => setFormData(prev => ({ ...prev, showCustomDuration: false, customDuration: '' }))}
-              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          </div>
-        )}
       </div>
 
       <div>
