@@ -319,7 +319,7 @@ export default function MyApp() {
             </div>
             
             <div>
-              <label className="block text-sm font-medium mb-2">Brand Color (Dark Theme)</label>
+              
               <div className="flex items-center space-x-3">
                 <input type="color" value={`#${embedSettings.darkBrandColor}`} onChange={e => handleSettingChange('darkBrandColor', e.target.value.slice(1))} className="w-10 h-10 border border-gray-300 rounded cursor-pointer" />
                 <input type="text" value={embedSettings.darkBrandColor} onChange={e => handleSettingChange('darkBrandColor', e.target.value.replace('#', ''))} className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="fafafa" />
