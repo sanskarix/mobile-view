@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Plus, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Switch } from './ui/switch';
 
 export const EventLimits = () => {
@@ -56,15 +56,6 @@ export const EventLimits = () => {
     }
   });
 
-  const [dropdownStates, setDropdownStates] = useState({
-    beforeBufferTime: false,
-    afterBufferTime: false,
-    minimumNoticeUnit: false,
-    timeSlotIntervals: false,
-    futureBookingType: false,
-    offsetUnit: false
-  });
-
   const updateSetting = (section: string, field: string, value: any) => {
     setSettings(prev => ({
       ...prev,
@@ -72,13 +63,6 @@ export const EventLimits = () => {
         ...prev[section as keyof typeof prev],
         [field]: value
       }
-    }));
-  };
-
-  const toggleDropdown = (dropdown: string) => {
-    setDropdownStates(prev => ({
-      ...prev,
-      [dropdown]: !prev[dropdown as keyof typeof prev]
     }));
   };
 
@@ -100,119 +84,93 @@ export const EventLimits = () => {
   };
 
   return (
-    <div className="p-0 max-w-none mx-auto space-y-8">
-      {/* Before and After Event - Side by Side */}
-      <div className="border border-border rounded-lg p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Before Event */}
-          <div className="space-y-4 border-r border-border pr-8">
-            <h3 className="text-lg font-semibold text-foreground mb-4" style={{ fontSize: '16px', color: '#384252' }}>Before event</h3>
-            
-            <div>
-              <label className="block text-sm font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Buffer time</label>
-              <div className="relative">
-                <button
-                  onClick={() => toggleDropdown('beforeBufferTime')}
-                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background text-left flex items-center justify-between h-10"
-                  style={{ fontSize: '14px', color: '#384252' }}
-                >
-                  <span>{settings.beforeEvent.bufferTime === 'no-buffer' ? 'No buffer time' : `${settings.beforeEvent.bufferTime} minutes`}</span>
-                  {dropdownStates.beforeBufferTime ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </button>
-                {dropdownStates.beforeBufferTime && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-10">
-                    <button onClick={() => { updateSetting('beforeEvent', 'bufferTime', 'no-buffer'); toggleDropdown('beforeBufferTime'); }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">No buffer time</button>
-                    <button onClick={() => { updateSetting('beforeEvent', 'bufferTime', '15'); toggleDropdown('beforeBufferTime'); }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">15 minutes</button>
-                    <button onClick={() => { updateSetting('beforeEvent', 'bufferTime', '30'); toggleDropdown('beforeBufferTime'); }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">30 minutes</button>
-                  </div>
-                )}
-              </div>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Minimum Notice</label>
-              <div className="flex space-x-2">
-                <input 
-                  type="number" 
-                  value={settings.beforeEvent.minimumNotice.value} 
-                  onChange={e => updateSetting('beforeEvent', 'minimumNotice', {
-                    ...settings.beforeEvent.minimumNotice,
-                    value: parseInt(e.target.value)
-                  })} 
-                  className="flex-1 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
-                  style={{ fontSize: '14px', color: '#384252' }}
-                />
-                <div className="relative">
-                  <button
-                    onClick={() => toggleDropdown('minimumNoticeUnit')}
-                    className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background flex items-center justify-between min-w-20 h-10"
-                    style={{ fontSize: '14px', color: '#384252' }}
-                  >
-                    <span>{settings.beforeEvent.minimumNotice.unit}</span>
-                    {dropdownStates.minimumNoticeUnit ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />}
-                  </button>
-                  {dropdownStates.minimumNoticeUnit && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-10">
-                      <button onClick={() => { updateSetting('beforeEvent', 'minimumNotice', { ...settings.beforeEvent.minimumNotice, unit: 'hours' }); toggleDropdown('minimumNoticeUnit'); }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">Hours</button>
-                      <button onClick={() => { updateSetting('beforeEvent', 'minimumNotice', { ...settings.beforeEvent.minimumNotice, unit: 'days' }); toggleDropdown('minimumNoticeUnit'); }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">Days</button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+    <div className="p-0 max-w-none mx-auto space-y-6">
+      {/* Before Event */}
+      <div className="pb-6 space-y-4">
+        <h3 className="text-lg font-semibold text-foreground mb-4" style={{ fontSize: '14px', color: '#384252' }}>Before event</h3>
+        
+        <div className="grid grid-cols-2 gap-6">
+          <div>
+            <label className="block text-sm font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Buffer time</label>
+            <select 
+              value={settings.beforeEvent.bufferTime} 
+              onChange={e => updateSetting('beforeEvent', 'bufferTime', e.target.value)} 
+              className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background"
+              style={{ fontSize: '14px', color: '#384252' }}
+            >
+              <option value="no-buffer">No buffer time</option>
+              <option value="15">15 minutes</option>
+              <option value="30">30 minutes</option>
+            </select>
           </div>
-
-          {/* After Event */}
-          <div className="space-y-4 pl-8">
-            <h3 className="font-semibold mb-4" style={{ fontSize: '16px', color: '#384252' }}>After event</h3>
-            
-            <div>
-              <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Buffer time</label>
-              <div className="relative">
-                <button
-                  onClick={() => toggleDropdown('afterBufferTime')}
-                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background text-left flex items-center justify-between h-10"
-                  style={{ fontSize: '14px', color: '#384252' }}
-                >
-                  <span>{settings.afterEvent.bufferTime === 'no-buffer' ? 'No buffer time' : `${settings.afterEvent.bufferTime} minutes`}</span>
-                  {dropdownStates.afterBufferTime ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </button>
-                {dropdownStates.afterBufferTime && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-10">
-                    <button onClick={() => { updateSetting('afterEvent', 'bufferTime', 'no-buffer'); toggleDropdown('afterBufferTime'); }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">No buffer time</button>
-                    <button onClick={() => { updateSetting('afterEvent', 'bufferTime', '15'); toggleDropdown('afterBufferTime'); }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">15 minutes</button>
-                    <button onClick={() => { updateSetting('afterEvent', 'bufferTime', '30'); toggleDropdown('afterBufferTime'); }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">30 minutes</button>
-                  </div>
-                )}
-              </div>
-            </div>
-            
-            <div>
-              <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Time-slot intervals</label>
-              <div className="relative">
-                <button
-                  onClick={() => toggleDropdown('timeSlotIntervals')}
-                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background text-left flex items-center justify-between h-10"
-                  style={{ fontSize: '14px', color: '#384252' }}
-                >
-                  <span>{settings.afterEvent.timeSlotIntervals === 'default' ? 'Use event length (default)' : `${settings.afterEvent.timeSlotIntervals} minutes`}</span>
-                  {dropdownStates.timeSlotIntervals ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                </button>
-                {dropdownStates.timeSlotIntervals && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-10">
-                    <button onClick={() => { updateSetting('afterEvent', 'timeSlotIntervals', 'default'); toggleDropdown('timeSlotIntervals'); }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">Use event length (default)</button>
-                    <button onClick={() => { updateSetting('afterEvent', 'timeSlotIntervals', '15'); toggleDropdown('timeSlotIntervals'); }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">15 minutes</button>
-                    <button onClick={() => { updateSetting('afterEvent', 'timeSlotIntervals', '30'); toggleDropdown('timeSlotIntervals'); }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">30 minutes</button>
-                  </div>
-                )}
-              </div>
+          
+          <div>
+            <label className="block text-sm font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Minimum Notice</label>
+            <div className="flex space-x-2">
+              <input 
+                type="number" 
+                value={settings.beforeEvent.minimumNotice.value} 
+                onChange={e => updateSetting('beforeEvent', 'minimumNotice', {
+                  ...settings.beforeEvent.minimumNotice,
+                  value: parseInt(e.target.value)
+                })} 
+                className="flex-1 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
+                style={{ fontSize: '14px', color: '#384252' }}
+              />
+              <select 
+                value={settings.beforeEvent.minimumNotice.unit} 
+                onChange={e => updateSetting('beforeEvent', 'minimumNotice', {
+                  ...settings.beforeEvent.minimumNotice,
+                  unit: e.target.value
+                })} 
+                className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
+                style={{ fontSize: '14px', color: '#384252' }}
+              >
+                <option value="hours">Hours</option>
+                <option value="days">Days</option>
+              </select>
             </div>
           </div>
         </div>
       </div>
 
+      {/* After Event */}
+      <div className="border-b border-border pb-6">
+        <h3 className="font-semibold mb-4" style={{ fontSize: '14px', color: '#384252' }}>After event</h3>
+        
+        <div className="grid grid-cols-2 gap-6">
+          <div>
+            <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Buffer time</label>
+            <select 
+              value={settings.afterEvent.bufferTime} 
+              onChange={e => updateSetting('afterEvent', 'bufferTime', e.target.value)} 
+              className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
+              style={{ fontSize: '14px', color: '#384252' }}
+            >
+              <option value="no-buffer">No buffer time</option>
+              <option value="15">15 minutes</option>
+              <option value="30">30 minutes</option>
+            </select>
+          </div>
+          
+          <div>
+            <label className="block font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Time-slot intervals</label>
+            <select 
+              value={settings.afterEvent.timeSlotIntervals} 
+              onChange={e => updateSetting('afterEvent', 'timeSlotIntervals', e.target.value)} 
+              className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
+              style={{ fontSize: '14px', color: '#384252' }}
+            >
+              <option value="default">Use event length (default)</option>
+              <option value="15">15 minutes</option>
+              <option value="30">30 minutes</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       {/* Limit Booking Frequency */}
-      <div className="border border-border rounded-lg p-6">
+      <div className="border-b border-border pb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="font-semibold" style={{ fontSize: '14px', color: '#384252' }}>Limit booking frequency</h3>
@@ -236,29 +194,26 @@ export const EventLimits = () => {
                     };
                     updateSetting('limitBookingFrequency', 'limits', newLimits);
                   }} 
-                  className="w-20 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
+                  className="w-20 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
                   style={{ fontSize: '14px', color: '#384252' }}
                 />
-                <div className="relative">
-                  <select 
-                    value={limit.period} 
-                    onChange={e => {
-                      const newLimits = [...settings.limitBookingFrequency.limits];
-                      newLimits[index] = {
-                        ...limit,
-                        period: e.target.value
-                      };
-                      updateSetting('limitBookingFrequency', 'limits', newLimits);
-                    }} 
-                    className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background appearance-none pr-8 h-10"
-                    style={{ fontSize: '14px', color: '#384252' }}
-                  >
-                    <option value="per-day">Per day</option>
-                    <option value="per-week">Per week</option>
-                    <option value="per-month">Per month</option>
-                  </select>
-                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                </div>
+                <select 
+                  value={limit.period} 
+                  onChange={e => {
+                    const newLimits = [...settings.limitBookingFrequency.limits];
+                    newLimits[index] = {
+                      ...limit,
+                      period: e.target.value
+                    };
+                    updateSetting('limitBookingFrequency', 'limits', newLimits);
+                  }} 
+                  className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
+                  style={{ fontSize: '14px', color: '#384252' }}
+                >
+                  <option value="per-day">Per day</option>
+                  <option value="per-week">Per week</option>
+                  <option value="per-month">Per month</option>
+                </select>
               </div>
             ))}
             <button 
@@ -274,7 +229,7 @@ export const EventLimits = () => {
       </div>
 
       {/* Show First Slot Only */}
-      <div className="border border-border rounded-lg p-6">
+      <div className="border-b border-border pb-6">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <h3 className="font-semibold mb-2" style={{ fontSize: '14px', color: '#384252' }}>Only show the first slot of each day as available</h3>
@@ -287,7 +242,7 @@ export const EventLimits = () => {
       </div>
 
       {/* Limit Total Booking Duration */}
-      <div className="border border-border rounded-lg p-6">
+      <div className="border-b border-border pb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="font-semibold" style={{ fontSize: '14px', color: '#384252' }}>Limit total booking duration</h3>
@@ -311,47 +266,41 @@ export const EventLimits = () => {
                     };
                     updateSetting('limitTotalBookingDuration', 'limits', newLimits);
                   }} 
-                  className="w-20 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
+                  className="w-20 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
                   style={{ fontSize: '14px', color: '#384252' }}
                 />
-                <div className="relative">
-                  <select 
-                    value={limit.unit} 
-                    onChange={e => {
-                      const newLimits = [...settings.limitTotalBookingDuration.limits];
-                      newLimits[index] = {
-                        ...limit,
-                        unit: e.target.value
-                      };
-                      updateSetting('limitTotalBookingDuration', 'limits', newLimits);
-                    }} 
-                    className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background appearance-none pr-8 h-10"
-                    style={{ fontSize: '14px', color: '#384252' }}
-                  >
-                    <option value="minutes">Minutes</option>
-                    <option value="hours">Hours</option>
-                  </select>
-                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                </div>
-                <div className="relative">
-                  <select 
-                    value={limit.period} 
-                    onChange={e => {
-                      const newLimits = [...settings.limitTotalBookingDuration.limits];
-                      newLimits[index] = {
-                        ...limit,
-                        period: e.target.value
-                      };
-                      updateSetting('limitTotalBookingDuration', 'limits', newLimits);
-                    }} 
-                    className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background appearance-none pr-8 h-10"
-                    style={{ fontSize: '14px', color: '#384252' }}
-                  >
-                    <option value="per-day">Per day</option>
-                    <option value="per-week">Per week</option>
-                  </select>
-                  <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                </div>
+                <select 
+                  value={limit.unit} 
+                  onChange={e => {
+                    const newLimits = [...settings.limitTotalBookingDuration.limits];
+                    newLimits[index] = {
+                      ...limit,
+                      unit: e.target.value
+                    };
+                    updateSetting('limitTotalBookingDuration', 'limits', newLimits);
+                  }} 
+                  className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
+                  style={{ fontSize: '14px', color: '#384252' }}
+                >
+                  <option value="minutes">Minutes</option>
+                  <option value="hours">Hours</option>
+                </select>
+                <select 
+                  value={limit.period} 
+                  onChange={e => {
+                    const newLimits = [...settings.limitTotalBookingDuration.limits];
+                    newLimits[index] = {
+                      ...limit,
+                      period: e.target.value
+                    };
+                    updateSetting('limitTotalBookingDuration', 'limits', newLimits);
+                  }} 
+                  className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
+                  style={{ fontSize: '14px', color: '#384252' }}
+                >
+                  <option value="per-day">Per day</option>
+                  <option value="per-week">Per week</option>
+                </select>
               </div>
             ))}
             <button 
@@ -367,7 +316,7 @@ export const EventLimits = () => {
       </div>
 
       {/* Limit Future Bookings */}
-      <div className="border border-border rounded-lg p-6">
+      <div className="border-b border-border pb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="font-semibold" style={{ fontSize: '14px', color: '#384252' }}>Limit future bookings</h3>
@@ -377,53 +326,33 @@ export const EventLimits = () => {
         </div>
         
         {settings.limitFutureBookings.enabled && (
-          <div className="space-y-6">
-            {/* Option 1 */}
-            <div className="space-y-4">
-              <h4 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>Option 1</h4>
-              <div className="flex items-center space-x-2">
-                <input 
-                  type="number" 
-                  value={settings.limitFutureBookings.days} 
-                  onChange={e => updateSetting('limitFutureBookings', 'days', parseInt(e.target.value))} 
-                  className="w-20 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
-                  style={{ fontSize: '14px', color: '#384252' }}
-                />
-                <div className="relative">
-                  <button
-                    onClick={() => toggleDropdown('futureBookingType')}
-                    className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background flex items-center justify-between min-w-32 h-10"
-                    style={{ fontSize: '14px', color: '#384252' }}
-                  >
-                    <span>{settings.limitFutureBookings.type === 'business-days' ? 'business days' : 'calendar days'}</span>
-                    {dropdownStates.futureBookingType ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />}
-                  </button>
-                  {dropdownStates.futureBookingType && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-10">
-                      <button onClick={() => { updateSetting('limitFutureBookings', 'type', 'business-days'); toggleDropdown('futureBookingType'); }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">business days</button>
-                      <button onClick={() => { updateSetting('limitFutureBookings', 'type', 'calendar-days'); toggleDropdown('futureBookingType'); }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">calendar days</button>
-                    </div>
-                  )}
-                </div>
-                <span className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>into the future</span>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <input 
-                  type="checkbox" 
-                  id="always-available"
-                  checked={settings.limitFutureBookings.alwaysAvailable}
-                  onChange={e => updateSetting('limitFutureBookings', 'alwaysAvailable', e.target.checked)}
-                />
-                <label htmlFor="always-available" className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>
-                  Always {settings.limitFutureBookings.days} days available
-                </label>
-              </div>
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <input 
+                type="number" 
+                value={settings.limitFutureBookings.days} 
+                onChange={e => updateSetting('limitFutureBookings', 'days', parseInt(e.target.value))} 
+                className="w-20 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
+                style={{ fontSize: '14px', color: '#384252' }}
+              />
+              <select 
+                value={settings.limitFutureBookings.type} 
+                onChange={e => updateSetting('limitFutureBookings', 'type', e.target.value)} 
+                className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
+                style={{ fontSize: '14px', color: '#384252' }}
+              >
+                <option value="business-days">business days</option>
+                <option value="calendar-days">calendar days</option>
+              </select>
+              <span className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>into the future</span>
             </div>
             
-            {/* Option 2 */}
+            <div className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>
+              Always {settings.limitFutureBookings.days} days available
+            </div>
+            
             <div>
-              <h4 className="font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Option 2 - Within a date range</h4>
+              <p className="text-sm font-medium mb-2" style={{ fontSize: '14px', color: '#384252' }}>Within a date range</p>
               <div className="flex items-center space-x-2">
                 <input 
                   type="text" 
@@ -432,7 +361,7 @@ export const EventLimits = () => {
                     ...settings.limitFutureBookings.dateRange,
                     start: e.target.value
                   })} 
-                  className="flex-1 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
+                  className="flex-1 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
                   style={{ fontSize: '14px', color: '#384252' }}
                 />
                 <span className="text-muted-foreground" style={{ fontSize: '14px', color: '#384252' }}>-</span>
@@ -443,7 +372,7 @@ export const EventLimits = () => {
                     ...settings.limitFutureBookings.dateRange,
                     end: e.target.value
                   })} 
-                  className="flex-1 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
+                  className="flex-1 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
                   style={{ fontSize: '14px', color: '#384252' }}
                 />
               </div>
@@ -453,7 +382,7 @@ export const EventLimits = () => {
       </div>
 
       {/* Offset Start Times */}
-      <div className="border border-border rounded-lg p-6">
+      <div>
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="font-semibold" style={{ fontSize: '14px', color: '#384252' }}>Offset start times</h3>
@@ -470,19 +399,17 @@ export const EventLimits = () => {
                 type="number" 
                 value={settings.offsetStartTimes.offset} 
                 onChange={e => updateSetting('offsetStartTimes', 'offset', parseInt(e.target.value))} 
-                className="w-20 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring h-10"
+                className="w-20 px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
                 style={{ fontSize: '14px', color: '#384252' }}
               />
-              <div className="relative">
-                <button
-                  onClick={() => toggleDropdown('offsetUnit')}
-                  className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background flex items-center justify-between min-w-20 h-10"
-                  style={{ fontSize: '14px', color: '#384252' }}
-                >
-                  <span>Minutes</span>
-                  {dropdownStates.offsetUnit ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />}
-                </button>
-              </div>
+              <select 
+                value={settings.offsetStartTimes.unit} 
+                onChange={e => updateSetting('offsetStartTimes', 'unit', e.target.value)} 
+                className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
+                style={{ fontSize: '14px', color: '#384252' }}
+              >
+                <option value="minutes">Minutes</option>
+              </select>
             </div>
             <p className="text-sm" style={{ fontSize: '14px', color: '#384252' }}>
               e.g. this will show time slots to your bookers at {9 + settings.offsetStartTimes.offset / 60}:00 AM instead of 9:00 AM

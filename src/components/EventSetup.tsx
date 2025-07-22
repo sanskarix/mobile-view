@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bold, Italic, Link, MapPin, Plus, X, Clock, Settings, Copy, ExternalLink, Code, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Bold, Italic, Link, MapPin, Plus, X, Clock, Settings, Copy, ExternalLink, Code, Trash2 } from 'lucide-react';
 import { Switch } from './ui/switch';
 interface EventSetupProps {
   onChange?: () => void;
@@ -16,9 +16,7 @@ export const EventSetup = ({
     allowBookerToSelectDuration: true,
     location: 'google-meet',
     customDuration: '',
-    showCustomDuration: false,
-    durationInput: '',
-    showDurationSuggestions: false
+    showCustomDuration: false
   });
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState('google-meet');
@@ -33,7 +31,7 @@ export const EventSetup = ({
     googleMapsLink: '',
     showGoogleMaps: false
   });
-  const availableDurations = ['15', '30', '45', '60', '90', '120'];
+  const availableDurations = ['15', '30', '45', '60'];
   const locationOptions = [{
     id: 'conferencing',
     label: 'Conferencing',
@@ -126,29 +124,12 @@ export const EventSetup = ({
     setShowLocationDropdown(false);
     handleFormChange('location', locationId);
   };
-  const handleDurationInputChange = (value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      durationInput: value,
-      showDurationSuggestions: true
-    }));
-  };
-  const addDurationFromInput = () => {
-    if (formData.durationInput && !formData.durations.includes(formData.durationInput)) {
-      handleFormChange('durations', [...formData.durations, formData.durationInput]);
-      setFormData(prev => ({
-        ...prev,
-        durationInput: '',
-        showDurationSuggestions: false
-      }));
+  const handleLinkInsert = () => {
+    if (linkUrl) {
+      document.execCommand('createLink', false, linkUrl);
+      setShowLinkInput(false);
+      setLinkUrl('');
     }
-  };
-  const removeDuration = (duration: string) => {
-    const newDurations = formData.durations.filter(d => d !== duration);
-    handleFormChange('durations', newDurations);
-  };
-  const getSuggestedDurations = () => {
-    return availableDurations.filter(duration => !formData.durations.includes(duration) && duration.includes(formData.durationInput));
   };
   const renderLocationDetails = () => {
     if (['zoom', 'facetime', 'link-meeting'].includes(selectedLocation)) {
@@ -157,7 +138,7 @@ export const EventSetup = ({
           <input type="url" value={locationDetails.meetingLink} onChange={e => setLocationDetails(prev => ({
           ...prev,
           meetingLink: e.target.value
-        }))} placeholder="https://zoom.us/j/..." className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background h-10" />
+        }))} placeholder="https://zoom.us/j/..." className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background" />
         </div>;
     }
     if (selectedLocation === 'in-person') {
@@ -181,7 +162,7 @@ export const EventSetup = ({
                 <input type="url" value={locationDetails.googleMapsLink} onChange={e => setLocationDetails(prev => ({
               ...prev,
               googleMapsLink: e.target.value
-            }))} placeholder="https://maps.google.com/..." className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background h-10" />
+            }))} placeholder="https://maps.google.com/..." className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background" />
               </div>}
           </div>
         </div>;
@@ -193,7 +174,7 @@ export const EventSetup = ({
             <input type="tel" value={locationDetails.phone} onChange={e => setLocationDetails(prev => ({
             ...prev,
             phone: e.target.value
-          }))} placeholder="+1 (555) 000-0000" className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background h-10" />
+          }))} placeholder="+1 (555) 000-0000" className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background" />
           </div>
           <div className="flex items-center">
             <input type="checkbox" id="display-phone" checked={locationDetails.displayPhone} onChange={e => setLocationDetails(prev => ({
@@ -210,8 +191,8 @@ export const EventSetup = ({
   };
   return <div className="p-0 max-w-none mx-auto space-y-6">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
-        <input type="text" value={formData.title} onChange={e => handleFormChange('title', e.target.value)} className="w-full px-2 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm text-gray-600 h-10" />
+        <label className="block text-sm font-small text-gray-700 mb-2">Title</label>
+        <input type="text" value={formData.title} onChange={e => handleFormChange('title', e.target.value)} className="w-full px-2 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm text-gray-600" />
       </div>
 
       <div>
@@ -229,7 +210,7 @@ export const EventSetup = ({
                 <Link className="h-4 w-4 text-muted-foreground" />
               </button>
               {showLinkInput && <div className="absolute top-full left-0 mt-1 p-3 bg-popover border border-border rounded-lg shadow-lg z-10 w-64 animate-scale-in">
-                  <input type="url" placeholder="Enter URL" value={linkUrl} onChange={e => setLinkUrl(e.target.value)} className="w-full px-3 py-2 border border-border rounded mb-2 text-sm bg-background h-10" autoFocus />
+                  <input type="url" placeholder="Enter URL" value={linkUrl} onChange={e => setLinkUrl(e.target.value)} className="w-full px-3 py-2 border border-border rounded mb-2 text-sm bg-background" autoFocus />
                   <div className="flex justify-end space-x-2">
                     <button onClick={() => setShowLinkInput(false)} className="px-3 py-1 text-sm text-muted-foreground hover:text-foreground">
                       Cancel
@@ -269,16 +250,20 @@ export const EventSetup = ({
           <label className="block text-sm font-medium text-gray-700">URL</label>
         </div>
         <div className="flex items-center">
-          <span className="inline-flex items-center px-4 py-3 border border-r-0 border-border bg-muted text-muted-foreground text-sm rounded-l-lg h-10">
+          <span className="inline-flex items-center px-4 py-3 border border-r-0 border-border bg-muted text-muted-foreground text-sm rounded-l-lg">
             cal.id/sanskar/
           </span>
-          <input type="text" value={formData.url} onChange={e => handleFormChange('url', e.target.value)} className="flex-1 px-4 py-3 border border-border focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm h-10" />
-          <div className="flex items-center border border-l-0 border-border rounded-r-lg bg-background h-10">
-            <button onClick={handleCopyUrl} title="Copy URL" className="p-3.5 transition-colors border-r border-border bg-[#64748b] hover:bg-[#64748b]/80 rounded-none h-10 flex items-center justify-center">
-              <Copy className="h-4 w-4 text-white" />
+          <input type="text" value={formData.url} onChange={e => handleFormChange('url', e.target.value)} className="flex-1 px-4 py-3 border border-border focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm" />
+          <div className="flex items-center border border-l-0 border-border rounded-r-lg bg-background">
+            <button onClick={handleCopyUrl} title="Copy URL" className="p-3.5 transition-colors border-r border-border bg-[64748B] bg-inherit">
+              <Copy className="h-4 w-4" style={{
+              color: '#384252'
+            }} />
             </button>
-            <button onClick={handlePreviewUrl} className="p-3 hover:bg-muted transition-colors rounded-r-lg bg-[#64748b] hover:bg-[#64748b]/80 h-10 flex items-center justify-center" title="Preview">
-              <ExternalLink className="h-4 w-4 text-white" />
+            <button onClick={handlePreviewUrl} className="p-3 hover:bg-muted transition-colors rounded-r-lg" title="Preview">
+              <ExternalLink className="h-4 w-4" style={{
+              color: '#384252'
+            }} />
             </button>
           </div>
           {copiedUrl && <div className="absolute bg-gray-800 text-white text-xs px-2 py-1 rounded ml-2 z-10">
@@ -289,38 +274,18 @@ export const EventSetup = ({
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-4">Available durations</label>
-        
-        {/* Duration Input with Suggestions */}
-        <div className="relative mb-4">
-          <input type="text" value={formData.durationInput} onChange={e => handleDurationInputChange(e.target.value)} onKeyDown={e => {
-          if (e.key === 'Enter') {
-            addDurationFromInput();
-          }
-        }} placeholder="Enter duration in minutes (e.g., 15, 30, 45)" className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background text-sm h-10" />
-          
-          {formData.showDurationSuggestions && formData.durationInput && getSuggestedDurations().length > 0 && <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-10 max-h-32 overflow-y-auto">
-              {getSuggestedDurations().map(duration => <button key={duration} onClick={() => {
-            handleFormChange('durations', [...formData.durations, duration]);
-            setFormData(prev => ({
-              ...prev,
-              durationInput: '',
-              showDurationSuggestions: false
-            }));
-          }} className="w-full text-left px-3 py-2 hover:bg-muted text-sm">
-                  {duration} mins
-                </button>)}
-            </div>}
-        </div>
-
-        {/* Duration Bubbles */}
         <div className="flex flex-wrap gap-2 mb-4">
-          {formData.durations.map(duration => <div key={duration} className="relative flex items-center space-x-1 px-3 py-2 text-sm rounded border bg-primary/10 border-primary text-primary group">
+          {availableDurations.map(duration => <button key={duration} onClick={() => {
+          const newDurations = formData.durations.includes(duration) ? formData.durations.filter(d => d !== duration) : [...formData.durations, duration];
+          handleFormChange('durations', newDurations);
+        }} className={`px-3 py-2 text-sm rounded border transition-colors flex items-center space-x-1 ${formData.durations.includes(duration) ? 'bg-primary/10 border-primary text-primary' : 'bg-background border-border text-gray-600 hover:bg-muted'}`}>
               <Clock className="h-3 w-3" />
               <span>{duration} mins</span>
-              <button onClick={() => removeDuration(duration)} className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                <X className="h-2 w-2" />
-              </button>
-            </div>)}
+            </button>)}
+          {formData.durations.filter(d => !availableDurations.includes(d)).map(duration => <div key={duration} className="flex items-center space-x-1 px-3 py-2 text-sm rounded border bg-primary/10 border-primary text-primary">
+                <Clock className="h-3 w-3" />
+                <span>{duration} mins</span>
+              </div>)}
         </div>
         
         {!formData.showCustomDuration ? <button onClick={() => setFormData(prev => ({
@@ -333,9 +298,18 @@ export const EventSetup = ({
             <input type="number" value={formData.customDuration} onChange={e => setFormData(prev => ({
           ...prev,
           customDuration: e.target.value
-        }))} placeholder="Duration" className="w-24 px-3 py-2 border border-border rounded text-sm bg-background h-10" />
+        }))} placeholder="Duration" className="w-24 px-3 py-2 border border-border rounded text-sm bg-background" />
             <span className="text-sm">mins</span>
-            <button onClick={addCustomDuration} className="px-3 py-2 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90 transition-colors h-10">
+            <button onClick={() => {
+          if (formData.customDuration && !formData.durations.includes(formData.customDuration)) {
+            handleFormChange('durations', [...formData.durations, formData.customDuration]);
+            setFormData(prev => ({
+              ...prev,
+              customDuration: '',
+              showCustomDuration: false
+            }));
+          }
+        }} className="px-3 py-2 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90 transition-colors">
               Add
             </button>
             <button onClick={() => setFormData(prev => ({
@@ -350,12 +324,9 @@ export const EventSetup = ({
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Default duration</label>
-        <div className="relative">
-          <select value={formData.defaultDuration} onChange={e => handleFormChange('defaultDuration', e.target.value)} className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm h-10 appearance-none pr-10">
-            {formData.durations.map(duration => <option key={duration} value={duration}>{duration} mins</option>)}
-          </select>
-          <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-        </div>
+        <select value={formData.defaultDuration} onChange={e => handleFormChange('defaultDuration', e.target.value)} className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm">
+          {formData.durations.map(duration => <option key={duration} value={duration}>{duration} mins</option>)}
+        </select>
       </div>
 
       <div>
@@ -375,7 +346,7 @@ export const EventSetup = ({
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
         <div className="relative">
-          <button onClick={() => setShowLocationDropdown(!showLocationDropdown)} className="w-full flex items-center justify-between p-4 border border-border rounded-lg hover:border-border/60 focus:ring-2 focus:ring-ring bg-background transition-colors h-10">
+          <button onClick={() => setShowLocationDropdown(!showLocationDropdown)} className="w-full flex items-center justify-between p-4 border border-border rounded-lg hover:border-border/60 focus:ring-2 focus:ring-ring bg-background transition-colors">
             <div className="flex items-center">
               <div className="w-8 h-8 bg-primary rounded flex items-center justify-center mr-3">
                 <span className="text-primary-foreground text-xs font-bold">
@@ -386,7 +357,6 @@ export const EventSetup = ({
                 {locationOptions.find(opt => opt.id === selectedLocation)?.label || 'Select location'}
               </span>
             </div>
-            {showLocationDropdown ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
           </button>
           
           {showLocationDropdown && <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-10 max-h-60 overflow-y-auto animate-scale-in">
@@ -411,6 +381,7 @@ export const EventSetup = ({
 
       <div className="flex justify-between items-center pt-8 border-t border-border">
         <div className="flex -space-x-0 mx-0">
+          
           <button className="flex items-center px-4 py-2 text-sm border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition-colors">
             <Trash2 className="h-4 w-4 mr-2" />
             Delete event

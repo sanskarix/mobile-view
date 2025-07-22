@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useOutletContext } from 'react-router-dom';
 import { Settings, Shield, Zap, RotateCcw, Smartphone, Workflow, Webhook, Bolt, Clock2 } from 'lucide-react';
@@ -51,7 +50,6 @@ const tabs = [{
   name: 'Webhooks',
   icon: Webhook
 }];
-
 export const EditEvent = () => {
   const {
     eventId,
@@ -91,19 +89,7 @@ export const EditEvent = () => {
       description: 'Configure event details, availability and integrations.',
       enabled: true,
       onEnabledChange: (enabled: boolean) => {
-        setHeaderMeta({
-          title: 'Edit Event',
-          description: 'Configure event details, availability and integrations.',
-          enabled,
-          onEnabledChange: (newEnabled: boolean) => {
-            setHeaderMeta({
-              title: 'Edit Event',
-              description: 'Configure event details, availability and integrations.',
-              enabled: newEnabled,
-              onEnabledChange: () => {}
-            });
-          }
-        });
+        setHeaderMeta(prev => ({ ...prev, enabled }));
       }
     });
   }, [setHeaderMeta]);
