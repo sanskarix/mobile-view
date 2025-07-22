@@ -185,7 +185,7 @@ export const EventAdvanced = () => {
               Use "Add to calendar" email as the organizer
               <button
                 className="ml-2 p-1 hover:bg-gray-100 rounded-full group relative"
-                title="If enabled, we'll display the email address from your \"Add to calendar\" as organizer and send confirmation emails there"
+                title="If enabled, we'll display the email address from your Add to calendar as organizer and send confirmation emails there"
               >
                 <Info className="h-4 w-4 text-gray-400" />
                 <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
