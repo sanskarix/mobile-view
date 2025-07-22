@@ -116,7 +116,7 @@ export const EventLimits = () => {
               <label className="block text-sm font-medium mb-3" style={{
               color: '#384252'
             }}>Minimum Notice</label>
-              <div className="flex items-center space-x-3">
+              <div className="font-semibold mb-2">
                 <input type="number" value={settings.beforeMinimumNoticeValue} onChange={e => handleValueChange('beforeMinimumNoticeValue', e.target.value)} className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white" style={{
                 fontSize: '14px'
               }} />
