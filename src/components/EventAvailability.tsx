@@ -2,13 +2,21 @@
 import React, { useState } from 'react';
 import { ChevronDown, Clock, Edit, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { CustomSelect } from './ui/custom-select';
 
 export const EventAvailability = () => {
   const navigate = useNavigate();
+  const [selectedSchedule, setSelectedSchedule] = useState('default');
 
   const handleEditAvailability = () => {
     navigate('/availability');
   };
+
+  const scheduleOptions = [
+    { value: 'default', label: 'Working Hours - Default' },
+    { value: 'weekend', label: 'Weekend Schedule' },
+    { value: 'holiday', label: 'Holiday Schedule' }
+  ];
 
   const weeklySchedule = [
     { day: 'Monday', startTime: '9:00 am', endTime: '5:00 pm', available: true },
@@ -24,9 +32,13 @@ export const EventAvailability = () => {
     <div className="p-6 max-w-none mx-auto space-y-6 border border-gray-200 rounded-lg" style={{ fontSize: '14px', color: '#384252' }}>
       {/* Header with dropdown */}
       <div className="flex items-center justify-between border-b border-border pb-4">
-        <div className="flex items-center space-x-2">
-          <h3 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>Working Hours - Default</h3>
-          <ChevronDown className="h-5 w-5 text-muted-foreground" />
+        <div className="flex items-center space-x-2 flex-1">
+          <CustomSelect
+            value={selectedSchedule}
+            onValueChange={setSelectedSchedule}
+            options={scheduleOptions}
+            className="max-w-xs"
+          />
         </div>
       </div>
 
