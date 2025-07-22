@@ -13,6 +13,7 @@ import type { DateRange } from 'react-day-picker';
 import type { HeaderMeta } from '../components/Layout';
 import { useOutletContext } from 'react-router-dom';
 
+
 interface Meeting {
   id: string;
   title: string;
@@ -49,7 +50,6 @@ interface Meeting {
       completed: boolean;
     }>;
   };
-  additionalNotes?: string;
 }
 
 const mockMeetings: Meeting[] = [
@@ -76,8 +76,7 @@ const mockMeetings: Meeting[] = [
     },
     eventType: 'Product Hunt Chats',
     status: 'upcoming',
-    isToday: true,
-    additionalNotes: 'Please prepare your product demo and bring any relevant materials for the discussion.'
+    isToday: true
   },
   {
     id: '2',
@@ -137,8 +136,7 @@ const mockMeetings: Meeting[] = [
     },
     eventType: 'Team Strategy Session',
     status: 'upcoming',
-    isToday: false,
-    additionalNotes: 'Review the quarterly goals and prepare strategy recommendations for the next quarter.'
+    isToday: false
   },
   {
     id: '4',
@@ -243,8 +241,7 @@ const mockMeetings: Meeting[] = [
     },
     eventType: 'Design Review',
     status: 'upcoming',
-    isToday: false,
-    additionalNotes: 'Please review the latest design mockups and come prepared with feedback on the user interface changes.'
+    isToday: false
   },
   {
     id: '7',
@@ -553,14 +550,7 @@ export default function Bookings() {
 
   const handleExport = () => {
     toast({
-      description: (
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-[#008c44] flex items-center justify-center">
-            <Check className="w-3 h-3 text-white" />
-          </div>
-          Export successful: Your bookings will be sent to your email shortly.
-        </div>
-      ),
+      description: "Export successful: Your bookings will be sent to your email shortly.",
       duration: 3000,
     });
   };
@@ -628,9 +618,36 @@ export default function Bookings() {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
-      description: "Email copied",
+      description: "Email copied to clipboard",
       duration: 2000,
     });
+  };
+
+  const getEventIcon = (eventType: string) => {
+    switch (eventType) {
+      case 'Product Hunt Chats':
+        return <Rocket className="h-5 w-5 text-primary" />;
+      case 'Discovery Call':
+        return <Search className="h-5 w-5 text-primary" />;
+      case 'Strategy Session':
+        return <Target className="h-5 w-5 text-primary" />;
+      case 'Design Review':
+        return <Eye className="h-5 w-5 text-primary" />;
+      case 'Client Consultation':
+        return <Briefcase className="h-5 w-5 text-primary" />;
+      case 'Weekly Standup':
+        return <Calendar className="h-5 w-5 text-primary" />;
+      case 'Onboarding Call':
+        return <GraduationCap className="h-5 w-5 text-primary" />;
+      case 'Product Demo':
+        return <Video className="h-5 w-5 text-primary" />;
+      case 'Team Strategy Session':
+        return <Users className="h-5 w-5 text-primary" />;
+      case 'Sales Pipeline Review':
+        return <Zap className="h-5 w-5 text-primary" />;
+      default:
+        return <Video className="h-5 w-5 text-primary" />;
+    }
   };
 
   const MeetingCard = ({ meeting }: { meeting: Meeting }) => {
@@ -785,22 +802,29 @@ export default function Bookings() {
       >
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-4 flex-1">
+            {/* Icon */}
+            <div className="flex-shrink-0">
+              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                {getEventIcon(meeting.eventType)}
+              </div>
+            </div>
+
             {/* Content */}
             <div className="flex-1 min-w-0">
               {/* Title and Attendees */}
               <div className="flex items-center space-x-2 mb-2">
-                <h3 className={`text-lg font-semibold ${meeting.status === 'canceled' ? 'line-through text-muted-foreground' : 'text-gray-700'}`}>
+                <h3 className={`text-lg font-semibold ${meeting.status === 'canceled' ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
                   {meeting.title}
                 </h3>
-                <span className="text-muted-foreground">with</span>
+                <span className="text-muted-foreground">•</span>
                 <div className="flex items-center space-x-1">
                   {attendeeDisplay && (
                     <div className="relative">
                       {typeof attendeeDisplay === 'object' ? (
                         <div className="flex items-center space-x-1">
-                          <span className="text-sm text-gray-600">{attendeeDisplay.display}</span>
+                          <span className="text-sm text-muted-foreground">{attendeeDisplay.display}</span>
                           <button
-                            className="text-sm text-gray-600 hover:text-foreground font-medium"
+                            className="text-sm text-muted-foreground hover:text-foreground font-medium"
                             onClick={(e) => {
                               e.stopPropagation();
                               setShowAttendeesDropdown(showAttendeesDropdown === meeting.id ? null : meeting.id);
@@ -811,7 +835,7 @@ export default function Bookings() {
                         </div>
                       ) : (
                         <button
-                          className="text-sm text-gray-600 hover:text-foreground font-medium"
+                          className="text-sm text-muted-foreground hover:text-foreground font-medium"
                           onClick={(e) => {
                             e.stopPropagation();
                             copyToClipboard(meeting.attendees[0].email);
@@ -847,7 +871,7 @@ export default function Bookings() {
               </div>
 
               {/* Time */}
-              <div className="text-sm text-gray-600 mb-3">
+              <div className="text-sm text-muted-foreground mb-3">
                 {meeting.isToday ? 'Today' : meeting.date} • {meeting.time} - {meeting.endTime}
               </div>
 
@@ -861,7 +885,7 @@ export default function Bookings() {
                         <span>Join {meeting.location.name}</span>
                       </button>
                     ) : (
-                      <div className="flex items-center space-x-2 text-sm text-gray-600">
+                      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                         <MapPin className="h-4 w-4" />
                         <span>{meeting.location.address}</span>
                       </div>
@@ -872,7 +896,7 @@ export default function Bookings() {
                   {meeting.status === 'recurring' && meeting.recurringSchedule && (
                     <div className="relative">
                       <button
-                        className="text-xs text-gray-600 hover:text-foreground transition-colors"
+                        className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                         onMouseEnter={() => setShowRecurringHover(meeting.id)}
                         onMouseLeave={() => setShowRecurringHover(null)}
                         onClick={(e) => e.stopPropagation()}
@@ -904,7 +928,7 @@ export default function Bookings() {
                 <div className="ml-auto">
                   {isHost ? (
                     <button
-                      className="flex items-center gap-2 text-sm text-gray-600 hover:text-foreground transition-colors"
+                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                       onClick={(e) => {
                         e.stopPropagation();
                         setExpandedMeeting(isExpanded ? null : meeting.id);
@@ -914,7 +938,7 @@ export default function Bookings() {
                       {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                     </button>
                   ) : (
-                    <span className="text-sm text-gray-600">Host</span>
+                    <span className="text-sm text-muted-foreground">Host</span>
                   )}
                 </div>
               </div>
@@ -931,13 +955,13 @@ export default function Bookings() {
             <div className="grid grid-cols-2 gap-8">
               <div className="space-y-4">
                 <div>
-                  <div className="text-sm font-medium text-gray-700 mb-1">Duration</div>
-                  <div className="text-sm text-gray-600">{meeting.duration}</div>
+                  <div className="text-sm font-medium text-foreground mb-1">Duration</div>
+                  <div className="text-sm text-muted-foreground">{meeting.duration}</div>
                 </div>
                 
                 <div>
-                  <div className="text-sm font-medium text-gray-700 mb-2">Invitee Details</div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="text-sm font-medium text-foreground mb-2">Invitee Details</div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <span>{meeting.attendees[0]?.name}</span>
                     <span>•</span>
                     <span>{meeting.attendees[0]?.timezone}</span>
@@ -954,7 +978,7 @@ export default function Bookings() {
 
                 {meeting.attendees.length > 1 && (
                   <div>
-                    <div className="text-sm font-medium text-gray-700 mb-2">Attendees</div>
+                    <div className="text-sm font-medium text-foreground mb-2">Attendees</div>
                     <div className="flex flex-wrap gap-2">
                       {meeting.attendees.slice(1).map((attendee, index) => (
                         <div key={index} className="relative">
@@ -989,13 +1013,6 @@ export default function Bookings() {
                     </div>
                   </div>
                 )}
-
-                {meeting.additionalNotes && (
-                  <div>
-                    <div className="text-sm font-medium text-gray-700 mb-2">Additional Notes</div>
-                    <div className="text-sm text-gray-600">{meeting.additionalNotes}</div>
-                  </div>
-                )}
               </div>
 
               {/* Action Buttons for Expanded View */}
@@ -1011,7 +1028,7 @@ export default function Bookings() {
                       setShowMeetingNotes(true);
                     }}
                   >
-                    Your Notes
+                    Meeting Notes
                   </Button>
                   {meeting.isToday && isCurrentTime(meeting.time) && (
                     <Button
@@ -1053,7 +1070,7 @@ export default function Bookings() {
 
         {/* Header with Tabs and Action Buttons */}
         <div className="flex items-center justify-between">
-          {/* Tabs - Updated styling with underline on hover */}
+          {/* Tabs - Updated styling to match teams tabs */}
           <div className="flex border-b border-border">
             {[
               { value: 'upcoming', label: 'Upcoming' },
@@ -1065,10 +1082,10 @@ export default function Bookings() {
               <button
                 key={tab.value}
                 onClick={() => setActiveTab(tab.value)}
-                className={`px-4 py-2 text-sm font-medium transition-colors relative hover:after:scale-x-100 after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-gray-300 after:origin-bottom-right after:transition-transform after:duration-300 hover:after:origin-bottom-left ${
+                className={`px-4 py-2 text-sm font-medium transition-colors relative ${
                   activeTab === tab.value
-                    ? 'text-foreground border-b-2 border-primary after:scale-x-0'
-                    : 'text-gray-600 hover:text-foreground'
+                    ? 'text-foreground border-b-2 border-primary'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {tab.label}
@@ -1250,7 +1267,7 @@ export default function Bookings() {
         <div className="space-y-6">
           {todayMeetings.length > 0 && (
             <div className="space-y-3">
-              <h2 className="text-sm font-medium text-gray-600">Today</h2>
+              <h2 className="text-sm font-medium text-muted-foreground">Today</h2>
               <div className="space-y-3">
                 {todayMeetings.map((meeting) => (
                   <MeetingCard key={meeting.id} meeting={meeting} />
@@ -1270,7 +1287,7 @@ export default function Bookings() {
           )}
 
           {todayMeetings.length === 0 && otherMeetings.length === 0 && (
-            <div className="text-center py-8 text-gray-600">
+            <div className="text-center py-8 text-muted-foreground">
               No {activeTab} bookings
             </div>
           )}
@@ -1280,7 +1297,7 @@ export default function Bookings() {
         {showAddGuests && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
-              <h2 className="text-xl font-semibold mb-2 text-gray-700">Add Guests</h2>
+              <h2 className="text-xl font-semibold mb-2">Add Guests</h2>
               <div className="flex items-center gap-2 mb-6">
                 <span className="text-sm text-gray-600">Add email addresses to add guests.</span>
                 <Tooltip>
@@ -1301,7 +1318,7 @@ export default function Bookings() {
                       placeholder="guest@example.com"
                       value={email}
                       onChange={(e) => updateGuestEmail(index, e.target.value)}
-                      className="flex-1 p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-600"
+                      className="flex-1 p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     {guestEmails.length > 1 && (
                       <Button
@@ -1356,8 +1373,8 @@ export default function Bookings() {
         {showMeetingNotes && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-2xl shadow-xl">
-              <h2 className="text-xl font-semibold mb-2 text-gray-700">Your Notes</h2>
-              <p className="text-sm text-gray-600 mb-6">These notes are only visible to you</p>
+              <h2 className="text-xl font-semibold mb-2">Meeting Notes</h2>
+              <p className="text-sm text-gray-600 mb-6">Add notes to your meeting</p>
               
               <div className="mb-6">
                 <div className="flex items-center space-x-1 mb-3 p-3 border border-gray-200 rounded-t-md bg-gray-50">
@@ -1373,7 +1390,7 @@ export default function Bookings() {
                 <textarea
                   value={meetingNotes}
                   onChange={(e) => setMeetingNotes(e.target.value)}
-                  className="w-full h-32 p-4 border border-gray-200 rounded-b-md border-t-0 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-600"
+                  className="w-full h-32 p-4 border border-gray-200 rounded-b-md border-t-0 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Add your meeting notes here..."
                 />
               </div>
@@ -1394,15 +1411,10 @@ export default function Bookings() {
         {showCancelSelection && selectedMeeting && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-2xl shadow-xl">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-6 h-6 rounded-full bg-[#f1352c] flex items-center justify-center">
-                  <X className="w-4 h-4 text-white" />
-                </div>
-                <h2 className="text-xl font-semibold text-gray-700">Cancel Event</h2>
-              </div>
+              <h2 className="text-xl font-semibold mb-6 text-gray-900 text-center">Cancel Event</h2>
               
               <div className="mb-6">
-                <label className="block text-sm font-medium mb-3 text-gray-700">Select the meetings you want to cancel</label>
+                <label className="block text-sm font-medium mb-3 text-gray-900">Select the meetings you want to cancel</label>
                 <div className="space-y-2 max-h-64 overflow-y-auto">
                   <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
                     <span className="text-sm font-medium">Select All</span>
@@ -1467,23 +1479,63 @@ export default function Bookings() {
         {showCancelConfirm && selectedMeeting && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-xl">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-6 h-6 rounded-full bg-[#f1352c] flex items-center justify-center">
-                  <X className="w-4 h-4 text-white" />
-                </div>
-                <h2 className="text-xl font-semibold text-gray-700">Cancel Event</h2>
-              </div>
+              <h2 className="text-xl font-semibold mb-2 text-gray-900 text-center">Cancel Event</h2>
               <p className="text-sm text-gray-600 mb-6 text-center">We sent an email with a calendar invitation with the details to everyone</p>
+              
+              {/* Host and Attendees */}
+              <div className="mb-6">
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {/* Host */}
+                  <div className="relative">
+                    <button className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors">
+                      <span>{selectedMeeting.host}</span>
+                      <span
+                        className="px-2 py-0.5 text-xs rounded-full"
+                        style={{ backgroundColor: '#007ee5', color: 'white' }}
+                      >
+                        Host
+                      </span>
+                    </button>
+                  </div>
+                  
+                  {/* Attendees */}
+                  {selectedMeeting.attendees.map((attendee, index) => (
+                    <div key={index} className="relative">
+                      <button
+                        className="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors"
+                        onMouseEnter={() => setShowAttendeeDetails(`cancel-${selectedMeeting.id}-${index}`)}
+                        onMouseLeave={() => setShowAttendeeDetails(null)}
+                      >
+                        {attendee.name}
+                      </button>
+                      {showAttendeeDetails === `cancel-${selectedMeeting.id}-${index}` && (
+                        <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-64">
+                          <div className="p-3 space-y-2">
+                            <div className="flex items-center gap-2">
+                              <Mail className="h-4 w-4 text-muted-foreground" />
+                              <span className="text-sm text-foreground">{attendee.email}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Globe className="h-4 w-4 text-muted-foreground" />
+                              <span className="text-sm text-foreground">{attendee.timezone}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
 
               {selectedMeeting.status === 'recurring' && selectedRecurringDates.length > 0 ? (
                 <div className="space-y-3 mb-6 p-4 bg-gray-50 rounded-lg">
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">Event:</span>
-                    <span className="text-gray-700">{selectedMeeting.eventType}</span>
+                    <span className="text-gray-900">{selectedMeeting.eventType}</span>
                   </div>
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">When:</span>
-                    <div className="text-gray-700">
+                    <div className="text-gray-900">
                       {selectedRecurringDates.map((date, index) => (
                         <div key={index}>{date}</div>
                       ))}
@@ -1491,72 +1543,40 @@ export default function Bookings() {
                   </div>
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">With:</span>
-                    <div className="text-gray-700">
-                      {selectedMeeting.attendees.map((attendee, index) => (
-                        <Tooltip key={index}>
-                          <TooltipTrigger asChild>
-                            <button
-                              className="mr-2 hover:underline"
-                              onClick={() => copyToClipboard(attendee.email)}
-                            >
-                              {attendee.name}
-                            </button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Email copied</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      ))}
-                    </div>
+                    <span className="text-gray-900">{selectedMeeting.attendees.map(a => a.name).join(', ')}</span>
                   </div>
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">Where:</span>
-                    <span className="text-gray-700">{selectedMeeting.location.name}</span>
+                    <span className="text-gray-900">{selectedMeeting.location.name}</span>
                   </div>
                 </div>
               ) : (
                 <div className="space-y-3 mb-6 p-4 bg-gray-50 rounded-lg">
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">Event:</span>
-                    <span className="text-gray-700">{selectedMeeting.eventType}</span>
+                    <span className="text-gray-900">{selectedMeeting.eventType}</span>
                   </div>
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">When:</span>
-                    <span className="text-gray-700">{selectedMeeting.date} {selectedMeeting.time} - {selectedMeeting.endTime}</span>
+                    <span className="text-gray-900">{selectedMeeting.date} {selectedMeeting.time} - {selectedMeeting.endTime}</span>
                   </div>
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">With:</span>
-                    <div className="text-gray-700">
-                      {selectedMeeting.attendees.map((attendee, index) => (
-                        <Tooltip key={index}>
-                          <TooltipTrigger asChild>
-                            <button
-                              className="mr-2 hover:underline"
-                              onClick={() => copyToClipboard(attendee.email)}
-                            >
-                              {attendee.name}
-                            </button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Email copied</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      ))}
-                    </div>
+                    <span className="text-gray-900">{selectedMeeting.attendees.map(a => a.name).join(', ')}</span>
                   </div>
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">Where:</span>
-                    <span className="text-gray-700">{selectedMeeting.location.name}</span>
+                    <span className="text-gray-900">{selectedMeeting.location.name}</span>
                   </div>
                 </div>
               )}
 
               <div className="mb-6">
-                <label className="block text-sm font-medium mb-3 text-gray-700">Reason for cancellation (optional)</label>
+                <label className="block text-sm font-medium mb-3 text-gray-900">Reason for cancellation (optional)</label>
                 <textarea
                   value={cancelReason}
                   onChange={(e) => setCancelReason(e.target.value)}
-                  className="w-full h-24 p-3 border border-gray-200 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-600"
+                  className="w-full h-24 p-3 border border-gray-200 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Why are you cancelling?"
                 />
               </div>
@@ -1597,7 +1617,7 @@ export default function Bookings() {
         {showNoShow && selectedMeeting && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
-              <h2 className="text-xl font-semibold mb-2 text-gray-700">Mark as No-Show</h2>
+              <h2 className="text-xl font-semibold mb-2">Mark as No-Show</h2>
               <p className="text-sm text-gray-600 mb-6">Select attendees to mark as no-show</p>
               
               <div className="space-y-4 mb-6">
@@ -1609,7 +1629,7 @@ export default function Bookings() {
                           {attendee.name.charAt(0)}
                         </span>
                       </div>
-                      <span className="text-sm font-medium text-gray-700">{attendee.name}</span>
+                      <span className="text-sm font-medium">{attendee.name}</span>
                     </div>
                     <Checkbox />
                   </div>
@@ -1632,14 +1652,14 @@ export default function Bookings() {
         {showEditLocation && selectedMeeting && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
-              <h2 className="text-xl font-semibold mb-2 text-gray-700">Edit Location</h2>
+              <h2 className="text-xl font-semibold mb-2">Edit Location</h2>
               <p className="text-sm text-gray-600 mb-6">
                 Current Location: {selectedMeeting.location.logo} {selectedMeeting.location.name}
               </p>
               
               <div className="mb-6">
-                <label className="block text-sm font-medium mb-2 text-gray-700">Meeting Location</label>
-                <select className="w-full p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-600">
+                <label className="block text-sm font-medium mb-2">Meeting Location</label>
+                <select className="w-full p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                   <option value="google-meet">📹 Google Meet</option>
                   <option value="zoom">📹 Zoom</option>
                   <option value="teams">📹 Microsoft Teams</option>
