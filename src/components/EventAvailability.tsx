@@ -78,7 +78,7 @@ export const EventAvailability = () => {
           style={{ fontSize: '14px' }}
         >
           <Clock className="h-4 w-4" />
-          <span>Edit</span>
+          <span>Edit Availability</span>
           <ExternalLink className="h-3 w-3" />
         </button>
       </div>
