@@ -44,127 +44,40 @@ export const EventLimits = () => {
 
   return (
     <div className="p-0 max-w-none mx-auto space-y-8" style={{ fontSize: '14px', color: '#384252' }}>
-      {/* Before event section */}
-      <div>
-        <h3 className="font-medium mb-4" style={{ fontSize: '14px', color: '#384252' }}>
-          Before event
-        </h3>
-        
-        {/* Buffer time before */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
+      {/* Minimum booking notice */}
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <div className="flex items-center justify-between">
             <div className="flex-1">
-              <h4 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>
-                Buffer time
-              </h4>
+              <h3 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>
+                Minimum booking notice
+              </h3>
+              <p style={{ fontSize: '14px', color: '#384252' }}>
+                Require a minimum amount of time before the meeting to book a slot
+              </p>
             </div>
-            <CustomSelect
-              value={settings.bufferTimeBefore ? settings.bufferTimeBeforeValue : 'No buffer time'}
-              onValueChange={value => {
-                if (value === 'No buffer time') {
-                  handleToggle('bufferTimeBefore', false);
-                } else {
-                  handleToggle('bufferTimeBefore', true);
-                  handleValueChange('bufferTimeBeforeValue', value);
-                }
-              }}
-              options={[
-                { value: 'No buffer time', label: 'No buffer time' },
-                { value: '5', label: '5 minutes' },
-                { value: '10', label: '10 minutes' },
-                { value: '15', label: '15 minutes' },
-                { value: '30', label: '30 minutes' },
-                { value: '45', label: '45 minutes' },
-                { value: '60', label: '1 hour' }
-              ]}
-              className="w-48"
+            <Switch
+              checked={settings.minimumNotice}
+              onCheckedChange={value => handleToggle('minimumNotice', value)}
             />
           </div>
-        </div>
-
-        {/* Minimum Notice */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex-1">
-              <h4 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>
-                Minimum Notice
-              </h4>
-            </div>
-            <div className="flex items-center space-x-2">
+          
+          {settings.minimumNotice && (
+            <div className="mt-4 flex items-center space-x-2">
               <input
                 type="number"
                 value={settings.minimumNoticeValue}
                 onChange={e => handleValueChange('minimumNoticeValue', e.target.value)}
-                className="w-16 px-2 py-1 border border-border rounded text-sm bg-background"
+                className="w-20 px-3 py-2 border border-border rounded-lg text-sm bg-background"
               />
               <CustomSelect
                 value={settings.minimumNoticeUnit}
                 onValueChange={value => handleValueChange('minimumNoticeUnit', value)}
-                options={[
-                  { value: 'hours', label: 'hours' }
-                ]}
-                className="w-20"
+                options={timeUnitOptions}
+                className="w-32"
               />
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* After event section */}
-      <div>
-        <h3 className="font-medium mb-4" style={{ fontSize: '14px', color: '#384252' }}>
-          After event
-        </h3>
-        
-        {/* Buffer time after */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex-1">
-              <h4 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>
-                Buffer time
-              </h4>
-            </div>
-            <CustomSelect
-              value={settings.bufferTimeAfter ? settings.bufferTimeAfterValue : 'No buffer time'}
-              onValueChange={value => {
-                if (value === 'No buffer time') {
-                  handleToggle('bufferTimeAfter', false);
-                } else {
-                  handleToggle('bufferTimeAfter', true);
-                  handleValueChange('bufferTimeAfterValue', value);
-                }
-              }}
-              options={[
-                { value: 'No buffer time', label: 'No buffer time' },
-                { value: '5', label: '5 minutes' },
-                { value: '10', label: '10 minutes' },
-                { value: '15', label: '15 minutes' },
-                { value: '30', label: '30 minutes' },
-                { value: '45', label: '45 minutes' },
-                { value: '60', label: '1 hour' }
-              ]}
-              className="w-48"
-            />
-          </div>
-        </div>
-
-        {/* Time-slot intervals */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex-1">
-              <h4 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>
-                Time-slot intervals
-              </h4>
-            </div>
-            <CustomSelect
-              value="Use event length (default)"
-              onValueChange={() => {}}
-              options={[
-                { value: 'Use event length (default)', label: 'Use event length (default)' }
-              ]}
-              className="w-64"
-            />
-          </div>
+          )}
         </div>
       </div>
 
@@ -267,6 +180,74 @@ export const EventLimits = () => {
             </div>
           </div>
         )}
+      </div>
+
+      <div className="border-t border-gray-200 pt-8">
+        {/* Buffer time before */}
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <h3 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>
+                  Buffer time before meetings
+                </h3>
+                <p style={{ fontSize: '14px', color: '#384252' }}>
+                  Add time before the meeting
+                </p>
+              </div>
+              <Switch
+                checked={settings.bufferTimeBefore}
+                onCheckedChange={value => handleToggle('bufferTimeBefore', value)}
+              />
+            </div>
+            
+            {settings.bufferTimeBefore && (
+              <div className="mt-4 flex items-center space-x-2">
+                <input
+                  type="number"
+                  value={settings.bufferTimeBeforeValue}
+                  onChange={e => handleValueChange('bufferTimeBeforeValue', e.target.value)}
+                  className="w-20 px-3 py-2 border border-border rounded-lg text-sm bg-background"
+                />
+                <span className="text-sm">minutes</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-gray-200 pt-8">
+        {/* Buffer time after */}
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <h3 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>
+                  Buffer time after meetings
+                </h3>
+                <p style={{ fontSize: '14px', color: '#384252' }}>
+                  Add time after the meeting
+                </p>
+              </div>
+              <Switch
+                checked={settings.bufferTimeAfter}
+                onCheckedChange={value => handleToggle('bufferTimeAfter', value)}
+              />
+            </div>
+            
+            {settings.bufferTimeAfter && (
+              <div className="mt-4 flex items-center space-x-2">
+                <input
+                  type="number"
+                  value={settings.bufferTimeAfterValue}
+                  onChange={e => handleValueChange('bufferTimeAfterValue', e.target.value)}
+                  className="w-20 px-3 py-2 border border-border rounded-lg text-sm bg-background"
+                />
+                <span className="text-sm">minutes</span>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="border-t border-gray-200 pt-8">
