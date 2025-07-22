@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useParams, useOutletContext } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Settings, Shield, Zap, RotateCcw, Smartphone, Workflow, Webhook, Bolt, Clock2 } from 'lucide-react';
 import { EventSetup } from '../components/EventSetup';
 import { EventAvailability } from '../components/EventAvailability';
@@ -11,7 +11,7 @@ import { EventWorkflows } from '../components/EventWorkflows';
 import { EventWebhooks } from '../components/EventWebhooks';
 import { RecurringEvent } from '../components/RecurringEvent';
 import { EventEmbed } from '../components/EventEmbed';
-import type { HeaderMeta } from '../components/Layout';
+import { useHeader } from '../contexts/HeaderContext';
 
 const tabs = [{
   id: 'setup',
@@ -58,7 +58,8 @@ export const EditEvent = () => {
     tab
   } = useParams();
   const [activeTab, setActiveTab] = useState(tab || 'setup');
-  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
+  const [eventEnabled, setEventEnabled] = useState(true);
+  const { setHeaderMeta } = useHeader();
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -89,17 +90,12 @@ export const EditEvent = () => {
     setHeaderMeta({
       title: 'Edit Event',
       description: 'Configure event details, availability and integrations.',
-      enabled: true,
+      enabled: eventEnabled,
       onEnabledChange: (enabled: boolean) => {
-        setHeaderMeta({
-          title: 'Edit Event',
-          description: 'Configure event details, availability and integrations.',
-          enabled,
-          onEnabledChange: () => {}
-        });
+        setEventEnabled(enabled);
       }
     });
-  }, [setHeaderMeta]);
+  }, [setHeaderMeta, eventEnabled]);
 
   return <div className="min-h-screen bg-background px-8 pt-6 pb-6 space-y-6">
       {/* Left-aligned Horizontal Tabs with Underlines */}
