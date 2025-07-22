@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Plus, Webhook, X, ExternalLink, Edit, MoreHorizontal } from 'lucide-react';
+import { Plus, Webhook, Trash2, Edit, MoreHorizontal } from 'lucide-react';
 import { Switch } from './ui/switch';
 import { CreateWebhookModal } from './CreateWebhookModal';
 
@@ -101,7 +101,7 @@ export const EventWebhooks = () => {
                 key={webhook.id} 
                 className={`p-4 border rounded-lg transition-colors ${
                   webhook.active 
-                    ? 'border-green-200 bg-green-50' 
+                    ? 'border-emerald-200 bg-emerald-50' 
                     : 'border-gray-200 bg-white'
                 }`}
                 onMouseEnter={() => setHoveredWebhook(webhook.id)}
@@ -110,10 +110,10 @@ export const EventWebhooks = () => {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-3">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                      webhook.active ? 'bg-green-100' : 'bg-blue-100'
+                      webhook.active ? 'bg-emerald-100' : 'bg-blue-100'
                     }`}>
                       <Webhook className={`h-4 w-4 ${
-                        webhook.active ? 'text-green-600' : 'text-blue-600'
+                        webhook.active ? 'text-emerald-600' : 'text-blue-600'
                       }`} />
                     </div>
                     <div>
@@ -123,24 +123,23 @@ export const EventWebhooks = () => {
                       <p style={{ fontSize: '12px', color: '#384252' }}>{webhook.url}</p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-3">
                     <Switch
                       checked={webhook.active}
                       onCheckedChange={() => toggleWebhook(webhook.id)}
                     />
                     <button
                       onClick={() => editWebhook(webhook)}
-                      className="p-1 hover:bg-gray-200 rounded text-blue-600 hover:text-blue-700"
-                      title="Edit webhook"
+                      className="px-3 py-1 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded font-medium transition-colors"
                     >
-                      <Edit className="h-4 w-4" />
+                      Edit
                     </button>
                     <button
                       onClick={() => deleteWebhook(webhook.id)}
                       className="p-1 hover:bg-gray-200 rounded text-red-500 hover:text-red-700"
                       title="Delete webhook"
                     >
-                      <X className="h-4 w-4" />
+                      <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
                 </div>

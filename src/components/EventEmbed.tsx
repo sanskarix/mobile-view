@@ -1,10 +1,13 @@
+
 import React, { useState } from 'react';
 import { Copy, Eye } from 'lucide-react';
 import { Switch } from './ui/switch';
 import { CustomSelect } from './ui/custom-select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 
 export const EventEmbed = () => {
   const [embedType, setEmbedType] = useState('inline');
+  const [showCodeModal, setShowCodeModal] = useState(false);
   const [embedSettings, setEmbedSettings] = useState({
     theme: 'auto',
     hideEventTypeDetails: false,
@@ -141,7 +144,7 @@ export const EventEmbed = () => {
     switch (embedType) {
       case 'inline':
         return (
-          <div className="w-full h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+          <div className="w-full h-80 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
             <div className="text-center">
               <div className="w-16 h-16 bg-primary rounded-lg mx-auto mb-4 flex items-center justify-center">
                 <Eye className="h-8 w-8 text-primary-foreground" />
@@ -153,7 +156,7 @@ export const EventEmbed = () => {
         );
       case 'floating':
         return (
-          <div className="relative w-full h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+          <div className="relative w-full h-80 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
             <div className="absolute bottom-4 right-4">
               <button 
                 className="px-4 py-2 rounded-lg shadow-lg text-sm font-medium"
@@ -174,7 +177,7 @@ export const EventEmbed = () => {
         );
       case 'popup':
         return (
-          <div className="w-full h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+          <div className="w-full h-80 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
             <div className="text-center">
               <button 
                 className="px-6 py-3 bg-primary text-primary-foreground rounded-lg text-sm font-medium mb-4"
@@ -188,7 +191,7 @@ export const EventEmbed = () => {
         );
       case 'email':
         return (
-          <div className="w-full h-96 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+          <div className="w-full h-80 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
             <div className="text-center">
               <a
                 href="#"
@@ -495,9 +498,9 @@ export const EventEmbed = () => {
     <div className="p-0 max-w-none mx-auto">
       <div className="flex gap-8">
         {/* Left Side - Main Content */}
-        <div className="w-1/2 space-y-6">
-          {/* Embed Type Selection */}
-          <div className="grid grid-cols-2 gap-4">
+        <div className="w-3/5 space-y-6">
+          {/* Embed Type Selection - Horizontal Layout */}
+          <div className="flex gap-4 overflow-x-auto">
             {[
               { key: 'inline', label: 'Inline' },
               { key: 'floating', label: 'Floating Button' },
@@ -507,7 +510,7 @@ export const EventEmbed = () => {
               <button
                 key={type.key}
                 onClick={() => setEmbedType(type.key)}
-                className={`p-4 border-2 rounded-lg text-center transition-all ${
+                className={`flex-shrink-0 px-6 py-3 border-2 rounded-lg text-center transition-all min-w-[140px] ${
                   embedType === type.key
                     ? 'border-primary bg-primary/10 text-primary'
                     : 'border-gray-200 hover:border-gray-300'
@@ -519,42 +522,58 @@ export const EventEmbed = () => {
           </div>
 
           {/* Embed Options */}
-          {renderEmbedOptions()}
-
-          {/* Generated Code */}
-          <div className="border rounded-lg p-4">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-medium">Generated Code</h3>
-              <div className="flex space-x-2">
-                <button
-                  onClick={copyToClipboard}
-                  className="flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm transition-colors"
-                >
-                  <Copy className="h-4 w-4 mr-1" />
-                  Copy
-                </button>
-                <button className="flex items-center px-3 py-2 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/90 transition-colors">
-                  <Eye className="h-4 w-4 mr-1" />
-                  Preview
-                </button>
-              </div>
-            </div>
-            <pre className="bg-gray-50 p-4 rounded text-xs overflow-x-auto">
-              <code>{generateEmbedCode()}</code>
-            </pre>
+          <div className="overflow-x-auto">
+            {renderEmbedOptions()}
           </div>
         </div>
 
         {/* Right Side - Preview */}
-        <div className="w-1/2">
-          <div className="sticky top-0">
-            <h3 className="font-medium mb-4">Preview</h3>
+        <div className="w-2/5">
+          <div className="sticky top-0 space-y-4">
+            <h3 className="font-medium text-lg">Preview</h3>
             <div className="border rounded-lg p-4 bg-white">
               {renderPreview()}
+            </div>
+            
+            {/* Get Code Button */}
+            <div className="text-center">
+              <h4 className="font-medium text-sm mb-1">Ready to embed?</h4>
+              <p className="text-xs text-gray-600 mb-3">Get the code to add to your website</p>
+              <button
+                onClick={() => setShowCodeModal(true)}
+                className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
+              >
+                <Copy className="h-4 w-4 mr-2 inline" />
+                Get Code
+              </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Code Modal */}
+      <Dialog open={showCodeModal} onOpenChange={setShowCodeModal}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Embed Code</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h4 className="font-medium">Generated Code</h4>
+              <button
+                onClick={copyToClipboard}
+                className="flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm transition-colors"
+              >
+                <Copy className="h-4 w-4 mr-1" />
+                Copy
+              </button>
+            </div>
+            <pre className="bg-gray-50 p-4 rounded text-xs overflow-x-auto max-h-96">
+              <code>{generateEmbedCode()}</code>
+            </pre>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
