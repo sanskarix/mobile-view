@@ -187,13 +187,13 @@ export const CreateWebhookModal: React.FC<CreateWebhookModalProps> = ({
                 {formData.eventTriggers.map(trigger => (
                   <span
                     key={trigger}
-                    className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-700 text-sm rounded border"
+                    className="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-600 text-sm rounded border"
                   >
                     {trigger}
                     <button
                       type="button"
                       onClick={() => removeEventTrigger(trigger)}
-                      className="ml-1 text-gray-500 hover:text-gray-700"
+                      className="ml-1 text-gray-500 hover:text-gray-600"
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -272,7 +272,7 @@ export const CreateWebhookModal: React.FC<CreateWebhookModalProps> = ({
                 className={`px-4 py-2 border rounded-lg text-sm transition-colors ${
                   formData.payloadTemplate === 'default'
                     ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                    : 'border-gray-300 text-gray-600 hover:bg-gray-50'
                 }`}
               >
                 Default
@@ -283,7 +283,7 @@ export const CreateWebhookModal: React.FC<CreateWebhookModalProps> = ({
                 className={`px-4 py-2 border rounded-lg text-sm transition-colors ${
                   formData.payloadTemplate === 'custom'
                     ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                    : 'border-gray-300 text-gray-600 hover:bg-gray-50'
                 }`}
               >
                 Custom
