@@ -13,7 +13,6 @@ import type { DateRange } from 'react-day-picker';
 import type { HeaderMeta } from '../components/Layout';
 import { useOutletContext } from 'react-router-dom';
 
-
 interface Meeting {
   id: string;
   title: string;
@@ -50,6 +49,7 @@ interface Meeting {
       completed: boolean;
     }>;
   };
+  additionalNotes?: string;
 }
 
 const mockMeetings: Meeting[] = [
@@ -76,7 +76,8 @@ const mockMeetings: Meeting[] = [
     },
     eventType: 'Product Hunt Chats',
     status: 'upcoming',
-    isToday: true
+    isToday: true,
+    additionalNotes: 'Please prepare the product demo and have the latest metrics ready for discussion.'
   },
   {
     id: '2',
@@ -136,7 +137,8 @@ const mockMeetings: Meeting[] = [
     },
     eventType: 'Team Strategy Session',
     status: 'upcoming',
-    isToday: false
+    isToday: false,
+    additionalNotes: 'Review Q3 roadmap and discuss resource allocation for upcoming projects.'
   },
   {
     id: '4',
@@ -201,7 +203,8 @@ const mockMeetings: Meeting[] = [
     },
     eventType: 'Client Consultation',
     status: 'upcoming',
-    isToday: false
+    isToday: false,
+    additionalNotes: 'Bring contract templates and pricing sheets. Client is interested in enterprise package.'
   },
   {
     id: '6',
@@ -550,7 +553,12 @@ export default function Bookings() {
 
   const handleExport = () => {
     toast({
-      description: "Export successful: Your bookings will be sent to your email shortly.",
+      description: (
+        <div className="flex items-center gap-2">
+          <Check className="h-5 w-5" style={{ color: '#008c44' }} />
+          <span>Export successful: Your bookings will be sent to your email shortly.</span>
+        </div>
+      ),
       duration: 3000,
     });
   };
@@ -618,36 +626,9 @@ export default function Bookings() {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
-      description: "Email copied to clipboard",
+      description: "Email copied",
       duration: 2000,
     });
-  };
-
-  const getEventIcon = (eventType: string) => {
-    switch (eventType) {
-      case 'Product Hunt Chats':
-        return <Rocket className="h-5 w-5 text-primary" />;
-      case 'Discovery Call':
-        return <Search className="h-5 w-5 text-primary" />;
-      case 'Strategy Session':
-        return <Target className="h-5 w-5 text-primary" />;
-      case 'Design Review':
-        return <Eye className="h-5 w-5 text-primary" />;
-      case 'Client Consultation':
-        return <Briefcase className="h-5 w-5 text-primary" />;
-      case 'Weekly Standup':
-        return <Calendar className="h-5 w-5 text-primary" />;
-      case 'Onboarding Call':
-        return <GraduationCap className="h-5 w-5 text-primary" />;
-      case 'Product Demo':
-        return <Video className="h-5 w-5 text-primary" />;
-      case 'Team Strategy Session':
-        return <Users className="h-5 w-5 text-primary" />;
-      case 'Sales Pipeline Review':
-        return <Zap className="h-5 w-5 text-primary" />;
-      default:
-        return <Video className="h-5 w-5 text-primary" />;
-    }
   };
 
   const MeetingCard = ({ meeting }: { meeting: Meeting }) => {
@@ -802,72 +783,67 @@ export default function Bookings() {
       >
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-4 flex-1">
-            {/* Icon */}
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                {getEventIcon(meeting.eventType)}
-              </div>
-            </div>
-
-            {/* Content */}
+            {/* Content - removed icon section */}
             <div className="flex-1 min-w-0">
               {/* Title and Attendees */}
               <div className="flex items-center space-x-2 mb-2">
                 <h3 className={`text-lg font-semibold ${meeting.status === 'canceled' ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
                   {meeting.title}
                 </h3>
-                <span className="text-muted-foreground">•</span>
-                <div className="flex items-center space-x-1">
-                  {attendeeDisplay && (
-                    <div className="relative">
-                      {typeof attendeeDisplay === 'object' ? (
-                        <div className="flex items-center space-x-1">
-                          <span className="text-sm text-muted-foreground">{attendeeDisplay.display}</span>
+                {attendeeDisplay && (
+                  <>
+                    <span className="text-muted-foreground">with</span>
+                    <div className="flex items-center space-x-1">
+                      <div className="relative">
+                        {typeof attendeeDisplay === 'object' ? (
+                          <div className="flex items-center space-x-1">
+                            <span className="text-sm text-muted-foreground">{attendeeDisplay.display}</span>
+                            <button
+                              className="text-sm text-muted-foreground hover:text-foreground font-medium"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowAttendeesDropdown(showAttendeesDropdown === meeting.id ? null : meeting.id);
+                              }}
+                            >
+                              + {attendeeDisplay.moreCount} More
+                            </button>
+                          </div>
+                        ) : (
                           <button
                             className="text-sm text-muted-foreground hover:text-foreground font-medium"
                             onClick={(e) => {
                               e.stopPropagation();
-                              setShowAttendeesDropdown(showAttendeesDropdown === meeting.id ? null : meeting.id);
+                              copyToClipboard(meeting.attendees[0].email);
                             }}
                           >
-                            + {attendeeDisplay.moreCount} More
+                            {attendeeDisplay}
                           </button>
-                        </div>
-                      ) : (
-                        <button
-                          className="text-sm text-muted-foreground hover:text-foreground font-medium"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            copyToClipboard(meeting.attendees[0].email);
-                          }}
-                        >
-                          {attendeeDisplay}
-                        </button>
-                      )}
-                      
-                      {showAttendeesDropdown === meeting.id && typeof attendeeDisplay === 'object' && (
-                        <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-48">
-                          <div className="p-2">
-                            <div className="text-xs font-medium text-muted-foreground mb-2">All Attendees</div>
-                            {meeting.attendees.map((attendee, index) => (
-                              <button
-                                key={index}
-                                className="w-full text-left text-sm text-foreground hover:bg-accent hover:text-accent-foreground py-1 px-2 rounded"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  copyToClipboard(attendee.email);
-                                  setShowAttendeesDropdown(null);
-                                }}
-                              >
-                                {attendee.name}
-                              </button>
-                            ))}
+                        )}
+                        
+                        {showAttendeesDropdown === meeting.id && typeof attendeeDisplay === 'object' && (
+                          <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-48">
+                            <div className="p-2">
+                              <div className="text-xs font-medium text-muted-foreground mb-2">All Attendees</div>
+                              {meeting.attendees.map((attendee, index) => (
+                                <button
+                                  key={index}
+                                  className="w-full text-left text-sm text-foreground hover:bg-accent hover:text-accent-foreground py-1 px-2 rounded"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    copyToClipboard(attendee.email);
+                                    setShowAttendeesDropdown(null);
+                                  }}
+                                >
+                                  {attendee.name}
+                                </button>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
-                  )}
-                </div>
+                  </>
+                )}
               </div>
 
               {/* Time */}
@@ -1013,6 +989,13 @@ export default function Bookings() {
                     </div>
                   </div>
                 )}
+
+                {meeting.additionalNotes && (
+                  <div>
+                    <div className="text-sm font-medium text-foreground mb-2">Additional Notes</div>
+                    <div className="text-sm text-muted-foreground">{meeting.additionalNotes}</div>
+                  </div>
+                )}
               </div>
 
               {/* Action Buttons for Expanded View */}
@@ -1028,7 +1011,7 @@ export default function Bookings() {
                       setShowMeetingNotes(true);
                     }}
                   >
-                    Meeting Notes
+                    Your Notes
                   </Button>
                   {meeting.isToday && isCurrentTime(meeting.time) && (
                     <Button
@@ -1070,7 +1053,7 @@ export default function Bookings() {
 
         {/* Header with Tabs and Action Buttons */}
         <div className="flex items-center justify-between">
-          {/* Tabs - Updated styling to match teams tabs */}
+          {/* Tabs - with underline hover effect */}
           <div className="flex border-b border-border">
             {[
               { value: 'upcoming', label: 'Upcoming' },
@@ -1082,7 +1065,7 @@ export default function Bookings() {
               <button
                 key={tab.value}
                 onClick={() => setActiveTab(tab.value)}
-                className={`px-4 py-2 text-sm font-medium transition-colors relative ${
+                className={`px-4 py-2 text-sm font-medium transition-colors relative hover:before:content-[''] hover:before:absolute hover:before:bottom-0 hover:before:left-0 hover:before:w-full hover:before:h-0.5 hover:before:bg-gray-300 ${
                   activeTab === tab.value
                     ? 'text-foreground border-b-2 border-primary'
                     : 'text-muted-foreground hover:text-foreground'
@@ -1373,8 +1356,8 @@ export default function Bookings() {
         {showMeetingNotes && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-2xl shadow-xl">
-              <h2 className="text-xl font-semibold mb-2">Meeting Notes</h2>
-              <p className="text-sm text-gray-600 mb-6">Add notes to your meeting</p>
+              <h2 className="text-xl font-semibold mb-2">Your Notes</h2>
+              <p className="text-sm text-gray-600 mb-6">These notes are only visible to you</p>
               
               <div className="mb-6">
                 <div className="flex items-center space-x-1 mb-3 p-3 border border-gray-200 rounded-t-md bg-gray-50">
@@ -1475,58 +1458,16 @@ export default function Bookings() {
           </div>
         )}
 
-        {/* Cancel Event Modal - Updated with invitees and host info */}
+        {/* Cancel Event Modal - Updated with red cross icon and clickable names */}
         {showCancelConfirm && selectedMeeting && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-xl">
-              <h2 className="text-xl font-semibold mb-2 text-gray-900 text-center">Cancel Event</h2>
+              <div className="flex items-center gap-3 mb-4">
+                <X className="h-6 w-6" style={{ color: '#f1352c' }} />
+                <h2 className="text-xl font-semibold text-gray-900">Cancel Event</h2>
+              </div>
               <p className="text-sm text-gray-600 mb-6 text-center">We sent an email with a calendar invitation with the details to everyone</p>
               
-              {/* Host and Attendees */}
-              <div className="mb-6">
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {/* Host */}
-                  <div className="relative">
-                    <button className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors">
-                      <span>{selectedMeeting.host}</span>
-                      <span
-                        className="px-2 py-0.5 text-xs rounded-full"
-                        style={{ backgroundColor: '#007ee5', color: 'white' }}
-                      >
-                        Host
-                      </span>
-                    </button>
-                  </div>
-                  
-                  {/* Attendees */}
-                  {selectedMeeting.attendees.map((attendee, index) => (
-                    <div key={index} className="relative">
-                      <button
-                        className="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors"
-                        onMouseEnter={() => setShowAttendeeDetails(`cancel-${selectedMeeting.id}-${index}`)}
-                        onMouseLeave={() => setShowAttendeeDetails(null)}
-                      >
-                        {attendee.name}
-                      </button>
-                      {showAttendeeDetails === `cancel-${selectedMeeting.id}-${index}` && (
-                        <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-64">
-                          <div className="p-3 space-y-2">
-                            <div className="flex items-center gap-2">
-                              <Mail className="h-4 w-4 text-muted-foreground" />
-                              <span className="text-sm text-foreground">{attendee.email}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Globe className="h-4 w-4 text-muted-foreground" />
-                              <span className="text-sm text-foreground">{attendee.timezone}</span>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
               {selectedMeeting.status === 'recurring' && selectedRecurringDates.length > 0 ? (
                 <div className="space-y-3 mb-6 p-4 bg-gray-50 rounded-lg">
                   <div className="flex gap-3">
@@ -1543,7 +1484,24 @@ export default function Bookings() {
                   </div>
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">With:</span>
-                    <span className="text-gray-900">{selectedMeeting.attendees.map(a => a.name).join(', ')}</span>
+                    <div className="flex flex-wrap gap-1">
+                      {selectedMeeting.attendees.map((attendee, index) => (
+                        <Tooltip key={index}>
+                          <TooltipTrigger asChild>
+                            <button
+                              className="text-blue-600 hover:text-blue-800 hover:underline"
+                              onClick={() => copyToClipboard(attendee.email)}
+                            >
+                              {attendee.name}
+                              {index < selectedMeeting.attendees.length - 1 && ','}
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Copy email</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      ))}
+                    </div>
                   </div>
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">Where:</span>
@@ -1562,7 +1520,24 @@ export default function Bookings() {
                   </div>
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">With:</span>
-                    <span className="text-gray-900">{selectedMeeting.attendees.map(a => a.name).join(', ')}</span>
+                    <div className="flex flex-wrap gap-1">
+                      {selectedMeeting.attendees.map((attendee, index) => (
+                        <Tooltip key={index}>
+                          <TooltipTrigger asChild>
+                            <button
+                              className="text-blue-600 hover:text-blue-800 hover:underline"
+                              onClick={() => copyToClipboard(attendee.email)}
+                            >
+                              {attendee.name}
+                              {index < selectedMeeting.attendees.length - 1 && ','}
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Copy email</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      ))}
+                    </div>
                   </div>
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">Where:</span>
