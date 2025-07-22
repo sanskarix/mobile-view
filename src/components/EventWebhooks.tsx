@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Plus, Webhook, Trash2, Edit, MoreHorizontal } from 'lucide-react';
+import { Plus, Webhook, Trash2 } from 'lucide-react';
 import { Switch } from './ui/switch';
 import { CreateWebhookModal } from './CreateWebhookModal';
 
@@ -101,20 +101,30 @@ export const EventWebhooks = () => {
                 key={webhook.id} 
                 className={`p-4 border rounded-lg transition-colors ${
                   webhook.active 
-                    ? 'border-emerald-200 bg-emerald-50' 
+                    ? 'border-green-200 bg-green-50' 
                     : 'border-gray-200 bg-white'
                 }`}
+                style={webhook.active ? {
+                  borderColor: 'rgba(0, 140, 68, 0.3)',
+                  backgroundColor: 'rgba(0, 140, 68, 0.05)'
+                } : {}}
                 onMouseEnter={() => setHoveredWebhook(webhook.id)}
                 onMouseLeave={() => setHoveredWebhook(null)}
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-3">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                      webhook.active ? 'bg-emerald-100' : 'bg-blue-100'
-                    }`}>
+                      webhook.active ? 'bg-green-100' : 'bg-blue-100'
+                    }`}
+                    style={webhook.active ? {
+                      backgroundColor: 'rgba(0, 140, 68, 0.1)'
+                    } : {}}>
                       <Webhook className={`h-4 w-4 ${
-                        webhook.active ? 'text-emerald-600' : 'text-blue-600'
-                      }`} />
+                        webhook.active ? 'text-green-600' : 'text-blue-600'
+                      }`} 
+                      style={webhook.active ? {
+                        color: '#008c44'
+                      } : {}} />
                     </div>
                     <div>
                       <h4 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>

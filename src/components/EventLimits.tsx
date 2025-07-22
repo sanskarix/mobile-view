@@ -13,11 +13,17 @@ export const EventLimits = () => {
     afterEventBufferTime: 'no-buffer',
     timeSlotIntervals: 'default',
     
+    // Toggle states for revealing sub-options
+    limitBookingFrequency: false,
+    showFirstSlotOnly: false,
+    limitTotalDuration: false,
+    limitFutureBookings: false,
+    offsetStartTimes: false,
+    
     // Existing settings
     minimumNotice: false,
     minimumNoticeValue: '120',
     minimumNoticeUnit: 'minutes',
-    limitFutureBookings: false,
     futureBookingType: 'business_days',
     futureBookingValue: '60',
     futureBookingUnit: 'business_days',
@@ -69,11 +75,11 @@ export const EventLimits = () => {
   ];
 
   return (
-    <div className="p-0 max-w-none mx-auto space-y-8" style={{ fontSize: '14px', color: '#384252' }}>
-      {/* New Before/After Event Sections */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="p-0 max-w-none mx-auto space-y-6" style={{ fontSize: '14px', color: '#384252' }}>
+      {/* Before/After Event Sections */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Before event section */}
-        <div className="space-y-6">
+        <div className="border border-gray-200 rounded-lg p-6 bg-white">
           <h3 className="font-semibold text-lg mb-4" style={{ fontSize: '18px', color: '#384252' }}>
             Before event
           </h3>
@@ -111,7 +117,7 @@ export const EventLimits = () => {
         </div>
 
         {/* After event section */}
-        <div className="space-y-6">
+        <div className="border border-gray-200 rounded-lg p-6 bg-white">
           <h3 className="font-semibold text-lg mb-4" style={{ fontSize: '18px', color: '#384252' }}>
             After event
           </h3>
@@ -141,17 +147,25 @@ export const EventLimits = () => {
       </div>
 
       {/* Limit booking frequency */}
-      <div className="border-t border-gray-200 pt-8">
-        <div className="flex items-start justify-between mb-6">
+      <div className="border border-gray-200 rounded-lg p-6 bg-white">
+        <div className="flex items-start justify-between mb-4">
           <div className="flex-1 pr-8">
             <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
               Limit booking frequency
             </h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600">
               Limit how many times this event can be booked
             </p>
-            
-            <div className="flex items-center space-x-3 mb-4">
+          </div>
+          <Switch
+            checked={settings.limitBookingFrequency}
+            onCheckedChange={value => handleToggle('limitBookingFrequency', value)}
+          />
+        </div>
+        
+        {settings.limitBookingFrequency && (
+          <div className="border-t border-gray-100 pt-4 space-y-4">
+            <div className="flex items-center space-x-3">
               <input
                 type="number"
                 min="1"
@@ -175,15 +189,11 @@ export const EventLimits = () => {
               + Add Limit
             </button>
           </div>
-          <Switch
-            checked={false}
-            onCheckedChange={() => {}}
-          />
-        </div>
+        )}
       </div>
 
       {/* Only show the first slot of each day as available */}
-      <div className="border-t border-gray-200 pt-8">
+      <div className="border border-gray-200 rounded-lg p-6 bg-white">
         <div className="flex items-start justify-between">
           <div className="flex-1 pr-8">
             <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
@@ -194,24 +204,32 @@ export const EventLimits = () => {
             </p>
           </div>
           <Switch
-            checked={false}
-            onCheckedChange={() => {}}
+            checked={settings.showFirstSlotOnly}
+            onCheckedChange={value => handleToggle('showFirstSlotOnly', value)}
           />
         </div>
       </div>
 
       {/* Limit total booking duration */}
-      <div className="border-t border-gray-200 pt-8">
-        <div className="flex items-start justify-between mb-6">
+      <div className="border border-gray-200 rounded-lg p-6 bg-white">
+        <div className="flex items-start justify-between mb-4">
           <div className="flex-1 pr-8">
             <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
               Limit total booking duration
             </h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600">
               Limit total amount of time that this event can be booked
             </p>
-            
-            <div className="flex items-center space-x-3 mb-4">
+          </div>
+          <Switch
+            checked={settings.limitTotalDuration}
+            onCheckedChange={value => handleToggle('limitTotalDuration', value)}
+          />
+        </div>
+        
+        {settings.limitTotalDuration && (
+          <div className="border-t border-gray-100 pt-4 space-y-4">
+            <div className="flex items-center space-x-3">
               <input
                 type="number"
                 min="1"
@@ -236,138 +254,138 @@ export const EventLimits = () => {
               + Add Limit
             </button>
           </div>
-          <Switch
-            checked={false}
-            onCheckedChange={() => {}}
-          />
-        </div>
+        )}
       </div>
 
       {/* Limit future bookings */}
-      <div className="border-t border-gray-200 pt-8">
-        <div className="flex items-start justify-between mb-6">
+      <div className="border border-gray-200 rounded-lg p-6 bg-white">
+        <div className="flex items-start justify-between mb-4">
           <div className="flex-1 pr-8">
             <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
               Limit future bookings
             </h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600">
               Limit how far in the future this event can be booked
             </p>
-            
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  id="business_days_option"
-                  name="futureBookingType"
-                  value="business_days"
-                  checked={settings.futureBookingType === 'business_days'}
-                  onChange={e => handleValueChange('futureBookingType', e.target.value)}
-                />
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="number"
-                    value={settings.futureBookingValue}
-                    onChange={e => handleValueChange('futureBookingValue', e.target.value)}
-                    className="w-16 px-2 py-1 border border-gray-300 rounded text-sm bg-white"
-                  />
-                  <CustomSelect
-                    value={settings.futureBookingUnit}
-                    onValueChange={value => handleValueChange('futureBookingUnit', value)}
-                    options={businessDayOptions}
-                    className="w-40"
-                  />
-                  <span className="text-sm text-gray-600">into the future</span>
-                </div>
-              </div>
-              
-              <div className="ml-6">
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="always-available-option"
-                    checked={settings.alwaysAvailable}
-                    onChange={e => handleToggle('alwaysAvailable', e.target.checked)}
-                  />
-                  <label htmlFor="always-available-option" className="text-sm text-gray-600">
-                    Always {settings.futureBookingValue} days available
-                  </label>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  id="date_range_option" 
-                  name="futureBookingType"
-                  value="date_range"
-                  checked={settings.futureBookingType === 'date_range'}
-                  onChange={e => handleValueChange('futureBookingType', e.target.value)}
-                />
-                <label htmlFor="date_range_option" className="text-sm text-gray-600">Within a date range</label>
-              </div>
-              
-              {settings.futureBookingType === 'date_range' && (
-                <div className="ml-6 flex items-center space-x-2">
-                  <input
-                    type="date"
-                    value={settings.dateRangeStart}
-                    onChange={e => handleValueChange('dateRangeStart', e.target.value)}
-                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
-                  />
-                  <span className="text-sm text-gray-600">to</span>
-                  <input
-                    type="date"
-                    value={settings.dateRangeEnd}
-                    onChange={e => handleValueChange('dateRangeEnd', e.target.value)}
-                    className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
-                  />
-                </div>
-              )}
-            </div>
           </div>
           <Switch
             checked={settings.limitFutureBookings}
             onCheckedChange={value => handleToggle('limitFutureBookings', value)}
           />
         </div>
+        
+        {settings.limitFutureBookings && (
+          <div className="border-t border-gray-100 pt-4 space-y-4">
+            <div className="flex items-center space-x-2">
+              <input
+                type="radio"
+                id="business_days_option"
+                name="futureBookingType"
+                value="business_days"
+                checked={settings.futureBookingType === 'business_days'}
+                onChange={e => handleValueChange('futureBookingType', e.target.value)}
+              />
+              <div className="flex items-center space-x-2">
+                <input
+                  type="number"
+                  value={settings.futureBookingValue}
+                  onChange={e => handleValueChange('futureBookingValue', e.target.value)}
+                  className="w-16 px-2 py-1 border border-gray-300 rounded text-sm bg-white"
+                />
+                <CustomSelect
+                  value={settings.futureBookingUnit}
+                  onValueChange={value => handleValueChange('futureBookingUnit', value)}
+                  options={businessDayOptions}
+                  className="w-40"
+                />
+                <span className="text-sm text-gray-600">into the future</span>
+              </div>
+            </div>
+            
+            <div className="ml-6">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="always-available-option"
+                  checked={settings.alwaysAvailable}
+                  onChange={e => handleToggle('alwaysAvailable', e.target.checked)}
+                />
+                <label htmlFor="always-available-option" className="text-sm text-gray-600">
+                  Always {settings.futureBookingValue} days available
+                </label>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <input
+                type="radio"
+                id="date_range_option" 
+                name="futureBookingType"
+                value="date_range"
+                checked={settings.futureBookingType === 'date_range'}
+                onChange={e => handleValueChange('futureBookingType', e.target.value)}
+              />
+              <label htmlFor="date_range_option" className="text-sm text-gray-600">Within a date range</label>
+            </div>
+            
+            {settings.futureBookingType === 'date_range' && (
+              <div className="ml-6 flex items-center space-x-2">
+                <input
+                  type="date"
+                  value={settings.dateRangeStart}
+                  onChange={e => handleValueChange('dateRangeStart', e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
+                />
+                <span className="text-sm text-gray-600">to</span>
+                <input
+                  type="date"
+                  value={settings.dateRangeEnd}
+                  onChange={e => handleValueChange('dateRangeEnd', e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Offset start times */}
-      <div className="border-t border-gray-200 pt-8">
-        <div className="flex items-start justify-between">
+      <div className="border border-gray-200 rounded-lg p-6 bg-white">
+        <div className="flex items-start justify-between mb-4">
           <div className="flex-1 pr-8">
             <h3 className="font-semibold mb-2" style={{ fontSize: '16px', color: '#384252' }}>
               Offset start times
             </h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600">
               Offset timestamps shown to bookers by a specified number of minutes
             </p>
-            
-            <div className="space-y-3">
-              <div>
-                <label className="block text-sm font-medium mb-2" style={{ color: '#384252' }}>Offset by</label>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="number"
-                    value="0"
-                    className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
-                    style={{ fontSize: '14px' }}
-                  />
-                  <span className="text-sm text-gray-600">Minutes</span>
-                </div>
-              </div>
-              
-              <p className="text-xs text-gray-500">
-                e.g. this will show time slots to your bookers at 9:00 AM instead of 9:00 AM
-              </p>
-            </div>
           </div>
           <Switch
-            checked={false}
-            onCheckedChange={() => {}}
+            checked={settings.offsetStartTimes}
+            onCheckedChange={value => handleToggle('offsetStartTimes', value)}
           />
         </div>
+        
+        {settings.offsetStartTimes && (
+          <div className="border-t border-gray-100 pt-4 space-y-3">
+            <div>
+              <label className="block text-sm font-medium mb-2" style={{ color: '#384252' }}>Offset by</label>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="number"
+                  value="0"
+                  className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
+                  style={{ fontSize: '14px' }}
+                />
+                <span className="text-sm text-gray-600">Minutes</span>
+              </div>
+            </div>
+            
+            <p className="text-xs text-gray-500">
+              e.g. this will show time slots to your bookers at 9:00 AM instead of 9:00 AM
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

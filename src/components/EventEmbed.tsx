@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { Copy, Eye } from 'lucide-react';
 import { Switch } from './ui/switch';
 import { CustomSelect } from './ui/custom-select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 export const EventEmbed = () => {
   const [embedType, setEmbedType] = useState('inline');
@@ -46,12 +46,87 @@ export const EventEmbed = () => {
     setEmbedSettings(prev => ({ ...prev, [key]: value }));
   };
 
-  const generateEmbedCode = () => {
-    switch (embedType) {
-      case 'inline':
-        return `<iframe src="https://cal.com/sanskar/product-hunt-chats?theme=${embedSettings.theme}&layout=${embedSettings.layout}" width="100%" height="600px" frameborder="0"></iframe>`;
-      case 'floating':
-        return `<script>
+  const generateEmbedCode = (type: 'html' | 'react') => {
+    if (type === 'react') {
+      switch (embedType) {
+        case 'inline':
+          return `import { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
+
+export default function MyApp() {
+  useEffect(()=>{
+    (async function () {
+      const cal = await getCalApi();
+      cal("ui", {
+        "theme": "${embedSettings.theme}",
+        "styles": {"branding":{"brandColor":"#${embedSettings.lightBrandColor}"}},
+        "hideEventTypeDetails": ${embedSettings.hideEventTypeDetails}
+      });
+    })();
+  }, [])
+
+  return <Cal
+    calLink="sanskar/product-hunt-chats"
+    style={{width:"100%",height:"600px",overflow:"scroll"}}
+    config={{"layout":"${embedSettings.layout}"}}
+  />;
+};`;
+        case 'floating':
+          return `import { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
+
+export default function MyApp() {
+  useEffect(()=>{
+    (async function () {
+      const cal = await getCalApi();
+      cal("floatingButton", {
+        calLink: "sanskar/product-hunt-chats",
+        config: {
+          theme: "${embedSettings.theme}"
+        }
+      });
+    })();
+  }, [])
+
+  return null;
+};`;
+        case 'popup':
+          return `import { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
+
+export default function MyApp() {
+  useEffect(()=>{
+    (async function () {
+      const cal = await getCalApi();
+      cal("init", {
+        origin: "https://cal.com"
+      });
+    })();
+  }, [])
+
+  return <button 
+    data-cal-link="sanskar/product-hunt-chats"
+    data-cal-config='{"theme":"${embedSettings.theme}"}'
+  >
+    ${embedSettings.buttonText}
+  </button>;
+};`;
+        case 'email':
+          return `// For email, use HTML format as React components aren't supported in emails`;
+        default:
+          return '';
+      }
+    } else {
+      switch (embedType) {
+        case 'inline':
+          return `<iframe 
+  src="https://cal.com/sanskar/product-hunt-chats?theme=${embedSettings.theme}&layout=${embedSettings.layout}" 
+  width="100%" 
+  height="600px" 
+  frameborder="0">
+</iframe>`;
+        case 'floating':
+          return `<script>
   (function (C, A, L) { 
     let p = function (a, ar) { 
       a.q.push(ar); 
@@ -90,8 +165,8 @@ export const EventEmbed = () => {
     }
   });
 </script>`;
-      case 'popup':
-        return `<script>
+        case 'popup':
+          return `<script>
   (function (C, A, L) { 
     let p = function (a, ar) { 
       a.q.push(ar); 
@@ -124,20 +199,30 @@ export const EventEmbed = () => {
   });
 </script>
 
-<button data-cal-link="sanskar/product-hunt-chats" data-cal-config='{"theme":"${embedSettings.theme}"}'>
+<button 
+  data-cal-link="sanskar/product-hunt-chats" 
+  data-cal-config='{"theme":"${embedSettings.theme}"}'>
   ${embedSettings.buttonText}
 </button>`;
-      case 'email':
-        return `<a href="https://cal.com/sanskar/product-hunt-chats?theme=${embedSettings.theme}" style="display: inline-block; padding: 12px 24px; background-color: #${embedSettings.buttonColor}; color: #${embedSettings.textColor}; text-decoration: none; border-radius: 6px; font-weight: 500;">
+        case 'email':
+          return `<a href="https://cal.com/sanskar/product-hunt-chats?theme=${embedSettings.theme}" 
+   style="display: inline-block; 
+          padding: 12px 24px; 
+          background-color: #${embedSettings.buttonColor}; 
+          color: #${embedSettings.textColor}; 
+          text-decoration: none; 
+          border-radius: 6px; 
+          font-weight: 500;">
   ${embedSettings.buttonText}
 </a>`;
-      default:
-        return '';
+        default:
+          return '';
+      }
     }
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(generateEmbedCode());
+  const copyToClipboard = (code: string) => {
+    navigator.clipboard.writeText(code);
   };
 
   const renderPreview = () => {
@@ -496,56 +581,59 @@ export const EventEmbed = () => {
 
   return (
     <div className="p-0 max-w-none mx-auto">
-      <div className="flex gap-8">
-        {/* Left Side - Main Content */}
-        <div className="w-3/5 space-y-6">
-          {/* Embed Type Selection - Horizontal Layout */}
-          <div className="flex gap-4 overflow-x-auto">
-            {[
-              { key: 'inline', label: 'Inline' },
-              { key: 'floating', label: 'Floating Button' },
-              { key: 'popup', label: 'Pop up' },
-              { key: 'email', label: 'Email' }
-            ].map(type => (
-              <button
-                key={type.key}
-                onClick={() => setEmbedType(type.key)}
-                className={`flex-shrink-0 px-6 py-3 border-2 rounded-lg text-center transition-all min-w-[140px] ${
-                  embedType === type.key
-                    ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <span className="font-medium text-sm">{type.label}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Embed Options */}
-          <div className="overflow-x-auto">
-            {renderEmbedOptions()}
-          </div>
+      <div className="space-y-8">
+        {/* Embed Type Selection - Single Row */}
+        <div className="flex gap-2 w-full">
+          {[
+            { key: 'inline', label: 'Inline' },
+            { key: 'floating', label: 'Floating Button' },
+            { key: 'popup', label: 'Pop up' },
+            { key: 'email', label: 'Email' }
+          ].map(type => (
+            <button
+              key={type.key}
+              onClick={() => setEmbedType(type.key)}
+              className={`flex-1 px-6 py-3 border-2 rounded-lg text-center transition-all ${
+                embedType === type.key
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <span className="font-medium text-sm">{type.label}</span>
+            </button>
+          ))}
         </div>
 
-        {/* Right Side - Preview */}
-        <div className="w-2/5">
-          <div className="sticky top-0 space-y-4">
-            <h3 className="font-medium text-lg">Preview</h3>
-            <div className="border rounded-lg p-4 bg-white">
-              {renderPreview()}
+        {/* Main Content Area */}
+        <div className="flex gap-8">
+          {/* Left Side - Embed Options */}
+          <div className="w-3/5">
+            <h3 className="font-medium text-lg mb-4">{embedType.charAt(0).toUpperCase() + embedType.slice(1)} Embed</h3>
+            <div className="overflow-x-auto">
+              {renderEmbedOptions()}
             </div>
-            
-            {/* Get Code Button */}
-            <div className="text-center">
-              <h4 className="font-medium text-sm mb-1">Ready to embed?</h4>
-              <p className="text-xs text-gray-600 mb-3">Get the code to add to your website</p>
-              <button
-                onClick={() => setShowCodeModal(true)}
-                className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
-              >
-                <Copy className="h-4 w-4 mr-2 inline" />
-                Get Code
-              </button>
+          </div>
+
+          {/* Right Side - Preview */}
+          <div className="w-2/5">
+            <div className="space-y-4">
+              <h3 className="font-medium text-lg">Preview</h3>
+              <div className="border rounded-lg p-4 bg-white">
+                {renderPreview()}
+              </div>
+              
+              {/* Get Code Button */}
+              <div className="text-center">
+                <h4 className="font-medium text-sm mb-1">Ready to embed?</h4>
+                <p className="text-xs text-gray-600 mb-3">Get the code to add to your website</p>
+                <button
+                  onClick={() => setShowCodeModal(true)}
+                  className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
+                >
+                  <Copy className="h-4 w-4 mr-2 inline" />
+                  Get Code
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -553,24 +641,49 @@ export const EventEmbed = () => {
 
       {/* Code Modal */}
       <Dialog open={showCodeModal} onOpenChange={setShowCodeModal}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-4xl max-h-[80vh]">
           <DialogHeader>
             <DialogTitle>Embed Code</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h4 className="font-medium">Generated Code</h4>
-              <button
-                onClick={copyToClipboard}
-                className="flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm transition-colors"
-              >
-                <Copy className="h-4 w-4 mr-1" />
-                Copy
-              </button>
-            </div>
-            <pre className="bg-gray-50 p-4 rounded text-xs overflow-x-auto max-h-96">
-              <code>{generateEmbedCode()}</code>
-            </pre>
+            <Tabs defaultValue="html" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="html">HTML</TabsTrigger>
+                <TabsTrigger value="react">React</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="html" className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-medium">HTML Code</h4>
+                  <button
+                    onClick={() => copyToClipboard(generateEmbedCode('html'))}
+                    className="flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm transition-colors"
+                  >
+                    <Copy className="h-4 w-4 mr-1" />
+                    Copy
+                  </button>
+                </div>
+                <pre className="bg-gray-50 p-4 rounded text-xs overflow-auto max-h-96 whitespace-pre-wrap">
+                  <code>{generateEmbedCode('html')}</code>
+                </pre>
+              </TabsContent>
+              
+              <TabsContent value="react" className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-medium">React Code</h4>
+                  <button
+                    onClick={() => copyToClipboard(generateEmbedCode('react'))}
+                    className="flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded text-sm transition-colors"
+                  >
+                    <Copy className="h-4 w-4 mr-1" />
+                    Copy
+                  </button>
+                </div>
+                <pre className="bg-gray-50 p-4 rounded text-xs overflow-auto max-h-96 whitespace-pre-wrap">
+                  <code>{generateEmbedCode('react')}</code>
+                </pre>
+              </TabsContent>
+            </Tabs>
           </div>
         </DialogContent>
       </Dialog>
