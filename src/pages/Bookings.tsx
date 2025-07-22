@@ -772,266 +772,443 @@ export default function Bookings() {
     };
 
     return (
-      <div
-        className={`bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow ${
-          isHost ? 'cursor-pointer' : ''
-        }`}
-        onClick={() => {
-          if (isHost) {
-            setExpandedMeeting(isExpanded ? null : meeting.id);
-          }
-        }}
-      >
-        <div className="flex items-start justify-between">
-          <div className="flex items-start space-x-4 flex-1">
-            {/* Content */}
-            <div className="flex-1 min-w-0">
-              {/* Title and Attendees */}
-              <div className="flex items-center space-x-2 mb-2">
-                <h3 className={`text-lg font-semibold ${meeting.status === 'canceled' ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
-                  {meeting.title}
-                </h3>
-                <span className="text-muted-foreground">with</span>
-                <div className="flex items-center space-x-1">
-                  {attendeeDisplay && (
-                    <div className="relative">
-                      {typeof attendeeDisplay === 'object' ? (
-                        <div className="flex items-center space-x-1">
-                          <span className="text-sm text-muted-foreground">{attendeeDisplay.display}</span>
-                          <button
-                            className="text-sm text-muted-foreground hover:text-foreground font-medium"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setShowAttendeesDropdown(showAttendeesDropdown === meeting.id ? null : meeting.id);
-                            }}
-                          >
-                            + {attendeeDisplay.moreCount} More
-                          </button>
-                        </div>
-                      ) : (
-                        <button
-                          className="text-sm text-muted-foreground hover:text-foreground font-medium"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            copyToClipboard(meeting.attendees[0].email);
-                          }}
-                        >
-                          {attendeeDisplay}
-                        </button>
-                      )}
-                      
-                      {showAttendeesDropdown === meeting.id && typeof attendeeDisplay === 'object' && (
-                        <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-48">
-                          <div className="p-2">
-                            <div className="text-xs font-medium text-muted-foreground mb-2">All Attendees</div>
-                            {meeting.attendees.map((attendee, index) => (
+      <TooltipProvider>
+        <div
+          className={`bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow ${
+            isHost ? 'cursor-pointer' : ''
+          }`}
+          onClick={() => {
+            if (isHost) {
+              setExpandedMeeting(isExpanded ? null : meeting.id);
+            }
+          }}
+        >
+          <div className="flex items-start justify-between">
+            <div className="flex items-start space-x-4 flex-1">
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                {/* Title and Attendees */}
+                <div className="flex items-center space-x-2 mb-2">
+                  <h3 className={`text-lg font-semibold ${meeting.status === 'canceled' ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
+                    {meeting.title}
+                  </h3>
+                  <span className="text-muted-foreground">with</span>
+                  <div className="flex items-center space-x-1">
+                    {attendeeDisplay && (
+                      <div className="relative">
+                        {typeof attendeeDisplay === 'object' ? (
+                          <div className="flex items-center space-x-1">
+                            <span className="text-sm text-muted-foreground">{attendeeDisplay.display}</span>
+                            <button
+                              className="text-sm text-muted-foreground hover:text-foreground font-medium"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowAttendeesDropdown(showAttendeesDropdown === meeting.id ? null : meeting.id);
+                              }}
+                            >
+                              + {attendeeDisplay.moreCount} More
+                            </button>
+                          </div>
+                        ) : (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
                               <button
-                                key={index}
-                                className="w-full text-left text-sm text-foreground hover:bg-accent hover:text-accent-foreground py-1 px-2 rounded"
+                                className="text-sm text-muted-foreground hover:text-foreground font-medium"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  copyToClipboard(attendee.email);
-                                  setShowAttendeesDropdown(null);
+                                  copyToClipboard(meeting.attendees[0].email);
                                 }}
                               >
-                                {attendee.name}
+                                {attendeeDisplay}
                               </button>
-                            ))}
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Email copied</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
+                        
+                        {showAttendeesDropdown === meeting.id && typeof attendeeDisplay === 'object' && (
+                          <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-48">
+                            <div className="p-2">
+                              <div className="text-xs font-medium text-muted-foreground mb-2">All Attendees</div>
+                              {meeting.attendees.map((attendee, index) => (
+                                <Tooltip key={index}>
+                                  <TooltipTrigger asChild>
+                                    <button
+                                      className="w-full text-left text-sm text-foreground hover:bg-accent hover:text-accent-foreground py-1 px-2 rounded"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        copyToClipboard(attendee.email);
+                                        setShowAttendeesDropdown(null);
+                                      }}
+                                    >
+                                      {attendee.name}
+                                    </button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Email copied</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Time */}
-              <div className="text-sm text-muted-foreground mb-3">
-                {meeting.isToday ? 'Today' : meeting.date} • {meeting.time} - {meeting.endTime}
-              </div>
-
-              {/* Location/Meeting Link and Details button in same line */}
-              <div className="flex items-center justify-between">
-                <div className="flex flex-col space-y-2">
-                  <div className="flex items-center space-x-2">
-                    {meeting.location.type === 'online' ? (
-                      <button className="flex items-center space-x-2 text-sm text-primary hover:text-primary/80 transition-colors">
-                        <Video className="h-4 w-4" />
-                        <span>Join {meeting.location.name}</span>
-                      </button>
-                    ) : (
-                      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                        <MapPin className="h-4 w-4" />
-                        <span>{meeting.location.address}</span>
+                        )}
                       </div>
                     )}
                   </div>
-                  
-                  {/* Recurring info for recurring tab */}
-                  {meeting.status === 'recurring' && meeting.recurringSchedule && (
-                    <div className="relative">
-                      <button
-                        className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-                        onMouseEnter={() => setShowRecurringHover(meeting.id)}
-                        onMouseLeave={() => setShowRecurringHover(null)}
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        Every {meeting.recurringSchedule.interval} days for {meeting.recurringSchedule.totalMeetings} occurrences
-                      </button>
-                      
-                      {showRecurringHover === meeting.id && (
-                        <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-64 p-3">
-                          <div className="space-y-1">
-                            {meeting.recurringSchedule.meetings.map((recurringMeeting, index) => (
-                              <div
-                                key={index}
-                                className={`text-sm ${
-                                  recurringMeeting.completed ? 'line-through text-muted-foreground' : 'text-foreground'
-                                }`}
-                              >
-                                {recurringMeeting.time} - {recurringMeeting.date}
-                              </div>
-                            ))}
-                          </div>
+                </div>
+
+                {/* Time */}
+                <div className="text-sm text-muted-foreground mb-3">
+                  {meeting.isToday ? 'Today' : meeting.date} • {meeting.time} - {meeting.endTime}
+                </div>
+
+                {/* Location/Meeting Link and Details button in same line */}
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex items-center space-x-2">
+                      {meeting.location.type === 'online' ? (
+                        <button className="flex items-center space-x-2 text-sm text-primary hover:text-primary/80 transition-colors">
+                          <Video className="h-4 w-4" />
+                          <span>Join {meeting.location.name}</span>
+                        </button>
+                      ) : (
+                        <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                          <MapPin className="h-4 w-4" />
+                          <span>{meeting.location.address}</span>
                         </div>
                       )}
                     </div>
-                  )}
-                </div>
+                    
+                    {/* Recurring info for recurring tab */}
+                    {meeting.status === 'recurring' && meeting.recurringSchedule && (
+                      <div className="relative">
+                        <button
+                          className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                          onMouseEnter={() => setShowRecurringHover(meeting.id)}
+                          onMouseLeave={() => setShowRecurringHover(null)}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Every {meeting.recurringSchedule.interval} days for {meeting.recurringSchedule.totalMeetings} occurrences
+                        </button>
+                        
+                        {showRecurringHover === meeting.id && (
+                          <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-64 p-3">
+                            <div className="space-y-1">
+                              {meeting.recurringSchedule.meetings.map((recurringMeeting, index) => (
+                                <div
+                                  key={index}
+                                  className={`text-sm ${
+                                    recurringMeeting.completed ? 'line-through text-muted-foreground' : 'text-foreground'
+                                  }`}
+                                >
+                                  {recurringMeeting.time} - {recurringMeeting.date}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
 
-                {/* Details button or Host label - moved to extreme right */}
-                <div className="ml-auto">
-                  {isHost ? (
-                    <button
-                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setExpandedMeeting(isExpanded ? null : meeting.id);
-                      }}
-                    >
-                      <span>Details</span>
-                      {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                    </button>
-                  ) : (
-                    <span className="text-sm text-muted-foreground">Host</span>
-                  )}
+                  {/* Details button or Host label - moved to extreme right */}
+                  <div className="ml-auto">
+                    {isHost ? (
+                      <button
+                        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setExpandedMeeting(isExpanded ? null : meeting.id);
+                        }}
+                      >
+                        <span>Details</span>
+                        {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                      </button>
+                    ) : (
+                      <span className="text-sm text-muted-foreground">Host</span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
+
+            {/* Action Buttons */}
+            {showActionButtons && getActionButtons()}
           </div>
 
-          {/* Action Buttons */}
-          {showActionButtons && getActionButtons()}
-        </div>
-
-        {/* Expanded Details */}
-        {isExpanded && isHost && (
-          <div className="mt-4 pt-4 border-t border-border animate-fade-in bg-[#f1f5f980] -mx-6 -mb-6 px-6 py-4 rounded-b-lg">
-            <div className="grid grid-cols-2 gap-8">
-              <div className="space-y-4">
-                <div>
-                  <div className="text-sm font-medium text-foreground mb-1">Duration</div>
-                  <div className="text-sm text-muted-foreground">{meeting.duration}</div>
-                </div>
-                
-                <div>
-                  <div className="text-sm font-medium text-foreground mb-2">Invitee Details</div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <span>{meeting.attendees[0]?.name}</span>
-                    <span>•</span>
-                    <span>{meeting.attendees[0]?.timezone}</span>
-                    <span>•</span>
-                    <span>{meeting.attendees[0]?.email}</span>
-                    <button
-                      onClick={() => copyToClipboard(meeting.attendees[0]?.email)}
-                      className="ml-1 text-muted-foreground hover:text-foreground"
-                    >
-                      <Copy className="h-3 w-3" />
-                    </button>
-                  </div>
-                </div>
-
-                {meeting.attendees.length > 1 && (
+          {/* Expanded Details */}
+          {isExpanded && isHost && (
+            <div className="mt-4 pt-4 border-t border-border animate-fade-in bg-[#f1f5f980] -mx-6 -mb-6 px-6 py-4 rounded-b-lg">
+              <div className="grid grid-cols-2 gap-8">
+                <div className="space-y-4">
                   <div>
-                    <div className="text-sm font-medium text-foreground mb-2">Attendees</div>
-                    <div className="flex flex-wrap gap-2">
-                      {meeting.attendees.slice(1).map((attendee, index) => (
-                        <div key={index} className="relative">
-                          <button
-                            className="px-3 py-1 bg-secondary text-secondary-foreground text-sm rounded-full hover:bg-secondary/80 hover:shadow-sm transition-all"
-                            onClick={() => setShowAttendeeDetails(showAttendeeDetails === `${meeting.id}-${index}` ? null : `${meeting.id}-${index}`)}
-                          >
-                            {attendee.name.split(' ')[0]}
-                          </button>
-                          {showAttendeeDetails === `${meeting.id}-${index}` && (
-                            <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-64">
-                              <div className="p-3 space-y-2">
-                                <div className="flex items-center gap-2">
-                                  <Mail className="h-4 w-4 text-muted-foreground" />
-                                  <span className="text-sm text-foreground">{attendee.email}</span>
-                                  <button
-                                    onClick={() => copyToClipboard(attendee.email)}
-                                    className="ml-1 text-muted-foreground hover:text-foreground"
-                                  >
-                                    <Copy className="h-3 w-3" />
-                                  </button>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <Globe className="h-4 w-4 text-muted-foreground" />
-                                  <span className="text-sm text-foreground">{attendee.timezone}</span>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                    <div className="text-sm font-medium text-foreground mb-1">Duration</div>
+                    <div className="text-sm text-muted-foreground">{meeting.duration}</div>
+                  </div>
+                  
+                  <div>
+                    <div className="text-sm font-medium text-foreground mb-2">Invitee Details</div>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span>{meeting.attendees[0]?.name}</span>
+                      <span>•</span>
+                      <span>{meeting.attendees[0]?.timezone}</span>
+                      <span>•</span>
+                      <span>{meeting.attendees[0]?.email}</span>
+                      <button
+                        onClick={() => copyToClipboard(meeting.attendees[0]?.email)}
+                        className="ml-1 text-muted-foreground hover:text-foreground"
+                      >
+                        <Copy className="h-3 w-3" />
+                      </button>
                     </div>
                   </div>
-                )}
 
-                {meeting.additionalNotes && (
-                  <div>
-                    <div className="text-sm font-medium text-foreground mb-2">Additional Notes</div>
-                    <div className="text-sm text-muted-foreground">{meeting.additionalNotes}</div>
-                  </div>
-                )}
-              </div>
+                  {meeting.attendees.length > 1 && (
+                    <div>
+                      <div className="text-sm font-medium text-foreground mb-2">Attendees</div>
+                      <div className="flex flex-wrap gap-2">
+                        {meeting.attendees.slice(1).map((attendee, index) => (
+                          <div key={index} className="relative">
+                            <button
+                              className="px-3 py-1 bg-secondary text-secondary-foreground text-sm rounded-full hover:bg-secondary/80 hover:shadow-sm transition-all"
+                              onClick={() => setShowAttendeeDetails(showAttendeeDetails === `${meeting.id}-${index}` ? null : `${meeting.id}-${index}`)}
+                            >
+                              {attendee.name.split(' ')[0]}
+                            </button>
+                            {showAttendeeDetails === `${meeting.id}-${index}` && (
+                              <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-64">
+                                <div className="p-3 space-y-2">
+                                  <div className="flex items-center gap-2">
+                                    <Mail className="h-4 w-4 text-muted-foreground" />
+                                    <span className="text-sm text-foreground">{attendee.email}</span>
+                                    <button
+                                      onClick={() => copyToClipboard(attendee.email)}
+                                      className="ml-1 text-muted-foreground hover:text-foreground"
+                                    >
+                                      <Copy className="h-3 w-3" />
+                                    </button>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <Globe className="h-4 w-4 text-muted-foreground" />
+                                    <span className="text-sm text-foreground">{attendee.timezone}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-              {/* Action Buttons for Expanded View */}
-              {showExpandedActions && (
-                <div className="flex flex-col items-end space-y-2">
-                  <Button
-                    variant="outline"
-                    size="default"
-                    className="w-40"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedMeeting(meeting);
-                      setShowMeetingNotes(true);
-                    }}
-                  >
-                    Your Notes
-                  </Button>
-                  {meeting.isToday && isCurrentTime(meeting.time) && (
+                  {meeting.additionalNotes && (
+                    <div>
+                      <div className="text-sm font-medium text-foreground mb-2">Additional Notes</div>
+                      <div className="text-sm text-muted-foreground">{meeting.additionalNotes}</div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Action Buttons for Expanded View */}
+                {showExpandedActions && (
+                  <div className="flex flex-col items-end space-y-2">
                     <Button
                       variant="outline"
                       size="default"
                       className="w-40"
-                      style={{ backgroundColor: '#007ee5', color: 'white' }}
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleMarkNoShow(meeting);
+                        setSelectedMeeting(meeting);
+                        setShowMeetingNotes(true);
                       }}
                     >
-                      Mark as No-Show
+                      Your Notes
                     </Button>
-                  )}
-                </div>
-              )}
+                    {meeting.isToday && isCurrentTime(meeting.time) && (
+                      <Button
+                        variant="outline"
+                        size="default"
+                        className="w-40"
+                        style={{ backgroundColor: '#007ee5', color: 'white' }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleMarkNoShow(meeting);
+                        }}
+                      >
+                        Mark as No-Show
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </TooltipProvider>
+    );
+  };
+
+  return (
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-foreground">Bookings</h1>
+        <div className="flex items-center space-x-3">
+          <Button variant="outline" onClick={handleExport}>
+            <Download className="h-4 w-4 mr-2" />
+            Export
+          </Button>
+          <Button variant="outline" onClick={() => setShowFilters(!showFilters)}>
+            <Filter className="h-4 w-4 mr-2" />
+            Filter
+          </Button>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="border-b border-border">
+        <nav className="-mb-px flex space-x-8">
+          {[
+            { key: 'upcoming', label: 'Upcoming', count: mockMeetings.length },
+            { key: 'unconfirmed', label: 'Unconfirmed', count: unconfirmedMeetings.length },
+            { key: 'recurring', label: 'Recurring', count: recurringMeetings.length },
+            { key: 'past', label: 'Past', count: pastMeetings.length },
+            { key: 'canceled', label: 'Canceled', count: canceledMeetings.length },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors hover:border-gray-300 ${
+                activeTab === tab.key
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              {tab.label} ({tab.count})
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      {/* Filter Panel */}
+      {showFilters && (
+        <div className="bg-card border border-border rounded-lg p-4">
+          <div className="grid grid-cols-4 gap-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Date Range</label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start text-left font-normal">
+                    <Calendar className="mr-2 h-4 w-4" />
+                    {dateRange?.from ? (
+                      dateRange.to ? (
+                        <>
+                          {dateRange.from.toLocaleDateString()} - {dateRange.to.toLocaleDateString()}
+                        </>
+                      ) : (
+                        dateRange.from.toLocaleDateString()
+                      )
+                    ) : (
+                      <span>Pick a date range</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <CalendarComponent
+                    initialFocus
+                    mode="range"
+                    defaultMonth={dateRange?.from}
+                    selected={dateRange}
+                    onSelect={setDateRange}
+                    numberOfMonths={2}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Attendee</label>
+              <select 
+                className="w-full px-3 py-2 border border-input bg-background text-foreground rounded-md"
+                value={filteredAttendee}
+                onChange={(e) => setFilteredAttendee(e.target.value)}
+              >
+                <option value="All">All</option>
+                {getAllAttendees().map(attendee => (
+                  <option key={attendee} value={attendee}>{attendee}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Event Type</label>
+              <select 
+                className="w-full px-3 py-2 border border-input bg-background text-foreground rounded-md"
+                value={filteredEventType}
+                onChange={(e) => setFilteredEventType(e.target.value)}
+              >
+                <option value="All">All</option>
+                <option value="Product Hunt Chats">Product Hunt Chats</option>
+                <option value="Discovery Call">Discovery Call</option>
+                <option value="Team Strategy Session">Team Strategy Session</option>
+                <option value="Product Demo">Product Demo</option>
+                <option value="Client Consultation">Client Consultation</option>
+                <option value="Design Review">Design Review</option>
+                <option value="Sales Pipeline Review">Sales Pipeline Review</option>
+                <option value="Strategy Session">Strategy Session</option>
+                <option value="Weekly Standup">Weekly Standup</option>
+                <option value="Onboarding Call">Onboarding Call</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">Team</label>
+              <select 
+                className="w-full px-3 py-2 border border-input bg-background text-foreground rounded-md"
+                value={filteredTeam}
+                onChange={(e) => setFilteredTeam(e.target.value)}
+              >
+                <option value="All">All</option>
+                {teamNames.map(team => (
+                  <option key={team} value={team}>{team}</option>
+                ))}
+              </select>
             </div>
           </div>
-        )}
+        </div>
+      )}
+
+      {/* Today's Meetings */}
+      {activeTab === 'upcoming' && todayMeetings.length > 0 && (
+        <div>
+          <h2 className="text-lg font-semibold text-foreground mb-4">Today</h2>
+          <div className="space-y-4">
+            {todayMeetings.map((meeting) => (
+              <MeetingCard key={meeting.id} meeting={meeting} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Other Meetings */}
+      <div className="space-y-4">
+        {(activeTab === 'upcoming' ? otherMeetings : currentMeetings).map((meeting) => (
+          <MeetingCard key={meeting.id} meeting={meeting} />
+        ))}
       </div>
-    </TooltipProvider>
+
+      {/* Add Guests Modal */}
+      <AddGuestsModal
+        isOpen={showAddGuests}
+        onClose={() => setShowAddGuests(false)}
+        meeting={selectedMeeting}
+        guestEmails={guestEmails}
+        onAddEmail={addGuestEmail}
+        onRemoveEmail={removeGuestEmail}
+        onUpdateEmail={updateGuestEmail}
+      />
+    </div>
   );
 }
