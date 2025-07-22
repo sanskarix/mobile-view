@@ -1203,11 +1203,12 @@ export default function Bookings() {
       <AddGuestsModal
         isOpen={showAddGuests}
         onClose={() => setShowAddGuests(false)}
-        meeting={selectedMeeting}
-        guestEmails={guestEmails}
-        onAddEmail={addGuestEmail}
-        onRemoveEmail={removeGuestEmail}
-        onUpdateEmail={updateGuestEmail}
+        onAdd={(emails: string[]) => {
+          toast({
+            description: `Added ${emails.length} guest${emails.length > 1 ? 's' : ''}`,
+            duration: 2000,
+          });
+        }}
       />
     </div>
   );
