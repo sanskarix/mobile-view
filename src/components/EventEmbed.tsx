@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Copy } from 'lucide-react';
 import { Switch } from './ui/switch';
+import { CustomSelect } from './ui/custom-select';
+
 export const EventEmbed = () => {
   const [selectedOption, setSelectedOption] = useState('inline');
   const [buttonText, setButtonText] = useState('Book my Cal');
   const [showCalendarIcon, setShowCalendarIcon] = useState(true);
   const [buttonPosition, setButtonPosition] = useState('bottom-right');
   const [buttonColor, setButtonColor] = useState('000000');
-  const [textColor, setTextColor] = useState('000000');
+  const [textColor, setTextColor] = useState('ffffff');
   const [theme, setTheme] = useState('auto');
   const [hideEventTypeDetails, setHideEventTypeDetails] = useState(false);
   const [layout, setLayout] = useState('month');
@@ -17,6 +19,7 @@ export const EventEmbed = () => {
   const [brandColorDark, setBrandColorDark] = useState('fafafa');
   const [selectedTimezone, setSelectedTimezone] = useState('Asia/Calcutta');
   const [codeType, setCodeType] = useState('HTML');
+
   const getEmbedCode = () => {
     if (codeType === 'React') {
       switch (selectedOption) {
@@ -143,25 +146,51 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
       }
     }
   };
+
   const handleCopyCode = () => {
     navigator.clipboard.writeText(getEmbedCode());
   };
+
   const timezones = ['Asia/Calcutta', 'America/New_York', 'America/Los_Angeles', 'Europe/London', 'Europe/Paris', 'Asia/Tokyo', 'Australia/Sydney'];
+  const themeOptions = [
+    { value: 'auto', label: '🌓 Auto' },
+    { value: 'light', label: '☀️ Light' },
+    { value: 'dark', label: '🌙 Dark' }
+  ];
+  const layoutOptions = [
+    { value: 'month', label: 'Month' },
+    { value: 'week', label: 'Week' },
+    { value: 'column', label: 'Column' }
+  ];
+  const buttonPositionOptions = [
+    { value: 'bottom-right', label: 'Bottom right' },
+    { value: 'bottom-left', label: 'Bottom left' },
+    { value: 'top-right', label: 'Top right' },
+    { value: 'top-left', label: 'Top left' }
+  ];
+  const timezoneOptions = timezones.map(tz => ({ value: tz, label: tz }));
+
   return <div className="p-0 max-w-none mx-auto space-y-8" style={{
     fontSize: '14px',
     color: '#384252'
   }}>
-      {/* Header */}
-      <div className="mb-8">
-        
-        
-      </div>
-
       {/* Embed Options */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         <div className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedOption === 'inline' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedOption('inline')}>
-          <div className="h-16 bg-gradient-to-br from-blue-50 to-blue-100 rounded mb-4 flex items-center justify-center">
-            <div className="text-blue-600 text-xs font-medium">Inline Embed</div>
+          <div className="h-20 bg-gradient-to-br from-blue-50 to-blue-100 rounded mb-4 flex items-center justify-center border">
+            <div className="w-full h-full bg-white rounded p-2 flex flex-col">
+              <div className="flex items-center justify-between mb-2">
+                <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+                <div className="text-xs text-gray-500">July</div>
+              </div>
+              <div className="grid grid-cols-7 gap-px flex-1">
+                {Array.from({ length: 21 }, (_, i) => (
+                  <div key={i} className="bg-gray-100 text-xs flex items-center justify-center">
+                    {i + 1 <= 14 ? i + 1 : ''}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{
           fontSize: '14px',
@@ -178,8 +207,11 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
         </div>
 
         <div className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedOption === 'floating' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedOption('floating')}>
-          <div className="h-16 bg-gradient-to-br from-green-50 to-green-100 rounded mb-4 flex items-center justify-center">
-            <div className="text-green-600 text-xs font-medium">Floating Button</div>
+          <div className="h-20 bg-gradient-to-br from-green-50 to-green-100 rounded mb-4 flex items-center justify-center relative border">
+            <div className="w-full h-full bg-gray-50 rounded"></div>
+            <div className="absolute bottom-2 right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-xs">
+              📅
+            </div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{
           fontSize: '14px',
@@ -196,8 +228,15 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
         </div>
 
         <div className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedOption === 'popup' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedOption('popup')}>
-          <div className="h-16 bg-gradient-to-br from-purple-50 to-purple-100 rounded mb-4 flex items-center justify-center">
-            <div className="text-purple-600 text-xs font-medium">Pop-up Click</div>
+          <div className="h-20 bg-gradient-to-br from-purple-50 to-purple-100 rounded mb-4 flex items-center justify-center border relative">
+            <div className="bg-white rounded p-2 shadow-lg border">
+              <div className="w-12 h-8 bg-purple-500 rounded text-xs text-white flex items-center justify-center">
+                Cal
+              </div>
+            </div>
+            <div className="absolute bottom-2 left-2 bg-gray-300 rounded px-2 py-1 text-xs">
+              Button
+            </div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{
           fontSize: '14px',
@@ -214,8 +253,13 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
         </div>
 
         <div className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedOption === 'email' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedOption('email')}>
-          <div className="h-16 bg-gradient-to-br from-orange-50 to-orange-100 rounded mb-4 flex items-center justify-center">
-            <div className="text-orange-600 text-xs font-medium">Email Embed</div>
+          <div className="h-20 bg-gradient-to-br from-orange-50 to-orange-100 rounded mb-4 flex items-center justify-center border">
+            <div className="bg-white rounded p-2 w-full h-full flex flex-col justify-center">
+              <div className="bg-orange-500 h-2 w-full rounded mb-1"></div>
+              <div className="bg-gray-200 h-1 w-3/4 rounded mb-1"></div>
+              <div className="bg-gray-200 h-1 w-1/2 rounded mb-2"></div>
+              <div className="bg-blue-500 h-3 w-1/3 rounded"></div>
+            </div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{
           fontSize: '14px',
@@ -235,8 +279,6 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
       {/* Configuration based on selected option */}
       <div className="border-t border-gray-200 pt-8">
         {selectedOption === 'inline' && <div className="space-y-8">
-            
-
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
@@ -253,7 +295,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                     color: '#384252'
                   }}>W</label>
                       <input type="text" value={windowWidth} onChange={e => setWindowWidth(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
-                    fontSize: '14px'
+                    fontSize: '14px',
+                    height: '40px'
                   }} />
                     </div>
                     <div>
@@ -262,7 +305,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                     color: '#384252'
                   }}>H</label>
                       <input type="text" value={windowHeight} onChange={e => setWindowHeight(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
-                    fontSize: '14px'
+                    fontSize: '14px',
+                    height: '40px'
                   }} />
                     </div>
                   </div>
@@ -273,13 +317,11 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                 fontSize: '14px',
                 color: '#384252'
               }}>Theme</label>
-                  <select value={theme} onChange={e => setTheme(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
-                fontSize: '14px'
-              }}>
-                    <option value="auto">🌓 Auto</option>
-                    <option value="light">☀️ Light</option>
-                    <option value="dark">🌙 Dark</option>
-                  </select>
+                  <CustomSelect
+                    value={theme}
+                    onChange={setTheme}
+                    options={themeOptions}
+                  />
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -302,7 +344,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                   backgroundColor: `#${brandColorLight}`
                 }}></div>
                     <input type="text" value={brandColorLight} onChange={e => setBrandColorLight(e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded" style={{
-                  fontSize: '14px'
+                  fontSize: '14px',
+                  height: '40px'
                 }} />
                   </div>
                 </div>
@@ -315,7 +358,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                     Brand Color (Dark Theme)
                   </label>
                   <input type="text" value={brandColorDark} onChange={e => setBrandColorDark(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
-                fontSize: '14px'
+                fontSize: '14px',
+                height: '40px'
               }} />
                 </div>
 
@@ -324,13 +368,11 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                 fontSize: '14px',
                 color: '#384252'
               }}>Layout</label>
-                  <select value={layout} onChange={e => setLayout(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
-                fontSize: '14px'
-              }}>
-                    <option value="month">Month</option>
-                    <option value="week">Week</option>
-                    <option value="column">Column</option>
-                  </select>
+                  <CustomSelect
+                    value={layout}
+                    onChange={setLayout}
+                    options={layoutOptions}
+                  />
                 </div>
               </div>
 
@@ -363,8 +405,6 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           </div>}
 
         {selectedOption === 'floating' && <div className="space-y-8">
-            
-
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div>
@@ -375,7 +415,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                     Button text
                   </label>
                   <input type="text" value={buttonText} onChange={e => setButtonText(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
-                fontSize: '14px'
+                fontSize: '14px',
+                height: '40px'
               }} />
                 </div>
 
@@ -394,14 +435,11 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
               }}>
                     Position of button
                   </label>
-                  <select value={buttonPosition} onChange={e => setButtonPosition(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
-                fontSize: '14px'
-              }}>
-                    <option value="bottom-right">Bottom right</option>
-                    <option value="bottom-left">Bottom left</option>
-                    <option value="top-right">Top right</option>
-                    <option value="top-left">Top left</option>
-                  </select>
+                  <CustomSelect
+                    value={buttonPosition}
+                    onChange={setButtonPosition}
+                    options={buttonPositionOptions}
+                  />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -417,7 +455,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                     backgroundColor: `#${buttonColor}`
                   }}></div>
                       <input type="text" value={buttonColor} onChange={e => setButtonColor(e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded" style={{
-                    fontSize: '14px'
+                    fontSize: '14px',
+                    height: '40px'
                   }} />
                     </div>
                   </div>
@@ -433,7 +472,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                     backgroundColor: `#${textColor}`
                   }}></div>
                       <input type="text" value={textColor} onChange={e => setTextColor(e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded" style={{
-                    fontSize: '14px'
+                    fontSize: '14px',
+                    height: '40px'
                   }} />
                     </div>
                   </div>
@@ -444,13 +484,11 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                 fontSize: '14px',
                 color: '#384252'
               }}>Theme</label>
-                  <select value={theme} onChange={e => setTheme(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
-                fontSize: '14px'
-              }}>
-                    <option value="auto">🌓 Auto</option>
-                    <option value="light">☀️ Light</option>
-                    <option value="dark">🌙 Dark</option>
-                  </select>
+                  <CustomSelect
+                    value={theme}
+                    onChange={setTheme}
+                    options={themeOptions}
+                  />
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -466,126 +504,222 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                 fontSize: '14px',
                 color: '#384252'
               }}>Layout</label>
-                  
-                </div>
-              </div>
-
-              {/* Preview */}
-              
-            </div>
-          </div>}
-
-        {selectedOption === 'popup' && <div className="space-y-8">
-            <div className="max-w-2xl space-y-6">
-              <div>
-                <label className="block font-medium mb-3" style={{
-              fontSize: '14px',
-              color: '#384252'
-            }}>Theme</label>
-                <select value={theme} onChange={e => setTheme(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
-              fontSize: '14px'
-            }}>
-                  <option value="auto">🌓 Auto</option>
-                  <option value="light">☀️ Light</option>
-                  <option value="dark" className="my-0 py-[50px] px-[50px] mx-0">🌙 Dark</option>
-                </select>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <label style={{
-              fontSize: '14px',
-              color: '#384252'
-            }}>Hide event type details</label>
-                <Switch checked={hideEventTypeDetails} onCheckedChange={setHideEventTypeDetails} />
-              </div>
-
-              <div>
-                <label className="block font-medium mb-3" style={{
-              fontSize: '14px',
-              color: '#384252'
-            }}>Layout</label>
-                <select value={layout} onChange={e => setLayout(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
-              fontSize: '14px'
-            }}>
-                  <option value="month">Month</option>
-                  <option value="week">Week</option>
-                  <option value="column">Column</option>
-                </select>
-              </div>
-
-              <div className="bg-black rounded-lg p-4 flex items-center justify-center min-h-[200px] max-w-md mx-auto">
-                <div className="bg-gray-600 text-white px-4 py-2 rounded text-sm">
-                  I am a button that exists on your website
-                </div>
-              </div>
-            </div>
-          </div>}
-
-        {selectedOption === 'email' && <div className="space-y-8">
-
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="space-y-6">
-                <div>
-                  <label className="block font-medium mb-3" style={{
-                fontSize: '14px',
-                color: '#384252'
-              }}>
-                    Select Date
-                  </label>
-                  <div className="text-lg font-semibold mb-3">July 2025</div>
-                  
-                  <div className="grid grid-cols-7 gap-1 text-xs text-center mb-3">
-                    {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => <div key={day} className="p-2 font-medium">{day}</div>)}
-                  </div>
-                  
-                  <div className="grid grid-cols-7 gap-1 text-sm">
-                    {Array.from({
-                  length: 35
-                }, (_, i) => {
-                  const date = i - 5;
-                  const isToday = date === 18;
-                  return <div key={i} className={`p-2 text-center cursor-pointer rounded ${date > 0 && date <= 31 ? isToday ? 'bg-blue-500 text-white' : 'hover:bg-gray-100' : 'text-gray-300'}`}>
-                          {date > 0 && date <= 31 ? date : ''}
-                        </div>;
-                })}
-                  </div>
+                  <CustomSelect
+                    value={layout}
+                    onChange={setLayout}
+                    options={layoutOptions}
+                  />
                 </div>
 
-                <div>
-                  <label className="block font-medium mb-3" style={{
-                fontSize: '14px',
-                color: '#384252'
-              }}>
-                    Timezone
-                  </label>
-                  <select value={selectedTimezone} onChange={e => setSelectedTimezone(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
-                fontSize: '14px'
-              }}>
-                    {timezones.map(tz => <option key={tz} value={tz}>{tz}</option>)}
-                  </select>
-                </div>
+                {/* Brand Colors Section for Floating */}
+                <div className="border-t border-gray-200 pt-6">
+                  <h4 className="font-medium mb-4" style={{
+                  fontSize: '14px',
+                  color: '#384252'
+                }}>Brand Colors</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block font-medium mb-3" style={{
+                    fontSize: '14px',
+                    color: '#384252'
+                  }}>
+                        Brand Color (Light Theme)
+                      </label>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 rounded border" style={{
+                      backgroundColor: `#${brandColorLight}`
+                    }}></div>
+                        <input type="text" value={brandColorLight} onChange={e => setBrandColorLight(e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded" style={{
+                      fontSize: '14px',
+                      height: '40px'
+                    }} />
+                      </div>
+                    </div>
 
-                <div>
-                  <div className="font-medium mb-3" style={{
-                fontSize: '14px',
-                color: '#384252'
-              }}>Fri 18</div>
-                  <div className="space-y-2">
-                    {['10:15am', '10:30am', '10:45am', '11:00am', '11:15am', '11:30am', '11:45am'].map(time => <div key={time} className="border border-gray-300 rounded p-2 text-center text-sm cursor-pointer hover:bg-gray-50">
-                        {time}
-                      </div>)}
+                    <div>
+                      <label className="block font-medium mb-3" style={{
+                    fontSize: '14px',
+                    color: '#384252'
+                  }}>
+                        Brand Color (Dark Theme)
+                      </label>
+                      <input type="text" value={brandColorDark} onChange={e => setBrandColorDark(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+                    fontSize: '14px',
+                    height: '40px'
+                  }} />
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Preview */}
               <div className="bg-gray-50 rounded-lg p-6 flex-shrink-0">
-                <div className="bg-white border border-gray-200 rounded-lg p-4 max-w-sm mx-auto">
+                <div className="relative bg-gray-100 rounded-lg h-64 flex items-center justify-center">
+                  <div className="text-gray-500 text-sm">Website Preview</div>
+                  <div 
+                    className="absolute bottom-4 right-4 px-4 py-2 rounded-full text-white font-medium shadow-lg cursor-pointer hover:shadow-xl transition-shadow"
+                    style={{ backgroundColor: `#${buttonColor}`, color: `#${textColor}` }}
+                  >
+                    {showCalendarIcon && <span className="mr-2">📅</span>}
+                    {buttonText}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>}
+
+        {selectedOption === 'popup' && <div className="space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="space-y-6">
+                <div>
+                  <label className="block font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>Theme</label>
+                  <CustomSelect
+                    value={theme}
+                    onChange={setTheme}
+                    options={themeOptions}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <label style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>Hide event type details</label>
+                  <Switch checked={hideEventTypeDetails} onCheckedChange={setHideEventTypeDetails} />
+                </div>
+
+                <div>
+                  <label className="block font-medium mb-3" style={{
+                fontSize: '14px',
+                color: '#384252'
+              }}>Layout</label>
+                  <CustomSelect
+                    value={layout}
+                    onChange={setLayout}
+                    options={layoutOptions}
+                  />
+                </div>
+
+                {/* Brand Colors Section for Popup */}
+                <div className="border-t border-gray-200 pt-6">
+                  <h4 className="font-medium mb-4" style={{
+                  fontSize: '14px',
+                  color: '#384252'
+                }}>Brand Colors</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block font-medium mb-3" style={{
+                    fontSize: '14px',
+                    color: '#384252'
+                  }}>
+                        Brand Color (Light Theme)
+                      </label>
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 rounded border" style={{
+                      backgroundColor: `#${brandColorLight}`
+                    }}></div>
+                        <input type="text" value={brandColorLight} onChange={e => setBrandColorLight(e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded" style={{
+                      fontSize: '14px',
+                      height: '40px'
+                    }} />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block font-medium mb-3" style={{
+                    fontSize: '14px',
+                    color: '#384252'
+                  }}>
+                        Brand Color (Dark Theme)
+                      </label>
+                      <input type="text" value={brandColorDark} onChange={e => setBrandColorDark(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded" style={{
+                    fontSize: '14px',
+                    height: '40px'
+                  }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Preview */}
+              <div className="bg-gray-50 rounded-lg p-6 flex-shrink-0">
+                <div className="bg-gray-100 rounded-lg p-4 flex items-center justify-center min-h-[200px] max-w-md mx-auto">
+                  <div className="bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium cursor-pointer hover:bg-blue-600 transition-colors">
+                    I am a button that exists on your website
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>}
+
+        {selectedOption === 'email' && <div className="space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="space-y-6">
+                <div className="bg-white border border-gray-200 rounded-lg p-6">
+                  <div>
+                    <label className="block font-medium mb-3" style={{
+                  fontSize: '14px',
+                  color: '#384252'
+                }}>
+                      Select Date
+                    </label>
+                    <div className="text-lg font-semibold mb-3">July 2025</div>
+                    
+                    <div className="grid grid-cols-7 gap-1 text-xs text-center mb-3">
+                      {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => <div key={day} className="p-2 font-medium">{day}</div>)}
+                    </div>
+                    
+                    <div className="grid grid-cols-7 gap-1 text-sm">
+                      {Array.from({
+                    length: 35
+                  }, (_, i) => {
+                    const date = i - 5;
+                    const isToday = date === 18;
+                    return <div key={i} className={`p-2 text-center cursor-pointer rounded ${date > 0 && date <= 31 ? isToday ? 'bg-blue-500 text-white' : 'hover:bg-gray-100' : 'text-gray-300'}`}>
+                            {date > 0 && date <= 31 ? date : ''}
+                          </div>;
+                  })}
+                    </div>
+                  </div>
+
+                  <div className="mt-6">
+                    <label className="block font-medium mb-3" style={{
+                  fontSize: '14px',
+                  color: '#384252'
+                }}>
+                      Timezone
+                    </label>
+                    <CustomSelect
+                      value={selectedTimezone}
+                      onChange={setSelectedTimezone}
+                      options={timezoneOptions}
+                    />
+                  </div>
+
+                  <div className="mt-6">
+                    <div className="font-medium mb-3" style={{
+                  fontSize: '14px',
+                  color: '#384252'
+                }}>Fri 18</div>
+                    <div className="space-y-2">
+                      {['10:15am', '10:30am', '10:45am', '11:00am', '11:15am', '11:30am', '11:45am'].map(time => <div key={time} className="border border-gray-300 rounded p-2 text-center text-sm cursor-pointer hover:bg-gray-50">
+                          {time}
+                        </div>)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Preview */}
+              <div className="bg-gray-50 rounded-lg p-6 flex-shrink-0">
+                <div className="bg-white border border-gray-200 rounded-lg p-4 max-w-sm mx-auto shadow-sm">
                   <h3 className="font-semibold text-lg mb-2">Product Hunt Chats</h3>
                   <p className="text-sm text-gray-600 mb-1">Duration: 15 mins</p>
                   <p className="text-sm text-gray-600 mb-4">Timezone: {selectedTimezone}</p>
-                  <a href="#" className="inline-block bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-600">
+                  <a href="#" className="inline-block bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-600 transition-colors">
                     See all available times
                   </a>
                   <p className="text-xs text-gray-400 mt-4">Powered by OneHash Cal</p>
