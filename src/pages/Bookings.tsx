@@ -792,7 +792,7 @@ export default function Bookings() {
                 </h3>
                 {attendeeDisplay && (
                   <>
-                    <span className="text-muted-foreground">with</span>
+                    <span className="text-sm text-muted-foreground">with</span>
                     <div className="flex items-center space-x-1">
                       <div className="relative">
                         {typeof attendeeDisplay === 'object' ? (
