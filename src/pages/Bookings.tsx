@@ -41,6 +41,7 @@ interface Meeting {
   recurringDates?: string[];
   host?: string;
   isHost?: boolean;
+  additionalNotes?: string;
   recurringSchedule?: {
     interval: number;
     totalMeetings: number;
@@ -76,7 +77,8 @@ const mockMeetings: Meeting[] = [
     },
     eventType: 'Product Hunt Chats',
     status: 'upcoming',
-    isToday: true
+    isToday: true,
+    additionalNotes: 'Discuss product launch strategy and timeline. Prepare demo materials for the presentation.'
   },
   {
     id: '2',
@@ -136,7 +138,8 @@ const mockMeetings: Meeting[] = [
     },
     eventType: 'Team Strategy Session',
     status: 'upcoming',
-    isToday: false
+    isToday: false,
+    additionalNotes: 'Review Q3 goals and align on key initiatives. Prepare budget estimates for next quarter.'
   },
   {
     id: '4',
@@ -201,7 +204,8 @@ const mockMeetings: Meeting[] = [
     },
     eventType: 'Client Consultation',
     status: 'upcoming',
-    isToday: false
+    isToday: false,
+    additionalNotes: 'Focus on understanding their current pain points and how our solution can help.'
   },
   {
     id: '6',
@@ -550,7 +554,12 @@ export default function Bookings() {
 
   const handleExport = () => {
     toast({
-      description: "Export successful: Your bookings will be sent to your email shortly.",
+      description: (
+        <div className="flex items-center gap-2">
+          <Check className="h-4 w-4" style={{ color: '#008c44' }} />
+          <span>Export successful: Your bookings will be sent to your email shortly.</span>
+        </div>
+      ),
       duration: 3000,
     });
   };
@@ -618,36 +627,9 @@ export default function Bookings() {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
-      description: "Email copied to clipboard",
+      description: "Email copied",
       duration: 2000,
     });
-  };
-
-  const getEventIcon = (eventType: string) => {
-    switch (eventType) {
-      case 'Product Hunt Chats':
-        return <Rocket className="h-5 w-5 text-primary" />;
-      case 'Discovery Call':
-        return <Search className="h-5 w-5 text-primary" />;
-      case 'Strategy Session':
-        return <Target className="h-5 w-5 text-primary" />;
-      case 'Design Review':
-        return <Eye className="h-5 w-5 text-primary" />;
-      case 'Client Consultation':
-        return <Briefcase className="h-5 w-5 text-primary" />;
-      case 'Weekly Standup':
-        return <Calendar className="h-5 w-5 text-primary" />;
-      case 'Onboarding Call':
-        return <GraduationCap className="h-5 w-5 text-primary" />;
-      case 'Product Demo':
-        return <Video className="h-5 w-5 text-primary" />;
-      case 'Team Strategy Session':
-        return <Users className="h-5 w-5 text-primary" />;
-      case 'Sales Pipeline Review':
-        return <Zap className="h-5 w-5 text-primary" />;
-      default:
-        return <Video className="h-5 w-5 text-primary" />;
-    }
   };
 
   const MeetingCard = ({ meeting }: { meeting: Meeting }) => {
@@ -802,13 +784,6 @@ export default function Bookings() {
       >
         <div className="flex items-start justify-between">
           <div className="flex items-start space-x-4 flex-1">
-            {/* Icon */}
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                {getEventIcon(meeting.eventType)}
-              </div>
-            </div>
-
             {/* Content */}
             <div className="flex-1 min-w-0">
               {/* Title and Attendees */}
@@ -816,7 +791,7 @@ export default function Bookings() {
                 <h3 className={`text-lg font-semibold ${meeting.status === 'canceled' ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
                   {meeting.title}
                 </h3>
-                <span className="text-muted-foreground">•</span>
+                <span className="text-muted-foreground">with</span>
                 <div className="flex items-center space-x-1">
                   {attendeeDisplay && (
                     <div className="relative">
@@ -1013,6 +988,13 @@ export default function Bookings() {
                     </div>
                   </div>
                 )}
+
+                {meeting.additionalNotes && (
+                  <div>
+                    <div className="text-sm font-medium text-foreground mb-2">Additional Notes</div>
+                    <div className="text-sm text-muted-foreground">{meeting.additionalNotes}</div>
+                  </div>
+                )}
               </div>
 
               {/* Action Buttons for Expanded View */}
@@ -1028,7 +1010,7 @@ export default function Bookings() {
                       setShowMeetingNotes(true);
                     }}
                   >
-                    Meeting Notes
+                    Your Notes
                   </Button>
                   {meeting.isToday && isCurrentTime(meeting.time) && (
                     <Button
@@ -1046,643 +1028,6 @@ export default function Bookings() {
                   )}
                 </div>
               )}
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  useEffect(() => {
-    setHeaderMeta({
-      title: 'Bookings',
-      description: 'View and manage all your scheduled appointments.'
-    });
-  }, [setHeaderMeta]);
-
-  return (
-    <TooltipProvider>
-      <div className="px-8 pt-3 pb-6 space-y-4 w-full max-w-full">
-        {/* Overlay for popups */}
-        {(showMeetingNotes || showCancelConfirm || showCancelSelection || showNoShow || showEditLocation || showAddGuests) && (
-          <div className="fixed inset-0 bg-black/50 z-40" />
-        )}
-
-        {/* Header with Tabs and Action Buttons */}
-        <div className="flex items-center justify-between">
-          {/* Tabs - Updated styling to match teams tabs */}
-          <div className="flex border-b border-border">
-            {[
-              { value: 'upcoming', label: 'Upcoming' },
-              { value: 'unconfirmed', label: 'Unconfirmed' },
-              { value: 'recurring', label: 'Recurring' },
-              { value: 'past', label: 'Past' },
-              { value: 'canceled', label: 'Canceled' }
-            ].map((tab) => (
-              <button
-                key={tab.value}
-                onClick={() => setActiveTab(tab.value)}
-                className={`px-4 py-2 text-sm font-medium transition-colors relative ${
-                  activeTab === tab.value
-                    ? 'text-foreground border-b-2 border-primary'
-                    : 'text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-          
-          {/* Action Buttons */}
-          <div className="flex items-center space-x-3">
-            <Button
-              variant="outline"
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center space-x-2"
-            >
-              <Filter className="h-4 w-4" />
-              <span>Filters</span>
-            </Button>
-            <Button
-              variant="outline"
-              onClick={handleExport}
-              className="flex items-center space-x-2"
-            >
-              <Download className="h-4 w-4" />
-              <span>Export All</span>
-            </Button>
-          </div>
-        </div>
-
-        {/* Filters */}
-        {showFilters && (
-          <div className="flex items-center space-x-4 p-4 bg-muted/50 rounded-lg transition-all duration-300 ease-in-out animate-fade-in">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" size="sm">Attendee: {filteredAttendee}</Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80 max-h-60 overflow-auto scrollbar-hide" align="start">
-                <div className="space-y-3">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <input
-                      type="text"
-                      placeholder="Search"
-                      className="w-full pl-10 pr-4 py-2 border border-border rounded-md text-sm"
-                    />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">All</span>
-                    <Checkbox
-                      checked={filteredAttendee === 'All'}
-                      onCheckedChange={() => setFilteredAttendee('All')}
-                    />
-                  </div>
-                  {getAllAttendees().map((attendee, index) => (
-                    <div key={index} className="flex items-center justify-between">
-                      <span className="text-sm">{attendee}</span>
-                      <Checkbox
-                        checked={filteredAttendee === attendee}
-                        onCheckedChange={() => setFilteredAttendee(attendee)}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" size="sm">Host: {filteredHost}</Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80 max-h-60 overflow-auto scrollbar-hide" align="start">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">All Users</span>
-                    <Checkbox
-                      checked={filteredHost === 'All'}
-                      onCheckedChange={() => setFilteredHost('All')}
-                    />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">You</span>
-                    <Checkbox
-                      checked={filteredHost === 'You'}
-                      onCheckedChange={() => setFilteredHost('You')}
-                    />
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" size="sm">Event Type: {filteredEventType}</Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80 max-h-60 overflow-auto scrollbar-hide" align="start">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">All event types</span>
-                    <Checkbox
-                      checked={filteredEventType === 'All'}
-                      onCheckedChange={() => setFilteredEventType('All')}
-                    />
-                  </div>
-                  <hr />
-                  <div>
-                    <p className="text-sm font-medium mb-2">Personal</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm">15 Min Meeting</span>
-                      <Checkbox />
-                    </div>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" size="sm">Teams: {filteredTeam}</Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80 max-h-60 overflow-auto scrollbar-hide" align="start">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm">All</span>
-                    <Checkbox
-                      checked={filteredTeam === 'All'}
-                      onCheckedChange={() => setFilteredTeam('All')}
-                    />
-                  </div>
-                  {teamNames.map((team, index) => (
-                    <div key={index} className="flex items-center justify-between">
-                      <span className="text-sm">{team}</span>
-                      <Checkbox
-                        checked={filteredTeam === team}
-                        onCheckedChange={() => setFilteredTeam(team)}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" size="sm">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  {dateRange?.from
-                    ? dateRange.to
-                      ? `${dateRange.from.toLocaleDateString()} - ${dateRange.to.toLocaleDateString()}`
-                      : dateRange.from.toLocaleDateString()
-                    : "Pick a date range"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <CalendarComponent
-                  mode="range"
-                  selected={dateRange}
-                  onSelect={setDateRange}
-                  className="rounded-md border pointer-events-auto"
-                />
-              </PopoverContent>
-            </Popover>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setFilteredAttendee('All');
-                setFilteredHost('All');
-                setFilteredEventType('All');
-                setFilteredTeam('All');
-                setDateRange(undefined);
-              }}
-            >
-              Clear all filters
-            </Button>
-          </div>
-        )}
-
-        {/* Meetings List */}
-        <div className="space-y-6">
-          {todayMeetings.length > 0 && (
-            <div className="space-y-3">
-              <h2 className="text-sm font-medium text-muted-foreground">Today</h2>
-              <div className="space-y-3">
-                {todayMeetings.map((meeting) => (
-                  <MeetingCard key={meeting.id} meeting={meeting} />
-                ))}
-              </div>
-            </div>
-          )}
-          
-          {otherMeetings.length > 0 && (
-            <div className={`space-y-3 ${todayMeetings.length > 0 ? 'mt-6' : ''}`}>
-              <div className="space-y-3">
-                {otherMeetings.map((meeting) => (
-                  <MeetingCard key={meeting.id} meeting={meeting} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {todayMeetings.length === 0 && otherMeetings.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
-              No {activeTab} bookings
-            </div>
-          )}
-        </div>
-
-        {/* Add Guests Modal - Updated with new design */}
-        {showAddGuests && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
-              <h2 className="text-xl font-semibold mb-2">Add Guests</h2>
-              <div className="flex items-center gap-2 mb-6">
-                <span className="text-sm text-gray-600">Add email addresses to add guests.</span>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Info className="h-4 w-4 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>An email invite will be sent to these guests automatically</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-              
-              <div className="space-y-3 mb-6">
-                {guestEmails.map((email, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <input
-                      type="email"
-                      placeholder="guest@example.com"
-                      value={email}
-                      onChange={(e) => updateGuestEmail(index, e.target.value)}
-                      className="flex-1 p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {guestEmails.length > 1 && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeGuestEmail(index)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
-                ))}
-                
-                <Button
-                  variant="ghost"
-                  onClick={addGuestEmail}
-                  className="w-full justify-start text-muted-foreground hover:bg-muted"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add More
-                </Button>
-              </div>
-              
-              <div className="flex justify-end space-x-3">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setShowAddGuests(false);
-                    setGuestEmails(['']);
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onClick={() => {
-                    setShowAddGuests(false);
-                    setGuestEmails(['']);
-                    toast({
-                      description: "Guests added successfully",
-                      duration: 2000,
-                    });
-                  }}
-                >
-                  Add Guests
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Meeting Notes Modal */}
-        {showMeetingNotes && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-2xl shadow-xl">
-              <h2 className="text-xl font-semibold mb-2">Meeting Notes</h2>
-              <p className="text-sm text-gray-600 mb-6">Add notes to your meeting</p>
-              
-              <div className="mb-6">
-                <div className="flex items-center space-x-1 mb-3 p-3 border border-gray-200 rounded-t-md bg-gray-50">
-                  <Button variant="ghost" size="sm"><Bold className="h-4 w-4" /></Button>
-                  <Button variant="ghost" size="sm"><Italic className="h-4 w-4" /></Button>
-                  <Button variant="ghost" size="sm"><Underline className="h-4 w-4" /></Button>
-                  <Button variant="ghost" size="sm"><Strikethrough className="h-4 w-4" /></Button>
-                  <Button variant="ghost" size="sm"><List className="h-4 w-4" /></Button>
-                  <Button variant="ghost" size="sm"><ListOrdered className="h-4 w-4" /></Button>
-                  <Button variant="ghost" size="sm"><Undo className="h-4 w-4" /></Button>
-                  <Button variant="ghost" size="sm"><Redo className="h-4 w-4" /></Button>
-                </div>
-                <textarea
-                  value={meetingNotes}
-                  onChange={(e) => setMeetingNotes(e.target.value)}
-                  className="w-full h-32 p-4 border border-gray-200 rounded-b-md border-t-0 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Add your meeting notes here..."
-                />
-              </div>
-              
-              <div className="flex justify-end space-x-3">
-                <Button variant="outline" onClick={() => setShowMeetingNotes(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={() => setShowMeetingNotes(false)}>
-                  Save
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Cancel Selection Modal - First popup for recurring events - Made bigger */}
-        {showCancelSelection && selectedMeeting && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-2xl shadow-xl">
-              <h2 className="text-xl font-semibold mb-6 text-gray-900 text-center">Cancel Event</h2>
-              
-              <div className="mb-6">
-                <label className="block text-sm font-medium mb-3 text-gray-900">Select the meetings you want to cancel</label>
-                <div className="space-y-2 max-h-64 overflow-y-auto">
-                  <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                    <span className="text-sm font-medium">Select All</span>
-                    <Checkbox
-                      checked={selectedRecurringDates.length === selectedMeeting.recurringSchedule?.meetings.length}
-                      onCheckedChange={(checked) => {
-                        if (checked) {
-                          setSelectedRecurringDates(selectedMeeting.recurringSchedule?.meetings.map(m => `${m.date} • ${m.time}`) || []);
-                        } else {
-                          setSelectedRecurringDates([]);
-                        }
-                      }}
-                    />
-                  </div>
-                  {selectedMeeting.recurringSchedule?.meetings.map((meeting, index) => {
-                    const dateTime = `${meeting.date} • ${meeting.time}`;
-                    return (
-                      <div key={index} className="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
-                        <span className="text-sm">{dateTime}</span>
-                        <Checkbox
-                          checked={selectedRecurringDates.includes(dateTime)}
-                          onCheckedChange={(checked) => {
-                            if (checked) {
-                              setSelectedRecurringDates([...selectedRecurringDates, dateTime]);
-                            } else {
-                              setSelectedRecurringDates(selectedRecurringDates.filter(d => d !== dateTime));
-                            }
-                          }}
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-              
-              <div className="flex justify-end space-x-3">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setShowCancelSelection(false);
-                    setSelectedMeeting(null);
-                    setSelectedRecurringDates([]);
-                  }}
-                >
-                  Nevermind
-                </Button>
-                <Button
-                  onClick={() => {
-                    setShowCancelSelection(false);
-                    setShowCancelConfirm(true);
-                  }}
-                  disabled={selectedRecurringDates.length === 0}
-                >
-                  Continue
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Cancel Event Modal - Updated with invitees and host info */}
-        {showCancelConfirm && selectedMeeting && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-xl">
-              <h2 className="text-xl font-semibold mb-2 text-gray-900 text-center">Cancel Event</h2>
-              <p className="text-sm text-gray-600 mb-6 text-center">We sent an email with a calendar invitation with the details to everyone</p>
-              
-              {/* Host and Attendees */}
-              <div className="mb-6">
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {/* Host */}
-                  <div className="relative">
-                    <button className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors">
-                      <span>{selectedMeeting.host}</span>
-                      <span
-                        className="px-2 py-0.5 text-xs rounded-full"
-                        style={{ backgroundColor: '#007ee5', color: 'white' }}
-                      >
-                        Host
-                      </span>
-                    </button>
-                  </div>
-                  
-                  {/* Attendees */}
-                  {selectedMeeting.attendees.map((attendee, index) => (
-                    <div key={index} className="relative">
-                      <button
-                        className="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors"
-                        onMouseEnter={() => setShowAttendeeDetails(`cancel-${selectedMeeting.id}-${index}`)}
-                        onMouseLeave={() => setShowAttendeeDetails(null)}
-                      >
-                        {attendee.name}
-                      </button>
-                      {showAttendeeDetails === `cancel-${selectedMeeting.id}-${index}` && (
-                        <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-64">
-                          <div className="p-3 space-y-2">
-                            <div className="flex items-center gap-2">
-                              <Mail className="h-4 w-4 text-muted-foreground" />
-                              <span className="text-sm text-foreground">{attendee.email}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Globe className="h-4 w-4 text-muted-foreground" />
-                              <span className="text-sm text-foreground">{attendee.timezone}</span>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {selectedMeeting.status === 'recurring' && selectedRecurringDates.length > 0 ? (
-                <div className="space-y-3 mb-6 p-4 bg-gray-50 rounded-lg">
-                  <div className="flex gap-3">
-                    <span className="font-medium text-gray-600 min-w-16">Event:</span>
-                    <span className="text-gray-900">{selectedMeeting.eventType}</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="font-medium text-gray-600 min-w-16">When:</span>
-                    <div className="text-gray-900">
-                      {selectedRecurringDates.map((date, index) => (
-                        <div key={index}>{date}</div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="font-medium text-gray-600 min-w-16">With:</span>
-                    <span className="text-gray-900">{selectedMeeting.attendees.map(a => a.name).join(', ')}</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="font-medium text-gray-600 min-w-16">Where:</span>
-                    <span className="text-gray-900">{selectedMeeting.location.name}</span>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-3 mb-6 p-4 bg-gray-50 rounded-lg">
-                  <div className="flex gap-3">
-                    <span className="font-medium text-gray-600 min-w-16">Event:</span>
-                    <span className="text-gray-900">{selectedMeeting.eventType}</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="font-medium text-gray-600 min-w-16">When:</span>
-                    <span className="text-gray-900">{selectedMeeting.date} {selectedMeeting.time} - {selectedMeeting.endTime}</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="font-medium text-gray-600 min-w-16">With:</span>
-                    <span className="text-gray-900">{selectedMeeting.attendees.map(a => a.name).join(', ')}</span>
-                  </div>
-                  <div className="flex gap-3">
-                    <span className="font-medium text-gray-600 min-w-16">Where:</span>
-                    <span className="text-gray-900">{selectedMeeting.location.name}</span>
-                  </div>
-                </div>
-              )}
-
-              <div className="mb-6">
-                <label className="block text-sm font-medium mb-3 text-gray-900">Reason for cancellation (optional)</label>
-                <textarea
-                  value={cancelReason}
-                  onChange={(e) => setCancelReason(e.target.value)}
-                  className="w-full h-24 p-3 border border-gray-200 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Why are you cancelling?"
-                />
-              </div>
-              
-              <div className="flex justify-end space-x-3">
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setShowCancelConfirm(false);
-                    setSelectedMeeting(null);
-                    setCancelReason('');
-                    setSelectedRecurringDates([]);
-                  }}
-                >
-                  Nevermind
-                </Button>
-                <Button
-                  variant="destructive"
-                  onClick={() => {
-                    setShowCancelConfirm(false);
-                    setSelectedMeeting(null);
-                    setCancelReason('');
-                    setSelectedRecurringDates([]);
-                    toast({
-                      description: "Event cancelled successfully.",
-                      duration: 3000,
-                    });
-                  }}
-                >
-                  Cancel Event
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* No Show Modal */}
-        {showNoShow && selectedMeeting && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
-              <h2 className="text-xl font-semibold mb-2">Mark as No-Show</h2>
-              <p className="text-sm text-gray-600 mb-6">Select attendees to mark as no-show</p>
-              
-              <div className="space-y-4 mb-6">
-                {selectedMeeting.attendees.map((attendee, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
-                    <div className="flex items-center space-x-3">
-                      <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center">
-                        <span className="text-sm font-medium text-white">
-                          {attendee.name.charAt(0)}
-                        </span>
-                      </div>
-                      <span className="text-sm font-medium">{attendee.name}</span>
-                    </div>
-                    <Checkbox />
-                  </div>
-                ))}
-              </div>
-              
-              <div className="flex justify-end space-x-3">
-                <Button variant="outline" onClick={() => setShowNoShow(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={() => setShowNoShow(false)}>
-                  Mark as No-Show
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Edit Location Modal - Updated with comprehensive dropdown */}
-        {showEditLocation && selectedMeeting && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
-              <h2 className="text-xl font-semibold mb-2">Edit Location</h2>
-              <p className="text-sm text-gray-600 mb-6">
-                Current Location: {selectedMeeting.location.logo} {selectedMeeting.location.name}
-              </p>
-              
-              <div className="mb-6">
-                <label className="block text-sm font-medium mb-2">Meeting Location</label>
-                <select className="w-full p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option value="google-meet">📹 Google Meet</option>
-                  <option value="zoom">📹 Zoom</option>
-                  <option value="teams">📹 Microsoft Teams</option>
-                  <option value="webex">📹 Cisco Webex</option>
-                  <option value="gotomeeting">📹 GoToMeeting</option>
-                  <option value="jitsi">📹 Jitsi Meet</option>
-                  <option value="around">📹 Around</option>
-                  <option value="riverside">📹 Riverside.fm</option>
-                  <option value="whereby">📹 Whereby</option>
-                  <option value="in-person">📍 In-person meeting</option>
-                  <option value="phone">📞 Phone call</option>
-                  <option value="custom">🔗 Custom link</option>
-                </select>
-              </div>
-              
-              <div className="flex justify-end space-x-3">
-                <Button variant="outline" onClick={() => setShowEditLocation(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={() => setShowEditLocation(false)}>
-                  Save Changes
-                </Button>
-              </div>
             </div>
           </div>
         )}
