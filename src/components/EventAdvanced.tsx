@@ -327,7 +327,7 @@ export const EventAdvanced = () => {
                   </p>
                 </div>
                 <button onClick={() => handleEditQuestion(question)} style={{
-              fontSize: '14px';margin-right: 8px;
+              fontSize: '14px'
             }} className="text-blue-600 hover:text-blue-700 mx-[12px]">
                   Edit
                 </button>
