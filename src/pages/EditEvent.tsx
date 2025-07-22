@@ -91,7 +91,19 @@ export const EditEvent = () => {
       description: 'Configure event details, availability and integrations.',
       enabled: true,
       onEnabledChange: (enabled: boolean) => {
-        console.log('Event enabled changed:', enabled);
+        setHeaderMeta({
+          title: 'Edit Event',
+          description: 'Configure event details, availability and integrations.',
+          enabled,
+          onEnabledChange: (newEnabled: boolean) => {
+            setHeaderMeta({
+              title: 'Edit Event',
+              description: 'Configure event details, availability and integrations.',
+              enabled: newEnabled,
+              onEnabledChange: () => {}
+            });
+          }
+        });
       }
     });
   }, [setHeaderMeta]);

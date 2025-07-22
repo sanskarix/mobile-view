@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Copy } from 'lucide-react';
+import { ArrowLeft, Copy, ChevronDown, ChevronUp } from 'lucide-react';
 import { Switch } from './ui/switch';
-import { CustomSelect } from './ui/custom-select';
 
 export const EventEmbed = () => {
   const [selectedOption, setSelectedOption] = useState('inline');
@@ -9,7 +8,7 @@ export const EventEmbed = () => {
   const [showCalendarIcon, setShowCalendarIcon] = useState(true);
   const [buttonPosition, setButtonPosition] = useState('bottom-right');
   const [buttonColor, setButtonColor] = useState('000000');
-  const [textColor, setTextColor] = useState('ffffff');
+  const [textColor, setTextColor] = useState('000000');
   const [theme, setTheme] = useState('auto');
   const [hideEventTypeDetails, setHideEventTypeDetails] = useState(false);
   const [layout, setLayout] = useState('month');
@@ -19,6 +18,10 @@ export const EventEmbed = () => {
   const [brandColorDark, setBrandColorDark] = useState('fafafa');
   const [selectedTimezone, setSelectedTimezone] = useState('Asia/Calcutta');
   const [codeType, setCodeType] = useState('HTML');
+  const [showThemeDropdown, setShowThemeDropdown] = useState(false);
+  const [showLayoutDropdown, setShowLayoutDropdown] = useState(false);
+  const [showPositionDropdown, setShowPositionDropdown] = useState(false);
+  const [showTimezoneDropdown, setShowTimezoneDropdown] = useState(false);
 
   const getEmbedCode = () => {
     if (codeType === 'React') {
@@ -152,48 +155,17 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
   };
 
   const timezones = ['Asia/Calcutta', 'America/New_York', 'America/Los_Angeles', 'Europe/London', 'Europe/Paris', 'Asia/Tokyo', 'Australia/Sydney'];
-  const themeOptions = [
-    { value: 'auto', label: '🌓 Auto' },
-    { value: 'light', label: '☀️ Light' },
-    { value: 'dark', label: '🌙 Dark' }
-  ];
-  const layoutOptions = [
-    { value: 'month', label: 'Month' },
-    { value: 'week', label: 'Week' },
-    { value: 'column', label: 'Column' }
-  ];
-  const buttonPositionOptions = [
-    { value: 'bottom-right', label: 'Bottom right' },
-    { value: 'bottom-left', label: 'Bottom left' },
-    { value: 'top-right', label: 'Top right' },
-    { value: 'top-left', label: 'Top left' }
-  ];
-  const timezoneOptions = timezones.map(tz => ({ value: tz, label: tz }));
 
   return (
     <div className="p-0 max-w-none mx-auto space-y-8" style={{ fontSize: '14px', color: '#384252' }}>
+      {/* Header */}
+      <div className="mb-8"></div>
+
       {/* Embed Options */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <div 
-          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-            selectedOption === 'inline' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-          }`} 
-          onClick={() => setSelectedOption('inline')}
-        >
-          <div className="h-20 bg-gradient-to-br from-blue-50 to-blue-100 rounded mb-4 flex items-center justify-center border">
-            <div className="w-full h-full bg-white rounded p-2 flex flex-col">
-              <div className="flex items-center justify-between mb-2">
-                <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                <div className="text-xs text-gray-500">July</div>
-              </div>
-              <div className="grid grid-cols-7 gap-px flex-1">
-                {Array.from({ length: 21 }, (_, i) => (
-                  <div key={i} className="bg-gray-100 text-xs flex items-center justify-center">
-                    {i + 1 <= 14 ? i + 1 : ''}
-                  </div>
-                ))}
-              </div>
-            </div>
+        <div className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedOption === 'inline' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedOption('inline')}>
+          <div className="h-16 bg-gradient-to-br from-blue-50 to-blue-100 rounded mb-4 flex items-center justify-center">
+            <div className="text-blue-600 text-xs font-medium">Inline Embed</div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Inline Embed
@@ -203,17 +175,9 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           </p>
         </div>
 
-        <div 
-          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-            selectedOption === 'floating' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-          }`} 
-          onClick={() => setSelectedOption('floating')}
-        >
-          <div className="h-20 bg-gradient-to-br from-green-50 to-green-100 rounded mb-4 flex items-center justify-center relative border">
-            <div className="w-full h-full bg-gray-50 rounded"></div>
-            <div className="absolute bottom-2 right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-xs">
-              📅
-            </div>
+        <div className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedOption === 'floating' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedOption('floating')}>
+          <div className="h-16 bg-gradient-to-br from-green-50 to-green-100 rounded mb-4 flex items-center justify-center">
+            <div className="text-green-600 text-xs font-medium">Floating Button</div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Floating pop-up button
@@ -223,21 +187,9 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           </p>
         </div>
 
-        <div 
-          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-            selectedOption === 'popup' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-          }`} 
-          onClick={() => setSelectedOption('popup')}
-        >
-          <div className="h-20 bg-gradient-to-br from-purple-50 to-purple-100 rounded mb-4 flex items-center justify-center border relative">
-            <div className="bg-white rounded p-2 shadow-lg border">
-              <div className="w-12 h-8 bg-purple-500 rounded text-xs text-white flex items-center justify-center">
-                Cal
-              </div>
-            </div>
-            <div className="absolute bottom-2 left-2 bg-gray-300 rounded px-2 py-1 text-xs">
-              Button
-            </div>
+        <div className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedOption === 'popup' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedOption('popup')}>
+          <div className="h-16 bg-gradient-to-br from-purple-50 to-purple-100 rounded mb-4 flex items-center justify-center">
+            <div className="text-purple-600 text-xs font-medium">Pop-up Click</div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Pop up via element click
@@ -247,19 +199,9 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           </p>
         </div>
 
-        <div 
-          className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${
-            selectedOption === 'email' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-          }`} 
-          onClick={() => setSelectedOption('email')}
-        >
-          <div className="h-20 bg-gradient-to-br from-orange-50 to-orange-100 rounded mb-4 flex items-center justify-center border">
-            <div className="bg-white rounded p-2 w-full h-full flex flex-col justify-center">
-              <div className="bg-orange-500 h-2 w-full rounded mb-1"></div>
-              <div className="bg-gray-200 h-1 w-3/4 rounded mb-1"></div>
-              <div className="bg-gray-200 h-1 w-1/2 rounded mb-2"></div>
-              <div className="bg-blue-500 h-3 w-1/3 rounded"></div>
-            </div>
+        <div className={`p-6 border-2 rounded-lg cursor-pointer transition-all ${selectedOption === 'email' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => setSelectedOption('email')}>
+          <div className="h-16 bg-gradient-to-br from-orange-50 to-orange-100 rounded mb-4 flex items-center justify-center">
+            <div className="text-orange-600 text-xs font-medium">Email Embed</div>
           </div>
           <h3 className="font-semibold text-center mb-2" style={{ fontSize: '14px', color: '#384252' }}>
             Email Embed
@@ -282,23 +224,23 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm mb-2" style={{ fontSize: '14px', color: '#384252' }}>W</label>
-                      <input 
-                        type="text" 
-                        value={windowWidth} 
-                        onChange={e => setWindowWidth(e.target.value)} 
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md" 
-                        style={{ fontSize: '14px', height: '40px' }} 
+                      <label className="block text-sm mb-2" style={{ fontSize: '12px', color: '#384252' }}>W</label>
+                      <input
+                        type="text"
+                        value={windowWidth}
+                        onChange={(e) => setWindowWidth(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ring bg-background h-10"
+                        style={{ fontSize: '14px' }}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm mb-2" style={{ fontSize: '14px', color: '#384252' }}>H</label>
-                      <input 
-                        type="text" 
-                        value={windowHeight} 
-                        onChange={e => setWindowHeight(e.target.value)} 
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md" 
-                        style={{ fontSize: '14px', height: '40px' }} 
+                      <label className="block text-sm mb-2" style={{ fontSize: '12px', color: '#384252' }}>H</label>
+                      <input
+                        type="text"
+                        value={windowHeight}
+                        onChange={(e) => setWindowHeight(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ring bg-background h-10"
+                        style={{ fontSize: '14px' }}
                       />
                     </div>
                   </div>
@@ -306,7 +248,44 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
 
                 <div>
                   <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
-                  <CustomSelect value={theme} onChange={setTheme} options={themeOptions} />
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowThemeDropdown(!showThemeDropdown)}
+                      className="w-full flex items-center justify-between p-3 border border-gray-300 rounded-lg hover:border-gray-400 focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
+                    >
+                      <div className="flex items-center">
+                        <span className="mr-2">🌓</span>
+                        <span>Auto</span>
+                      </div>
+                      {showThemeDropdown ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    </button>
+                    {showThemeDropdown && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                        <button
+                          onClick={() => { setTheme('auto'); setShowThemeDropdown(false); }}
+                          className="w-full flex items-center px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          <span className="mr-2">🌓</span>
+                          <span>Auto</span>
+                        </button>
+                        <button
+                          onClick={() => { setTheme('light'); setShowThemeDropdown(false); }}
+                          className="w-full flex items-center px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          <span className="mr-2">☀️</span>
+                          <span>Light</span>
+                        </button>
+                        <button
+                          onClick={() => { setTheme('dark'); setShowThemeDropdown(false); }}
+                          className="w-full flex items-center px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          <span className="mr-2">🌙</span>
+                          <span>Dark</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -319,13 +298,13 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                     Brand Color (Light Theme)
                   </label>
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded border" style={{ backgroundColor: `#${brandColorLight}` }}></div>
-                    <input 
-                      type="text" 
-                      value={brandColorLight} 
-                      onChange={e => setBrandColorLight(e.target.value)} 
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md" 
-                      style={{ fontSize: '14px', height: '40px' }} 
+                    <div className="w-10 h-10 rounded border border-gray-300 flex-shrink-0" style={{ backgroundColor: `#${brandColorLight}` }}></div>
+                    <input
+                      type="text"
+                      value={brandColorLight}
+                      onChange={(e) => setBrandColorLight(e.target.value)}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
                     />
                   </div>
                 </div>
@@ -335,47 +314,65 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                     Brand Color (Dark Theme)
                   </label>
                   <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded border" style={{ backgroundColor: `#${brandColorDark}` }}></div>
-                    <input 
-                      type="text" 
-                      value={brandColorDark} 
-                      onChange={e => setBrandColorDark(e.target.value)} 
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md" 
-                      style={{ fontSize: '14px', height: '40px' }} 
+                    <div className="w-10 h-10 rounded border border-gray-300 flex-shrink-0" style={{ backgroundColor: `#${brandColorDark}` }}></div>
+                    <input
+                      type="text"
+                      value={brandColorDark}
+                      onChange={(e) => setBrandColorDark(e.target.value)}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
-                  <CustomSelect value={layout} onChange={setLayout} options={layoutOptions} />
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowLayoutDropdown(!showLayoutDropdown)}
+                      className="w-full flex items-center justify-between p-3 border border-gray-300 rounded-lg hover:border-gray-400 focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
+                    >
+                      <span>Month</span>
+                      {showLayoutDropdown ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    </button>
+                    {showLayoutDropdown && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                        <button
+                          onClick={() => { setLayout('month'); setShowLayoutDropdown(false); }}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          Month
+                        </button>
+                        <button
+                          onClick={() => { setLayout('week'); setShowLayoutDropdown(false); }}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          Week
+                        </button>
+                        <button
+                          onClick={() => { setLayout('column'); setShowLayoutDropdown(false); }}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          Column
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
               {/* Preview */}
               <div className="bg-gray-50 rounded-lg p-6 flex-shrink-0">
-                <div className="bg-black rounded-lg p-4 text-white max-w-sm mx-auto">
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-8 h-8 rounded-full bg-gray-600"></div>
-                      <div>
-                        <div className="text-sm">Sanskar Yadav</div>
-                        <div className="text-lg font-semibold">Product Hunt Chats</div>
-                      </div>
-                    </div>
-                    <div className="text-sm">July 2025</div>
-                  </div>
-                  <div className="grid grid-cols-7 gap-1 text-xs text-center mb-2">
-                    {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => 
-                      <div key={day} className="p-1">{day}</div>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-7 gap-1 text-xs">
-                    {Array.from({ length: 35 }, (_, i) => 
-                      <div key={i} className="p-2 text-center hover:bg-gray-700 rounded">
-                        {i < 6 ? '' : i - 5}
-                      </div>
-                    )}
+                <div className="bg-white border border-gray-200 rounded-lg p-4 max-w-sm mx-auto min-h-[300px] relative">
+                  <div className="text-center text-gray-500 mb-4">Your website content</div>
+                  <div className="absolute bottom-4 right-4">
+                    <button
+                      className="px-4 py-2 rounded-full text-white font-medium shadow-lg"
+                      style={{ backgroundColor: `#${buttonColor}`, color: `#${textColor}` }}
+                    >
+                      {buttonText}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -391,12 +388,12 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                   <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
                     Button text
                   </label>
-                  <input 
-                    type="text" 
-                    value={buttonText} 
-                    onChange={e => setButtonText(e.target.value)} 
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md" 
-                    style={{ fontSize: '14px', height: '40px' }} 
+                  <input
+                    type="text"
+                    value={buttonText}
+                    onChange={(e) => setButtonText(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ring bg-background h-10"
+                    style={{ fontSize: '14px' }}
                   />
                 </div>
 
@@ -409,7 +406,44 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                   <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
                     Position of button
                   </label>
-                  <CustomSelect value={buttonPosition} onChange={setButtonPosition} options={buttonPositionOptions} />
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowPositionDropdown(!showPositionDropdown)}
+                      className="w-full flex items-center justify-between p-3 border border-gray-300 rounded-lg hover:border-gray-400 focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
+                    >
+                      <span>Bottom right</span>
+                      {showPositionDropdown ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    </button>
+                    {showPositionDropdown && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                        <button
+                          onClick={() => { setButtonPosition('bottom-right'); setShowPositionDropdown(false); }}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          Bottom right
+                        </button>
+                        <button
+                          onClick={() => { setButtonPosition('bottom-left'); setShowPositionDropdown(false); }}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          Bottom left
+                        </button>
+                        <button
+                          onClick={() => { setButtonPosition('top-right'); setShowPositionDropdown(false); }}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          Top right
+                        </button>
+                        <button
+                          onClick={() => { setButtonPosition('top-left'); setShowPositionDropdown(false); }}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          Top left
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
@@ -418,13 +452,13 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                       Button color
                     </label>
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded border" style={{ backgroundColor: `#${buttonColor}` }}></div>
-                      <input 
-                        type="text" 
-                        value={buttonColor} 
-                        onChange={e => setButtonColor(e.target.value)} 
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md" 
-                        style={{ fontSize: '14px', height: '40px' }} 
+                      <div className="w-10 h-10 rounded border border-gray-300 flex-shrink-0" style={{ backgroundColor: `#${buttonColor}` }}></div>
+                      <input
+                        type="text"
+                        value={buttonColor}
+                        onChange={(e) => setButtonColor(e.target.value)}
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ring bg-background h-10"
+                        style={{ fontSize: '14px' }}
                       />
                     </div>
                   </div>
@@ -433,13 +467,13 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                       Text color
                     </label>
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 rounded border" style={{ backgroundColor: `#${textColor}` }}></div>
-                      <input 
-                        type="text" 
-                        value={textColor} 
-                        onChange={e => setTextColor(e.target.value)} 
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md" 
-                        style={{ fontSize: '14px', height: '40px' }} 
+                      <div className="w-10 h-10 rounded border border-gray-300 flex-shrink-0" style={{ backgroundColor: `#${textColor}` }}></div>
+                      <input
+                        type="text"
+                        value={textColor}
+                        onChange={(e) => setTextColor(e.target.value)}
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ring bg-background h-10"
+                        style={{ fontSize: '14px' }}
                       />
                     </div>
                   </div>
@@ -447,7 +481,44 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
 
                 <div>
                   <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
-                  <CustomSelect value={theme} onChange={setTheme} options={themeOptions} />
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowThemeDropdown(!showThemeDropdown)}
+                      className="w-full flex items-center justify-between p-3 border border-gray-300 rounded-lg hover:border-gray-400 focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
+                    >
+                      <div className="flex items-center">
+                        <span className="mr-2">🌓</span>
+                        <span>Auto</span>
+                      </div>
+                      {showThemeDropdown ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    </button>
+                    {showThemeDropdown && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                        <button
+                          onClick={() => { setTheme('auto'); setShowThemeDropdown(false); }}
+                          className="w-full flex items-center px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          <span className="mr-2">🌓</span>
+                          <span>Auto</span>
+                        </button>
+                        <button
+                          onClick={() => { setTheme('light'); setShowThemeDropdown(false); }}
+                          className="w-full flex items-center px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          <span className="mr-2">☀️</span>
+                          <span>Light</span>
+                        </button>
+                        <button
+                          onClick={() => { setTheme('dark'); setShowThemeDropdown(false); }}
+                          className="w-full flex items-center px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          <span className="mr-2">🌙</span>
+                          <span>Dark</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -456,62 +527,76 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
-                  <CustomSelect value={layout} onChange={setLayout} options={layoutOptions} />
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                    Brand Color (Light Theme)
+                  </label>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded border border-gray-300 flex-shrink-0" style={{ backgroundColor: `#${brandColorLight}` }}></div>
+                    <input
+                      type="text"
+                      value={brandColorLight}
+                      onChange={(e) => setBrandColorLight(e.target.value)}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
+                    />
+                  </div>
                 </div>
 
-                {/* Brand Colors Section */}
-                <div className="border-t border-gray-200 pt-6">
-                  <h4 className="font-medium mb-4" style={{ fontSize: '14px', color: '#384252' }}>Brand Colors</h4>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
-                        Brand Color (Light Theme)
-                      </label>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 rounded border" style={{ backgroundColor: `#${brandColorLight}` }}></div>
-                        <input 
-                          type="text" 
-                          value={brandColorLight} 
-                          onChange={e => setBrandColorLight(e.target.value)} 
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md" 
-                          style={{ fontSize: '14px', height: '40px' }} 
-                        />
-                      </div>
-                    </div>
+                <div>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                    Brand Color (Dark Theme)
+                  </label>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded border border-gray-300 flex-shrink-0" style={{ backgroundColor: `#${brandColorDark}` }}></div>
+                    <input
+                      type="text"
+                      value={brandColorDark}
+                      onChange={(e) => setBrandColorDark(e.target.value)}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
+                    />
+                  </div>
+                </div>
 
-                    <div>
-                      <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
-                        Brand Color (Dark Theme)
-                      </label>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 rounded border" style={{ backgroundColor: `#${brandColorDark}` }}></div>
-                        <input 
-                          type="text" 
-                          value={brandColorDark} 
-                          onChange={e => setBrandColorDark(e.target.value)} 
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md" 
-                          style={{ fontSize: '14px', height: '40px' }} 
-                        />
+                <div>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowLayoutDropdown(!showLayoutDropdown)}
+                      className="w-full flex items-center justify-between p-3 border border-gray-300 rounded-lg hover:border-gray-400 focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
+                    >
+                      <span>Month</span>
+                      {showLayoutDropdown ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    </button>
+                    {showLayoutDropdown && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                        <button
+                          onClick={() => { setLayout('month'); setShowLayoutDropdown(false); }}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          Month
+                        </button>
+                        <button
+                          onClick={() => { setLayout('week'); setShowLayoutDropdown(false); }}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          Week
+                        </button>
+                        <button
+                          onClick={() => { setLayout('column'); setShowLayoutDropdown(false); }}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          Column
+                        </button>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* Preview */}
-              <div className="bg-gray-50 rounded-lg p-6 flex-shrink-0">
-                <div className="relative bg-gray-100 rounded-lg h-64 flex items-center justify-center">
-                  <div className="text-gray-500 text-sm">Website Preview</div>
-                  <div 
-                    className="absolute bottom-4 right-4 px-4 py-2 rounded-full text-white font-medium shadow-lg cursor-pointer hover:shadow-xl transition-shadow"
-                    style={{ backgroundColor: `#${buttonColor}`, color: `#${textColor}` }}
-                  >
-                    {showCalendarIcon && <span className="mr-2">📅</span>}
-                    {buttonText}
-                  </div>
-                </div>
-              </div>
+              
             </div>
           </div>
         )}
@@ -522,7 +607,44 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
               <div className="space-y-6">
                 <div>
                   <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Theme</label>
-                  <CustomSelect value={theme} onChange={setTheme} options={themeOptions} />
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowThemeDropdown(!showThemeDropdown)}
+                      className="w-full flex items-center justify-between p-3 border border-gray-300 rounded-lg hover:border-gray-400 focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
+                    >
+                      <div className="flex items-center">
+                        <span className="mr-2">🌓</span>
+                        <span>Auto</span>
+                      </div>
+                      {showThemeDropdown ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    </button>
+                    {showThemeDropdown && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                        <button
+                          onClick={() => { setTheme('auto'); setShowThemeDropdown(false); }}
+                          className="w-full flex items-center px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          <span className="mr-2">🌓</span>
+                          <span>Auto</span>
+                        </button>
+                        <button
+                          onClick={() => { setTheme('light'); setShowThemeDropdown(false); }}
+                          className="w-full flex items-center px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          <span className="mr-2">☀️</span>
+                          <span>Light</span>
+                        </button>
+                        <button
+                          onClick={() => { setTheme('dark'); setShowThemeDropdown(false); }}
+                          className="w-full flex items-center px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          <span className="mr-2">🌙</span>
+                          <span>Dark</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -531,55 +653,80 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                 </div>
 
                 <div>
-                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
-                  <CustomSelect value={layout} onChange={setLayout} options={layoutOptions} />
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                    Brand Color (Light Theme)
+                  </label>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded border border-gray-300 flex-shrink-0" style={{ backgroundColor: `#${brandColorLight}` }}></div>
+                    <input
+                      type="text"
+                      value={brandColorLight}
+                      onChange={(e) => setBrandColorLight(e.target.value)}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
+                    />
+                  </div>
                 </div>
 
-                {/* Brand Colors Section */}
-                <div className="border-t border-gray-200 pt-6">
-                  <h4 className="font-medium mb-4" style={{ fontSize: '14px', color: '#384252' }}>Brand Colors</h4>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
-                        Brand Color (Light Theme)
-                      </label>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 rounded border" style={{ backgroundColor: `#${brandColorLight}` }}></div>
-                        <input 
-                          type="text" 
-                          value={brandColorLight} 
-                          onChange={e => setBrandColorLight(e.target.value)} 
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md" 
-                          style={{ fontSize: '14px', height: '40px' }} 
-                        />
-                      </div>
-                    </div>
+                <div>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                    Brand Color (Dark Theme)
+                  </label>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded border border-gray-300 flex-shrink-0" style={{ backgroundColor: `#${brandColorDark}` }}></div>
+                    <input
+                      type="text"
+                      value={brandColorDark}
+                      onChange={(e) => setBrandColorDark(e.target.value)}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
+                    />
+                  </div>
+                </div>
 
-                    <div>
-                      <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
-                        Brand Color (Dark Theme)
-                      </label>
-                      <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 rounded border" style={{ backgroundColor: `#${brandColorDark}` }}></div>
-                        <input 
-                          type="text" 
-                          value={brandColorDark} 
-                          onChange={e => setBrandColorDark(e.target.value)} 
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md" 
-                          style={{ fontSize: '14px', height: '40px' }} 
-                        />
+                <div>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Layout</label>
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowLayoutDropdown(!showLayoutDropdown)}
+                      className="w-full flex items-center justify-between p-3 border border-gray-300 rounded-lg hover:border-gray-400 focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
+                    >
+                      <span>Month</span>
+                      {showLayoutDropdown ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    </button>
+                    {showLayoutDropdown && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                        <button
+                          onClick={() => { setLayout('month'); setShowLayoutDropdown(false); }}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          Month
+                        </button>
+                        <button
+                          onClick={() => { setLayout('week'); setShowLayoutDropdown(false); }}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          Week
+                        </button>
+                        <button
+                          onClick={() => { setLayout('column'); setShowLayoutDropdown(false); }}
+                          className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                        >
+                          Column
+                        </button>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* Preview */}
               <div className="bg-gray-50 rounded-lg p-6 flex-shrink-0">
-                <div className="bg-gray-100 rounded-lg p-4 flex items-center justify-center min-h-[200px] max-w-md mx-auto">
-                  <div className="bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium cursor-pointer hover:bg-blue-600 transition-colors">
+                <div className="bg-white border border-gray-200 rounded-lg p-4 max-w-sm mx-auto min-h-[200px] flex items-center justify-center">
+                  <button className="bg-gray-600 text-white px-4 py-2 rounded text-sm">
                     I am a button that exists on your website
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
@@ -590,17 +737,17 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
           <div className="space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="space-y-6">
-                <div className="bg-white border border-gray-200 rounded-lg p-6">
-                  <div>
-                    <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
-                      Select Date
-                    </label>
+                <div>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                    Select Date
+                  </label>
+                  <div className="bg-white border border-gray-200 rounded-lg p-4">
                     <div className="text-lg font-semibold mb-3">July 2025</div>
                     
                     <div className="grid grid-cols-7 gap-1 text-xs text-center mb-3">
-                      {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => 
+                      {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map((day) => (
                         <div key={day} className="p-2 font-medium">{day}</div>
-                      )}
+                      ))}
                     </div>
                     
                     <div className="grid grid-cols-7 gap-1 text-sm">
@@ -608,50 +755,69 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
                         const date = i - 5;
                         const isToday = date === 18;
                         return (
-                          <div 
-                            key={i} 
-                            className={`p-2 text-center cursor-pointer rounded ${
-                              date > 0 && date <= 31 
-                                ? isToday 
-                                  ? 'bg-blue-500 text-white' 
-                                  : 'hover:bg-gray-100' 
-                                : 'text-gray-300'
-                            }`}
-                          >
+                          <div key={i} className={`p-2 text-center cursor-pointer rounded ${date > 0 && date <= 31 ? isToday ? 'bg-blue-500 text-white' : 'hover:bg-gray-100' : 'text-gray-300'}`}>
                             {date > 0 && date <= 31 ? date : ''}
                           </div>
                         );
                       })}
                     </div>
                   </div>
+                </div>
 
-                  <div className="mt-6">
-                    <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
-                      Timezone
-                    </label>
-                    <CustomSelect value={selectedTimezone} onChange={setSelectedTimezone} options={timezoneOptions} />
+                <div>
+                  <label className="block font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>
+                    Timezone
+                  </label>
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowTimezoneDropdown(!showTimezoneDropdown)}
+                      className="w-full flex items-center justify-between p-3 border border-gray-300 rounded-lg hover:border-gray-400 focus:ring-2 focus:ring-ring bg-background h-10"
+                      style={{ fontSize: '14px' }}
+                    >
+                      <span>{selectedTimezone}</span>
+                      {showTimezoneDropdown ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                    </button>
+                    {showTimezoneDropdown && (
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10 max-h-40 overflow-y-auto">
+                        {timezones.map((tz) => (
+                          <button
+                            key={tz}
+                            onClick={() => { setSelectedTimezone(tz); setShowTimezoneDropdown(false); }}
+                            className="w-full px-3 py-2 text-left hover:bg-gray-50"
+                          >
+                            {tz}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
+                </div>
 
-                  <div className="mt-6">
-                    <div className="font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Fri 18</div>
-                    <div className="space-y-2">
-                      {['10:15am', '10:30am', '10:45am', '11:00am', '11:15am', '11:30am', '11:45am'].map(time => 
-                        <div key={time} className="border border-gray-300 rounded p-2 text-center text-sm cursor-pointer hover:bg-gray-50">
-                          {time}
-                        </div>
-                      )}
-                    </div>
+                <div>
+                  <div className="font-medium mb-3" style={{ fontSize: '14px', color: '#384252' }}>Available Times - Fri 18</div>
+                  <div className="space-y-2">
+                    {['10:15am', '10:30am', '10:45am', '11:00am', '11:15am', '11:30am', '11:45am'].map((time) => (
+                      <button
+                        key={time}
+                        className="w-full border border-gray-300 rounded-lg p-3 text-center text-sm cursor-pointer hover:bg-gray-50 transition-colors"
+                      >
+                        {time}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
 
               {/* Preview */}
               <div className="bg-gray-50 rounded-lg p-6 flex-shrink-0">
-                <div className="bg-white border border-gray-200 rounded-lg p-4 max-w-sm mx-auto shadow-sm">
+                <div className="bg-white border border-gray-200 rounded-lg p-4 max-w-sm mx-auto">
                   <h3 className="font-semibold text-lg mb-2">Product Hunt Chats</h3>
                   <p className="text-sm text-gray-600 mb-1">Duration: 15 mins</p>
                   <p className="text-sm text-gray-600 mb-4">Timezone: {selectedTimezone}</p>
-                  <a href="#" className="inline-block bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-600 transition-colors">
+                  <a
+                    href="#"
+                    className="inline-block bg-blue-500 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-600 transition-colors"
+                  >
                     See all available times
                   </a>
                   <p className="text-xs text-gray-400 mt-4">Powered by OneHash Cal</p>
@@ -665,20 +831,16 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
         <div className="border-t border-gray-200 pt-8 mt-10">
           <div className="flex items-center justify-between mb-6">
             <div className="flex space-x-4">
-              <button 
-                onClick={() => setCodeType('HTML')} 
-                className={`px-4 py-2 rounded font-medium ${
-                  codeType === 'HTML' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'
-                }`} 
+              <button
+                onClick={() => setCodeType('HTML')}
+                className={`px-4 py-2 rounded font-medium transition-colors ${codeType === 'HTML' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                 style={{ fontSize: '14px' }}
               >
                 HTML
               </button>
-              <button 
-                onClick={() => setCodeType('React')} 
-                className={`px-4 py-2 rounded font-medium ${
-                  codeType === 'React' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'
-                }`} 
+              <button
+                onClick={() => setCodeType('React')}
+                className={`px-4 py-2 rounded font-medium transition-colors ${codeType === 'React' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                 style={{ fontSize: '14px' }}
               >
                 React
@@ -693,7 +855,7 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
             <p className="text-sm mb-3" style={{ fontSize: '14px', color: '#384252' }}>
               Place this code in your HTML where you want your OneHash Cal widget to appear.
             </p>
-            <div className="bg-gray-100 border border-gray-300 text-gray-800 p-4 rounded text-sm font-mono overflow-x-auto max-h-80 overflow-y-auto">
+            <div className="bg-white border border-gray-300 text-gray-800 p-4 rounded-lg text-sm font-mono overflow-x-auto max-h-80 overflow-y-auto">
               <pre className="whitespace-pre-wrap break-all">{getEmbedCode()}</pre>
             </div>
           </div>
@@ -702,8 +864,8 @@ Cal.ns["product-hunt-chats"]("ui", {"hideEventTypeDetails":false,"layout":"month
             <button className="px-4 py-2 border border-gray-300 rounded text-sm font-medium hover:bg-gray-50">
               Close
             </button>
-            <button 
-              onClick={handleCopyCode} 
+            <button
+              onClick={handleCopyCode}
               className="px-4 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700 flex items-center space-x-2"
             >
               <Copy className="h-4 w-4" />
