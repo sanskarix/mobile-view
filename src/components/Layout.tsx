@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
-import { useHeader } from '../contexts/HeaderContext';
 
 export interface HeaderMeta {
   title: string;
@@ -14,8 +13,10 @@ export interface HeaderMeta {
 
 export const Layout = () => {
   const [darkMode, setDarkMode] = useState(false);
-  const { headerMeta } = useHeader();
-  
+  const [headerMeta, setHeaderMeta] = useState<HeaderMeta>({
+    title: '',
+    description: '',
+  });  
   return (
     <div className={darkMode ? 'dark' : ''}>
       <div className="min-h-screen bg-background text-foreground flex">
@@ -23,7 +24,7 @@ export const Layout = () => {
         <div className="flex-1 ml-64">
           <Header metaData={headerMeta}/>          
           <main className="relative z-0">
-            <Outlet />
+            <Outlet context={{ setHeaderMeta }}/>
           </main>
         </div>
       </div>
