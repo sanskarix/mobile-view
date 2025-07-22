@@ -656,7 +656,7 @@ export default function Bookings() {
                   <h3 className={`text-lg font-semibold ${meeting.status === 'canceled' ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
                     {meeting.title}
                   </h3>
-                  <span className="text-muted-foreground">with</span>
+                  <span className="text-sm text-muted-foreground text-center">with</span>
                   <div className="flex items-center space-x-1">
                     {attendeeDisplay && <div className="relative">
                         {typeof attendeeDisplay === 'object' ? <div className="flex items-center space-x-1">
