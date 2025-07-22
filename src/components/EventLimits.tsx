@@ -51,9 +51,9 @@ export const EventLimits = () => {
   };
 
   return (
-    <div className="p-0 max-w-none mx-auto space-y-8 border border-gray-200 rounded-lg" style={{ fontSize: '14px', color: '#384252' }}>
+    <div className="p-0 max-w-none mx-auto space-y-6" style={{ fontSize: '14px', color: '#384252' }}>
       {/* Buffer Times Section */}
-      <div className="p-6 bg-white rounded-t-lg">
+      <div className="p-6 bg-white border border-gray-200 rounded-lg">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Before Event */}
           <div className="space-y-6">
@@ -106,6 +106,10 @@ export const EventLimits = () => {
             </div>
           </div>
 
+          {/* Separator */}
+          <div className="hidden lg:block w-px bg-gray-200 mx-4"></div>
+          <div className="lg:hidden border-t border-gray-200 my-6"></div>
+
           {/* After Event */}
           <div className="space-y-6">
             <h3 className="font-semibold text-lg" style={{ fontSize: '16px', color: '#384252' }}>
@@ -148,11 +152,8 @@ export const EventLimits = () => {
         </div>
       </div>
 
-      {/* Separator */}
-      <div className="border-t border-gray-200"></div>
-
       {/* Future Bookings Section */}
-      <div className="p-6 bg-white">
+      <div className="p-6 bg-white border border-gray-200 rounded-lg">
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
@@ -259,7 +260,7 @@ export const EventLimits = () => {
       </div>
 
       {/* Past Bookings Section */}
-      <div className="border-t border-gray-200 p-6 bg-white rounded-b-lg">
+      <div className="p-6 bg-white border border-gray-200 rounded-lg">
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>

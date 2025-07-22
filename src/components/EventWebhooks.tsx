@@ -91,11 +91,23 @@ export const EventWebhooks = () => {
 
           <div className="space-y-3">
             {webhooks.map(webhook => (
-              <div key={webhook.id} className="p-4 border border-gray-200 rounded-lg bg-white">
+              <div key={webhook.id} className={`p-4 border rounded-lg transition-colors ${
+                webhook.active 
+                  ? 'border-green-200 bg-green-50' 
+                  : 'border-gray-200 bg-white'
+              }`}>
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-3 flex-1">
-                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Webhook className="h-4 w-4 text-blue-600" />
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      webhook.active 
+                        ? 'bg-green-100' 
+                        : 'bg-blue-100'
+                    }`}>
+                      <Webhook className={`h-4 w-4 ${
+                        webhook.active 
+                          ? 'text-green-600' 
+                          : 'text-blue-600'
+                      }`} />
                     </div>
                     <div className="flex-1">
                       <h4 className="font-medium" style={{ fontSize: '14px', color: '#384252' }}>{webhook.name}</h4>

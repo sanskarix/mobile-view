@@ -34,9 +34,11 @@ export const CustomSelect = ({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isOpen]);
 
   const handleOptionSelect = (optionValue: string) => {
     onChange(optionValue);
@@ -62,11 +64,9 @@ export const CustomSelect = ({
         <span className={value ? 'text-foreground' : 'text-muted-foreground'}>
           {displayValue}
         </span>
-        {isOpen ? (
-          <ChevronUp className="h-4 w-4 text-muted-foreground" />
-        ) : (
+        <div className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}>
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
-        )}
+        </div>
       </button>
 
       {isOpen && (
