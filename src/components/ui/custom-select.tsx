@@ -39,12 +39,12 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   return <div className={cn("relative", className)} ref={selectRef}>
       <button type="button" onClick={() => !disabled && setIsOpen(!isOpen)} disabled={disabled} className="w-full flex items-center justify-between p-4 border border-border rounded-lg hover:border-border/60 focus:ring-2 focus:ring-ring bg-background transition-colors h-10 disabled:opacity-50 disabled:cursor-not-allowed">
         <div className="flex items-center">
-          {selectedOption?.icon && <div className="w-8 h-8 bg-primary rounded flex items-center justify-center mr-3">
-              <span className="text-primary-foreground text-xs font-bold">
+          {selectedOption?.icon && <div className="w-7 h-7 bg-primary rounded flex items-center justify-center mr-3">
+              <span className="text-primary-foreground text-xs -space-x-1 ">
                 {selectedOption.icon}
               </span>
             </div>}
-          <span className="">
+          <span className="text-sm text-gray-600 ">
             {selectedOption?.label || placeholder}
           </span>
         </div>
