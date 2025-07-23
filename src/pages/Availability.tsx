@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { BulkUpdateModal } from '../components/BulkUpdateModal';
+import { TeamAvailability } from '../components/TeamAvailability';
 
 interface Schedule {
   id: string;
@@ -133,13 +134,15 @@ export const Availability = () => {
           ))}
         </div>
 
-        <Button
-          onClick={() => setIsNewScheduleModalOpen(true)}
-          className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          New schedule
-        </Button>
+        {selectedTab === 'my-availability' && (
+          <Button
+            onClick={() => setIsNewScheduleModalOpen(true)}
+            className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            New schedule
+          </Button>
+        )}
       </div>
 
       {/* Tab Content */}
@@ -224,9 +227,7 @@ export const Availability = () => {
         )}
 
         {selectedTab === 'team-availability' && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">Team availability features coming soon...</p>
-          </div>
+          <TeamAvailability />
         )}
       </div>
 
