@@ -1168,7 +1168,7 @@ export default function Bookings() {
                     <span className="font-medium text-gray-600 min-w-16">Where:</span>
                     <span className="text-gray-900">{selectedMeeting.location.name}</span>
                   </div>
-                </div> : <div className="space-y-3 mb-6 p-4 bg-gray-50 rounded-lg">
+                </div> : <div className="space-y-3 mb-6 p-4 bg-gray-50 rounded-lg my-[24px]">
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">Event:</span>
                     <span className="text-gray-900">{selectedMeeting.eventType}</span>
