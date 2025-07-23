@@ -346,7 +346,7 @@ export const EditAvailability = () => {
 
             {/* Timezone Section - Right Side (1/3 width) */}
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Timezone</h3>
+              <h3 className="text-sm font-medium min-w-[80px] text-lg ">Timezone</h3>
               <Select value={timezone} onValueChange={setTimezone}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select timezone" />
