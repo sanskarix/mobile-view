@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
@@ -49,7 +50,7 @@ export const EditRoutingForm = () => {
   const [showFallbackRoute, setShowFallbackRoute] = useState(false);
   const [fallbackRouteType, setFallbackRouteType] = useState<'custom' | 'external' | 'event'>('custom');
   const [fallbackRouteValue, setFallbackRouteValue] = useState('');
-  const [activeTab, setActiveTab] = useState<'form' | 'routing' | 'reporting'>('form');
+  const [activeTab, setActiveTab] = useState<'setup' | 'form' | 'routing' | 'reporting' | 'embed'>('setup');
   const [showEmbedModal, setShowEmbedModal] = useState(false);
   const [newRoute, setNewRoute] = useState<Route>({
     id: '',
@@ -164,187 +165,86 @@ export const EditRoutingForm = () => {
     navigate('/apps');
   };
 
-  return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-border bg-background">
-        <div className="flex items-center justify-between px-6 py-4">
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate('/routing-forms')}
-              className="p-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div>
-              <h1 className="text-lg font-semibold">{formName}</h1>
-              <p className="text-sm text-muted-foreground">hwllUGELBVWufl</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <Button>Save</Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex">
-        {/* Left Sidebar */}
-        <div className="w-80 border-r border-border bg-background p-6">
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                value={formName}
-                onChange={(e) => setFormName(e.target.value)}
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                value={formDescription}
-                onChange={(e) => setFormDescription(e.target.value)}
-                rows={3}
-              />
-            </div>
-            
-            {/* Action Buttons */}
-            <div className="flex items-center space-x-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="outline" size="icon" onClick={handlePreview}>
-                    <Eye className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Preview</TooltipContent>
-              </Tooltip>
-              
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="outline" size="icon" onClick={handleCopyLink}>
-                    <Copy className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Copy Link</TooltipContent>
-              </Tooltip>
-              
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="outline" size="icon" onClick={handleDownloadResponses}>
-                    <Download className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Download Responses</TooltipContent>
-              </Tooltip>
-              
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="outline" size="icon" onClick={handleEmbed}>
-                    <Code className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>Embed</TooltipContent>
-              </Tooltip>
-            </div>
-            
-            <div className="flex items-start space-x-2">
-              <Checkbox
-                id="send-email"
-                checked={sendEmailToOwner}
-                onCheckedChange={(checked) => setSendEmailToOwner(checked === true)}
-              />
-              <div className="space-y-1">
-                <Label htmlFor="send-email">Send Email to Owner</Label>
-                <p className="text-sm text-muted-foreground">
-                  Sends an email to the owner when the form is submitted
-                </p>
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'setup':
+        return (
+          <div className="p-6 w-full">
+            <div className="max-w-4xl mx-auto space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  value={formName}
+                  onChange={(e) => setFormName(e.target.value)}
+                />
               </div>
-            </div>
-            
-            <Button variant="outline" className="w-full">
-              Test Preview
-            </Button>
-            
-            {/* Warnings */}
-            <div className="space-y-3">
-              <div className="flex items-start space-x-2 p-3 bg-orange-50 border border-orange-200 rounded-lg">
-                <AlertTriangle className="h-4 w-4 text-orange-600 mt-0.5" />
-                <div className="text-sm">
-                  <p className="font-medium text-orange-800">No routes defined</p>
+              
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  value={formDescription}
+                  onChange={(e) => setFormDescription(e.target.value)}
+                  rows={3}
+                />
+              </div>
+              
+              {/* Form link with copy and preview */}
+              <div className="space-y-2">
+                <Label>Form Link</Label>
+                <div className="flex items-center space-x-2">
+                  <Input
+                    value={`cal.id/forms/${formId}`}
+                    readOnly
+                    className="flex-1"
+                  />
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="icon" onClick={handleCopyLink}>
+                        <Copy className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Copy Link</TooltipContent>
+                  </Tooltip>
+                  
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="outline" size="icon" onClick={handlePreview}>
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Preview</TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
               
-              <div className="flex items-start space-x-2 p-3 bg-muted/50 border border-border rounded-lg">
-                <BarChart3 className="h-4 w-4 text-muted-foreground mt-0.5" />
-                <div className="text-sm text-muted-foreground">
-                  <p>No responses yet</p>
+              <div className="flex items-start space-x-2">
+                <Checkbox
+                  id="send-email"
+                  checked={sendEmailToOwner}
+                  onCheckedChange={(checked) => setSendEmailToOwner(checked === true)}
+                />
+                <div className="space-y-1">
+                  <Label htmlFor="send-email">Send Email to Owner</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Sends an email to the owner when the form is submitted
+                  </p>
                 </div>
               </div>
+              
+              <Button onClick={handleDownloadResponses} className="w-full">
+                <Download className="h-4 w-4 mr-2" />
+                Download Responses
+              </Button>
             </div>
           </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="flex-1">
-          {/* Tabs */}
-          <div className="border-b border-border px-6">
-            <div className="flex space-x-0">
-              <button
-                onClick={() => setActiveTab('form')}
-                className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
-                  activeTab === 'form' 
-                    ? 'border-primary text-primary' 
-                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
-                }`}
-              >
-                <div className="flex items-center space-x-2">
-                  <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-primary text-primary-foreground">
-                    F
-                  </div>
-                  <span>Form</span>
-                </div>
-              </button>
-              <button
-                onClick={() => setActiveTab('routing')}
-                className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
-                  activeTab === 'routing' 
-                    ? 'border-primary text-primary' 
-                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
-                }`}
-              >
-                <div className="flex items-center space-x-2">
-                  <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-primary text-primary-foreground">
-                    R
-                  </div>
-                  <span>Routing</span>
-                </div>
-              </button>
-              <button
-                onClick={handleReporting}
-                className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
-                  activeTab === 'reporting' 
-                    ? 'border-primary text-primary' 
-                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
-                }`}
-              >
-                <div className="flex items-center space-x-2">
-                  <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-primary text-primary-foreground">
-                    Re
-                  </div>
-                  <span>Reporting</span>
-                </div>
-              </button>
-            </div>
-          </div>
-          
-          {/* Form Tab Content */}
-          {activeTab === 'form' && (
-            <div className="p-6">
+        );
+      
+      case 'form':
+        return (
+          <div className="p-6 w-full">
+            <div className="max-w-4xl mx-auto">
               {formFields.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center min-h-[600px]">
                   <div className="text-center space-y-4">
@@ -471,18 +371,172 @@ export const EditRoutingForm = () => {
                 </div>
               )}
             </div>
-          )}
-          
-          {/* Routing Tab Content */}
-          {activeTab === 'routing' && (
-            <div className="p-6">
-              <div className="max-w-4xl mx-auto">
-                <div className="bg-card border border-border rounded-lg p-6">
-                  <div className="space-y-6">
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold">Add a new Route</h3>
-                      
-                      {!showRouteCreator ? (
+          </div>
+        );
+      
+      case 'routing':
+        return (
+          <div className="p-6 w-full">
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-card border border-border rounded-lg p-6">
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Add a new Route</h3>
+                    
+                    {!showRouteCreator ? (
+                      <div className="space-y-2">
+                        <Label>Select a router</Label>
+                        <Select onValueChange={handleRouterSelect}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a router" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="create-new">Create a new Route</SelectItem>
+                            {mockForms.map(form => (
+                              <SelectItem key={form.id} value={form.id}>
+                                {form.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    ) : (
+                      <div className="space-y-6 p-4 border rounded-lg bg-muted/20 transition-all duration-300 animate-in slide-in-from-top-2">
+                        <div className="space-y-2">
+                          <Input
+                            value={newRoute.name}
+                            onChange={(e) => setNewRoute(prev => ({ ...prev, name: e.target.value }))}
+                            className="font-medium"
+                          />
+                        </div>
+                        
+                        <hr className="border-border" />
+                        
+                        <div className="space-y-4">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm text-muted-foreground">For responses matching the following criteria (matches</span>
+                            <Select value={newRoute.conditionLogic} onValueChange={(value: 'all' | 'any' | 'none') => setNewRoute(prev => ({ ...prev, conditionLogic: value }))}>
+                              <SelectTrigger className="w-20">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="all">All</SelectItem>
+                                <SelectItem value="any">Any</SelectItem>
+                                <SelectItem value="none">None</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <span className="text-sm text-muted-foreground">by default)</span>
+                          </div>
+                          
+                          {newRoute.conditions.length > 1 && (
+                            <div className="flex items-center space-x-2">
+                              <span className="text-sm text-muted-foreground">where</span>
+                              <Select value={newRoute.conditionLogic} onValueChange={(value: 'all' | 'any' | 'none') => setNewRoute(prev => ({ ...prev, conditionLogic: value }))}>
+                                <SelectTrigger className="w-20">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="all">All</SelectItem>
+                                  <SelectItem value="any">Any</SelectItem>
+                                  <SelectItem value="none">None</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <span className="text-sm text-muted-foreground">match</span>
+                            </div>
+                          )}
+                          
+                          <div className="space-y-2">
+                            {newRoute.conditions.map((condition, index) => (
+                              <div key={condition.id} className="flex items-center space-x-2">
+                                <Select value={condition.fieldName} onValueChange={(value) => updateCondition(condition.id, { fieldName: value })}>
+                                  <SelectTrigger className="flex-1">
+                                    <SelectValue placeholder="Select field" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {formFields.filter(field => field.label.trim() !== '').map(field => (
+                                      <SelectItem key={field.id} value={field.label}>
+                                        {field.label}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                
+                                <Select value={condition.operator} onValueChange={(value) => updateCondition(condition.id, { operator: value })}>
+                                  <SelectTrigger className="flex-1">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    {comparisonOptions.map(option => (
+                                      <SelectItem key={option.value} value={option.value}>
+                                        {option.label}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                
+                                <Input
+                                  value={condition.value}
+                                  onChange={(e) => updateCondition(condition.id, { value: e.target.value })}
+                                  placeholder="Enter string"
+                                  className="flex-1"
+                                />
+                                
+                                {newRoute.conditions.length > 1 && (
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => removeCondition(condition.id)}
+                                    className="h-8 w-8 text-red-600 hover:text-red-700"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                          
+                          <Button variant="outline" onClick={addCondition} className="w-full">
+                            <Plus className="h-4 w-4 mr-2" />
+                            Add rule
+                          </Button>
+                        </div>
+                        
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm">Send Booker to</span>
+                          <Select value={newRoute.actionType} onValueChange={(value: 'custom' | 'external' | 'event') => setNewRoute(prev => ({ ...prev, actionType: value }))}>
+                            <SelectTrigger className="flex-1">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="custom">Custom Page</SelectItem>
+                              <SelectItem value="external">External Redirect</SelectItem>
+                              <SelectItem value="event">Event Redirect</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          
+                          {newRoute.actionType === 'event' ? (
+                            <Select value={newRoute.actionValue} onValueChange={(value) => setNewRoute(prev => ({ ...prev, actionValue: value }))}>
+                              <SelectTrigger className="flex-1">
+                                <SelectValue placeholder="Select event" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {mockEventTypes.map(eventType => (
+                                  <SelectItem key={eventType.id} value={eventType.id}>
+                                    {eventType.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          ) : (
+                            <Input
+                              value={newRoute.actionValue}
+                              onChange={(e) => setNewRoute(prev => ({ ...prev, actionValue: e.target.value }))}
+                              placeholder={newRoute.actionType === 'custom' ? 'Enter custom page content' : 'Enter URL'}
+                              className="flex-1"
+                            />
+                          )}
+                        </div>
+                        
                         <div className="space-y-2">
                           <Label>Select a router</Label>
                           <Select onValueChange={handleRouterSelect}>
@@ -499,220 +553,324 @@ export const EditRoutingForm = () => {
                             </SelectContent>
                           </Select>
                         </div>
-                      ) : (
-                        <div className="space-y-6 p-4 border rounded-lg bg-muted/20 transition-all duration-300 animate-in slide-in-from-top-2">
-                          <div className="space-y-2">
-                            <Input
-                              value={newRoute.name}
-                              onChange={(e) => setNewRoute(prev => ({ ...prev, name: e.target.value }))}
-                              className="font-medium"
-                            />
-                          </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Fallback Route Section */}
+                  {showFallbackRoute && (
+                    <div className="space-y-4 p-4 border rounded-lg bg-muted/10 transition-all duration-300 animate-in slide-in-from-top-2">
+                      <h3 className="text-lg font-semibold">Fallback Route</h3>
+                      <div className="space-y-4">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm">Send Booker to</span>
+                          <Select 
+                            value={fallbackRouteType} 
+                            onValueChange={(value: 'custom' | 'external' | 'event') => setFallbackRouteType(value)}
+                          >
+                            <SelectTrigger className="flex-1">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="custom">Custom Page</SelectItem>
+                              <SelectItem value="external">External Redirect</SelectItem>
+                              <SelectItem value="event">Event Redirect</SelectItem>
+                            </SelectContent>
+                          </Select>
                           
-                          <hr className="border-border" />
-                          
-                          <div className="space-y-4">
-                            <div className="flex items-center space-x-2">
-                              <span className="text-sm text-muted-foreground">For responses matching the following criteria (matches</span>
-                              <Select value={newRoute.conditionLogic} onValueChange={(value: 'all' | 'any' | 'none') => setNewRoute(prev => ({ ...prev, conditionLogic: value }))}>
-                                <SelectTrigger className="w-20">
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="all">All</SelectItem>
-                                  <SelectItem value="any">Any</SelectItem>
-                                  <SelectItem value="none">None</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <span className="text-sm text-muted-foreground">by default)</span>
-                            </div>
-                            
-                            {newRoute.conditions.length > 1 && (
-                              <div className="flex items-center space-x-2">
-                                <span className="text-sm text-muted-foreground">where</span>
-                                <Select value={newRoute.conditionLogic} onValueChange={(value: 'all' | 'any' | 'none') => setNewRoute(prev => ({ ...prev, conditionLogic: value }))}>
-                                  <SelectTrigger className="w-20">
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="all">All</SelectItem>
-                                    <SelectItem value="any">Any</SelectItem>
-                                    <SelectItem value="none">None</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                                <span className="text-sm text-muted-foreground">match</span>
-                              </div>
-                            )}
-                            
-                            <div className="space-y-2">
-                              {newRoute.conditions.map((condition, index) => (
-                                <div key={condition.id} className="flex items-center space-x-2">
-                                  <Select value={condition.fieldName} onValueChange={(value) => updateCondition(condition.id, { fieldName: value })}>
-                                    <SelectTrigger className="flex-1">
-                                      <SelectValue placeholder="Select field" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {formFields.filter(field => field.label.trim() !== '').map(field => (
-                                        <SelectItem key={field.id} value={field.label}>
-                                          {field.label}
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                  
-                                  <Select value={condition.operator} onValueChange={(value) => updateCondition(condition.id, { operator: value })}>
-                                    <SelectTrigger className="flex-1">
-                                      <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {comparisonOptions.map(option => (
-                                        <SelectItem key={option.value} value={option.value}>
-                                          {option.label}
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                  
-                                  <Input
-                                    value={condition.value}
-                                    onChange={(e) => updateCondition(condition.id, { value: e.target.value })}
-                                    placeholder="Enter string"
-                                    className="flex-1"
-                                  />
-                                  
-                                  {newRoute.conditions.length > 1 && (
-                                    <Button
-                                      variant="ghost"
-                                      size="icon"
-                                      onClick={() => removeCondition(condition.id)}
-                                      className="h-8 w-8 text-red-600 hover:text-red-700"
-                                    >
-                                      <Trash2 className="h-4 w-4" />
-                                    </Button>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                            
-                            <Button variant="outline" onClick={addCondition} className="w-full">
-                              <Plus className="h-4 w-4 mr-2" />
-                              Add rule
-                            </Button>
-                          </div>
-                          
-                          <div className="flex items-center space-x-2">
-                            <span className="text-sm">Send Booker to</span>
-                            <Select value={newRoute.actionType} onValueChange={(value: 'custom' | 'external' | 'event') => setNewRoute(prev => ({ ...prev, actionType: value }))}>
+                          {fallbackRouteType === 'event' ? (
+                            <Select value={fallbackRouteValue} onValueChange={setFallbackRouteValue}>
                               <SelectTrigger className="flex-1">
-                                <SelectValue />
+                                <SelectValue placeholder="Select an event type" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="custom">Custom Page</SelectItem>
-                                <SelectItem value="external">External Redirect</SelectItem>
-                                <SelectItem value="event">Event Redirect</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            
-                            {newRoute.actionType === 'event' ? (
-                              <Select value={newRoute.actionValue} onValueChange={(value) => setNewRoute(prev => ({ ...prev, actionValue: value }))}>
-                                <SelectTrigger className="flex-1">
-                                  <SelectValue placeholder="Select event" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {mockEventTypes.map(eventType => (
-                                    <SelectItem key={eventType.id} value={eventType.id}>
-                                      {eventType.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            ) : (
-                              <Input
-                                value={newRoute.actionValue}
-                                onChange={(e) => setNewRoute(prev => ({ ...prev, actionValue: e.target.value }))}
-                                placeholder={newRoute.actionType === 'custom' ? 'Enter custom page content' : 'Enter URL'}
-                                className="flex-1"
-                              />
-                            )}
-                          </div>
-                          
-                          <div className="space-y-2">
-                            <Label>Select a router</Label>
-                            <Select onValueChange={handleRouterSelect}>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a router" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="create-new">Create a new Route</SelectItem>
-                                {mockForms.map(form => (
-                                  <SelectItem key={form.id} value={form.id}>
-                                    {form.name}
+                                {mockEventTypes.map(eventType => (
+                                  <SelectItem key={eventType.id} value={eventType.id}>
+                                    {eventType.name}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
                             </Select>
-                          </div>
+                          ) : (
+                            <Textarea
+                              value={fallbackRouteValue}
+                              onChange={(e) => setFallbackRouteValue(e.target.value)}
+                              placeholder={fallbackRouteType === 'custom' 
+                                ? 'Thank you for your interest! We will be in touch soon.' 
+                                : 'Enter URL'
+                              }
+                              rows={3}
+                              className="flex-1"
+                            />
+                          )}
                         </div>
-                      )}
+                      </div>
                     </div>
-                    
-                    {/* Fallback Route Section */}
-                    {showFallbackRoute && (
-                      <div className="space-y-4 p-4 border rounded-lg bg-muted/10 transition-all duration-300 animate-in slide-in-from-top-2">
-                        <h3 className="text-lg font-semibold">Fallback Route</h3>
-                        <div className="space-y-4">
-                          <div className="flex items-center space-x-2">
-                            <span className="text-sm">Send Booker to</span>
-                            <Select 
-                              value={fallbackRouteType} 
-                              onValueChange={(value: 'custom' | 'external' | 'event') => setFallbackRouteType(value)}
-                            >
-                              <SelectTrigger className="flex-1">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="custom">Custom Page</SelectItem>
-                                <SelectItem value="external">External Redirect</SelectItem>
-                                <SelectItem value="event">Event Redirect</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            
-                            {fallbackRouteType === 'event' ? (
-                              <Select value={fallbackRouteValue} onValueChange={setFallbackRouteValue}>
-                                <SelectTrigger className="flex-1">
-                                  <SelectValue placeholder="Select an event type" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {mockEventTypes.map(eventType => (
-                                    <SelectItem key={eventType.id} value={eventType.id}>
-                                      {eventType.name}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                            ) : (
-                              <Textarea
-                                value={fallbackRouteValue}
-                                onChange={(e) => setFallbackRouteValue(e.target.value)}
-                                placeholder={fallbackRouteType === 'custom' 
-                                  ? 'Thank you for your interest! We will be in touch soon.' 
-                                  : 'Enter URL'
-                                }
-                                rows={3}
-                                className="flex-1"
-                              />
-                            )}
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      
+      case 'embed':
+        return (
+          <div className="p-6 w-full">
+            <div className="max-w-4xl mx-auto">
+              <div className="space-y-8">
+                {/* Embed Type Selection */}
+                <div className="flex gap-2 w-full">
+                  <button className="flex-1 px-6 py-3 border-2 rounded-lg text-center transition-all border-primary bg-primary/10 text-primary">
+                    <span className="font-medium text-sm">Inline</span>
+                  </button>
+                  <button className="flex-1 px-6 py-3 border-2 rounded-lg text-center transition-all border-gray-200 hover:border-gray-300">
+                    <span className="font-medium text-sm">Floating Button</span>
+                  </button>
+                  <button className="flex-1 px-6 py-3 border-2 rounded-lg text-center transition-all border-gray-200 hover:border-gray-300">
+                    <span className="font-medium text-sm">Pop up</span>
+                  </button>
+                  <button className="flex-1 px-6 py-3 border-2 rounded-lg text-center transition-all border-gray-200 hover:border-gray-300">
+                    <span className="font-medium text-sm">Email</span>
+                  </button>
+                </div>
+
+                <div className="flex gap-8">
+                  {/* Left side - Configuration */}
+                  <div className="w-3/5">
+                    <div className="overflow-x-auto">
+                      <div className="p-4 bg-gray-50 rounded-lg">
+                        <p className="text-sm text-gray-600 mb-4">
+                          Embed the form directly into your webpage
+                        </p>
+                        
+                        <div className="space-y-6">
+                          <div className="space-y-4">
+                            <div>
+                              <label className="block text-sm font-medium mb-2">Theme</label>
+                              <select className="w-full p-2 border border-gray-300 rounded-lg">
+                                <option>Auto</option>
+                                <option>Light</option>
+                                <option>Dark</option>
+                              </select>
+                            </div>
+
+                            <div className="flex items-center space-x-2">
+                              <input type="checkbox" id="hide-details" className="rounded" />
+                              <label htmlFor="hide-details" className="text-sm">
+                                Hide event type details
+                              </label>
+                            </div>
+
+                            <div className="space-y-4 mt-6">
+                              <h4 className="font-medium text-sm">Brand Colors</h4>
+                              <div className="space-y-4">
+                                <div>
+                                  <label className="block text-sm font-medium mb-2">
+                                    Brand Color (Light Theme)
+                                  </label>
+                                  <div className="flex items-center space-x-3">
+                                    <input
+                                      type="color"
+                                      value="#007ee5"
+                                      className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                                    />
+                                    <input
+                                      type="text"
+                                      value="007ee5"
+                                      placeholder="007ee5"
+                                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                    />
+                                  </div>
+                                </div>
+                                <div>
+                                  <label className="block text-sm font-medium mb-2">
+                                    Brand Color (Dark Theme)
+                                  </label>
+                                  <div className="flex items-center space-x-3">
+                                    <input
+                                      type="color"
+                                      value="#fafafa"
+                                      className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                                    />
+                                    <input
+                                      type="text"
+                                      value="fafafa"
+                                      placeholder="fafafa"
+                                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="mt-6">
+                              <label className="block text-sm font-medium mb-2">Layout</label>
+                              <select className="w-full p-2 border border-gray-300 rounded-lg">
+                                <option>Month</option>
+                                <option>Week</option>
+                                <option>Day</option>
+                              </select>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    )}
+                    </div>
+                  </div>
+
+                  {/* Right side - Preview and Code */}
+                  <div className="w-2/5">
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="font-semibold mb-2">Preview</h3>
+                        <div className="border rounded-lg p-4 bg-white">
+                          <div className="w-full h-80 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                            <div className="text-center">
+                              <div className="w-16 h-16 bg-primary rounded-lg mx-auto mb-4 flex items-center justify-center">
+                                <Eye className="h-8 w-8 text-primary-foreground" />
+                              </div>
+                              <p className="text-sm text-gray-600">
+                                Inline Form Preview
+                              </p>
+                              <p className="text-xs text-gray-400 mt-1">
+                                Theme: auto | Layout: month
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="text-center">
+                        <h4 className="font-medium text-sm mb-1">Ready to embed?</h4>
+                        <p className="text-xs text-gray-600 mb-3">
+                          Get the code to add to your website
+                        </p>
+                        <button className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium">
+                          <Copy className="h-4 w-4 mr-2 inline" />
+                          Get Code
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          )}
+          </div>
+        );
+      
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="border-b border-border bg-background">
+        <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate('/routing-forms')}
+              className="p-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+            <div>
+              <h1 className="text-lg font-semibold">{formName}</h1>
+              <p className="text-sm text-muted-foreground">hwllUGELBVWufl</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <Button>Save</Button>
+          </div>
         </div>
       </div>
+
+      {/* Navigation Tabs */}
+      <div className="border-b border-border px-6">
+        <div className="flex space-x-0">
+          <button
+            onClick={() => setActiveTab('setup')}
+            className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+              activeTab === 'setup' 
+                ? 'border-primary text-primary' 
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
+            }`}
+          >
+            <div className="flex items-center space-x-2">
+              <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-muted-foreground/20">
+                S
+              </div>
+              <span>Setup</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('form')}
+            className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+              activeTab === 'form' 
+                ? 'border-primary text-primary' 
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
+            }`}
+          >
+            <div className="flex items-center space-x-2">
+              <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-muted-foreground/20">
+                F
+              </div>
+              <span>Form</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('routing')}
+            className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+              activeTab === 'routing' 
+                ? 'border-primary text-primary' 
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
+            }`}
+          >
+            <div className="flex items-center space-x-2">
+              <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-muted-foreground/20">
+                R
+              </div>
+              <span>Routing</span>
+            </div>
+          </button>
+          <button
+            onClick={handleReporting}
+            className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+              activeTab === 'reporting' 
+                ? 'border-primary text-primary' 
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
+            }`}
+          >
+            <div className="flex items-center space-x-2">
+              <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-muted-foreground/20">
+                Re
+              </div>
+              <span>Reporting</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('embed')}
+            className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+              activeTab === 'embed' 
+                ? 'border-primary text-primary' 
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
+            }`}
+          >
+            <div className="flex items-center space-x-2">
+              <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-muted-foreground/20">
+                E
+              </div>
+              <span>Embed</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      {renderTabContent()}
 
       <RoutingFormEmbedModal 
         open={showEmbedModal} 

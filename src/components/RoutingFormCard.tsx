@@ -54,7 +54,7 @@ export const RoutingFormCard: React.FC<RoutingFormCardProps> = ({
   };
 
   return (
-    <div className="bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer flex-1 animate-fade-in" onClick={handleCardClick}>
+    <div className="bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer w-full animate-fade-in" onClick={handleCardClick}>
       <div className="flex items-start justify-between">
         <div className="flex items-start space-x-3 flex-1">
           <button

@@ -327,8 +327,8 @@ export const RoutingForms = () => {
               </Button>
             </div>
 
-            {/* Forms Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Forms List - Single Column */}
+            <div className="space-y-4">
               {routingForms.map(form => (
                 <RoutingFormCard
                   key={form.id}
