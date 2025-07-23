@@ -323,7 +323,7 @@ export const EditAvailability = () => {
                   </button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p><strong>Date overrides are archived automatically after the date has passed</strong></p>
+                  <p className="text-sm text-muted-foreground"><strong>Date overrides are archived automatically after the date has passed</strong></p>
                 </TooltipContent>
               </Tooltip>
             </div>
