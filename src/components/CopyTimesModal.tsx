@@ -44,12 +44,12 @@ export const CopyTimesModal = ({ isOpen, onClose, onCopy, sourceDay }: CopyTimes
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-sm">
+      <DialogContent className="max-w-xs fixed right-4 top-1/2 transform -translate-y-1/2 translate-x-0">
         <DialogHeader>
           <DialogTitle>Copy times to</DialogTitle>
         </DialogHeader>
         
-        <div className="space-y-4">
+        <div className="space-y-3">
           <div className="flex items-center space-x-2">
             <Checkbox
               id="select-all"
@@ -76,11 +76,11 @@ export const CopyTimesModal = ({ isOpen, onClose, onCopy, sourceDay }: CopyTimes
             ))}
           </div>
 
-          <div className="flex justify-end space-x-3 pt-4 border-t">
-            <Button variant="outline" onClick={onClose}>
+          <div className="flex justify-end space-x-2 pt-2">
+            <Button variant="outline" onClick={onClose} size="sm">
               Cancel
             </Button>
-            <Button onClick={handleCopy} disabled={selectedDays.length === 0}>
+            <Button onClick={handleCopy} disabled={selectedDays.length === 0} size="sm">
               Apply
             </Button>
           </div>

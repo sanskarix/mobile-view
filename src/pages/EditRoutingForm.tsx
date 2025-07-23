@@ -5,11 +5,20 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { Label } from '../components/ui/label';
-import { Switch } from '../components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { Checkbox } from '../components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import { ArrowLeft, FileText, AlertTriangle, BarChart3, Plus, ChevronDown, ChevronUp } from 'lucide-react';
-import { FormFieldModal, FormField } from '../components/FormFieldModal';
+import { ArrowLeft, FileText, AlertTriangle, BarChart3, Plus, ChevronDown, ChevronUp, Copy, ExternalLink, Download, Code, Eye, Trash2, X } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/tooltip';
+
+export interface FormField {
+  id: string;
+  label: string;
+  identifier: string;
+  type: 'short-text' | 'number' | 'long-text' | 'single-selection' | 'multiple-selection' | 'phone' | 'email';
+  required: boolean;
+  options?: string[];
+  collapsed?: boolean;
+}
 
 export const EditRoutingForm = () => {
   const { formId } = useParams();
@@ -17,29 +26,27 @@ export const EditRoutingForm = () => {
   const [formName, setFormName] = useState('RFFFF');
   const [formDescription, setFormDescription] = useState('hwllUGELBVWufl');
   const [sendEmailToOwner, setSendEmailToOwner] = useState(true);
-  const [showFieldModal, setShowFieldModal] = useState(false);
-  const [editingField, setEditingField] = useState<FormField | undefined>();
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [routes, setRoutes] = useState<any[]>([]);
+  const [selectedRouter, setSelectedRouter] = useState<string>('');
+  const [fallbackRouteType, setFallbackRouteType] = useState<'custom' | 'external' | 'event'>('custom');
+  const [fallbackRouteValue, setFallbackRouteValue] = useState('');
+  const [activeTab, setActiveTab] = useState<'form' | 'routing' | 'reporting'>('form');
 
   const handleCreateField = () => {
-    setEditingField(undefined);
-    setShowFieldModal(true);
+    const newField: FormField = {
+      id: `field-${Date.now()}`,
+      label: '',
+      identifier: '',
+      type: 'short-text',
+      required: false,
+      collapsed: false
+    };
+    setFormFields(prev => [...prev, newField]);
   };
 
-  const handleEditField = (field: FormField) => {
-    setEditingField(field);
-    setShowFieldModal(true);
-  };
-
-  const handleSaveField = (field: FormField) => {
-    if (editingField) {
-      setFormFields(prev => prev.map(f => f.id === field.id ? field : f));
-    } else {
-      setFormFields(prev => [...prev, field]);
-    }
-    setShowFieldModal(false);
-    setEditingField(undefined);
+  const handleUpdateField = (fieldId: string, updates: Partial<FormField>) => {
+    setFormFields(prev => prev.map(f => f.id === fieldId ? { ...f, ...updates } : f));
   };
 
   const handleDeleteField = (fieldId: string) => {
@@ -61,6 +68,22 @@ export const EditRoutingForm = () => {
     setRoutes(prev => [...prev, newRoute]);
   };
 
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText('cal.id/forms/f860530b-f820-497a-9728-6b56b7ae7d7b');
+  };
+
+  const handlePreview = () => {
+    window.open('cal.id/forms/f860530b-f820-497a-9728-6b56b7ae7d7b', '_blank');
+  };
+
+  const handleDownloadResponses = () => {
+    console.log('Downloading responses...');
+  };
+
+  const handleEmbed = () => {
+    console.log('Opening embed modal...');
+  };
+
   const comparisonOptions = [
     'Equals',
     'Does not equal',
@@ -69,6 +92,9 @@ export const EditRoutingForm = () => {
     'Is empty',
     'Is not empty'
   ];
+
+  const mockForms = ['Form1', 'Form2', 'Form3'];
+  const mockEventTypes = ['30 Min Meeting', '60 Min Meeting', 'Team Meeting'];
 
   return (
     <div className="min-h-screen bg-background">
@@ -91,32 +117,6 @@ export const EditRoutingForm = () => {
           </div>
           
           <div className="flex items-center space-x-2">
-            <Switch defaultChecked />
-            <Button variant="outline" size="sm">
-              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </Button>
-            <Button variant="outline" size="sm">
-              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-              </svg>
-            </Button>
-            <Button variant="outline" size="sm">
-              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l3-3m-3 3l-3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-              </svg>
-            </Button>
-            <Button variant="outline" size="sm">
-              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-              </svg>
-            </Button>
-            <Button variant="outline" size="sm">
-              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </Button>
             <Button>Save</Button>
           </div>
         </div>
@@ -145,17 +145,57 @@ export const EditRoutingForm = () => {
               />
             </div>
             
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label>Send Email to Owner</Label>
+            {/* Action Buttons */}
+            <div className="flex items-center space-x-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" onClick={handlePreview}>
+                    <Eye className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Preview</TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" onClick={handleCopyLink}>
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Copy Link</TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" onClick={handleDownloadResponses}>
+                    <Download className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Download Responses</TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="icon" onClick={handleEmbed}>
+                    <Code className="h-4 w-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Embed</TooltipContent>
+              </Tooltip>
+            </div>
+            
+            <div className="flex items-start space-x-2">
+              <Checkbox
+                id="send-email"
+                checked={sendEmailToOwner}
+                onCheckedChange={setSendEmailToOwner}
+              />
+              <div className="space-y-1">
+                <Label htmlFor="send-email">Send Email to Owner</Label>
                 <p className="text-sm text-muted-foreground">
                   Sends an email to the owner when the form is submitted
                 </p>
               </div>
-              <Switch
-                checked={sendEmailToOwner}
-                onCheckedChange={setSendEmailToOwner}
-              />
             </div>
             
             <Button variant="outline" className="w-full">
@@ -183,206 +223,268 @@ export const EditRoutingForm = () => {
 
         {/* Main Content */}
         <div className="flex-1">
-          <Tabs defaultValue="form" className="w-full">
-            <div className="border-b border-border px-6">
-              <TabsList className="bg-transparent">
-                <TabsTrigger value="form" className="data-[state=active]:bg-muted">
-                  Form
-                </TabsTrigger>
-                <TabsTrigger value="routing" className="data-[state=active]:bg-muted">
-                  Routing
-                </TabsTrigger>
-                <TabsTrigger value="reporting" className="data-[state=active]:bg-muted">
-                  Reporting
-                </TabsTrigger>
-              </TabsList>
+          {/* Updated Tabs */}
+          <div className="border-b border-border px-6">
+            <div className="flex space-x-0">
+              <button
+                onClick={() => setActiveTab('form')}
+                className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+                  activeTab === 'form' 
+                    ? 'border-primary text-primary' 
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
+                }`}
+              >
+                Form
+              </button>
+              <button
+                onClick={() => setActiveTab('routing')}
+                className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+                  activeTab === 'routing' 
+                    ? 'border-primary text-primary' 
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
+                }`}
+              >
+                Routing
+              </button>
+              <button
+                onClick={() => setActiveTab('reporting')}
+                className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+                  activeTab === 'reporting' 
+                    ? 'border-primary text-primary' 
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
+                }`}
+              >
+                Reporting
+              </button>
             </div>
-            
-            <TabsContent value="form" className="mt-0 p-0">
-              <div className="p-6">
-                {formFields.length === 0 ? (
-                  <div className="flex-1 flex items-center justify-center min-h-[600px]">
-                    <div className="text-center space-y-4">
-                      <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto">
-                        <FileText className="h-12 w-12 text-muted-foreground" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold mb-2">Create your first field</h3>
-                        <p className="text-muted-foreground mb-6">
-                          Fields are the form fields that the booker would see.
-                        </p>
-                        <Button onClick={handleCreateField}>Create Field</Button>
-                      </div>
+          </div>
+          
+          {/* Form Tab Content */}
+          {activeTab === 'form' && (
+            <div className="p-6">
+              {formFields.length === 0 ? (
+                <div className="flex-1 flex items-center justify-center min-h-[600px]">
+                  <div className="text-center space-y-4">
+                    <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto">
+                      <FileText className="h-12 w-12 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold mb-2">Create your first field</h3>
+                      <p className="text-muted-foreground mb-6">
+                        Fields are the form fields that the booker would see.
+                      </p>
+                      <Button onClick={handleCreateField}>Create Field</Button>
                     </div>
                   </div>
-                ) : (
-                  <div className="space-y-4">
-                    {formFields.map((field) => (
-                      <div key={field.id} className="border rounded-lg p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            {field.collapsed ? (
-                              <div className="flex items-center space-x-4">
-                                <span className="font-medium">{field.label || 'Untitled Field'}</span>
-                                <span className="text-sm text-muted-foreground">({field.type})</span>
-                                {field.required && (
-                                  <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">Required</span>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {formFields.map((field) => (
+                    <div key={field.id} className="border rounded-lg p-4">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <Label className="text-sm font-medium">Label</Label>
+                            <div className="flex items-center space-x-1 ml-auto">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => toggleFieldCollapse(field.id)}
+                                className="h-6 w-6"
+                              >
+                                {field.collapsed ? (
+                                  <ChevronDown className="h-4 w-4" />
+                                ) : (
+                                  <ChevronUp className="h-4 w-4" />
                                 )}
-                              </div>
-                            ) : (
-                              <div className="space-y-4">
-                                <div className="space-y-2">
-                                  <Label>Label</Label>
-                                  <Input value={field.label} readOnly />
-                                </div>
-                                <div className="space-y-2">
-                                  <Label>Identifier</Label>
-                                  <Input value={field.identifier} readOnly />
-                                </div>
-                                <div className="space-y-2">
-                                  <Label>Type</Label>
-                                  <Input value={field.type} readOnly />
-                                </div>
-                                {field.options && (
-                                  <div className="space-y-2">
-                                    <Label>Options</Label>
-                                    <div className="space-y-1">
-                                      {field.options.map((option, index) => (
-                                        <div key={index} className="text-sm p-2 bg-muted rounded">
-                                          {option}
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            )}
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => handleDeleteField(field.id)}
+                                className="h-6 w-6 text-red-600 hover:text-red-700"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
                           </div>
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => toggleFieldCollapse(field.id)}
-                            >
-                              {field.collapsed ? (
-                                <ChevronDown className="h-4 w-4" />
-                              ) : (
-                                <ChevronUp className="h-4 w-4" />
-                              )}
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleEditField(field)}
-                            >
-                              Edit
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeleteField(field.id)}
-                              className="text-red-600 hover:text-red-700"
-                            >
-                              Delete
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                    <Button variant="outline" onClick={handleCreateField} className="w-full">
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add field
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="routing" className="mt-0 p-6">
-              <div className="space-y-6">
-                {routes.length === 0 ? (
-                  <div className="text-center py-12">
-                    <p className="text-muted-foreground mb-4">No routes defined yet</p>
-                    <Button onClick={handleAddRoute}>Add Route</Button>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {routes.map((route, index) => (
-                      <div key={route.id} className="border rounded-lg p-4 space-y-4">
-                        <div className="space-y-2">
-                          <Label>Route Name</Label>
-                          <Input 
-                            value={route.name}
-                            onChange={(e) => {
-                              const newRoutes = [...routes];
-                              newRoutes[index].name = e.target.value;
-                              setRoutes(newRoutes);
-                            }}
-                            placeholder="Enter route name"
+                          <Input
+                            value={field.label}
+                            onChange={(e) => handleUpdateField(field.id, { label: e.target.value })}
+                            placeholder="This is what your users would see"
+                            className="mb-4"
                           />
                         </div>
-                        
-                        <div className="space-y-2">
-                          <Label>For responses matching the following criteria (matches all by default)</Label>
-                          <div className="flex space-x-2">
-                            <Select>
-                              <SelectTrigger className="w-40">
-                                <SelectValue placeholder="Select field" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {formFields.map(field => (
-                                  <SelectItem key={field.id} value={field.identifier}>
-                                    {field.label || field.identifier}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            
-                            <Select defaultValue="Equals">
-                              <SelectTrigger className="w-40">
+                      </div>
+                      
+                      {!field.collapsed && (
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <Label>Identifier</Label>
+                            <Input
+                              value={field.identifier}
+                              onChange={(e) => handleUpdateField(field.id, { identifier: e.target.value })}
+                              placeholder="Identifies field by this name."
+                            />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label>Type</Label>
+                            <Select
+                              value={field.type}
+                              onValueChange={(value: FormField['type']) => handleUpdateField(field.id, { type: value })}
+                            >
+                              <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                {comparisonOptions.map(option => (
-                                  <SelectItem key={option} value={option}>
-                                    {option}
-                                  </SelectItem>
-                                ))}
+                                <SelectItem value="short-text">Short Text</SelectItem>
+                                <SelectItem value="number">Number</SelectItem>
+                                <SelectItem value="long-text">Long Text</SelectItem>
+                                <SelectItem value="single-selection">Single Selection</SelectItem>
+                                <SelectItem value="multiple-selection">Multiple Selection</SelectItem>
+                                <SelectItem value="phone">Phone</SelectItem>
+                                <SelectItem value="email">Email</SelectItem>
                               </SelectContent>
                             </Select>
-                            
-                            <Input placeholder="Enter string" className="flex-1" />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label>Required</Label>
+                            <div className="flex space-x-2">
+                              <Button
+                                variant={field.required ? 'default' : 'outline'}
+                                onClick={() => handleUpdateField(field.id, { required: true })}
+                                size="sm"
+                                className="px-4"
+                              >
+                                Yes
+                              </Button>
+                              <Button
+                                variant={!field.required ? 'default' : 'outline'}
+                                onClick={() => handleUpdateField(field.id, { required: false })}
+                                size="sm"
+                                className="px-4"
+                              >
+                                No
+                              </Button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                    <Button variant="outline" onClick={handleAddRoute} className="w-full">
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add Route
+                      )}
+                    </div>
+                  ))}
+                  <Button variant="outline" onClick={handleCreateField} className="w-full">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add field
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {/* Routing Tab Content */}
+          {activeTab === 'routing' && (
+            <div className="p-6 space-y-6">
+              {/* Add a new Route Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Add a new Route</h3>
+                <div className="space-y-2">
+                  <Label>Select a router</Label>
+                  <Select value={selectedRouter} onValueChange={setSelectedRouter}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a router" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {mockForms.map(form => (
+                        <SelectItem key={form} value={form}>
+                          {form}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                {selectedRouter && (
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Fields available in <strong>{selectedRouter}</strong> will be added to this form.
+                    </p>
+                    <Button onClick={handleAddRoute} className="mt-2">
+                      Add a new route
                     </Button>
                   </div>
                 )}
               </div>
-            </TabsContent>
-            
-            <TabsContent value="reporting" className="mt-0 p-6">
+              
+              {/* Fallback Route Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Fallback Route</h3>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Send Booker to</Label>
+                    <Select 
+                      value={fallbackRouteType} 
+                      onValueChange={(value: 'custom' | 'external' | 'event') => setFallbackRouteType(value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="custom">Custom Page</SelectItem>
+                        <SelectItem value="external">External Redirect</SelectItem>
+                        <SelectItem value="event">Event Redirect</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  {fallbackRouteType === 'event' ? (
+                    <div className="space-y-2">
+                      <Label>Select Event Type</Label>
+                      <Select value={fallbackRouteValue} onValueChange={setFallbackRouteValue}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select an event type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {mockEventTypes.map(eventType => (
+                            <SelectItem key={eventType} value={eventType}>
+                              {eventType}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <Label>
+                        {fallbackRouteType === 'custom' ? 'Custom Page URL' : 'External Redirect URL'}
+                      </Label>
+                      <Textarea
+                        value={fallbackRouteValue}
+                        onChange={(e) => setFallbackRouteValue(e.target.value)}
+                        placeholder={fallbackRouteType === 'custom' 
+                          ? 'Thank you for your interest! We will be in touch soon.' 
+                          : 'Enter URL'
+                        }
+                        rows={3}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Reporting Tab Content */}
+          {activeTab === 'reporting' && (
+            <div className="p-6">
               <div className="text-center py-12">
                 <p className="text-muted-foreground">Reporting dashboard will go here</p>
               </div>
-            </TabsContent>
-          </Tabs>
+            </div>
+          )}
         </div>
       </div>
-
-      <FormFieldModal
-        open={showFieldModal}
-        onClose={() => {
-          setShowFieldModal(false);
-          setEditingField(undefined);
-        }}
-        onSave={handleSaveField}
-        field={editingField}
-      />
     </div>
   );
 };
