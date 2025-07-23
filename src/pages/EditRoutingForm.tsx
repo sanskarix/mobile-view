@@ -5,12 +5,11 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { Label } from '../components/ui/label';
-import { Checkbox } from '../components/ui/checkbox';
+import { Switch } from '../components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { CustomSelect } from '../components/ui/custom-select';
-import { ArrowLeft, FileText, AlertTriangle, BarChart3, Plus, ChevronDown, ChevronUp, Copy, ExternalLink, Download, Code, Trash2, GripVertical } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { ArrowLeft, FileText, AlertTriangle, BarChart3, Plus, ChevronDown, ChevronUp } from 'lucide-react';
 import { FormFieldModal, FormField } from '../components/FormFieldModal';
-import { EmbedModal } from '../components/EmbedModal';
 
 export const EditRoutingForm = () => {
   const { formId } = useParams();
@@ -19,30 +18,28 @@ export const EditRoutingForm = () => {
   const [formDescription, setFormDescription] = useState('hwllUGELBVWufl');
   const [sendEmailToOwner, setSendEmailToOwner] = useState(true);
   const [showFieldModal, setShowFieldModal] = useState(false);
-  const [showEmbedModal, setShowEmbedModal] = useState(false);
   const [editingField, setEditingField] = useState<FormField | undefined>();
   const [formFields, setFormFields] = useState<FormField[]>([]);
   const [routes, setRoutes] = useState<any[]>([]);
-  const [selectedRouter, setSelectedRouter] = useState('');
-  const [fallbackRoute, setFallbackRoute] = useState('');
-  const [fallbackValue, setFallbackValue] = useState('');
 
   const handleCreateField = () => {
-    const newField: FormField = {
-      id: `field-${Date.now()}`,
-      label: 'Untitled Field',
-      identifier: `field_${Date.now()}`,
-      type: 'text',
-      required: false,
-      collapsed: false
-    };
-    setFormFields(prev => [...prev, newField]);
+    setEditingField(undefined);
+    setShowFieldModal(true);
   };
 
-  const handleFieldChange = (fieldId: string, updates: Partial<FormField>) => {
-    setFormFields(prev => prev.map(f => 
-      f.id === fieldId ? { ...f, ...updates } : f
-    ));
+  const handleEditField = (field: FormField) => {
+    setEditingField(field);
+    setShowFieldModal(true);
+  };
+
+  const handleSaveField = (field: FormField) => {
+    if (editingField) {
+      setFormFields(prev => prev.map(f => f.id === field.id ? field : f));
+    } else {
+      setFormFields(prev => [...prev, field]);
+    }
+    setShowFieldModal(false);
+    setEditingField(undefined);
   };
 
   const handleDeleteField = (fieldId: string) => {
@@ -55,34 +52,22 @@ export const EditRoutingForm = () => {
     ));
   };
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText('cal.id/forms/f860530b-f820-497a-9728-6b56b7ae7d7b');
+  const handleAddRoute = () => {
+    const newRoute = {
+      id: `route-${Date.now()}`,
+      name: `Route ${routes.length + 1}`,
+      conditions: []
+    };
+    setRoutes(prev => [...prev, newRoute]);
   };
 
-  const handlePreview = () => {
-    window.open('cal.id/forms/f860530b-f820-497a-9728-6b56b7ae7d7b', '_blank');
-  };
-
-  const handleDownloadResponses = () => {
-    console.log('Downloading responses...');
-  };
-
-  const routerOptions = [
-    { value: 'form1', label: 'Contact Form' },
-    { value: 'form2', label: 'Support Request' },
-    { value: 'form3', label: 'Sales Inquiry' }
-  ];
-
-  const fallbackOptions = [
-    { value: 'custom', label: 'Custom Page' },
-    { value: 'external', label: 'External Redirect' },
-    { value: 'event', label: 'Event Redirect' }
-  ];
-
-  const eventTypes = [
-    { value: 'meeting', label: '15 min Meeting' },
-    { value: 'consultation', label: '30 min Consultation' },
-    { value: 'demo', label: '1 hour Demo' }
+  const comparisonOptions = [
+    'Equals',
+    'Does not equal',
+    'Contains',
+    'Not contains',
+    'Is empty',
+    'Is not empty'
   ];
 
   return (
@@ -106,20 +91,31 @@ export const EditRoutingForm = () => {
           </div>
           
           <div className="flex items-center space-x-2">
+            <Switch defaultChecked />
             <Button variant="outline" size="sm">
-              <ExternalLink className="h-4 w-4 mr-2" />
+              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
             </Button>
             <Button variant="outline" size="sm">
-              <Copy className="h-4 w-4 mr-2" />
+              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
             </Button>
             <Button variant="outline" size="sm">
-              <Download className="h-4 w-4 mr-2" />
+              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l3-3m-3 3l-3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+              </svg>
             </Button>
             <Button variant="outline" size="sm">
-              <Code className="h-4 w-4 mr-2" />
+              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
             </Button>
             <Button variant="outline" size="sm">
-              <Trash2 className="h-4 w-4 mr-2" />
+              <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
             </Button>
             <Button>Save</Button>
           </div>
@@ -149,39 +145,17 @@ export const EditRoutingForm = () => {
               />
             </div>
             
-            {/* Moved buttons here */}
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" onClick={handlePreview}>
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Preview
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleCopyLink}>
-                <Copy className="h-4 w-4 mr-2" />
-                Copy
-              </Button>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" onClick={handleDownloadResponses}>
-                <Download className="h-4 w-4 mr-2" />
-                Download
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => setShowEmbedModal(true)}>
-                <Code className="h-4 w-4 mr-2" />
-                Embed
-              </Button>
-            </div>
-            
-            {/* Changed to checkbox */}
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="send-email"
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label>Send Email to Owner</Label>
+                <p className="text-sm text-muted-foreground">
+                  Sends an email to the owner when the form is submitted
+                </p>
+              </div>
+              <Switch
                 checked={sendEmailToOwner}
                 onCheckedChange={setSendEmailToOwner}
               />
-              <Label htmlFor="send-email" className="text-sm">
-                Send Email to Owner
-              </Label>
             </div>
             
             <Button variant="outline" className="w-full">
@@ -211,23 +185,17 @@ export const EditRoutingForm = () => {
         <div className="flex-1">
           <Tabs defaultValue="form" className="w-full">
             <div className="border-b border-border px-6">
-              <div className="flex">
-                <button
-                  className="py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors border-primary text-primary"
-                >
+              <TabsList className="bg-transparent">
+                <TabsTrigger value="form" className="data-[state=active]:bg-muted">
                   Form
-                </button>
-                <button
-                  className="py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300"
-                >
+                </TabsTrigger>
+                <TabsTrigger value="routing" className="data-[state=active]:bg-muted">
                   Routing
-                </button>
-                <button
-                  className="py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300"
-                >
+                </TabsTrigger>
+                <TabsTrigger value="reporting" className="data-[state=active]:bg-muted">
                   Reporting
-                </button>
-              </div>
+                </TabsTrigger>
+              </TabsList>
             </div>
             
             <TabsContent value="form" className="mt-0 p-0">
@@ -251,65 +219,46 @@ export const EditRoutingForm = () => {
                   <div className="space-y-4">
                     {formFields.map((field) => (
                       <div key={field.id} className="border rounded-lg p-4">
-                        <div className="flex items-start justify-between">
+                        <div className="flex items-center justify-between">
                           <div className="flex-1">
-                            <div className="flex items-center space-x-2 mb-2">
-                              <GripVertical className="h-4 w-4 text-muted-foreground" />
-                              <Input
-                                value={field.label}
-                                onChange={(e) => handleFieldChange(field.id, { label: e.target.value })}
-                                className="font-medium border-none p-0 h-auto"
-                                placeholder="Field Label"
-                              />
-                            </div>
-                            
-                            {!field.collapsed && (
-                              <div className="space-y-4 mt-4">
+                            {field.collapsed ? (
+                              <div className="flex items-center space-x-4">
+                                <span className="font-medium">{field.label || 'Untitled Field'}</span>
+                                <span className="text-sm text-muted-foreground">({field.type})</span>
+                                {field.required && (
+                                  <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">Required</span>
+                                )}
+                              </div>
+                            ) : (
+                              <div className="space-y-4">
+                                <div className="space-y-2">
+                                  <Label>Label</Label>
+                                  <Input value={field.label} readOnly />
+                                </div>
                                 <div className="space-y-2">
                                   <Label>Identifier</Label>
-                                  <Input
-                                    value={field.identifier}
-                                    onChange={(e) => handleFieldChange(field.id, { identifier: e.target.value })}
-                                  />
+                                  <Input value={field.identifier} readOnly />
                                 </div>
                                 <div className="space-y-2">
                                   <Label>Type</Label>
-                                  <CustomSelect
-                                    value={field.type}
-                                    onValueChange={(value) => handleFieldChange(field.id, { type: value })}
-                                    options={[
-                                      { value: 'text', label: 'Text' },
-                                      { value: 'email', label: 'Email' },
-                                      { value: 'number', label: 'Number' },
-                                      { value: 'select', label: 'Select' },
-                                      { value: 'textarea', label: 'Textarea' }
-                                    ]}
-                                  />
+                                  <Input value={field.type} readOnly />
                                 </div>
-                                <div className="space-y-2">
-                                  <Label>Required</Label>
-                                  <div className="flex space-x-2">
-                                    <Button
-                                      variant={field.required ? "default" : "outline"}
-                                      size="sm"
-                                      onClick={() => handleFieldChange(field.id, { required: true })}
-                                    >
-                                      Yes
-                                    </Button>
-                                    <Button
-                                      variant={!field.required ? "default" : "outline"}
-                                      size="sm"
-                                      onClick={() => handleFieldChange(field.id, { required: false })}
-                                    >
-                                      No
-                                    </Button>
+                                {field.options && (
+                                  <div className="space-y-2">
+                                    <Label>Options</Label>
+                                    <div className="space-y-1">
+                                      {field.options.map((option, index) => (
+                                        <div key={index} className="text-sm p-2 bg-muted rounded">
+                                          {option}
+                                        </div>
+                                      ))}
+                                    </div>
                                   </div>
-                                </div>
+                                )}
                               </div>
                             )}
                           </div>
-                          
-                          <div className="flex items-center space-x-2 ml-4">
+                          <div className="flex items-center space-x-2">
                             <Button
                               variant="ghost"
                               size="icon"
@@ -323,11 +272,18 @@ export const EditRoutingForm = () => {
                             </Button>
                             <Button
                               variant="ghost"
-                              size="icon"
+                              size="sm"
+                              onClick={() => handleEditField(field)}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
                               onClick={() => handleDeleteField(field.id)}
                               className="text-red-600 hover:text-red-700"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              Delete
                             </Button>
                           </div>
                         </div>
@@ -343,65 +299,69 @@ export const EditRoutingForm = () => {
             </TabsContent>
             
             <TabsContent value="routing" className="mt-0 p-6">
-              <div className="space-y-8">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Add a new Route</h3>
-                  <div className="space-y-2">
-                    <Label>Select a router</Label>
-                    <CustomSelect
-                      value={selectedRouter}
-                      onValueChange={setSelectedRouter}
-                      options={routerOptions}
-                      placeholder="Choose a router"
-                    />
+              <div className="space-y-6">
+                {routes.length === 0 ? (
+                  <div className="text-center py-12">
+                    <p className="text-muted-foreground mb-4">No routes defined yet</p>
+                    <Button onClick={handleAddRoute}>Add Route</Button>
                   </div>
-                  
-                  {selectedRouter && (
-                    <Button onClick={() => console.log('Add route')}>
+                ) : (
+                  <div className="space-y-4">
+                    {routes.map((route, index) => (
+                      <div key={route.id} className="border rounded-lg p-4 space-y-4">
+                        <div className="space-y-2">
+                          <Label>Route Name</Label>
+                          <Input 
+                            value={route.name}
+                            onChange={(e) => {
+                              const newRoutes = [...routes];
+                              newRoutes[index].name = e.target.value;
+                              setRoutes(newRoutes);
+                            }}
+                            placeholder="Enter route name"
+                          />
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label>For responses matching the following criteria (matches all by default)</Label>
+                          <div className="flex space-x-2">
+                            <Select>
+                              <SelectTrigger className="w-40">
+                                <SelectValue placeholder="Select field" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {formFields.map(field => (
+                                  <SelectItem key={field.id} value={field.identifier}>
+                                    {field.label || field.identifier}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            
+                            <Select defaultValue="Equals">
+                              <SelectTrigger className="w-40">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {comparisonOptions.map(option => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            
+                            <Input placeholder="Enter string" className="flex-1" />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    <Button variant="outline" onClick={handleAddRoute} className="w-full">
                       <Plus className="h-4 w-4 mr-2" />
                       Add Route
                     </Button>
-                  )}
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Fallback Route</h3>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label>Send Booker to</Label>
-                      <CustomSelect
-                        value={fallbackRoute}
-                        onValueChange={setFallbackRoute}
-                        options={fallbackOptions}
-                        placeholder="Choose fallback option"
-                      />
-                    </div>
-                    
-                    {fallbackRoute && (
-                      <div className="space-y-2">
-                        <Label>
-                          {fallbackRoute === 'custom' && 'Custom Page URL'}
-                          {fallbackRoute === 'external' && 'External Redirect URL'}
-                          {fallbackRoute === 'event' && 'Event Type'}
-                        </Label>
-                        {fallbackRoute === 'event' ? (
-                          <CustomSelect
-                            value={fallbackValue}
-                            onValueChange={setFallbackValue}
-                            options={eventTypes}
-                            placeholder="Choose event type"
-                          />
-                        ) : (
-                          <Input
-                            value={fallbackValue}
-                            onChange={(e) => setFallbackValue(e.target.value)}
-                            placeholder={fallbackRoute === 'custom' ? 'Enter custom page URL' : 'Enter redirect URL'}
-                          />
-                        )}
-                      </div>
-                    )}
                   </div>
-                </div>
+                )}
               </div>
             </TabsContent>
             
@@ -414,7 +374,15 @@ export const EditRoutingForm = () => {
         </div>
       </div>
 
-      <EmbedModal open={showEmbedModal} onClose={() => setShowEmbedModal(false)} formId="f860530b-f820-497a-9728-6b56b7ae7d7b" />
+      <FormFieldModal
+        open={showFieldModal}
+        onClose={() => {
+          setShowFieldModal(false);
+          setEditingField(undefined);
+        }}
+        onSave={handleSaveField}
+        field={editingField}
+      />
     </div>
   );
 };

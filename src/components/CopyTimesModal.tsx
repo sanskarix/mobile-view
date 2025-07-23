@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
 import { Checkbox } from './ui/checkbox';
 
@@ -9,10 +9,9 @@ interface CopyTimesModalProps {
   onClose: () => void;
   onCopy: (selectedDays: string[]) => void;
   sourceDay: string;
-  children: React.ReactNode;
 }
 
-export const CopyTimesModal = ({ isOpen, onClose, onCopy, sourceDay, children }: CopyTimesModalProps) => {
+export const CopyTimesModal = ({ isOpen, onClose, onCopy, sourceDay }: CopyTimesModalProps) => {
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -44,14 +43,13 @@ export const CopyTimesModal = ({ isOpen, onClose, onCopy, sourceDay, children }:
   };
 
   return (
-    <Popover open={isOpen} onOpenChange={onClose}>
-      <PopoverTrigger asChild>
-        {children}
-      </PopoverTrigger>
-      <PopoverContent className="w-64 p-4" align="end">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle>Copy times to</DialogTitle>
+        </DialogHeader>
+        
         <div className="space-y-4">
-          <h4 className="font-medium">Copy times to</h4>
-          
           <div className="flex items-center space-x-2">
             <Checkbox
               id="select-all"
@@ -78,16 +76,16 @@ export const CopyTimesModal = ({ isOpen, onClose, onCopy, sourceDay, children }:
             ))}
           </div>
 
-          <div className="flex justify-end space-x-2 pt-2 border-t">
-            <Button variant="outline" size="sm" onClick={onClose}>
+          <div className="flex justify-end space-x-3 pt-4 border-t">
+            <Button variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button size="sm" onClick={handleCopy} disabled={selectedDays.length === 0}>
+            <Button onClick={handleCopy} disabled={selectedDays.length === 0}>
               Apply
             </Button>
           </div>
         </div>
-      </PopoverContent>
-    </Popover>
+      </DialogContent>
+    </Dialog>
   );
 };
