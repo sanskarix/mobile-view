@@ -98,7 +98,7 @@ export const DateOverrideModal = ({
           {/* Time Configuration Section */}
           {selectedDate && <div className="flex-1 space-y-6">
               <div>
-                <h3 className="text-lg font-medium mb-4">Which hours are you free?</h3>
+                <h3 className="font-medium mb-4 text-sm">Which hours are you free?</h3>
                 
                 {!isUnavailable && <div className="space-y-3">
                     {timeSlots.map((slot, index) => <div key={index} className="flex items-center gap-3">
