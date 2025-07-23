@@ -387,9 +387,7 @@ export default function MyApp() {
       case 'popup':
         return <div className="space-y-6">
             <div className="p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600 mb-4">
-                Open your calendar as a dialog when someone clicks an element
-              </p>
+              
               
               <div className="space-y-4">
                 <div>
