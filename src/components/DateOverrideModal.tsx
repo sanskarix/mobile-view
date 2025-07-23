@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar } from './ui/calendar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Switch } from './ui/switch';
@@ -11,14 +11,34 @@ interface DateOverrideModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (override: any) => void;
+  editingOverride?: any;
 }
 
-export const DateOverrideModal = ({ isOpen, onClose, onSave }: DateOverrideModalProps) => {
+export const DateOverrideModal = ({ isOpen, onClose, onSave, editingOverride }: DateOverrideModalProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [isUnavailable, setIsUnavailable] = useState(false);
   const [timeSlots, setTimeSlots] = useState([
     { startTime: '09:00', endTime: '17:00' }
   ]);
+
+  useEffect(() => {
+    if (editingOverride) {
+      setSelectedDate(editingOverride.date);
+      setIsUnavailable(editingOverride.isUnavailable);
+      if (!editingOverride.isUnavailable) {
+        // Parse time slots from timeString
+        const slots = editingOverride.timeString.split(', ').map((timeRange: string) => {
+          const [start, end] = timeRange.split(' - ');
+          return { startTime: start, endTime: end };
+        });
+        setTimeSlots(slots);
+      }
+    } else {
+      setSelectedDate(undefined);
+      setIsUnavailable(false);
+      setTimeSlots([{ startTime: '09:00', endTime: '17:00' }]);
+    }
+  }, [editingOverride]);
 
   const handleAddTimeSlot = () => {
     setTimeSlots([...timeSlots, { startTime: '18:00', endTime: '19:00' }]);
@@ -42,10 +62,12 @@ export const DateOverrideModal = ({ isOpen, onClose, onSave }: DateOverrideModal
         timeSlots: isUnavailable ? [] : timeSlots
       });
       onClose();
-      // Reset form
-      setSelectedDate(undefined);
-      setIsUnavailable(false);
-      setTimeSlots([{ startTime: '09:00', endTime: '17:00' }]);
+      // Reset form only if not editing
+      if (!editingOverride) {
+        setSelectedDate(undefined);
+        setIsUnavailable(false);
+        setTimeSlots([{ startTime: '09:00', endTime: '17:00' }]);
+      }
     }
   };
 
@@ -53,7 +75,9 @@ export const DateOverrideModal = ({ isOpen, onClose, onSave }: DateOverrideModal
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Select the dates to override</DialogTitle>
+          <DialogTitle>
+            {editingOverride ? 'Edit date override' : 'Select the dates to override'}
+          </DialogTitle>
         </DialogHeader>
         
         <div className="flex gap-8">
@@ -134,7 +158,7 @@ export const DateOverrideModal = ({ isOpen, onClose, onSave }: DateOverrideModal
                   Close
                 </Button>
                 <Button onClick={handleSave}>
-                  Add Override
+                  {editingOverride ? 'Update Override' : 'Add Override'}
                 </Button>
               </div>
             </div>

@@ -1,9 +1,13 @@
+
 import React, { useState } from 'react';
 import { Plus, MoreHorizontal, Copy, Trash2, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
+import { BulkUpdateModal } from '../components/BulkUpdateModal';
+
 interface Schedule {
   id: string;
   title: string;
@@ -12,51 +16,80 @@ interface Schedule {
   timezone: string;
   isDefault: boolean;
 }
+
 export const Availability = () => {
   const [selectedTab, setSelectedTab] = useState('my-availability');
   const [showMoreOptions, setShowMoreOptions] = useState<string | null>(null);
   const [isNewScheduleModalOpen, setIsNewScheduleModalOpen] = useState(false);
+  const [isBulkUpdateModalOpen, setIsBulkUpdateModalOpen] = useState(false);
   const [newScheduleName, setNewScheduleName] = useState('');
   const navigate = useNavigate();
-  const [schedules, setSchedules] = useState<Schedule[]>([{
-    id: 'working-hours',
-    title: 'Working Hours',
-    description: 'Default',
-    hours: 'Mon - Fri, 9:00 AM - 5:00 PM',
-    timezone: 'Asia/Calcutta',
-    isDefault: true
-  }, {
-    id: 'additional-hours',
-    title: 'Additional hours',
-    description: '',
-    hours: 'Mon - Fri, 9:00 AM - 5:00 PM\nSun, Sat, 9:00 AM - 4:00 PM',
-    timezone: 'Asia/Calcutta',
-    isDefault: false
-  }]);
+
+  const [schedules, setSchedules] = useState<Schedule[]>([
+    {
+      id: 'working-hours',
+      title: 'Working Hours',
+      description: 'Default',
+      hours: 'Mon - Fri, 9:00 AM - 5:00 PM',
+      timezone: 'Asia/Calcutta',
+      isDefault: true
+    },
+    {
+      id: 'additional-hours',
+      title: 'Additional hours',
+      description: '',
+      hours: 'Mon - Fri, 9:00 AM - 5:00 PM\nSun, Sat, 9:00 AM - 4:00 PM',
+      timezone: 'Asia/Calcutta',
+      isDefault: false
+    }
+  ]);
+
   const handleScheduleClick = (scheduleId: string) => {
     navigate(`/availability/${scheduleId}`);
   };
+
   const handleSetAsDefault = (scheduleId: string) => {
     setSchedules(prev => prev.map(schedule => ({
       ...schedule,
       isDefault: schedule.id === scheduleId
     })));
     setShowMoreOptions(null);
+    setIsBulkUpdateModalOpen(true);
   };
-  const handleMenuAction = (action: string, scheduleId: string) => {
+
+  const handleDuplicate = (scheduleId: string) => {
+    const originalSchedule = schedules.find(s => s.id === scheduleId);
+    if (originalSchedule) {
+      const newSchedule = {
+        ...originalSchedule,
+        id: `${scheduleId}-copy-${Date.now()}`,
+        title: `${originalSchedule.title} (Copy)`,
+        isDefault: false
+      };
+      setSchedules(prev => [...prev, newSchedule]);
+    }
     setShowMoreOptions(null);
+  };
+
+  const handleDelete = (scheduleId: string) => {
+    setSchedules(prev => prev.filter(s => s.id !== scheduleId));
+    setShowMoreOptions(null);
+  };
+
+  const handleMenuAction = (action: string, scheduleId: string) => {
     switch (action) {
       case 'setDefault':
         handleSetAsDefault(scheduleId);
         break;
       case 'duplicate':
-        console.log('Duplicating schedule', scheduleId);
+        handleDuplicate(scheduleId);
         break;
       case 'delete':
-        console.log('Deleting schedule', scheduleId);
+        handleDelete(scheduleId);
         break;
     }
   };
+
   const handleNewSchedule = () => {
     if (newScheduleName.trim()) {
       const newId = `schedule-${Date.now()}`;
@@ -70,83 +103,127 @@ export const Availability = () => {
     }
   };
 
-  // Sort schedules to show default first
   const sortedSchedules = [...schedules].sort((a, b) => {
     if (a.isDefault && !b.isDefault) return -1;
     if (!a.isDefault && b.isDefault) return 1;
     return 0;
   });
-  return <div className="px-6 pt-3 pb-6 space-y-6 w-full max-w-full">
-      {/* Tab Selector with New Schedule Button */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center bg-muted/50 rounded-lg p-1">
-          <button onClick={() => setSelectedTab('my-availability')} className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${selectedTab === 'my-availability' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>
-            My availability
-          </button>
-          <button onClick={() => setSelectedTab('team-availability')} className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${selectedTab === 'team-availability' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>
-            Team Availability
-          </button>
+
+  const tabOptions = [
+    { value: 'my-availability', label: 'Sanskar Yadav' },
+    { value: 'team-meta', label: 'Meta' },
+    { value: 'team-google', label: 'Google' },
+    { value: 'team-tesla', label: 'Tesla' },
+    { value: 'team-onehash', label: 'OneHash' }
+  ];
+
+  return (
+    <div className="px-6 pt-3 pb-6 space-y-6 w-full max-w-full">
+      <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+        <div className="flex items-center justify-between mb-6">
+          <TabsList className="grid w-auto grid-cols-5 bg-muted/50 p-1 rounded-lg">
+            {tabOptions.map((tab) => (
+              <TabsTrigger
+                key={tab.value}
+                value={tab.value}
+                className="px-6 py-2 text-sm font-medium rounded-md transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+              >
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          <Button
+            onClick={() => setIsNewScheduleModalOpen(true)}
+            className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            New schedule
+          </Button>
         </div>
 
-        <button onClick={() => setIsNewScheduleModalOpen(true)} className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors">
-          <Plus className="h-4 w-4 mr-2" />
-          New schedule
-        </button>
-      </div>
-
-      {/* Schedules List */}
-      <div className="space-y-4">
-        {sortedSchedules.map(schedule => <div key={schedule.id} onClick={() => handleScheduleClick(schedule.id)} className="bg-card rounded-lg p-6 hover:shadow-md transition-all cursor-pointer border border-border/50 hover:border-border">
-            <div className="flex items-start justify-between">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center mb-3 space-x-3">
-                  <h3 className="font-semibold text-foreground text-lg">
-                    {schedule.title}
-                  </h3>
-                  {schedule.isDefault && <span className="inline-flex items-center px-2 py-1 text-xs rounded border font-medium" style={{
-                borderColor: '#008c44',
-                color: '#008c44',
-                backgroundColor: 'transparent'
-              }}>
-                      Default
-                    </span>}
-                </div>
-                <div className="text-muted-foreground text-sm mb-3 leading-relaxed">
-                  {schedule.hours.split('\n').map((line, index) => <div key={index}>{line}</div>)}
-                </div>
-                <div className="flex items-center text-sm text-muted-foreground">
-                  <span className="mr-2">🌍</span>
-                  <span>{schedule.timezone}</span>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-2 ml-4" onClick={e => e.stopPropagation()}>
-                <div className="relative">
-                  <button onClick={() => setShowMoreOptions(showMoreOptions === schedule.id ? null : schedule.id)} className="p-2 hover:bg-muted rounded-md transition-colors">
-                    <MoreHorizontal className="h-4 w-4" />
-                  </button>
-                  
-                  {showMoreOptions === schedule.id && <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-10">
-                      <div className="py-1">
-                        {!schedule.isDefault && <button onClick={() => handleMenuAction('setDefault', schedule.id)} className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors">
-                            <Star className="h-4 w-4 mr-2 text-muted-foreground" />
-                            Set as default
-                          </button>}
-                        <button onClick={() => handleMenuAction('duplicate', schedule.id)} className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors">
-                          <Copy className="h-4 w-4 mr-2 text-muted-foreground" />
-                          Duplicate
-                        </button>
-                        <button onClick={() => handleMenuAction('delete', schedule.id)} className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors text-destructive">
-                          <Trash2 className="h-4 w-4 mr-2" />
-                          Delete
-                        </button>
+        <TabsContent value={selectedTab} className="space-y-4">
+          <div className="grid gap-4">
+            {sortedSchedules.map((schedule) => (
+              <div
+                key={schedule.id}
+                className="bg-card rounded-lg border border-border hover:shadow-md transition-all cursor-pointer group"
+                onClick={() => handleScheduleClick(schedule.id)}
+              >
+                <div className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-primary rounded-full"></div>
+                          <h3 className="font-semibold text-foreground text-lg">
+                            {schedule.title}
+                          </h3>
+                        </div>
+                        {schedule.isDefault && (
+                          <span className="inline-flex items-center px-2 py-1 text-xs rounded border font-medium border-green-600 text-green-600 bg-transparent">
+                            Default
+                          </span>
+                        )}
                       </div>
-                    </div>}
+                      <div className="text-muted-foreground text-sm mb-3 leading-relaxed">
+                        {schedule.hours.split('\n').map((line, index) => (
+                          <div key={index}>{line}</div>
+                        ))}
+                      </div>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <span className="mr-2">🌍</span>
+                        <span>{schedule.timezone}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2 ml-4 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
+                      <div className="relative">
+                        <button
+                          onClick={() => setShowMoreOptions(showMoreOptions === schedule.id ? null : schedule.id)}
+                          className="p-2 hover:bg-muted rounded-md transition-colors"
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </button>
+                        
+                        {showMoreOptions === schedule.id && (
+                          <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-10">
+                            <div className="py-1">
+                              {!schedule.isDefault && (
+                                <button
+                                  onClick={() => handleMenuAction('setDefault', schedule.id)}
+                                  className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                                >
+                                  <Star className="h-4 w-4 mr-2 text-muted-foreground" />
+                                  Set as default
+                                </button>
+                              )}
+                              <button
+                                onClick={() => handleMenuAction('duplicate', schedule.id)}
+                                className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                              >
+                                <Copy className="h-4 w-4 mr-2 text-muted-foreground" />
+                                Duplicate
+                              </button>
+                              <button
+                                onClick={() => handleMenuAction('delete', schedule.id)}
+                                className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>)}
-      </div>
+            ))}
+          </div>
+        </TabsContent>
+      </Tabs>
 
       {/* New Schedule Modal */}
       <Dialog open={isNewScheduleModalOpen} onOpenChange={setIsNewScheduleModalOpen}>
@@ -160,8 +237,13 @@ export const Availability = () => {
               <label htmlFor="schedule-name" className="block text-sm font-medium mb-2">
                 Name
               </label>
-              <Input id="schedule-name" value={newScheduleName} onChange={e => setNewScheduleName(e.target.value)} placeholder="Working Hours" className="w-full" />
-              {!newScheduleName.trim()}
+              <Input
+                id="schedule-name"
+                value={newScheduleName}
+                onChange={(e) => setNewScheduleName(e.target.value)}
+                placeholder="Working Hours"
+                className="w-full"
+              />
             </div>
 
             <div className="flex justify-end space-x-3 pt-4">
@@ -175,5 +257,16 @@ export const Availability = () => {
           </div>
         </DialogContent>
       </Dialog>
-    </div>;
+
+      {/* Bulk Update Modal */}
+      <BulkUpdateModal
+        isOpen={isBulkUpdateModalOpen}
+        onClose={() => setIsBulkUpdateModalOpen(false)}
+        onUpdate={(selectedEventTypes) => {
+          console.log('Bulk updating event types:', selectedEventTypes);
+          setIsBulkUpdateModalOpen(false);
+        }}
+      />
+    </div>
+  );
 };
