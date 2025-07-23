@@ -363,7 +363,7 @@ export const EditAvailability = () => {
           {/* Date Overrides Section - Full Width */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <h3 className="text-lg font-semibold">Date overrides</h3>
+              <h3 className="text-sm font-medium min-w-[80px] -bottom-1.5 ">Date overrides</h3>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button className="p-1 hover:bg-muted rounded-full transition-colors">
