@@ -290,7 +290,7 @@ export const EditAvailability = () => {
                     </button>
                   </div>}
                 <div>
-                  <p className="text-sm text-muted-foreground">Mon - Fri, 9:00 AM - 5:00 PM</p>
+                  <p className="text-sm text-muted-foreground mx-0 py-0 ">Mon - Fri, 9:00 AM - 5:00 PM</p>
                 </div>
               </div>
             </div>
@@ -367,7 +367,7 @@ export const EditAvailability = () => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button className="p-1 hover:bg-muted rounded-full transition-colors">
-                    <Info className="h-4 w-4 text-muted-foreground" />
+                    <Info className="h-4 w-4 text-muted-foreground mx-0 my-0" />
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="right" sideOffset={10}>
@@ -377,7 +377,7 @@ export const EditAvailability = () => {
                 </TooltipContent>
               </Tooltip>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground mx-0 py-0">
               Add dates when your availability changes from your daily hours.
             </p>
 
