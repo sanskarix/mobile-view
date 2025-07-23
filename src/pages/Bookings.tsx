@@ -999,10 +999,10 @@ export default function Bookings() {
             <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
               <h2 className="text-xl font-semibold mb-2">Add Guests</h2>
               <div className="flex items-center gap-2 mb-6">
-                <span className="text-sm text-gray-600">Add email addresses to add guests.</span>
+                <span className="text-sm text-gray-600">An email invite will be sent to these guests automatically</span>
                 <Tooltip>
                   <TooltipTrigger>
-                    <Info className="h-4 w-4 text-muted-foreground" />
+                    
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>An email invite will be sent to these guests automatically</p>
