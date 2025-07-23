@@ -10,20 +10,17 @@ import { DateOverrideModal } from '../components/DateOverrideModal';
 import { CopyTimesModal } from '../components/CopyTimesModal';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/tooltip';
 import { Card, CardContent } from '../components/ui/card';
-
 interface TimeSlot {
   id: string;
   startTime: string;
   endTime: string;
   isNew?: boolean;
 }
-
 interface DaySchedule {
   day: string;
   enabled: boolean;
   timeSlots: TimeSlot[];
 }
-
 interface DateOverride {
   id: string;
   date: Date;
@@ -32,12 +29,12 @@ interface DateOverride {
   timeString: string;
   isUnavailable: boolean;
 }
-
 export const EditAvailability = () => {
   const navigate = useNavigate();
-  const { scheduleId } = useParams();
+  const {
+    scheduleId
+  } = useParams();
   const location = useLocation();
-  
   const [isSetToDefault, setIsSetToDefault] = useState(true);
   const [timezone, setTimezone] = useState('Asia/Kolkata');
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -110,25 +107,52 @@ export const EditAvailability = () => {
     enabled: false,
     timeSlots: []
   }]);
-
-  const timezones = [
-    { value: 'Asia/Kolkata', label: 'Asia/Kolkata (GMT+05:30)' },
-    { value: 'America/New_York', label: 'America/New_York (GMT-05:00)' },
-    { value: 'Europe/London', label: 'Europe/London (GMT+00:00)' },
-    { value: 'Asia/Tokyo', label: 'Asia/Tokyo (GMT+09:00)' },
-    { value: 'America/Los_Angeles', label: 'America/Los_Angeles (GMT-08:00)' },
-    { value: 'Australia/Sydney', label: 'Australia/Sydney (GMT+11:00)' },
-    { value: 'Europe/Paris', label: 'Europe/Paris (GMT+01:00)' },
-    { value: 'Asia/Shanghai', label: 'Asia/Shanghai (GMT+08:00)' },
-    { value: 'America/Chicago', label: 'America/Chicago (GMT-06:00)' },
-    { value: 'Europe/Berlin', label: 'Europe/Berlin (GMT+01:00)' },
-    { value: 'Asia/Dubai', label: 'Asia/Dubai (GMT+04:00)' },
-    { value: 'America/Toronto', label: 'America/Toronto (GMT-05:00)' },
-    { value: 'Pacific/Auckland', label: 'Pacific/Auckland (GMT+13:00)' },
-    { value: 'Asia/Singapore', label: 'Asia/Singapore (GMT+08:00)' },
-    { value: 'Europe/Amsterdam', label: 'Europe/Amsterdam (GMT+01:00)' }
-  ];
-
+  const timezones = [{
+    value: 'Asia/Kolkata',
+    label: 'Asia/Kolkata (GMT+05:30)'
+  }, {
+    value: 'America/New_York',
+    label: 'America/New_York (GMT-05:00)'
+  }, {
+    value: 'Europe/London',
+    label: 'Europe/London (GMT+00:00)'
+  }, {
+    value: 'Asia/Tokyo',
+    label: 'Asia/Tokyo (GMT+09:00)'
+  }, {
+    value: 'America/Los_Angeles',
+    label: 'America/Los_Angeles (GMT-08:00)'
+  }, {
+    value: 'Australia/Sydney',
+    label: 'Australia/Sydney (GMT+11:00)'
+  }, {
+    value: 'Europe/Paris',
+    label: 'Europe/Paris (GMT+01:00)'
+  }, {
+    value: 'Asia/Shanghai',
+    label: 'Asia/Shanghai (GMT+08:00)'
+  }, {
+    value: 'America/Chicago',
+    label: 'America/Chicago (GMT-06:00)'
+  }, {
+    value: 'Europe/Berlin',
+    label: 'Europe/Berlin (GMT+01:00)'
+  }, {
+    value: 'Asia/Dubai',
+    label: 'Asia/Dubai (GMT+04:00)'
+  }, {
+    value: 'America/Toronto',
+    label: 'America/Toronto (GMT-05:00)'
+  }, {
+    value: 'Pacific/Auckland',
+    label: 'Pacific/Auckland (GMT+13:00)'
+  }, {
+    value: 'Asia/Singapore',
+    label: 'Asia/Singapore (GMT+08:00)'
+  }, {
+    value: 'Europe/Amsterdam',
+    label: 'Europe/Amsterdam (GMT+01:00)'
+  }];
   useEffect(() => {
     // Set initial title based on scheduleId or new schedule name from state
     if (location.state?.newScheduleName) {
@@ -141,7 +165,6 @@ export const EditAvailability = () => {
       setScheduleTitle('New Schedule');
     }
   }, [scheduleId, location.state]);
-
   const handleDayToggle = (dayIndex: number) => {
     const updated = [...weekDays];
     updated[dayIndex].enabled = !updated[dayIndex].enabled;
@@ -154,7 +177,6 @@ export const EditAvailability = () => {
     }
     setWeekDays(updated);
   };
-
   const handleAddTimeSlot = (dayIndex: number) => {
     const updated = [...weekDays];
     const newSlot = {
@@ -166,13 +188,11 @@ export const EditAvailability = () => {
     updated[dayIndex].timeSlots.push(newSlot);
     setWeekDays(updated);
   };
-
   const handleRemoveTimeSlot = (dayIndex: number, slotId: string) => {
     const updated = [...weekDays];
     updated[dayIndex].timeSlots = updated[dayIndex].timeSlots.filter(slot => slot.id !== slotId);
     setWeekDays(updated);
   };
-
   const handleTimeSlotChange = (dayIndex: number, slotId: string, field: 'startTime' | 'endTime', value: string) => {
     const updated = [...weekDays];
     const slotIndex = updated[dayIndex].timeSlots.findIndex(slot => slot.id === slotId);
@@ -181,12 +201,10 @@ export const EditAvailability = () => {
       setWeekDays(updated);
     }
   };
-
   const handleCopyTimes = (day: string) => {
     setCopySourceDay(day);
     setIsCopyModalOpen(true);
   };
-
   const handleCopyTimesToDays = (selectedDays: string[]) => {
     const sourceDay = weekDays.find(d => d.day === copySourceDay);
     if (!sourceDay) return;
@@ -204,20 +222,16 @@ export const EditAvailability = () => {
     });
     setWeekDays(updated);
   };
-
   const handleSaveTitle = () => {
     setIsEditingTitle(false);
   };
-
   const handleDeleteOverride = (overrideId: string) => {
     setDateOverrides(prev => prev.filter(override => override.id !== overrideId));
   };
-
   const handleEditOverride = (override: DateOverride) => {
     setEditingOverride(override);
     setIsOverrideModalOpen(true);
   };
-
   const handleSaveOverride = (override: any) => {
     if (editingOverride) {
       // Update existing override
@@ -253,14 +267,11 @@ export const EditAvailability = () => {
       setDateOverrides(prev => [...prev, newOverride]);
     }
   };
-
   const handleCloseOverrideModal = () => {
     setIsOverrideModalOpen(false);
     setEditingOverride(null);
   };
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
         <div className="px-6 py-4">
@@ -270,25 +281,14 @@ export const EditAvailability = () => {
                 <ArrowLeft className="h-5 w-5" />
               </button>
               <div className="flex items-center space-x-2">
-                {isEditingTitle ? (
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      value={scheduleTitle}
-                      onChange={e => setScheduleTitle(e.target.value)}
-                      className="text-xl font-semibold border-none p-0 h-auto bg-transparent focus:ring-0"
-                      onBlur={handleSaveTitle}
-                      onKeyDown={e => e.key === 'Enter' && handleSaveTitle()}
-                      autoFocus
-                    />
-                  </div>
-                ) : (
-                  <div className="flex items-center space-x-2">
+                {isEditingTitle ? <div className="flex items-center space-x-2">
+                    <Input value={scheduleTitle} onChange={e => setScheduleTitle(e.target.value)} className="text-xl font-semibold border-none p-0 h-auto bg-transparent focus:ring-0" onBlur={handleSaveTitle} onKeyDown={e => e.key === 'Enter' && handleSaveTitle()} autoFocus />
+                  </div> : <div className="flex items-center space-x-2">
                     <h1 className="text-xl font-semibold">{scheduleTitle}</h1>
                     <button onClick={() => setIsEditingTitle(true)} className="p-1 hover:bg-muted rounded transition-colors">
                       <Edit3 className="h-4 w-4 text-muted-foreground" />
                     </button>
-                  </div>
-                )}
+                  </div>}
                 <div>
                   <p className="text-sm text-muted-foreground">Mon - Fri, 9:00 AM - 5:00 PM</p>
                 </div>
@@ -312,9 +312,8 @@ export const EditAvailability = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Schedule Selector - Left Side (2/3 width) */}
             <div className="lg:col-span-2 space-y-6">
-              <h3 className="text-lg font-semibold">Weekly Schedule</h3>
-              {weekDays.map((daySchedule, dayIndex) => (
-                <div key={dayIndex} className="flex items-start space-x-6">
+              
+              {weekDays.map((daySchedule, dayIndex) => <div key={dayIndex} className="flex items-start space-x-6">
                   <div className="flex items-center space-x-4 min-w-[140px] flex-shrink-0">
                     <Switch checked={daySchedule.enabled} onCheckedChange={() => handleDayToggle(dayIndex)} />
                     <div className="text-sm font-medium min-w-[80px] my-[9px]">
@@ -322,60 +321,27 @@ export const EditAvailability = () => {
                     </div>
                   </div>
                   
-                  {!daySchedule.enabled ? (
-                    <div className="text-sm text-muted-foreground pt-2">Unavailable</div>
-                  ) : (
-                    <div className="flex-1 space-y-3">
-                      {daySchedule.timeSlots.map((timeSlot, slotIndex) => (
-                        <div key={timeSlot.id} className="flex items-center space-x-3">
+                  {!daySchedule.enabled ? <div className="text-sm text-muted-foreground pt-2">Unavailable</div> : <div className="flex-1 space-y-3">
+                      {daySchedule.timeSlots.map((timeSlot, slotIndex) => <div key={timeSlot.id} className="flex items-center space-x-3">
                           <div className="w-32">
-                            <TimeSelector
-                              value={timeSlot.startTime}
-                              onChange={time => handleTimeSlotChange(dayIndex, timeSlot.id, 'startTime', time)}
-                            />
+                            <TimeSelector value={timeSlot.startTime} onChange={time => handleTimeSlotChange(dayIndex, timeSlot.id, 'startTime', time)} />
                           </div>
                           <span className="text-muted-foreground">-</span>
                           <div className="w-32">
-                            <TimeSelector
-                              value={timeSlot.endTime}
-                              onChange={time => handleTimeSlotChange(dayIndex, timeSlot.id, 'endTime', time)}
-                            />
+                            <TimeSelector value={timeSlot.endTime} onChange={time => handleTimeSlotChange(dayIndex, timeSlot.id, 'endTime', time)} />
                           </div>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleAddTimeSlot(dayIndex)}
-                            className="h-8 w-8"
-                          >
+                          <Button type="button" variant="ghost" size="icon" onClick={() => handleAddTimeSlot(dayIndex)} className="h-8 w-8">
                             <Plus className="h-4 w-4" />
                           </Button>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleCopyTimes(daySchedule.day)}
-                            className="h-8 w-8"
-                          >
+                          <Button type="button" variant="ghost" size="icon" onClick={() => handleCopyTimes(daySchedule.day)} className="h-8 w-8">
                             <Copy className="h-4 w-4" />
                           </Button>
-                          {timeSlot.isNew && (
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => handleRemoveTimeSlot(dayIndex, timeSlot.id)}
-                              className="h-8 w-8"
-                            >
+                          {timeSlot.isNew && <Button type="button" variant="ghost" size="icon" onClick={() => handleRemoveTimeSlot(dayIndex, timeSlot.id)} className="h-8 w-8">
                               <Trash2 className="h-4 w-4" />
-                            </Button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
+                            </Button>}
+                        </div>)}
+                    </div>}
+                </div>)}
             </div>
 
             {/* Timezone Section - Right Side (1/3 width) */}
@@ -386,11 +352,9 @@ export const EditAvailability = () => {
                   <SelectValue placeholder="Select timezone" />
                 </SelectTrigger>
                 <SelectContent>
-                  {timezones.map((tz) => (
-                    <SelectItem key={tz.value} value={tz.value}>
+                  {timezones.map(tz => <SelectItem key={tz.value} value={tz.value}>
                       {tz.label}
-                    </SelectItem>
-                  ))}
+                    </SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
@@ -418,10 +382,8 @@ export const EditAvailability = () => {
             </p>
 
             {/* Date Override Cards */}
-            {dateOverrides.length > 0 && (
-              <div className="space-y-4">
-                {dateOverrides.map(override => (
-                  <Card key={override.id} className="border border-border">
+            {dateOverrides.length > 0 && <div className="space-y-4">
+                {dateOverrides.map(override => <Card key={override.id} className="border border-border">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div>
@@ -433,29 +395,17 @@ export const EditAvailability = () => {
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleEditOverride(override)}
-                            className="h-8 w-8"
-                          >
+                          <Button variant="ghost" size="icon" onClick={() => handleEditOverride(override)} className="h-8 w-8">
                             <Edit3 className="h-4 w-4" />
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleDeleteOverride(override.id)}
-                            className="h-8 w-8"
-                          >
+                          <Button variant="ghost" size="icon" onClick={() => handleDeleteOverride(override.id)} className="h-8 w-8">
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
                       </div>
                     </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
+                  </Card>)}
+              </div>}
 
             <Button variant="outline" onClick={() => setIsOverrideModalOpen(true)} className="flex items-center">
               <Plus className="h-4 w-4 mr-2" />
@@ -466,19 +416,8 @@ export const EditAvailability = () => {
       </div>
 
       {/* Modals */}
-      <DateOverrideModal
-        isOpen={isOverrideModalOpen}
-        onClose={handleCloseOverrideModal}
-        onSave={handleSaveOverride}
-        editingOverride={editingOverride}
-      />
+      <DateOverrideModal isOpen={isOverrideModalOpen} onClose={handleCloseOverrideModal} onSave={handleSaveOverride} editingOverride={editingOverride} />
 
-      <CopyTimesModal
-        isOpen={isCopyModalOpen}
-        onClose={() => setIsCopyModalOpen(false)}
-        onCopy={handleCopyTimesToDays}
-        sourceDay={copySourceDay}
-      />
-    </div>
-  );
+      <CopyTimesModal isOpen={isCopyModalOpen} onClose={() => setIsCopyModalOpen(false)} onCopy={handleCopyTimesToDays} sourceDay={copySourceDay} />
+    </div>;
 };
