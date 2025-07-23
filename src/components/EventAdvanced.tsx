@@ -3,6 +3,7 @@ import { Monitor, Smartphone, Tablet, Copy, Info, Plus, X } from 'lucide-react';
 import { Switch } from './ui/switch';
 import { CustomSelect } from './ui/custom-select';
 import { BookingQuestionModal } from './BookingQuestionModal';
+
 export const EventAdvanced = () => {
   const [settings, setSettings] = useState({
     requiresConfirmation: false,
@@ -47,6 +48,7 @@ export const EventAdvanced = () => {
   });
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
+
   const layoutOptions = [{
     id: 'month',
     name: 'Month',
@@ -66,6 +68,7 @@ export const EventAdvanced = () => {
     description: 'Column layout view',
     image: '/lovable-uploads/250cba12-30a8-4629-9401-ee5a78dee766.png'
   }];
+
   const captchaOptions = [{
     value: 'low',
     label: 'Low'
@@ -76,6 +79,7 @@ export const EventAdvanced = () => {
     value: 'high',
     label: 'High'
   }];
+
   const timeUnitOptions = [{
     value: 'minutes',
     label: 'Minutes'
@@ -83,29 +87,35 @@ export const EventAdvanced = () => {
     value: 'hours',
     label: 'Hours'
   }];
+
   const organizerEmailOptions = [{
     value: 'sanskarix@gmail.com',
     label: 'sanskarix@gmail.com'
   }];
+
   const handleToggle = (setting: string, value: boolean) => {
     setSettings(prev => ({
       ...prev,
       [setting]: value
     }));
   };
+
   const handleBookingQuestionToggle = (questionKey: string, value: boolean) => {
     setBookingQuestionStates(prev => ({
       ...prev,
       [questionKey]: value
     }));
   };
+
   const handleCopyPrivateLink = (link: string) => {
     navigator.clipboard.writeText(link);
   };
+
   const handleEditQuestion = (question: any) => {
     setSelectedQuestion(question);
     setModalOpen(true);
   };
+
   const handleLayoutSelect = (layoutId: string) => {
     const newSelectedLayouts = settings.selectedLayouts.includes(layoutId) ? settings.selectedLayouts.filter(id => id !== layoutId) : [...settings.selectedLayouts, layoutId];
     setSettings(prev => ({
@@ -113,13 +123,16 @@ export const EventAdvanced = () => {
       selectedLayouts: newSelectedLayouts
     }));
   };
+
   const addPrivateLink = () => {
     const newLink = `https://cal.id/d/${Date.now()}/product-hunt-chats`;
     setPrivateLinks(prev => [...prev, newLink]);
   };
+
   const removePrivateLink = (linkToRemove: string) => {
     setPrivateLinks(prev => prev.filter(link => link !== linkToRemove));
   };
+
   const bookingQuestions = [{
     label: 'Your name',
     type: 'Name',
@@ -156,17 +169,19 @@ export const EventAdvanced = () => {
     required: false,
     key: 'rescheduleReason'
   }];
-  return <div className="p-0 max-w-none mx-auto space-y-8" style={{
-    fontSize: '14px',
-    color: '#384252'
-  }}>
+
+  return (
+    <div className="p-0 max-w-none mx-auto space-y-8" style={{
+      fontSize: '14px',
+      color: '#384252'
+    }}>
       {/* Add to calendar */}
-      <div className="space-y-6">
+      <div className="space-y-6 p-6 border border-border rounded-lg">
         <div>
           <h3 className="font-semibold mb-4" style={{
-          fontSize: '16px',
-          color: '#384252'
-        }}>
+            fontSize: '16px',
+            color: '#384252'
+          }}>
             Add to calendar
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -235,17 +250,17 @@ export const EventAdvanced = () => {
       </div>
 
       {/* Layout */}
-      <div className="border-t border-gray-200 pt-8">
+      <div className="p-6 border border-border rounded-lg">
         <h3 className="font-semibold mb-4" style={{
-        fontSize: '16px',
-        color: '#384252'
-      }}>
+          fontSize: '16px',
+          color: '#384252'
+        }}>
           Layout
         </h3>
         <p className="mb-6" style={{
-        fontSize: '14px',
-        color: '#384252'
-      }}>
+          fontSize: '14px',
+          color: '#384252'
+        }}>
           You can select multiple and your bookers can switch views.
         </p>
         
@@ -292,17 +307,17 @@ export const EventAdvanced = () => {
       </div>
 
       {/* Booking questions */}
-      <div className="border-t border-gray-200 pt-8">
+      <div className="p-6 border border-border rounded-lg">
         <h3 className="font-semibold mb-4" style={{
-        fontSize: '16px',
-        color: '#384252'
-      }}>
+          fontSize: '16px',
+          color: '#384252'
+        }}>
           Booking questions
         </h3>
         <p className="mb-6" style={{
-        fontSize: '14px',
-        color: '#384252'
-      }}>
+          fontSize: '14px',
+          color: '#384252'
+        }}>
           Customize the questions asked on the booking page
         </p>
         
@@ -344,8 +359,8 @@ export const EventAdvanced = () => {
       </div>
 
       {/* Settings toggles */}
-      <div className="border-t border-gray-200 pt-8 space-y-8">
-        <div className="space-y-6">
+      <div className="p-6 border border-border rounded-lg">
+        <div className="space-y-8">
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <h3 className="font-medium" style={{
@@ -730,5 +745,6 @@ export const EventAdvanced = () => {
       </div>
 
       <BookingQuestionModal isOpen={modalOpen} onClose={() => setModalOpen(false)} question={selectedQuestion} />
-    </div>;
+    </div>
+  );
 };

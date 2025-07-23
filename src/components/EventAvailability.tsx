@@ -29,21 +29,23 @@ export const EventAvailability = () => {
   ];
 
   return (
-    <div className="p-6 max-w-none mx-auto space-y-6 border border-gray-200 rounded-lg" style={{ fontSize: '14px', color: '#384252' }}>
+    <div className="p-6 max-w-none mx-auto space-y-6 border border-border rounded-lg" style={{ fontSize: '14px', color: '#384252' }}>
       {/* Header with dropdown */}
       <div className="flex items-center justify-between border-b border-border pb-4">
         <div className="flex items-center space-x-2 flex-1">
-          <CustomSelect
-            value={selectedSchedule}
-            onValueChange={setSelectedSchedule}
-            options={scheduleOptions}
-            className="max-w-xs"
-          />
+          <div className="border border-border rounded-lg">
+            <CustomSelect
+              value={selectedSchedule}
+              onValueChange={setSelectedSchedule}
+              options={scheduleOptions}
+              className="max-w-xs"
+            />
+          </div>
         </div>
       </div>
 
       {/* Weekly Schedule */}
-      <div className="space-y-6">
+      <div className="space-y-6 p-4 border border-border rounded-lg">
         {weeklySchedule.map((schedule, index) => (
           <div key={schedule.day} className="flex items-center justify-between">
             <div className="font-medium min-w-[120px]" style={{ fontSize: '14px', color: '#384252' }}>
