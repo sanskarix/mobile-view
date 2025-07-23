@@ -344,9 +344,7 @@ export default function MyApp() {
       case 'floating':
         return <div className="space-y-6">
             <div className="p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600 mb-4">
-                Add a floating button that opens the calendar in a popup
-              </p>
+              
               
               <div className="space-y-4">
                 <div>
