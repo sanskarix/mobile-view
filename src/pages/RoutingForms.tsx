@@ -1,13 +1,19 @@
+
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Route, Plus, ChevronDown, Copy, ExternalLink, Download, Code } from 'lucide-react';
 import { CreateRoutingFormModal } from '../components/CreateRoutingFormModal';
 import { Switch } from '../components/ui/switch';
-import { EmbedModal } from '../components/EmbedModal';
+import { RoutingFormEmbedModal } from '../components/RoutingFormEmbedModal';
+import { RoutingFormCard } from '../components/RoutingFormCard';
+
 export const RoutingForms = () => {
+  const navigate = useNavigate();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showTeamDropdown, setShowTeamDropdown] = useState(false);
   const [showEmbedModal, setShowEmbedModal] = useState(false);
+  const [selectedEmbedFormId, setSelectedEmbedFormId] = useState('');
   const [selectedTeamFilter, setSelectedTeamFilter] = useState('all');
   const [routingForms, setRoutingForms] = useState<any[]>([]);
   const [teams, setTeams] = useState<any[]>([]);
@@ -46,14 +52,95 @@ export const RoutingForms = () => {
       name: team.name
     })), ...exampleTeams]);
   }, []);
+
+  // Load sample forms
+  useEffect(() => {
+    const sampleForms = [
+      {
+        id: 'form-1',
+        title: 'Customer Support Routing',
+        description: 'Route customers to the right support team based on their issue type',
+        enabled: true,
+        responses: 45,
+        teamName: 'Support Team',
+        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+      },
+      {
+        id: 'form-2',
+        title: 'Sales Qualification Form',
+        description: 'Qualify leads and route them to appropriate sales representatives',
+        enabled: true,
+        responses: 23,
+        teamName: 'Sales Team',
+        createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+      },
+      {
+        id: 'form-3',
+        title: 'Marketing Campaign Routing',
+        description: 'Route prospects based on their interest and campaign source',
+        enabled: false,
+        responses: 12,
+        teamName: 'Marketing Team',
+        createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
+      }
+    ];
+    setRoutingForms(sampleForms);
+  }, []);
+
   const handleFormCreated = (form: any) => {
     const newForm = {
       ...form,
       id: `form-${Date.now()}`,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      enabled: true,
+      responses: 0
     };
     setRoutingForms(prev => [...prev, newForm]);
   };
+
+  const handleSave = () => {
+    // Save functionality - in a real app, this would save to backend
+    console.log('Saving routing forms...');
+    // Show success message or toast
+  };
+
+  const handleFormEdit = (formId: string) => {
+    navigate(`/routing-forms/${formId}/edit`);
+  };
+
+  const handleFormToggle = (formId: string, enabled: boolean) => {
+    setRoutingForms(prev => prev.map(form => 
+      form.id === formId ? { ...form, enabled } : form
+    ));
+  };
+
+  const handleFormDownload = (formId: string) => {
+    console.log('Downloading responses for form:', formId);
+  };
+
+  const handleFormDuplicate = (formId: string) => {
+    const formToDuplicate = routingForms.find(f => f.id === formId);
+    if (formToDuplicate) {
+      const duplicatedForm = {
+        ...formToDuplicate,
+        id: `form-${Date.now()}`,
+        title: `${formToDuplicate.title} (Copy)`,
+        createdAt: new Date().toISOString(),
+        responses: 0
+      };
+      setRoutingForms(prev => [...prev, duplicatedForm]);
+    }
+  };
+
+  const handleFormDelete = (formId: string) => {
+    setRoutingForms(prev => prev.filter(form => form.id !== formId));
+  };
+
+  const handleEmbedClick = (formId: string) => {
+    setSelectedEmbedFormId(formId);
+    setShowEmbedModal(true);
+  };
+
   const getFilteredTeams = () => {
     const allOption = {
       id: 'all',
@@ -67,51 +154,78 @@ export const RoutingForms = () => {
     }));
     return [allOption, ...teamOptions];
   };
+
   const handleCopyLink = () => {
     navigator.clipboard.writeText('cal.id/forms/f860530b-f820-497a-9728-6b56b7ae7d7b');
-    // You could add a toast notification here
   };
+
   const handlePreview = () => {
     window.open('cal.id/forms/f860530b-f820-497a-9728-6b56b7ae7d7b', '_blank');
   };
+
   const handleDownloadResponses = () => {
-    // Implementation for downloading responses
     console.log('Downloading responses...');
   };
-  return <div className="min-h-screen bg-background">
+
+  const handleReporting = () => {
+    navigate('/apps');
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="border-b border-border bg-background">
-        
+        <div className="flex items-center justify-between px-6 py-4">
+          <h1 className="text-xl font-semibold">Routing Forms</h1>
+          <div className="flex items-center space-x-2">
+            <Button onClick={handleSave}>Save</Button>
+          </div>
+        </div>
       </div>
 
       <div className="px-8 py-6">
-        {routingForms.length === 0 ?
-      // Empty state
-      <div className="max-w-6xl mx-auto">
+        {routingForms.length === 0 ? (
+          // Empty state
+          <div className="max-w-6xl mx-auto">
             {/* Teams Filter Dropdown */}
             <div className="mb-8">
               <div className="relative inline-block">
-                <button onClick={() => setShowTeamDropdown(!showTeamDropdown)} className="flex items-center space-x-2 px-3 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm">
+                <button 
+                  onClick={() => setShowTeamDropdown(!showTeamDropdown)} 
+                  className="flex items-center space-x-2 px-3 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm"
+                >
                   <span>Teams: All</span>
                   <ChevronDown className="h-4 w-4" />
                 </button>
 
-                {showTeamDropdown && <div className="absolute top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-10">
+                {showTeamDropdown && (
+                  <div className="absolute top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-10">
                     <div className="py-2">
-                      {getFilteredTeams().map(team => <button key={team.id} onClick={() => {
-                  setSelectedTeamFilter(team.id);
-                  setShowTeamDropdown(false);
-                }} className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-muted transition-colors">
+                      {getFilteredTeams().map(team => (
+                        <button
+                          key={team.id}
+                          onClick={() => {
+                            setSelectedTeamFilter(team.id);
+                            setShowTeamDropdown(false);
+                          }}
+                          className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-muted transition-colors"
+                        >
                           <div className="flex items-center">
-                            {team.id === 'all' ? <div className="h-5 w-5 mr-2" /> : <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium mr-2">
+                            {team.id === 'all' ? (
+                              <div className="h-5 w-5 mr-2" />
+                            ) : (
+                              <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium mr-2">
                                 {team.avatar}
-                              </div>}
+                              </div>
+                            )}
                             <span>{team.name}</span>
                           </div>
                           {team.checked && <div className="h-2 w-2 bg-primary rounded-full" />}
-                        </button>)}
+                        </button>
+                      ))}
                     </div>
-                  </div>}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -131,64 +245,49 @@ export const RoutingForms = () => {
                 New
               </Button>
             </div>
-          </div> :
-      // Forms display (for when we have forms)
-      <div className="max-w-6xl mx-auto">
-            {/* Header with form link and controls */}
-            <div className="mb-6 space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <h2 className="text-xl font-semibold">RFFFF</h2>
-                  <Switch checked={formEnabled} onCheckedChange={setFormEnabled} />
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-muted-foreground">cal.id/forms/f860530b-f820-497a-9728-6b56b7ae7d7b</span>
-                <Button variant="ghost" size="icon" onClick={handleCopyLink}>
-                  <Copy className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon" onClick={handlePreview}>
-                  <ExternalLink className="h-4 w-4" />
-                </Button>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <Button variant="outline" onClick={handleDownloadResponses}>
-                  <Download className="h-4 w-4 mr-2" />
-                  Download responses
-                </Button>
-                <Button variant="outline" onClick={() => setShowEmbedModal(true)}>
-                  <Code className="h-4 w-4 mr-2" />
-                  Embed
-                </Button>
-              </div>
-            </div>
-
+          </div>
+        ) : (
+          // Forms display
+          <div className="max-w-6xl mx-auto">
             {/* Teams Filter and New Button */}
             <div className="flex items-center justify-between mb-8">
               <div className="relative">
-                <button onClick={() => setShowTeamDropdown(!showTeamDropdown)} className="flex items-center space-x-2 px-3 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm">
+                <button 
+                  onClick={() => setShowTeamDropdown(!showTeamDropdown)} 
+                  className="flex items-center space-x-2 px-3 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm"
+                >
                   <span>Teams: All</span>
                   <ChevronDown className="h-4 w-4" />
                 </button>
 
-                {showTeamDropdown && <div className="absolute top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-10">
+                {showTeamDropdown && (
+                  <div className="absolute top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-10">
                     <div className="py-2">
-                      {getFilteredTeams().map(team => <button key={team.id} onClick={() => {
-                  setSelectedTeamFilter(team.id);
-                  setShowTeamDropdown(false);
-                }} className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-muted transition-colors">
+                      {getFilteredTeams().map(team => (
+                        <button
+                          key={team.id}
+                          onClick={() => {
+                            setSelectedTeamFilter(team.id);
+                            setShowTeamDropdown(false);
+                          }}
+                          className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-muted transition-colors"
+                        >
                           <div className="flex items-center">
-                            {team.id === 'all' ? <div className="h-5 w-5 mr-2" /> : <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium mr-2">
+                            {team.id === 'all' ? (
+                              <div className="h-5 w-5 mr-2" />
+                            ) : (
+                              <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium mr-2">
                                 {team.avatar}
-                              </div>}
+                              </div>
+                            )}
                             <span>{team.name}</span>
                           </div>
                           {team.checked && <div className="h-2 w-2 bg-primary rounded-full" />}
-                        </button>)}
+                        </button>
+                      ))}
                     </div>
-                  </div>}
+                  </div>
+                )}
               </div>
 
               <Button onClick={() => setShowCreateModal(true)}>
@@ -197,18 +296,36 @@ export const RoutingForms = () => {
               </Button>
             </div>
 
-            {/* Forms list would go here */}
-            <div className="space-y-4">
-              {routingForms.map(form => <div key={form.id} className="p-4 border border-border rounded-lg">
-                  <h3 className="font-semibold">{form.title}</h3>
-                  <p className="text-muted-foreground text-sm">{form.description}</p>
-                </div>)}
+            {/* Forms Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {routingForms.map(form => (
+                <RoutingFormCard
+                  key={form.id}
+                  form={form}
+                  onEdit={handleFormEdit}
+                  onToggle={handleFormToggle}
+                  onDownload={handleFormDownload}
+                  onDuplicate={handleFormDuplicate}
+                  onDelete={handleFormDelete}
+                />
+              ))}
             </div>
-          </div>}
+          </div>
+        )}
 
-        <CreateRoutingFormModal open={showCreateModal} onClose={() => setShowCreateModal(false)} onFormCreated={handleFormCreated} teams={teams} />
+        <CreateRoutingFormModal 
+          open={showCreateModal} 
+          onClose={() => setShowCreateModal(false)} 
+          onFormCreated={handleFormCreated} 
+          teams={teams} 
+        />
 
-        <EmbedModal open={showEmbedModal} onClose={() => setShowEmbedModal(false)} formId="f860530b-f820-497a-9728-6b56b7ae7d7b" />
+        <RoutingFormEmbedModal 
+          open={showEmbedModal} 
+          onClose={() => setShowEmbedModal(false)} 
+          formId={selectedEmbedFormId} 
+        />
       </div>
-    </div>;
+    </div>
+  );
 };
