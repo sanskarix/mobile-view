@@ -1,423 +1,380 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Plus, ChevronDown, Copy, Trash2, Edit3, Info } from 'lucide-react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { Switch } from '../components/ui/switch';
-import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { Checkbox } from '../components/ui/checkbox';
+import { ArrowLeft, Plus, Trash2, Copy, Info, MoreHorizontal } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { TimeSelector } from '../components/TimeSelector';
+import { CustomSelect } from '../components/ui/custom-select';
 import { DateOverrideModal } from '../components/DateOverrideModal';
-import { CopyTimesModal } from '../components/CopyTimesModal';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/tooltip';
-import { Card, CardContent } from '../components/ui/card';
+import { CopyTimesModal } from '../components/CopyTimesModal';
+
 interface TimeSlot {
   id: string;
   startTime: string;
   endTime: string;
-  isNew?: boolean;
 }
-interface DaySchedule {
-  day: string;
-  enabled: boolean;
-  timeSlots: TimeSlot[];
-}
+
 interface DateOverride {
   id: string;
   date: Date;
-  dayName: string;
-  dateString: string;
-  timeString: string;
   isUnavailable: boolean;
+  timeString: string;
 }
+
 export const EditAvailability = () => {
+  const { teamId } = useParams();
   const navigate = useNavigate();
-  const {
-    scheduleId
-  } = useParams();
-  const location = useLocation();
-  const [isSetToDefault, setIsSetToDefault] = useState(true);
-  const [timezone, setTimezone] = useState('Asia/Kolkata');
-  const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [scheduleTitle, setScheduleTitle] = useState('');
-  const [isOverrideModalOpen, setIsOverrideModalOpen] = useState(false);
-  const [isCopyModalOpen, setIsCopyModalOpen] = useState(false);
-  const [copySourceDay, setCopySourceDay] = useState('');
-  const [editingOverride, setEditingOverride] = useState<DateOverride | null>(null);
-  const [dateOverrides, setDateOverrides] = useState<DateOverride[]>([{
-    id: '1',
-    date: new Date(2025, 6, 15),
-    dayName: 'Tuesday',
-    dateString: 'July 15',
-    timeString: '9:00 AM - 5:00 PM',
-    isUnavailable: false
-  }, {
-    id: '2',
-    date: new Date(2025, 6, 16),
-    dayName: 'Wednesday',
-    dateString: 'July 16',
-    timeString: 'Unavailable',
-    isUnavailable: true
-  }]);
-  const [weekDays, setWeekDays] = useState<DaySchedule[]>([{
-    day: 'Monday',
-    enabled: true,
-    timeSlots: [{
-      id: '1',
-      startTime: '09:00',
-      endTime: '17:00'
-    }]
-  }, {
-    day: 'Tuesday',
-    enabled: true,
-    timeSlots: [{
-      id: '2',
-      startTime: '09:00',
-      endTime: '17:00'
-    }]
-  }, {
-    day: 'Wednesday',
-    enabled: true,
-    timeSlots: [{
-      id: '3',
-      startTime: '09:00',
-      endTime: '17:00'
-    }]
-  }, {
-    day: 'Thursday',
-    enabled: true,
-    timeSlots: [{
-      id: '4',
-      startTime: '09:00',
-      endTime: '17:00'
-    }]
-  }, {
-    day: 'Friday',
-    enabled: true,
-    timeSlots: [{
-      id: '5',
-      startTime: '09:00',
-      endTime: '17:00'
-    }]
-  }, {
-    day: 'Saturday',
-    enabled: false,
-    timeSlots: []
-  }, {
-    day: 'Sunday',
-    enabled: false,
-    timeSlots: []
-  }]);
-  const timezones = [{
-    value: 'Asia/Kolkata',
-    label: 'Asia/Kolkata (GMT+05:30)'
-  }, {
-    value: 'America/New_York',
-    label: 'America/New_York (GMT-05:00)'
-  }, {
-    value: 'Europe/London',
-    label: 'Europe/London (GMT+00:00)'
-  }, {
-    value: 'Asia/Tokyo',
-    label: 'Asia/Tokyo (GMT+09:00)'
-  }, {
-    value: 'America/Los_Angeles',
-    label: 'America/Los_Angeles (GMT-08:00)'
-  }, {
-    value: 'Australia/Sydney',
-    label: 'Australia/Sydney (GMT+11:00)'
-  }, {
-    value: 'Europe/Paris',
-    label: 'Europe/Paris (GMT+01:00)'
-  }, {
-    value: 'Asia/Shanghai',
-    label: 'Asia/Shanghai (GMT+08:00)'
-  }, {
-    value: 'America/Chicago',
-    label: 'America/Chicago (GMT-06:00)'
-  }, {
-    value: 'Europe/Berlin',
-    label: 'Europe/Berlin (GMT+01:00)'
-  }, {
-    value: 'Asia/Dubai',
-    label: 'Asia/Dubai (GMT+04:00)'
-  }, {
-    value: 'America/Toronto',
-    label: 'America/Toronto (GMT-05:00)'
-  }, {
-    value: 'Pacific/Auckland',
-    label: 'Pacific/Auckland (GMT+13:00)'
-  }, {
-    value: 'Asia/Singapore',
-    label: 'Asia/Singapore (GMT+08:00)'
-  }, {
-    value: 'Europe/Amsterdam',
-    label: 'Europe/Amsterdam (GMT+01:00)'
-  }];
+  const [weeklySchedule, setWeeklySchedule] = useState<{
+    [key: string]: TimeSlot[];
+  }>({
+    Monday: [],
+    Tuesday: [],
+    Wednesday: [],
+    Thursday: [],
+    Friday: [],
+    Saturday: [],
+    Sunday: []
+  });
+  const [timezone, setTimezone] = useState('UTC');
+  const [showDateOverrideModal, setShowDateOverrideModal] = useState(false);
+  const [dateOverrides, setDateOverrides] = useState<DateOverride[]>([]);
+  const [editingOverride, setEditingOverride] = useState<any>(null);
+
+  const timezones = [
+    { value: 'UTC-12:00', label: '(UTC-12:00) Baker/Howland Island' },
+    { value: 'UTC-11:00', label: '(UTC-11:00) Niue' },
+    { value: 'UTC-10:00', label: '(UTC-10:00) Honolulu' },
+    { value: 'UTC-09:30', label: '(UTC-09:30) Marquesas Islands' },
+    { value: 'UTC-09:00', label: '(UTC-09:00) Anchorage' },
+    { value: 'UTC-08:00', label: '(UTC-08:00) Los Angeles' },
+    { value: 'UTC-07:00', label: '(UTC-07:00) Denver' },
+    { value: 'UTC-06:00', label: '(UTC-06:00) Chicago' },
+    { value: 'UTC-05:00', label: '(UTC-05:00) New York' },
+    { value: 'UTC-04:00', label: '(UTC-04:00) Caracas' },
+    { value: 'UTC-03:30', label: '(UTC-03:30) Newfoundland' },
+    { value: 'UTC-03:00', label: '(UTC-03:00) Buenos Aires' },
+    { value: 'UTC-02:00', label: '(UTC-02:00) South Georgia' },
+    { value: 'UTC-01:00', label: '(UTC-01:00) Azores' },
+    { value: 'UTC+00:00', label: '(UTC+00:00) London' },
+    { value: 'UTC+01:00', label: '(UTC+01:00) Paris' },
+    { value: 'UTC+02:00', label: '(UTC+02:00) Cairo' },
+    { value: 'UTC+03:00', label: '(UTC+03:00) Moscow' },
+    { value: 'UTC+03:30', label: '(UTC+03:30) Tehran' },
+    { value: 'UTC+04:00', label: '(UTC+04:00) Dubai' },
+    { value: 'UTC+04:30', label: '(UTC+04:30) Kabul' },
+    { value: 'UTC+05:00', label: '(UTC+05:00) Islamabad' },
+    { value: 'UTC+05:30', label: '(UTC+05:30) Mumbai' },
+    { value: 'UTC+05:45', label: '(UTC+05:45) Kathmandu' },
+    { value: 'UTC+06:00', label: '(UTC+06:00) Dhaka' },
+    { value: 'UTC+06:30', label: '(UTC+06:30) Yangon' },
+    { value: 'UTC+07:00', label: '(UTC+07:00) Bangkok' },
+    { value: 'UTC+08:00', label: '(UTC+08:00) Beijing' },
+    { value: 'UTC+09:00', label: '(UTC+09:00) Tokyo' },
+    { value: 'UTC+09:30', label: '(UTC+09:30) Adelaide' },
+    { value: 'UTC+10:00', label: '(UTC+10:00) Sydney' },
+    { value: 'UTC+10:30', label: '(UTC+10:30) Lord Howe Island' },
+    { value: 'UTC+11:00', label: '(UTC+11:00) Magadan' },
+    { value: 'UTC+11:30', label: '(UTC+11:30) Norfolk Island' },
+    { value: 'UTC+12:00', label: '(UTC+12:00) Auckland' },
+    { value: 'UTC+12:45', label: '(UTC+12:45) Chatham Islands' },
+    { value: 'UTC+13:00', label: '(UTC+13:00) Samoa' },
+    { value: 'UTC+14:00', label: '(UTC+14:00) Kiritimati' },
+  ];
+
   useEffect(() => {
-    // Set initial title based on scheduleId or new schedule name from state
-    if (location.state?.newScheduleName) {
-      setScheduleTitle(location.state.newScheduleName);
-    } else if (scheduleId === 'working-hours') {
-      setScheduleTitle('Working Hours');
-    } else if (scheduleId === 'additional-hours') {
-      setScheduleTitle('Additional hours');
-    } else {
-      setScheduleTitle('New Schedule');
+    // Load initial schedule and timezone from localStorage or default values
+    const savedSchedule = localStorage.getItem('weeklySchedule');
+    const savedTimezone = localStorage.getItem('timezone');
+
+    if (savedSchedule) {
+      setWeeklySchedule(JSON.parse(savedSchedule));
     }
-  }, [scheduleId, location.state]);
-  const handleDayToggle = (dayIndex: number) => {
-    const updated = [...weekDays];
-    updated[dayIndex].enabled = !updated[dayIndex].enabled;
-    if (updated[dayIndex].enabled && updated[dayIndex].timeSlots.length === 0) {
-      updated[dayIndex].timeSlots = [{
-        id: Date.now().toString(),
-        startTime: '09:00',
-        endTime: '17:00'
-      }];
+    if (savedTimezone) {
+      setTimezone(savedTimezone);
     }
-    setWeekDays(updated);
+  }, []);
+
+  useEffect(() => {
+    // Save schedule and timezone to localStorage whenever they change
+    localStorage.setItem('weeklySchedule', JSON.stringify(weeklySchedule));
+    localStorage.setItem('timezone', timezone);
+  }, [weeklySchedule, timezone]);
+
+  const addTimeSlot = (day: string) => {
+    setWeeklySchedule(prev => ({
+      ...prev,
+      [day]: [...prev[day], { id: Date.now().toString(), startTime: '09:00', endTime: '17:00' }]
+    }));
   };
-  const handleAddTimeSlot = (dayIndex: number) => {
-    const updated = [...weekDays];
-    const newSlot = {
-      id: Date.now().toString(),
-      startTime: '18:00',
-      endTime: '19:00',
-      isNew: true
-    };
-    updated[dayIndex].timeSlots.push(newSlot);
-    setWeekDays(updated);
+
+  const removeTimeSlot = (day: string, slotId: string) => {
+    setWeeklySchedule(prev => ({
+      ...prev,
+      [day]: prev[day].filter(slot => slot.id !== slotId)
+    }));
   };
-  const handleRemoveTimeSlot = (dayIndex: number, slotId: string) => {
-    const updated = [...weekDays];
-    updated[dayIndex].timeSlots = updated[dayIndex].timeSlots.filter(slot => slot.id !== slotId);
-    setWeekDays(updated);
+
+  const handleTimeSlotChange = (day: string, slotId: string, field: 'startTime' | 'endTime', value: string) => {
+    setWeeklySchedule(prev => ({
+      ...prev,
+      [day]: prev[day].map(slot =>
+        slot.id === slotId ? { ...slot, [field]: value } : slot
+      )
+    }));
   };
-  const handleTimeSlotChange = (dayIndex: number, slotId: string, field: 'startTime' | 'endTime', value: string) => {
-    const updated = [...weekDays];
-    const slotIndex = updated[dayIndex].timeSlots.findIndex(slot => slot.id === slotId);
-    if (slotIndex !== -1) {
-      updated[dayIndex].timeSlots[slotIndex][field] = value;
-      setWeekDays(updated);
-    }
-  };
-  const handleCopyTimes = (day: string) => {
-    setCopySourceDay(day);
-    setIsCopyModalOpen(true);
-  };
-  const handleCopyTimesToDays = (selectedDays: string[]) => {
-    const sourceDay = weekDays.find(d => d.day === copySourceDay);
-    if (!sourceDay) return;
-    const updated = [...weekDays];
-    selectedDays.forEach(targetDay => {
-      const targetIndex = updated.findIndex(d => d.day === targetDay);
-      if (targetIndex !== -1) {
-        updated[targetIndex].timeSlots = sourceDay.timeSlots.map(slot => ({
-          ...slot,
-          id: Date.now().toString() + Math.random(),
-          isNew: false
-        }));
-        updated[targetIndex].enabled = true;
-      }
+
+  const handleCopyTimes = (sourceDay: string, targetDays: string[]) => {
+    const sourceSchedule = weeklySchedule[sourceDay];
+    const updatedSchedule = { ...weeklySchedule };
+    
+    targetDays.forEach(day => {
+      updatedSchedule[day] = [...sourceSchedule];
     });
-    setWeekDays(updated);
+    
+    setWeeklySchedule(updatedSchedule);
   };
-  const handleSaveTitle = () => {
-    setIsEditingTitle(false);
-  };
-  const handleDeleteOverride = (overrideId: string) => {
-    setDateOverrides(prev => prev.filter(override => override.id !== overrideId));
-  };
-  const handleEditOverride = (override: DateOverride) => {
-    setEditingOverride(override);
-    setIsOverrideModalOpen(true);
-  };
+
   const handleSaveOverride = (override: any) => {
+    const timeString = override.timeSlots.map((slot: any) => `${slot.startTime} - ${slot.endTime}`).join(', ');
+    const newOverride = {
+      id: override.id || Date.now().toString(),
+      date: override.date,
+      isUnavailable: override.isUnavailable,
+      timeString: override.isUnavailable ? 'Unavailable' : timeString
+    };
+
     if (editingOverride) {
-      // Update existing override
-      setDateOverrides(prev => prev.map(existing => existing.id === editingOverride.id ? {
-        ...existing,
-        date: override.date,
-        dayName: override.date.toLocaleDateString('en-US', {
-          weekday: 'long'
-        }),
-        dateString: override.date.toLocaleDateString('en-US', {
-          month: 'long',
-          day: 'numeric'
-        }),
-        timeString: override.isUnavailable ? 'Unavailable' : override.timeSlots.map((slot: any) => `${slot.startTime} - ${slot.endTime}`).join(', '),
-        isUnavailable: override.isUnavailable
-      } : existing));
-      setEditingOverride(null);
+      setDateOverrides(prev =>
+        prev.map(o => (o.id === editingOverride.id ? newOverride : o))
+      );
     } else {
-      // Add new override
-      const newOverride: DateOverride = {
-        id: Date.now().toString(),
-        date: override.date,
-        dayName: override.date.toLocaleDateString('en-US', {
-          weekday: 'long'
-        }),
-        dateString: override.date.toLocaleDateString('en-US', {
-          month: 'long',
-          day: 'numeric'
-        }),
-        timeString: override.isUnavailable ? 'Unavailable' : override.timeSlots.map((slot: any) => `${slot.startTime} - ${slot.endTime}`).join(', '),
-        isUnavailable: override.isUnavailable
-      };
       setDateOverrides(prev => [...prev, newOverride]);
     }
-  };
-  const handleCloseOverrideModal = () => {
-    setIsOverrideModalOpen(false);
     setEditingOverride(null);
   };
-  return <div className="min-h-screen bg-background">
+
+  const handleEditOverride = (override: any) => {
+    setEditingOverride(override);
+    setShowDateOverrideModal(true);
+  };
+
+  const handleDeleteOverride = (overrideId: string) => {
+    setDateOverrides(prev => prev.filter(o => o.id !== overrideId));
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button onClick={() => navigate('/availability')} className="p-2 hover:bg-muted rounded-lg transition-colors">
-                <ArrowLeft className="h-5 w-5" />
-              </button>
-              <div className="flex items-center space-x-2">
-                {isEditingTitle ? <div className="flex items-center space-x-2">
-                    <Input value={scheduleTitle} onChange={e => setScheduleTitle(e.target.value)} className="text-xl font-semibold border-none p-0 h-auto bg-transparent focus:ring-0" onBlur={handleSaveTitle} onKeyDown={e => e.key === 'Enter' && handleSaveTitle()} autoFocus />
-                  </div> : <div className="flex items-center space-x-2">
-                    <h1 className="text-xl font-semibold">{scheduleTitle}</h1>
-                    <button onClick={() => setIsEditingTitle(true)} className="p-1 hover:bg-muted rounded transition-colors">
-                      <Edit3 className="h-4 w-4 text-muted-foreground" />
-                    </button>
-                  </div>}
-                <div>
-                  <p className="text-sm text-muted-foreground mx-0 py-0 ">Mon - Fri, 9:00 AM - 5:00 PM</p>
-                </div>
+      <div className="border-b border-border bg-background">
+        <div className="flex items-center justify-between px-6 py-4">
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate(`/teams/${teamId}`)}
+              className="p-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+            <div>
+              <h1 className="text-lg font-semibold">Availability</h1>
+              <p className="text-sm text-muted-foreground">Configure your weekly availability</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <Button>Save</Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex">
+        {/* Schedule Selector - Left Side */}
+        <div className="flex-1 p-6 border-r">
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Schedule</h3>
+              <div className="space-y-4">
+                {Object.entries(weeklySchedule).map(([day, timeSlots]) => (
+                  <div key={day} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <Checkbox
+                          checked={timeSlots.length > 0}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setWeeklySchedule(prev => ({
+                                ...prev,
+                                [day]: [{ id: Date.now().toString(), startTime: '09:00', endTime: '17:00' }]
+                              }));
+                            } else {
+                              setWeeklySchedule(prev => ({
+                                ...prev,
+                                [day]: []
+                              }));
+                            }
+                          }}
+                        />
+                        <span className="font-medium">{day}</span>
+                      </div>
+                      
+                      {timeSlots.length > 0 && (
+                        <CopyTimesModal
+                          isOpen={false}
+                          onClose={() => {}}
+                          onCopy={(targetDays) => handleCopyTimes(day, targetDays)}
+                          sourceDay={day}
+                        >
+                          <Button variant="outline" size="sm">
+                            <Copy className="h-4 w-4 mr-2" />
+                            Copy times
+                          </Button>
+                        </CopyTimesModal>
+                      )}
+                    </div>
+
+                    {timeSlots.length > 0 && (
+                      <div className="ml-6 space-y-2">
+                        {timeSlots.map((slot, index) => (
+                          <div key={slot.id} className="flex items-center space-x-2">
+                            <TimeSelector
+                              value={slot.startTime}
+                              onChange={(time) => handleTimeSlotChange(day, slot.id, 'startTime', time)}
+                              placeholder="Start time"
+                            />
+                            <span className="text-muted-foreground">-</span>
+                            <TimeSelector
+                              value={slot.endTime}
+                              onChange={(time) => handleTimeSlotChange(day, slot.id, 'endTime', time)}
+                              placeholder="End time"
+                            />
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => addTimeSlot(day)}
+                              className="text-green-600 hover:text-green-700"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                            {timeSlots.length > 1 && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => removeTimeSlot(day, slot.id)}
+                                className="text-red-600 hover:text-red-700"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-sm">
-                <span className="text-muted-foreground">Set to Default</span>
-                <Switch checked={isSetToDefault} onCheckedChange={setIsSetToDefault} />
-              </div>
-              <Button>Save</Button>
+          </div>
+        </div>
+
+        {/* Timezone Selector - Right Side */}
+        <div className="w-80 p-6">
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Timezone</Label>
+              <CustomSelect
+                value={timezone}
+                onValueChange={setTimezone}
+                options={timezones}
+                placeholder="Select timezone"
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="px-6 py-8">
-        <div className="max-w-full mx-auto space-y-8">
-          {/* Schedule Selector and Timezone - Side by Side */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Schedule Selector - Left Side (2/3 width) */}
-            <div className="lg:col-span-2 space-y-6">
-              
-              {weekDays.map((daySchedule, dayIndex) => <div key={dayIndex} className="flex items-start space-x-6">
-                  <div className="flex items-center space-x-4 min-w-[140px] flex-shrink-0">
-                    <Switch checked={daySchedule.enabled} onCheckedChange={() => handleDayToggle(dayIndex)} />
-                    <div className="text-sm font-medium min-w-[80px] my-[9px]">
-                      {daySchedule.day}
-                    </div>
-                  </div>
-                  
-                  {!daySchedule.enabled ? <div className="text-sm text-muted-foreground pt-2">Unavailable</div> : <div className="flex-1 space-y-3">
-                      {daySchedule.timeSlots.map((timeSlot, slotIndex) => <div key={timeSlot.id} className="flex items-center space-x-3">
-                          <div className="w-32">
-                            <TimeSelector value={timeSlot.startTime} onChange={time => handleTimeSlotChange(dayIndex, timeSlot.id, 'startTime', time)} />
-                          </div>
-                          <span className="text-muted-foreground">-</span>
-                          <div className="w-32">
-                            <TimeSelector value={timeSlot.endTime} onChange={time => handleTimeSlotChange(dayIndex, timeSlot.id, 'endTime', time)} />
-                          </div>
-                          <Button type="button" variant="ghost" size="icon" onClick={() => handleAddTimeSlot(dayIndex)} className="h-8 w-8">
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                          <Button type="button" variant="ghost" size="icon" onClick={() => handleCopyTimes(daySchedule.day)} className="h-8 w-8">
-                            <Copy className="h-4 w-4" />
-                          </Button>
-                          {timeSlot.isNew && <Button type="button" variant="ghost" size="icon" onClick={() => handleRemoveTimeSlot(dayIndex, timeSlot.id)} className="h-8 w-8">
-                              <Trash2 className="h-4 w-4" />
-                            </Button>}
-                        </div>)}
-                    </div>}
-                </div>)}
-            </div>
-
-            {/* Timezone Section - Right Side (1/3 width) */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-medium min-w-[80px] text-lg ">Timezone</h3>
-              <Select value={timezone} onValueChange={setTimezone}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select timezone" />
-                </SelectTrigger>
-                <SelectContent>
-                  {timezones.map(tz => <SelectItem key={tz.value} value={tz.value}>
-                      {tz.label}
-                    </SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {/* Date Overrides Section - Full Width */}
-          <div className="space-y-4">
+      {/* Date Overrides Section - Full Width */}
+      <div className="border-t p-6">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <h3 className="text-sm font-medium min-w-[80px] -bottom-1 ">Date overrides</h3>
+              <h3 className="text-lg font-semibold">Date Overrides</h3>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button className="p-1 hover:bg-muted rounded-full transition-colors">
-                    <Info className="h-4 w-4 text-muted-foreground mx-0 my-0" />
-                  </button>
+                  <Button variant="ghost" size="icon" className="h-4 w-4">
+                    <Info className="h-4 w-4" />
+                  </Button>
                 </TooltipTrigger>
-                <TooltipContent side="right" sideOffset={10}>
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Date overrides are archived automatically after the date has passed</strong>
-                  </p>
+                <TooltipContent side="right" className="ml-2">
+                  <p>Add dates when your availability differs from your weekly hours</p>
                 </TooltipContent>
               </Tooltip>
             </div>
-            <p className="text-sm text-muted-foreground mx-0 py-0 ">
-              Add dates when your availability changes from your daily hours.
-            </p>
-
-            {/* Date Override Cards */}
-            {dateOverrides.length > 0 && <div className="space-y-4">
-                {dateOverrides.map(override => <Card key={override.id} className="border border-border">
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium text-sm">
-                            {override.dayName}, {override.dateString}
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {override.timeString}
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Button variant="ghost" size="icon" onClick={() => handleEditOverride(override)} className="h-8 w-8">
-                            <Edit3 className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleDeleteOverride(override.id)} className="h-8 w-8">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>)}
-              </div>}
-
-            <Button variant="outline" onClick={() => setIsOverrideModalOpen(true)} className="flex items-center">
+            <Button onClick={() => setShowDateOverrideModal(true)} variant="outline">
               <Plus className="h-4 w-4 mr-2" />
               Add an override
             </Button>
           </div>
+
+          {dateOverrides.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <p>No date overrides</p>
+            </div>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {dateOverrides.map((override) => (
+                <div key={override.id} className="border rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium">
+                      {override.date.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </h4>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => handleEditOverride(override)}>
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={() => handleDeleteOverride(override.id)}
+                          className="text-red-600"
+                        >
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {override.isUnavailable ? 'Unavailable' : override.timeString}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Modals */}
-      <DateOverrideModal isOpen={isOverrideModalOpen} onClose={handleCloseOverrideModal} onSave={handleSaveOverride} editingOverride={editingOverride} />
-
-      <CopyTimesModal isOpen={isCopyModalOpen} onClose={() => setIsCopyModalOpen(false)} onCopy={handleCopyTimesToDays} sourceDay={copySourceDay} />
-    </div>;
+      <DateOverrideModal
+        isOpen={showDateOverrideModal}
+        onClose={() => {
+          setShowDateOverrideModal(false);
+          setEditingOverride(null);
+        }}
+        onSave={handleSaveOverride}
+        editingOverride={editingOverride}
+      />
+    </div>
+  );
 };
