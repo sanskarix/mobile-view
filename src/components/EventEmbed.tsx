@@ -485,7 +485,7 @@ export default function MyApp() {
           {/* Right Side - Preview */}
           <div className="w-2/5">
             <div className="space-y-4">
-              <h3 className="font-semibold mb-2">Preview</h3>
+              
               <div className="border rounded-lg p-4 bg-white">
                 {renderPreview()}
               </div>
