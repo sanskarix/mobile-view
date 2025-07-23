@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
 import { BulkUpdateModal } from '../components/BulkUpdateModal';
 
 interface Schedule {
@@ -109,40 +108,43 @@ export const Availability = () => {
     return 0;
   });
 
-  const tabOptions = [
-    { value: 'my-availability', label: 'Sanskar Yadav' },
-    { value: 'team-meta', label: 'Meta' },
-    { value: 'team-google', label: 'Google' },
-    { value: 'team-tesla', label: 'Tesla' },
-    { value: 'team-onehash', label: 'OneHash' }
+  const tabs = [
+    { id: 'my-availability', label: 'My Availability' },
+    { id: 'team-availability', label: 'Team Availability' }
   ];
 
   return (
     <div className="px-6 pt-3 pb-6 space-y-6 w-full max-w-full">
-      <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-        <div className="flex items-center justify-between mb-6">
-          <TabsList className="grid w-auto grid-cols-5 bg-muted/50 p-1 rounded-lg">
-            {tabOptions.map((tab) => (
-              <TabsTrigger
-                key={tab.value}
-                value={tab.value}
-                className="px-6 py-2 text-sm font-medium rounded-md transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
-              >
-                {tab.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          <Button
-            onClick={() => setIsNewScheduleModalOpen(true)}
-            className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            New schedule
-          </Button>
+      <div className="flex items-center justify-between mb-6">
+        {/* Custom Tabs */}
+        <div className="flex">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setSelectedTab(tab.id)}
+              className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+                selectedTab === tab.id
+                  ? 'border-primary text-primary'
+                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
 
-        <TabsContent value={selectedTab} className="space-y-4">
+        <Button
+          onClick={() => setIsNewScheduleModalOpen(true)}
+          className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          New schedule
+        </Button>
+      </div>
+
+      {/* Tab Content */}
+      <div className="space-y-4">
+        {selectedTab === 'my-availability' && (
           <div className="grid gap-4">
             {sortedSchedules.map((schedule) => (
               <div
@@ -154,12 +156,9 @@ export const Availability = () => {
                   <div className="flex items-start justify-between">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-3">
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-primary rounded-full"></div>
-                          <h3 className="font-semibold text-foreground text-lg">
-                            {schedule.title}
-                          </h3>
-                        </div>
+                        <h3 className="font-semibold text-foreground text-lg">
+                          {schedule.title}
+                        </h3>
                         {schedule.isDefault && (
                           <span className="inline-flex items-center px-2 py-1 text-xs rounded border font-medium border-green-600 text-green-600 bg-transparent">
                             Default
@@ -177,7 +176,7 @@ export const Availability = () => {
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-2 ml-4 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
+                    <div className="flex items-center space-x-2 ml-4" onClick={(e) => e.stopPropagation()}>
                       <div className="relative">
                         <button
                           onClick={() => setShowMoreOptions(showMoreOptions === schedule.id ? null : schedule.id)}
@@ -222,8 +221,14 @@ export const Availability = () => {
               </div>
             ))}
           </div>
-        </TabsContent>
-      </Tabs>
+        )}
+
+        {selectedTab === 'team-availability' && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Team availability features coming soon...</p>
+          </div>
+        )}
+      </div>
 
       {/* New Schedule Modal */}
       <Dialog open={isNewScheduleModalOpen} onOpenChange={setIsNewScheduleModalOpen}>

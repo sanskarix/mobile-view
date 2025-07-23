@@ -50,46 +50,48 @@ export const BulkUpdateModal = ({ isOpen, onClose, onUpdate }: BulkUpdateModalPr
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle>Bulk update existing event types</DialogTitle>
-          <p className="text-sm text-muted-foreground">
+        <DialogHeader className="pb-4">
+          <DialogTitle className="text-lg font-semibold">Bulk update existing event types</DialogTitle>
+          <p className="text-sm text-muted-foreground mt-2">
             Update the schedules for the selected event types
           </p>
         </DialogHeader>
         
-        <div className="space-y-4">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="select-all"
-              checked={selectedEventTypes.length === eventTypes.length}
-              onCheckedChange={handleSelectAll}
-            />
-            <label htmlFor="select-all" className="text-sm font-medium">
-              Select All
-            </label>
+        <div className="space-y-6">
+          <div className="space-y-4">
+            <div className="flex items-center space-x-3 pb-3 border-b border-border">
+              <Checkbox
+                id="select-all"
+                checked={selectedEventTypes.length === eventTypes.length}
+                onCheckedChange={handleSelectAll}
+              />
+              <label htmlFor="select-all" className="text-sm font-medium cursor-pointer">
+                Select All
+              </label>
+            </div>
+
+            <div className="space-y-3">
+              {eventTypes.map((eventType) => (
+                <div key={eventType.id} className="flex items-center space-x-3">
+                  <Checkbox
+                    id={eventType.id}
+                    checked={selectedEventTypes.includes(eventType.id)}
+                    onCheckedChange={() => handleEventTypeToggle(eventType.id)}
+                  />
+                  <label htmlFor={eventType.id} className="text-sm cursor-pointer">
+                    {eventType.name}
+                  </label>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="space-y-3">
-            {eventTypes.map((eventType) => (
-              <div key={eventType.id} className="flex items-center space-x-2">
-                <Checkbox
-                  id={eventType.id}
-                  checked={selectedEventTypes.includes(eventType.id)}
-                  onCheckedChange={() => handleEventTypeToggle(eventType.id)}
-                />
-                <label htmlFor={eventType.id} className="text-sm">
-                  {eventType.name}
-                </label>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-end space-x-3 pt-4 border-t">
+          <div className="flex justify-end space-x-3 pt-4 border-t border-border">
             <Button variant="outline" onClick={onClose}>
-              Close
+              Cancel
             </Button>
-            <Button onClick={handleUpdate}>
-              Update
+            <Button onClick={handleUpdate} disabled={selectedEventTypes.length === 0}>
+              Update Selected
             </Button>
           </div>
         </div>

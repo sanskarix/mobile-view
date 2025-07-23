@@ -92,7 +92,7 @@ export const EditAvailability = () => {
     const updated = [...weekDays];
     updated[dayIndex].enabled = !updated[dayIndex].enabled;
     if (updated[dayIndex].enabled && updated[dayIndex].timeSlots.length === 0) {
-      updated[dayIndex].timeSlots = [{ startTime: '09:00', endTime: '17:00' }];
+      updated[dayIndex].timeSlots = [{ id: Date.now().toString(), startTime: '09:00', endTime: '17:00' }];
     }
     setWeekDays(updated);
   };
@@ -255,6 +255,7 @@ export const EditAvailability = () => {
         <div className="max-w-full mx-auto space-y-8">
           {/* Days Schedule - Full Width */}
           <div className="space-y-6">
+            <h3 className="text-lg font-semibold">Weekly Schedule</h3>
             {weekDays.map((daySchedule, dayIndex) => (
               <div key={dayIndex} className="flex items-start space-x-6">
                 <div className="flex items-center space-x-4 min-w-[140px] flex-shrink-0">
@@ -304,7 +305,7 @@ export const EditAvailability = () => {
                         >
                           <Copy className="h-4 w-4" />
                         </Button>
-                        {(daySchedule.timeSlots.length > 1 || timeSlot.isNew) && (
+                        {timeSlot.isNew && (
                           <Button
                             type="button"
                             variant="ghost"
@@ -323,92 +324,89 @@ export const EditAvailability = () => {
             ))}
           </div>
 
-          {/* Bottom Section - Timezone and Date Overrides */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Timezone Section */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Timezone</h3>
-              <Select value={timezone} onValueChange={setTimezone}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select timezone" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Asia/Kolkata">Asia/Kolkata</SelectItem>
-                  <SelectItem value="America/New_York">America/New_York</SelectItem>
-                  <SelectItem value="Europe/London">Europe/London</SelectItem>
-                  <SelectItem value="Asia/Tokyo">Asia/Tokyo</SelectItem>
-                </SelectContent>
-              </Select>
+          {/* Timezone Section - Full Width */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Timezone</h3>
+            <Select value={timezone} onValueChange={setTimezone}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select timezone" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Asia/Kolkata">Asia/Kolkata</SelectItem>
+                <SelectItem value="America/New_York">America/New_York</SelectItem>
+                <SelectItem value="Europe/London">Europe/London</SelectItem>
+                <SelectItem value="Asia/Tokyo">Asia/Tokyo</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Date Overrides Section - Full Width */}
+          <div className="space-y-4">
+            <div className="flex items-center space-x-2">
+              <h3 className="text-lg font-semibold">Date overrides</h3>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button className="p-1 hover:bg-muted rounded-full transition-colors">
+                    <Info className="h-4 w-4 text-muted-foreground" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p><strong>Date overrides are archived automatically after the date has passed</strong></p>
+                </TooltipContent>
+              </Tooltip>
             </div>
+            <p className="text-sm text-muted-foreground">
+              Add dates when your availability changes from your daily hours.
+            </p>
 
-            {/* Date Overrides Section */}
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <h3 className="text-lg font-semibold">Date overrides</h3>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button className="p-1 hover:bg-muted rounded-full transition-colors">
-                      <Info className="h-4 w-4 text-muted-foreground" />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p><strong>Date overrides are archived automatically after the date has passed</strong></p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-              <p className="text-sm text-muted-foreground mb-6">
-                Add dates when your availability changes from your daily hours.
-              </p>
-
-              {/* Date Override Cards */}
-              {dateOverrides.length > 0 && (
-                <div className="space-y-4 mb-6">
-                  {dateOverrides.map((override) => (
-                    <Card key={override.id} className="border border-border">
-                      <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-medium text-sm">
-                              {override.dayName}, {override.dateString}
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              {override.timeString}
-                            </div>
+            {/* Date Override Cards */}
+            {dateOverrides.length > 0 && (
+              <div className="space-y-4">
+                {dateOverrides.map((override) => (
+                  <Card key={override.id} className="border border-border">
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-medium text-sm">
+                            {override.dayName}, {override.dateString}
                           </div>
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => handleEditOverride(override)}
-                              className="h-8 w-8"
-                            >
-                              <Edit3 className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => handleDeleteOverride(override.id)}
-                              className="h-8 w-8"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                          <div className="text-sm text-muted-foreground">
+                            {override.timeString}
                           </div>
                         </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
+                        <div className="flex items-center space-x-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEditOverride(override)}
+                            className="h-8 w-8"
+                          >
+                            <Edit3 className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteOverride(override.id)}
+                            className="h-8 w-8"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
 
-              <Button
-                variant="outline"
-                onClick={() => setIsOverrideModalOpen(true)}
-                className="flex items-center"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Add an override
-              </Button>
-            </div>
+            <Button
+              variant="outline"
+              onClick={() => setIsOverrideModalOpen(true)}
+              className="flex items-center"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add an override
+            </Button>
           </div>
         </div>
       </div>
