@@ -62,11 +62,11 @@ export const EditRoutingForm = () => {
   const handleCreateField = () => {
     const newField: FormField = {
       id: `field-${Date.now()}`,
-      label: '',
+      label: 'New Field',
       identifier: '',
       type: 'short-text',
       required: false,
-      collapsed: false
+      collapsed: true
     };
     setFormFields(prev => [...prev, newField]);
   };
@@ -147,8 +147,17 @@ export const EditRoutingForm = () => {
     { value: 'is-not-empty', label: 'Is not empty' }
   ];
 
-  const mockForms = ['Form1', 'Form2', 'Form3'];
-  const mockEventTypes = ['30 Min Meeting', '60 Min Meeting', 'Team Meeting'];
+  const mockForms = [
+    { id: 'form1', name: 'Form1' },
+    { id: 'form2', name: 'Form2' },
+    { id: 'form3', name: 'Form3' }
+  ];
+  
+  const mockEventTypes = [
+    { id: 'event1', name: '30 Min Meeting' },
+    { id: 'event2', name: '60 Min Meeting' },
+    { id: 'event3', name: 'Team Meeting' }
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -349,16 +358,22 @@ export const EditRoutingForm = () => {
               ) : (
                 <div className="space-y-4">
                   {formFields.map((field) => (
-                    <div key={field.id} className="border rounded-lg">
+                    <div key={field.id} className="border rounded-lg transition-all duration-200">
                       <div className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
-                            <Input
-                              value={field.label}
-                              onChange={(e) => handleUpdateField(field.id, { label: e.target.value })}
-                              placeholder="Field label"
-                              className="border-0 shadow-none p-0 text-sm font-medium focus-visible:ring-0"
-                            />
+                            {field.collapsed ? (
+                              <div className="text-sm font-medium">
+                                {field.label || 'New Field'}
+                              </div>
+                            ) : (
+                              <Input
+                                value={field.label}
+                                onChange={(e) => handleUpdateField(field.id, { label: e.target.value })}
+                                placeholder="Field label"
+                                className="border-0 shadow-none p-0 text-sm font-medium focus-visible:ring-0"
+                              />
+                            )}
                           </div>
                           <div className="flex items-center space-x-1">
                             <Button
@@ -386,7 +401,7 @@ export const EditRoutingForm = () => {
                         
                         <div className={`transition-all duration-200 ${field.collapsed ? 'max-h-0 overflow-hidden opacity-0' : 'max-h-none opacity-100'}`}>
                           {!field.collapsed && (
-                            <div className="mt-4 space-y-4">
+                            <div className="mt-4 space-y-4 animate-in slide-in-from-top-2">
                               <div className="space-y-2">
                                 <Label>Identifier</Label>
                                 <Input
@@ -424,7 +439,7 @@ export const EditRoutingForm = () => {
                                     variant={field.required ? 'default' : 'outline'}
                                     onClick={() => handleUpdateField(field.id, { required: true })}
                                     size="sm"
-                                    className="px-3 py-1 h-8"
+                                    className="px-3 py-1 h-7 text-xs"
                                   >
                                     Yes
                                   </Button>
@@ -432,7 +447,7 @@ export const EditRoutingForm = () => {
                                     variant={!field.required ? 'default' : 'outline'}
                                     onClick={() => handleUpdateField(field.id, { required: false })}
                                     size="sm"
-                                    className="px-3 py-1 h-8"
+                                    className="px-3 py-1 h-7 text-xs"
                                   >
                                     No
                                   </Button>
@@ -469,8 +484,8 @@ export const EditRoutingForm = () => {
                       <SelectContent>
                         <SelectItem value="create-new">Create a new Route</SelectItem>
                         {mockForms.map(form => (
-                          <SelectItem key={form} value={form}>
-                            {form}
+                          <SelectItem key={form.id} value={form.id}>
+                            {form.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -529,7 +544,7 @@ export const EditRoutingForm = () => {
                                 <SelectValue placeholder="Select field" />
                               </SelectTrigger>
                               <SelectContent>
-                                {formFields.map(field => (
+                                {formFields.filter(field => field.label.trim() !== '').map(field => (
                                   <SelectItem key={field.id} value={field.label}>
                                     {field.label}
                                   </SelectItem>
@@ -597,8 +612,8 @@ export const EditRoutingForm = () => {
                           </SelectTrigger>
                           <SelectContent>
                             {mockEventTypes.map(eventType => (
-                              <SelectItem key={eventType} value={eventType}>
-                                {eventType}
+                              <SelectItem key={eventType.id} value={eventType.id}>
+                                {eventType.name}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -622,8 +637,8 @@ export const EditRoutingForm = () => {
                         <SelectContent>
                           <SelectItem value="create-new">Create a new Route</SelectItem>
                           {mockForms.map(form => (
-                            <SelectItem key={form} value={form}>
-                              {form}
+                            <SelectItem key={form.id} value={form.id}>
+                              {form.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -634,57 +649,55 @@ export const EditRoutingForm = () => {
               </div>
               
               {/* Fallback Route Section */}
-              <div className={`space-y-4 transition-all duration-300 ${showFallbackRoute ? 'animate-in slide-in-from-top-2' : ''}`}>
-                {showFallbackRoute && (
-                  <>
-                    <h3 className="text-lg font-semibold">Fallback Route</h3>
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm">Send Booker to</span>
-                        <Select 
-                          value={fallbackRouteType} 
-                          onValueChange={(value: 'custom' | 'external' | 'event') => setFallbackRouteType(value)}
-                        >
+              {showFallbackRoute && (
+                <div className="space-y-4 transition-all duration-300 animate-in slide-in-from-top-2">
+                  <h3 className="text-lg font-semibold">Fallback Route</h3>
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm">Send Booker to</span>
+                      <Select 
+                        value={fallbackRouteType} 
+                        onValueChange={(value: 'custom' | 'external' | 'event') => setFallbackRouteType(value)}
+                      >
+                        <SelectTrigger className="flex-1">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="custom">Custom Page</SelectItem>
+                          <SelectItem value="external">External Redirect</SelectItem>
+                          <SelectItem value="event">Event Redirect</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      
+                      {fallbackRouteType === 'event' ? (
+                        <Select value={fallbackRouteValue} onValueChange={setFallbackRouteValue}>
                           <SelectTrigger className="flex-1">
-                            <SelectValue />
+                            <SelectValue placeholder="Select an event type" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="custom">Custom Page</SelectItem>
-                            <SelectItem value="external">External Redirect</SelectItem>
-                            <SelectItem value="event">Event Redirect</SelectItem>
+                            {mockEventTypes.map(eventType => (
+                              <SelectItem key={eventType.id} value={eventType.id}>
+                                {eventType.name}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
-                        
-                        {fallbackRouteType === 'event' ? (
-                          <Select value={fallbackRouteValue} onValueChange={setFallbackRouteValue}>
-                            <SelectTrigger className="flex-1">
-                              <SelectValue placeholder="Select an event type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {mockEventTypes.map(eventType => (
-                                <SelectItem key={eventType} value={eventType}>
-                                  {eventType}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        ) : (
-                          <Textarea
-                            value={fallbackRouteValue}
-                            onChange={(e) => setFallbackRouteValue(e.target.value)}
-                            placeholder={fallbackRouteType === 'custom' 
-                              ? 'Thank you for your interest! We will be in touch soon.' 
-                              : 'Enter URL'
-                            }
-                            rows={3}
-                            className="flex-1"
-                          />
-                        )}
-                      </div>
+                      ) : (
+                        <Textarea
+                          value={fallbackRouteValue}
+                          onChange={(e) => setFallbackRouteValue(e.target.value)}
+                          placeholder={fallbackRouteType === 'custom' 
+                            ? 'Thank you for your interest! We will be in touch soon.' 
+                            : 'Enter URL'
+                          }
+                          rows={3}
+                          className="flex-1"
+                        />
+                      )}
                     </div>
-                  </>
-                )}
-              </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
           
