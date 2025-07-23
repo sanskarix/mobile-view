@@ -1135,7 +1135,7 @@ export default function Bookings() {
                 
                 <h2 className="text-xl font-semibold text-gray-900 text-center ">Cancel Event</h2>
               </div>
-              <p className="text-sm text-gray-600 mb-6 text-center">We sent an email with a calendar invitation with the details to everyone</p>
+              
               
               {selectedMeeting.status === 'recurring' && selectedRecurringDates.length > 0 ? <div className="space-y-3 mb-6 p-4 bg-gray-50 rounded-lg">
                   <div className="flex gap-3">
