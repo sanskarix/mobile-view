@@ -111,107 +111,109 @@ export const Availability = () => {
   return (
     <div className="px-6 pt-3 pb-6 space-y-6 w-full max-w-full">
       <div className="flex items-center justify-between">
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-auto">
-          <TabsList className="grid w-fit grid-cols-2">
-            <TabsTrigger value="my-availability">My availability</TabsTrigger>
-            <TabsTrigger value="team-availability">Team Availability</TabsTrigger>
-          </TabsList>
-        </Tabs>
+        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+          <div className="flex items-center justify-between w-full">
+            <TabsList className="grid w-fit grid-cols-2">
+              <TabsTrigger value="my-availability">My availability</TabsTrigger>
+              <TabsTrigger value="team-availability">Team Availability</TabsTrigger>
+            </TabsList>
 
-        <button
-          onClick={() => setIsNewScheduleModalOpen(true)}
-          className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          New schedule
-        </button>
-      </div>
+            <button
+              onClick={() => setIsNewScheduleModalOpen(true)}
+              className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              New schedule
+            </button>
+          </div>
 
-      <TabsContent value="my-availability" className="space-y-4 mt-6">
-        {sortedSchedules.map(schedule => (
-          <Card key={schedule.id} className="hover:shadow-md transition-all cursor-pointer border-border/50 hover:border-border">
-            <CardContent className="p-6">
-              <div 
-                onClick={() => handleScheduleClick(schedule.id)}
-                className="flex items-start justify-between"
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center mb-3 space-x-3">
-                    <h3 className="font-semibold text-foreground text-lg">
-                      {schedule.title}
-                    </h3>
-                    {schedule.isDefault && (
-                      <span className="inline-flex items-center px-2 py-1 text-xs rounded border font-medium" style={{
-                        borderColor: '#008c44',
-                        color: '#008c44',
-                        backgroundColor: 'transparent'
-                      }}>
-                        Default
-                      </span>
-                    )}
-                  </div>
-                  <div className="text-muted-foreground text-sm mb-3 leading-relaxed">
-                    {schedule.hours.split('\n').map((line, index) => (
-                      <div key={index}>{line}</div>
-                    ))}
-                  </div>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <span className="mr-2">🌍</span>
-                    <span>{schedule.timezone}</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-2 ml-4" onClick={e => e.stopPropagation()}>
-                  <div className="relative">
-                    <button
-                      onClick={() => setShowMoreOptions(showMoreOptions === schedule.id ? null : schedule.id)}
-                      className="p-2 hover:bg-muted rounded-md transition-colors"
-                    >
-                      <MoreHorizontal className="h-4 w-4" />
-                    </button>
-                    
-                    {showMoreOptions === schedule.id && (
-                      <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-50">
-                        <div className="py-1">
-                          {!schedule.isDefault && (
-                            <button
-                              onClick={() => handleMenuAction('setDefault', schedule.id)}
-                              className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                            >
-                              <Star className="h-4 w-4 mr-2 text-muted-foreground" />
-                              Set as default
-                            </button>
-                          )}
-                          <button
-                            onClick={() => handleMenuAction('duplicate', schedule.id)}
-                            className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
-                          >
-                            <Copy className="h-4 w-4 mr-2 text-muted-foreground" />
-                            Duplicate
-                          </button>
-                          <button
-                            onClick={() => handleMenuAction('delete', schedule.id)}
-                            className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors text-destructive"
-                          >
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            Delete
-                          </button>
-                        </div>
+          <TabsContent value="my-availability" className="space-y-4 mt-6">
+            {sortedSchedules.map(schedule => (
+              <Card key={schedule.id} className="hover:shadow-md transition-all cursor-pointer border-border/50 hover:border-border">
+                <CardContent className="p-6">
+                  <div 
+                    onClick={() => handleScheduleClick(schedule.id)}
+                    className="flex items-start justify-between"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center mb-3 space-x-3">
+                        <h3 className="font-semibold text-foreground text-lg">
+                          {schedule.title}
+                        </h3>
+                        {schedule.isDefault && (
+                          <span className="inline-flex items-center px-2 py-1 text-xs rounded border font-medium" style={{
+                            borderColor: '#008c44',
+                            color: '#008c44',
+                            backgroundColor: 'transparent'
+                          }}>
+                            Default
+                          </span>
+                        )}
                       </div>
-                    )}
+                      <div className="text-muted-foreground text-sm mb-3 leading-relaxed">
+                        {schedule.hours.split('\n').map((line, index) => (
+                          <div key={index}>{line}</div>
+                        ))}
+                      </div>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <span className="mr-2">🌍</span>
+                        <span>{schedule.timezone}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2 ml-4" onClick={e => e.stopPropagation()}>
+                      <div className="relative">
+                        <button
+                          onClick={() => setShowMoreOptions(showMoreOptions === schedule.id ? null : schedule.id)}
+                          className="p-2 hover:bg-muted rounded-md transition-colors"
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </button>
+                        
+                        {showMoreOptions === schedule.id && (
+                          <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-50">
+                            <div className="py-1">
+                              {!schedule.isDefault && (
+                                <button
+                                  onClick={() => handleMenuAction('setDefault', schedule.id)}
+                                  className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                                >
+                                  <Star className="h-4 w-4 mr-2 text-muted-foreground" />
+                                  Set as default
+                                </button>
+                              )}
+                              <button
+                                onClick={() => handleMenuAction('duplicate', schedule.id)}
+                                className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors"
+                              >
+                                <Copy className="h-4 w-4 mr-2 text-muted-foreground" />
+                                Duplicate
+                              </button>
+                              <button
+                                onClick={() => handleMenuAction('delete', schedule.id)}
+                                className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </TabsContent>
+                </CardContent>
+              </Card>
+            ))}
+          </TabsContent>
 
-      <TabsContent value="team-availability" className="space-y-4 mt-6">
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">No team availability configured yet.</p>
-        </div>
-      </TabsContent>
+          <TabsContent value="team-availability" className="space-y-4 mt-6">
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">No team availability configured yet.</p>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
 
       <Dialog open={isNewScheduleModalOpen} onOpenChange={setIsNewScheduleModalOpen}>
         <DialogContent className="max-w-lg">
