@@ -8,6 +8,7 @@ import { Checkbox } from '../components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { ArrowLeft, FileText, AlertTriangle, BarChart3, Plus, ChevronDown, ChevronUp, Copy, ExternalLink, Download, Code, Eye, Trash2, X } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/tooltip';
+import { RoutingFormEmbedModal } from '../components/RoutingFormEmbedModal';
 
 export interface FormField {
   id: string;
@@ -49,6 +50,7 @@ export const EditRoutingForm = () => {
   const [fallbackRouteType, setFallbackRouteType] = useState<'custom' | 'external' | 'event'>('custom');
   const [fallbackRouteValue, setFallbackRouteValue] = useState('');
   const [activeTab, setActiveTab] = useState<'form' | 'routing' | 'reporting'>('form');
+  const [showEmbedModal, setShowEmbedModal] = useState(false);
   const [newRoute, setNewRoute] = useState<Route>({
     id: '',
     name: 'Route 1',
@@ -134,7 +136,7 @@ export const EditRoutingForm = () => {
   };
 
   const handleEmbed = () => {
-    console.log('Opening embed modal...');
+    setShowEmbedModal(true);
   };
 
   const comparisonOptions = [
@@ -473,240 +475,250 @@ export const EditRoutingForm = () => {
           
           {/* Routing Tab Content */}
           {activeTab === 'routing' && (
-            <div className="p-6 border-l border-r border-b border-border bg-background">
-              <div className="space-y-6">
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Add a new Route</h3>
-                  
-                  {!showRouteCreator ? (
-                    <div className="space-y-2">
-                      <Label>Select a router</Label>
-                      <Select onValueChange={handleRouterSelect}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a router" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="create-new">Create a new Route</SelectItem>
-                          {mockForms.map(form => (
-                            <SelectItem key={form.id} value={form.id}>
-                              {form.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  ) : (
-                    <div className="space-y-6 p-4 border rounded-lg transition-all duration-300 animate-in slide-in-from-top-2">
-                      <div className="space-y-2">
-                        <Input
-                          value={newRoute.name}
-                          onChange={(e) => setNewRoute(prev => ({ ...prev, name: e.target.value }))}
-                          className="font-medium"
-                        />
-                      </div>
+            <div className="p-6">
+              <div className="max-w-4xl mx-auto">
+                <div className="bg-card border border-border rounded-lg p-6">
+                  <div className="space-y-6">
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold">Add a new Route</h3>
                       
-                      <hr className="border-border" />
-                      
-                      <div className="space-y-4">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-muted-foreground">For responses matching the following criteria (matches</span>
-                          <Select value={newRoute.conditionLogic} onValueChange={(value: 'all' | 'any' | 'none') => setNewRoute(prev => ({ ...prev, conditionLogic: value }))}>
-                            <SelectTrigger className="w-20">
-                              <SelectValue />
+                      {!showRouteCreator ? (
+                        <div className="space-y-2">
+                          <Label>Select a router</Label>
+                          <Select onValueChange={handleRouterSelect}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a router" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="all">All</SelectItem>
-                              <SelectItem value="any">Any</SelectItem>
-                              <SelectItem value="none">None</SelectItem>
+                              <SelectItem value="create-new">Create a new Route</SelectItem>
+                              {mockForms.map(form => (
+                                <SelectItem key={form.id} value={form.id}>
+                                  {form.name}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
-                          <span className="text-sm text-muted-foreground">by default)</span>
                         </div>
-                        
-                        {newRoute.conditions.length > 1 && (
-                          <div className="flex items-center space-x-2">
-                            <span className="text-sm text-muted-foreground">where</span>
-                            <Select value={newRoute.conditionLogic} onValueChange={(value: 'all' | 'any' | 'none') => setNewRoute(prev => ({ ...prev, conditionLogic: value }))}>
-                              <SelectTrigger className="w-20">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="all">All</SelectItem>
-                                <SelectItem value="any">Any</SelectItem>
-                                <SelectItem value="none">None</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <span className="text-sm text-muted-foreground">match</span>
+                      ) : (
+                        <div className="space-y-6 p-4 border rounded-lg bg-muted/20 transition-all duration-300 animate-in slide-in-from-top-2">
+                          <div className="space-y-2">
+                            <Input
+                              value={newRoute.name}
+                              onChange={(e) => setNewRoute(prev => ({ ...prev, name: e.target.value }))}
+                              className="font-medium"
+                            />
                           </div>
-                        )}
-                        
-                        <div className="space-y-2">
-                          {newRoute.conditions.map((condition, index) => (
-                            <div key={condition.id} className="flex items-center space-x-2">
-                              <Select value={condition.fieldName} onValueChange={(value) => updateCondition(condition.id, { fieldName: value })}>
-                                <SelectTrigger className="flex-1">
-                                  <SelectValue placeholder="Select field" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {formFields.filter(field => field.label.trim() !== '').map(field => (
-                                    <SelectItem key={field.id} value={field.label}>
-                                      {field.label}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                              
-                              <Select value={condition.operator} onValueChange={(value) => updateCondition(condition.id, { operator: value })}>
-                                <SelectTrigger className="flex-1">
+                          
+                          <hr className="border-border" />
+                          
+                          <div className="space-y-4">
+                            <div className="flex items-center space-x-2">
+                              <span className="text-sm text-muted-foreground">For responses matching the following criteria (matches</span>
+                              <Select value={newRoute.conditionLogic} onValueChange={(value: 'all' | 'any' | 'none') => setNewRoute(prev => ({ ...prev, conditionLogic: value }))}>
+                                <SelectTrigger className="w-20">
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  {comparisonOptions.map(option => (
-                                    <SelectItem key={option.value} value={option.value}>
-                                      {option.label}
+                                  <SelectItem value="all">All</SelectItem>
+                                  <SelectItem value="any">Any</SelectItem>
+                                  <SelectItem value="none">None</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <span className="text-sm text-muted-foreground">by default)</span>
+                            </div>
+                            
+                            {newRoute.conditions.length > 1 && (
+                              <div className="flex items-center space-x-2">
+                                <span className="text-sm text-muted-foreground">where</span>
+                                <Select value={newRoute.conditionLogic} onValueChange={(value: 'all' | 'any' | 'none') => setNewRoute(prev => ({ ...prev, conditionLogic: value }))}>
+                                  <SelectTrigger className="w-20">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="all">All</SelectItem>
+                                    <SelectItem value="any">Any</SelectItem>
+                                    <SelectItem value="none">None</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <span className="text-sm text-muted-foreground">match</span>
+                              </div>
+                            )}
+                            
+                            <div className="space-y-2">
+                              {newRoute.conditions.map((condition, index) => (
+                                <div key={condition.id} className="flex items-center space-x-2">
+                                  <Select value={condition.fieldName} onValueChange={(value) => updateCondition(condition.id, { fieldName: value })}>
+                                    <SelectTrigger className="flex-1">
+                                      <SelectValue placeholder="Select field" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {formFields.filter(field => field.label.trim() !== '').map(field => (
+                                        <SelectItem key={field.id} value={field.label}>
+                                          {field.label}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                  
+                                  <Select value={condition.operator} onValueChange={(value) => updateCondition(condition.id, { operator: value })}>
+                                    <SelectTrigger className="flex-1">
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {comparisonOptions.map(option => (
+                                        <SelectItem key={option.value} value={option.value}>
+                                          {option.label}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                  
+                                  <Input
+                                    value={condition.value}
+                                    onChange={(e) => updateCondition(condition.id, { value: e.target.value })}
+                                    placeholder="Enter string"
+                                    className="flex-1"
+                                  />
+                                  
+                                  {newRoute.conditions.length > 1 && (
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => removeCondition(condition.id)}
+                                      className="h-8 w-8 text-red-600 hover:text-red-700"
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                            
+                            <Button variant="outline" onClick={addCondition} className="w-full">
+                              <Plus className="h-4 w-4 mr-2" />
+                              Add rule
+                            </Button>
+                          </div>
+                          
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm">Send Booker to</span>
+                            <Select value={newRoute.actionType} onValueChange={(value: 'custom' | 'external' | 'event') => setNewRoute(prev => ({ ...prev, actionType: value }))}>
+                              <SelectTrigger className="flex-1">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="custom">Custom Page</SelectItem>
+                                <SelectItem value="external">External Redirect</SelectItem>
+                                <SelectItem value="event">Event Redirect</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            
+                            {newRoute.actionType === 'event' ? (
+                              <Select value={newRoute.actionValue} onValueChange={(value) => setNewRoute(prev => ({ ...prev, actionValue: value }))}>
+                                <SelectTrigger className="flex-1">
+                                  <SelectValue placeholder="Select event" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {mockEventTypes.map(eventType => (
+                                    <SelectItem key={eventType.id} value={eventType.id}>
+                                      {eventType.name}
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
                               </Select>
-                              
+                            ) : (
                               <Input
-                                value={condition.value}
-                                onChange={(e) => updateCondition(condition.id, { value: e.target.value })}
-                                placeholder="Enter string"
+                                value={newRoute.actionValue}
+                                onChange={(e) => setNewRoute(prev => ({ ...prev, actionValue: e.target.value }))}
+                                placeholder={newRoute.actionType === 'custom' ? 'Enter custom page content' : 'Enter URL'}
                                 className="flex-1"
                               />
-                              
-                              {newRoute.conditions.length > 1 && (
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => removeCondition(condition.id)}
-                                  className="h-8 w-8 text-red-600 hover:text-red-700"
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              )}
-                            </div>
-                          ))}
+                            )}
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label>Select a router</Label>
+                            <Select onValueChange={handleRouterSelect}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select a router" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="create-new">Create a new Route</SelectItem>
+                                {mockForms.map(form => (
+                                  <SelectItem key={form.id} value={form.id}>
+                                    {form.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </div>
-                        
-                        <Button variant="outline" onClick={addCondition} className="w-full">
-                          <Plus className="h-4 w-4 mr-2" />
-                          Add rule
-                        </Button>
-                      </div>
-                      
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm">Send Booker to</span>
-                        <Select value={newRoute.actionType} onValueChange={(value: 'custom' | 'external' | 'event') => setNewRoute(prev => ({ ...prev, actionType: value }))}>
-                          <SelectTrigger className="flex-1">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="custom">Custom Page</SelectItem>
-                            <SelectItem value="external">External Redirect</SelectItem>
-                            <SelectItem value="event">Event Redirect</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        
-                        {newRoute.actionType === 'event' ? (
-                          <Select value={newRoute.actionValue} onValueChange={(value) => setNewRoute(prev => ({ ...prev, actionValue: value }))}>
-                            <SelectTrigger className="flex-1">
-                              <SelectValue placeholder="Select event" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {mockEventTypes.map(eventType => (
-                                <SelectItem key={eventType.id} value={eventType.id}>
-                                  {eventType.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        ) : (
-                          <Input
-                            value={newRoute.actionValue}
-                            onChange={(e) => setNewRoute(prev => ({ ...prev, actionValue: e.target.value }))}
-                            placeholder={newRoute.actionType === 'custom' ? 'Enter custom page content' : 'Enter URL'}
-                            className="flex-1"
-                          />
-                        )}
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label>Select a router</Label>
-                        <Select onValueChange={handleRouterSelect}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a router" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="create-new">Create a new Route</SelectItem>
-                            {mockForms.map(form => (
-                              <SelectItem key={form.id} value={form.id}>
-                                {form.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                
-                {/* Fallback Route Section */}
-                {showFallbackRoute && (
-                  <div className="space-y-4 transition-all duration-300 animate-in slide-in-from-top-2">
-                    <h3 className="text-lg font-semibold">Fallback Route</h3>
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm">Send Booker to</span>
-                        <Select 
-                          value={fallbackRouteType} 
-                          onValueChange={(value: 'custom' | 'external' | 'event') => setFallbackRouteType(value)}
-                        >
-                          <SelectTrigger className="flex-1">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="custom">Custom Page</SelectItem>
-                            <SelectItem value="external">External Redirect</SelectItem>
-                            <SelectItem value="event">Event Redirect</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        
-                        {fallbackRouteType === 'event' ? (
-                          <Select value={fallbackRouteValue} onValueChange={setFallbackRouteValue}>
-                            <SelectTrigger className="flex-1">
-                              <SelectValue placeholder="Select an event type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {mockEventTypes.map(eventType => (
-                                <SelectItem key={eventType.id} value={eventType.id}>
-                                  {eventType.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        ) : (
-                          <Textarea
-                            value={fallbackRouteValue}
-                            onChange={(e) => setFallbackRouteValue(e.target.value)}
-                            placeholder={fallbackRouteType === 'custom' 
-                              ? 'Thank you for your interest! We will be in touch soon.' 
-                              : 'Enter URL'
-                            }
-                            rows={3}
-                            className="flex-1"
-                          />
-                        )}
+                    
+                    {/* Fallback Route Section */}
+                    {showFallbackRoute && (
+                      <div className="space-y-4 p-4 border rounded-lg bg-muted/10 transition-all duration-300 animate-in slide-in-from-top-2">
+                        <h3 className="text-lg font-semibold">Fallback Route</h3>
+                        <div className="space-y-4">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm">Send Booker to</span>
+                            <Select 
+                              value={fallbackRouteType} 
+                              onValueChange={(value: 'custom' | 'external' | 'event') => setFallbackRouteType(value)}
+                            >
+                              <SelectTrigger className="flex-1">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="custom">Custom Page</SelectItem>
+                                <SelectItem value="external">External Redirect</SelectItem>
+                                <SelectItem value="event">Event Redirect</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            
+                            {fallbackRouteType === 'event' ? (
+                              <Select value={fallbackRouteValue} onValueChange={setFallbackRouteValue}>
+                                <SelectTrigger className="flex-1">
+                                  <SelectValue placeholder="Select an event type" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {mockEventTypes.map(eventType => (
+                                    <SelectItem key={eventType.id} value={eventType.id}>
+                                      {eventType.name}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            ) : (
+                              <Textarea
+                                value={fallbackRouteValue}
+                                onChange={(e) => setFallbackRouteValue(e.target.value)}
+                                placeholder={fallbackRouteType === 'custom' 
+                                  ? 'Thank you for your interest! We will be in touch soon.' 
+                                  : 'Enter URL'
+                                }
+                                rows={3}
+                                className="flex-1"
+                              />
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
             </div>
           )}
         </div>
       </div>
+
+      <RoutingFormEmbedModal 
+        open={showEmbedModal} 
+        onClose={() => setShowEmbedModal(false)} 
+        formId={formId || ''} 
+      />
     </div>
   );
 };

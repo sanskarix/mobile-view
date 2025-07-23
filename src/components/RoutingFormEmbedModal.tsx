@@ -75,7 +75,7 @@ export const RoutingFormEmbedModal: React.FC<RoutingFormEmbedModalProps> = ({
   });
 </script>`;
     } else if (embedType === 'popup') {
-      return `<button onclick="openCalPopup()">Book a Meeting</button>
+      return `<button onclick="openCalPopup()">Open Form</button>
 <script>
   function openCalPopup() {
     Cal("modal", {
@@ -106,157 +106,205 @@ export const RoutingFormEmbedModal: React.FC<RoutingFormEmbedModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-5xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Embed Form</DialogTitle>
         </DialogHeader>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left side - Configuration */}
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <div className="flex space-x-2">
-                <Button
-                  variant={embedType === 'inline' ? 'default' : 'outline'}
-                  onClick={() => setEmbedType('inline')}
-                  className="flex-1"
-                >
-                  Inline
-                </Button>
-                <Button
-                  variant={embedType === 'floating-button' ? 'default' : 'outline'}
-                  onClick={() => setEmbedType('floating-button')}
-                  className="flex-1"
-                >
-                  Floating Button
-                </Button>
-                <Button
-                  variant={embedType === 'popup' ? 'default' : 'outline'}
-                  onClick={() => setEmbedType('popup')}
-                  className="flex-1"
-                >
-                  Pop up
-                </Button>
-              </div>
-              
-              <p className="text-sm text-muted-foreground">
-                Embed the form directly into your webpage
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Theme</Label>
-                <Select value={theme} onValueChange={setTheme}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="auto">Auto</SelectItem>
-                    <SelectItem value="light">Light</SelectItem>
-                    <SelectItem value="dark">Dark</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <Switch
-                  checked={hideEventTypeDetails}
-                  onCheckedChange={setHideEventTypeDetails}
-                />
-                <Label>Hide event type details</Label>
-              </div>
-
-              <div className="space-y-4">
-                <h4 className="font-medium">Brand Colors</h4>
-                
-                <div className="space-y-2">
-                  <Label>Brand Color (Light Theme)</Label>
-                  <div className="flex items-center space-x-2">
-                    <div 
-                      className="w-8 h-8 rounded border"
-                      style={{ backgroundColor: `#${brandColorLight}` }}
-                    />
-                    <Input
-                      value={brandColorLight}
-                      onChange={(e) => setBrandColorLight(e.target.value)}
-                      placeholder="007ee5"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Brand Color (Dark Theme)</Label>
-                  <div className="flex items-center space-x-2">
-                    <div 
-                      className="w-8 h-8 rounded border"
-                      style={{ backgroundColor: `#${brandColorDark}` }}
-                    />
-                    <Input
-                      value={brandColorDark}
-                      onChange={(e) => setBrandColorDark(e.target.value)}
-                      placeholder="fafafa"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Layout</Label>
-                <Select value={layout} onValueChange={setLayout}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="month">Month</SelectItem>
-                    <SelectItem value="week">Week</SelectItem>
-                    <SelectItem value="day">Day</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
+        <div className="space-y-8">
+          {/* Embed Type Selection */}
+          <div className="flex gap-2 w-full">
+            <button
+              onClick={() => setEmbedType('inline')}
+              className={`flex-1 px-6 py-3 border-2 rounded-lg text-center transition-all ${
+                embedType === 'inline' 
+                  ? 'border-primary bg-primary/10 text-primary' 
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <span className="font-medium text-sm">Inline</span>
+            </button>
+            <button
+              onClick={() => setEmbedType('floating-button')}
+              className={`flex-1 px-6 py-3 border-2 rounded-lg text-center transition-all ${
+                embedType === 'floating-button' 
+                  ? 'border-primary bg-primary/10 text-primary' 
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <span className="font-medium text-sm">Floating Button</span>
+            </button>
+            <button
+              onClick={() => setEmbedType('popup')}
+              className={`flex-1 px-6 py-3 border-2 rounded-lg text-center transition-all ${
+                embedType === 'popup' 
+                  ? 'border-primary bg-primary/10 text-primary' 
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <span className="font-medium text-sm">Pop up</span>
+            </button>
           </div>
 
-          {/* Right side - Preview and Code */}
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h4 className="font-medium">Preview</h4>
-                <Button variant="outline" size="sm" onClick={handlePreview}>
-                  <Eye className="h-4 w-4 mr-2" />
-                  Preview
-                </Button>
-              </div>
-              
-              <div className="border rounded-lg p-4 bg-muted/50 h-64 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Eye className="h-8 w-8 text-primary-foreground" />
+          <div className="flex gap-8">
+            {/* Left side - Configuration */}
+            <div className="w-3/5">
+              <div className="overflow-x-auto">
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600 mb-4">
+                    Embed the form directly into your webpage
+                  </p>
+                  
+                  <div className="space-y-4">
+                    {/* Theme Selection */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Theme</label>
+                      <Select value={theme} onValueChange={setTheme}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="auto">Auto</SelectItem>
+                          <SelectItem value="light">Light</SelectItem>
+                          <SelectItem value="dark">Dark</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {/* Hide Details Toggle */}
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="hide-details"
+                        checked={hideEventTypeDetails}
+                        onCheckedChange={setHideEventTypeDetails}
+                      />
+                      <label htmlFor="hide-details" className="text-sm">
+                        Hide event type details
+                      </label>
+                    </div>
+
+                    {/* Brand Colors */}
+                    <div className="space-y-4 mt-6">
+                      <h4 className="font-medium text-sm">Brand Colors</h4>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-2">
+                            Brand Color (Light Theme)
+                          </label>
+                          <div className="flex items-center space-x-3">
+                            <input
+                              type="color"
+                              value={`#${brandColorLight}`}
+                              onChange={(e) => setBrandColorLight(e.target.value.substring(1))}
+                              className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                            />
+                            <input
+                              type="text"
+                              value={brandColorLight}
+                              onChange={(e) => setBrandColorLight(e.target.value)}
+                              placeholder="007ee5"
+                              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-2">
+                            Brand Color (Dark Theme)
+                          </label>
+                          <div className="flex items-center space-x-3">
+                            <input
+                              type="color"
+                              value={`#${brandColorDark}`}
+                              onChange={(e) => setBrandColorDark(e.target.value.substring(1))}
+                              className="w-10 h-10 border border-gray-300 rounded cursor-pointer"
+                            />
+                            <input
+                              type="text"
+                              value={brandColorDark}
+                              onChange={(e) => setBrandColorDark(e.target.value)}
+                              placeholder="fafafa"
+                              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Layout */}
+                    <div className="mt-6">
+                      <label className="block text-sm font-medium mb-2">Layout</label>
+                      <Select value={layout} onValueChange={setLayout}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="month">Month</SelectItem>
+                          <SelectItem value="week">Week</SelectItem>
+                          <SelectItem value="day">Day</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
-                  <p className="text-sm text-muted-foreground">Form Preview</p>
-                  <p className="text-xs text-muted-foreground">Theme: {theme} | Layout: {layout}</p>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h4 className="font-medium">Ready to embed?</h4>
-                <Button onClick={handleCopyCode}>
-                  <Copy className="h-4 w-4 mr-2" />
-                  Get Code
-                </Button>
+            {/* Right side - Preview and Code */}
+            <div className="w-2/5">
+              <div className="space-y-4">
+                {/* Preview */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold">Preview</h3>
+                    <Button variant="outline" size="sm" onClick={handlePreview}>
+                      <Eye className="h-4 w-4 mr-2" />
+                      Preview
+                    </Button>
+                  </div>
+                  <div className="border rounded-lg p-4 bg-white">
+                    <div className="w-full h-80 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="w-16 h-16 bg-primary rounded-lg mx-auto mb-4 flex items-center justify-center">
+                          <Eye className="h-8 w-8 text-primary-foreground" />
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          {embedType === 'inline' && 'Inline Form Preview'}
+                          {embedType === 'floating-button' && 'Floating Button Preview'}
+                          {embedType === 'popup' && 'Pop-up Form Preview'}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          Theme: {theme} | Layout: {layout}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Ready to Embed */}
+                <div className="text-center">
+                  <h4 className="font-medium text-sm mb-1">Ready to embed?</h4>
+                  <p className="text-xs text-gray-600 mb-3">
+                    Get the code to add to your website
+                  </p>
+                  <button
+                    onClick={handleCopyCode}
+                    className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
+                  >
+                    <Copy className="h-4 w-4 mr-2 inline" />
+                    Get Code
+                  </button>
+                </div>
+
+                {/* Code Preview */}
+                <div className="mt-4">
+                  <Textarea
+                    value={generateEmbedCode()}
+                    readOnly
+                    rows={8}
+                    className="font-mono text-xs"
+                  />
+                </div>
               </div>
-              <p className="text-sm text-muted-foreground">
-                Get the code to add to your website
-              </p>
-              
-              <Textarea
-                value={generateEmbedCode()}
-                readOnly
-                rows={8}
-                className="font-mono text-xs"
-              />
             </div>
           </div>
         </div>

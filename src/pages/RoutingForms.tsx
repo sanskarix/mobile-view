@@ -17,7 +17,7 @@ export const RoutingForms = () => {
   const [selectedTeamFilter, setSelectedTeamFilter] = useState('all');
   const [routingForms, setRoutingForms] = useState<any[]>([]);
   const [teams, setTeams] = useState<any[]>([]);
-  const [formEnabled, setFormEnabled] = useState(true);
+  const [copiedLink, setCopiedLink] = useState<string | null>(null);
 
   // Load teams from localStorage
   useEffect(() => {
@@ -62,6 +62,8 @@ export const RoutingForms = () => {
         description: 'Route customers to the right support team based on their issue type',
         enabled: true,
         responses: 45,
+        fields: 5,
+        routes: 3,
         teamName: 'Support Team',
         createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
       },
@@ -71,6 +73,8 @@ export const RoutingForms = () => {
         description: 'Qualify leads and route them to appropriate sales representatives',
         enabled: true,
         responses: 23,
+        fields: 4,
+        routes: 2,
         teamName: 'Sales Team',
         createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
       },
@@ -80,8 +84,43 @@ export const RoutingForms = () => {
         description: 'Route prospects based on their interest and campaign source',
         enabled: false,
         responses: 12,
+        fields: 6,
+        routes: 4,
         teamName: 'Marketing Team',
         createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
+      },
+      {
+        id: 'form-4',
+        title: 'Technical Support Triage',
+        description: 'Categorize and route technical support requests to specialized teams',
+        enabled: true,
+        responses: 67,
+        fields: 7,
+        routes: 5,
+        teamName: 'Development Team',
+        createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+      },
+      {
+        id: 'form-5',
+        title: 'Product Demo Requests',
+        description: 'Route product demonstration requests to appropriate sales engineers',
+        enabled: true,
+        responses: 31,
+        fields: 4,
+        routes: 3,
+        teamName: 'Sales Team',
+        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
+      },
+      {
+        id: 'form-6',
+        title: 'Partnership Inquiries',
+        description: 'Filter and route partnership and integration requests',
+        enabled: false,
+        responses: 8,
+        fields: 5,
+        routes: 2,
+        teamName: 'Marketing Team',
+        createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
       }
     ];
     setRoutingForms(sampleForms);
@@ -93,7 +132,9 @@ export const RoutingForms = () => {
       id: `form-${Date.now()}`,
       createdAt: new Date().toISOString(),
       enabled: true,
-      responses: 0
+      responses: 0,
+      fields: 0,
+      routes: 0
     };
     setRoutingForms(prev => [...prev, newForm]);
   };
@@ -136,6 +177,12 @@ export const RoutingForms = () => {
     setRoutingForms(prev => prev.filter(form => form.id !== formId));
   };
 
+  const handleCopyLink = (formId: string) => {
+    navigator.clipboard.writeText(`https://cal.id/forms/${formId}`);
+    setCopiedLink(formId);
+    setTimeout(() => setCopiedLink(null), 2000);
+  };
+
   const handleEmbedClick = (formId: string) => {
     setSelectedEmbedFormId(formId);
     setShowEmbedModal(true);
@@ -153,22 +200,6 @@ export const RoutingForms = () => {
       checked: selectedTeamFilter === team.id
     }));
     return [allOption, ...teamOptions];
-  };
-
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText('cal.id/forms/f860530b-f820-497a-9728-6b56b7ae7d7b');
-  };
-
-  const handlePreview = () => {
-    window.open('cal.id/forms/f860530b-f820-497a-9728-6b56b7ae7d7b', '_blank');
-  };
-
-  const handleDownloadResponses = () => {
-    console.log('Downloading responses...');
-  };
-
-  const handleReporting = () => {
-    navigate('/apps');
   };
 
   return (
@@ -307,6 +338,8 @@ export const RoutingForms = () => {
                   onDownload={handleFormDownload}
                   onDuplicate={handleFormDuplicate}
                   onDelete={handleFormDelete}
+                  onCopyLink={handleCopyLink}
+                  copiedLink={copiedLink}
                 />
               ))}
             </div>
