@@ -268,7 +268,7 @@ export const EditAvailability = () => {
             {weekDays.map((daySchedule, dayIndex) => <div key={dayIndex} className="flex items-start space-x-6">
                 <div className="flex items-center space-x-4 min-w-[140px] flex-shrink-0">
                   <Switch checked={daySchedule.enabled} onCheckedChange={() => handleDayToggle(dayIndex)} />
-                  <div className="text-sm font-medium min-w-[80px]">
+                  <div className="text-sm font-medium min-w-[80px] my-[9px]">
                     {daySchedule.day}
                   </div>
                 </div>
