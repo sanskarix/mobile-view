@@ -1133,7 +1133,7 @@ export default function Bookings() {
             <div className="bg-white rounded-lg p-6 w-full max-w-lg shadow-xl">
               <div className="flex items-center mx-[160px]">
                 
-                <h2 className="text-xl font-semibold text-gray-900 text-center ">Cancel Event</h2>
+                <h2 className="text-xl font-semibold text-gray-900 text-center px-0 py-[12px]">Cancel Event</h2>
               </div>
               
               
