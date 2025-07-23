@@ -411,9 +411,7 @@ export default function MyApp() {
       case 'email':
         return <div className="space-y-6">
             <div className="p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600 mb-4">
-                Create a styled button for your email campaigns
-              </p>
+              
               
               <div className="space-y-4">
                 <div>
