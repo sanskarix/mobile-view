@@ -250,7 +250,7 @@ export const EditRoutingForm = () => {
                       <Button onClick={handleCreateField}>Create Field</Button>
                     </div>
                   </div>
-                </div> : <div className="space-y-4">
+                </div> : <div className="px-8 pt-6 pb-6 space-y-4 w-full max-w-full ">
                   {formFields.map(field => <div key={field.id} className="border rounded-lg transition-all duration-200">
                       <div className="p-4">
                         <div className="flex items-center justify-between">
