@@ -37,7 +37,15 @@ export const TeamBookingLimits = () => {
       [field]: value
     } : limit));
   };
-  return <div className="space-y-6 mx-[24px]">
+  return (
+    <div className="min-h-screen bg-background flex justify-center">
+      <div className="p-8 max-w-4xl w-full">
+        <div className="mb-8 text-center">
+          <h1 className="text-2xl font-semibold mb-2">Booking Limits</h1>
+          <p className="text-muted-foreground">Control how many bookings can be made for your team</p>
+        </div>
+
+        <div className="space-y-6 border rounded-lg p-6">
       <div>
         <h3 className="text-lg font-medium">Booking Limits</h3>
         <p className="text-sm text-muted-foreground">
@@ -92,11 +100,14 @@ export const TeamBookingLimits = () => {
           </div>}
       </div>
 
-      {/* Action Buttons */}
-      <div className="flex justify-end">
-        <Button onClick={handleSave}>
-          Save Changes
-        </Button>
+          {/* Action Buttons */}
+          <div className="flex justify-end">
+            <Button onClick={handleSave}>
+              Save Changes
+            </Button>
+          </div>
+        </div>
       </div>
-    </div>;
+    </div>
+  );
 };
