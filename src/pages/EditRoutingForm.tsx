@@ -236,7 +236,7 @@ export const EditRoutingForm = () => {
           </div>;
       case 'form':
         return <div className="p-6 w-full">
-            <div className="max-w-4xl mx-auto">
+            <div className="px-8 pt-6 pb-6 space-y-4 w-full max-w-full ">
               {formFields.length === 0 ? <div className="flex-1 flex items-center justify-center min-h-[600px]">
                   <div className="text-center space-y-4">
                     <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto">
@@ -328,7 +328,7 @@ export const EditRoutingForm = () => {
           </div>;
       case 'routing':
         return <div className="p-6 w-full">
-            <div className="max-w-4xl mx-auto">
+            <div className="px-8 pt-6 pb-6 space-y-4 w-full max-w-full ">
               <div className="bg-card border border-border rounded-lg p-6">
                 <div className="space-y-6">
                   <div className="space-y-4">
