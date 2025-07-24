@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../components/ui/button';
-import { Users, MoreHorizontal, Edit, ExternalLink, UserPlus, Trash2 } from 'lucide-react';
+import { Users, MoreHorizontal, Edit, ExternalLink, UserPlus, Trash2, Clock } from 'lucide-react';
 import { CreateTeamModal } from '../components/CreateTeamModal';
 import { TeamCard } from '../components/TeamCard';
 import { useNavigate } from 'react-router-dom';
