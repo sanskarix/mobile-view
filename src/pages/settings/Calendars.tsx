@@ -24,6 +24,7 @@ export const Calendars = () => {
           <p className="text-muted-foreground">Configure how your event types interact with your calendars</p>
         </div>
 
+        <div className="border rounded-lg p-6 bg-card">
         <div className="space-y-8">
           {/* Add to calendar */}
           <div className="space-y-4">
@@ -128,6 +129,7 @@ export const Calendars = () => {
               </div>
             </div>
           </div>
+        </div>
         </div>
 
         {/* Vertical dotted line */}

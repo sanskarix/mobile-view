@@ -46,6 +46,7 @@ export const General = () => {
           <p className="text-muted-foreground">Manage settings for your language and timezone</p>
         </div>
 
+        <div className="border rounded-lg p-6 bg-card">
         <div className="space-y-6">
           {/* Language */}
           <div className="space-y-2">
@@ -221,6 +222,7 @@ export const General = () => {
 
           {/* Update button */}
           
+        </div>
         </div>
       </div>
     </div>;

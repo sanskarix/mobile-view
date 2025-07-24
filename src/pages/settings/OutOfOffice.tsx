@@ -178,6 +178,7 @@ export const OutOfOffice = () => {
           </Dialog>
         </div>
 
+        <div className="border rounded-lg p-6 bg-card">
         {oooSchedules.length > 0 ? <div className="space-y-6">
             {oooSchedules.map(schedule => <div key={schedule.id} className="border border-border rounded-lg p-4 bg-card">
                 <div className="flex items-center justify-between">
@@ -293,6 +294,7 @@ export const OutOfOffice = () => {
               {/* Dialog content same as above */}
             </Dialog>
           </div>}
+        </div>
       </div>
     </div>;
 };

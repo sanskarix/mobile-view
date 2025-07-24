@@ -70,6 +70,7 @@ export const Appearance = () => {
           <h1 className="text-2xl font-semibold mb-2">Appearance</h1>
         </div>
 
+        <div className="border rounded-lg p-6 bg-card">
         <div className="space-y-8">
           {/* Dashboard theme */}
           <div className="space-y-4">
@@ -297,6 +298,7 @@ export const Appearance = () => {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>

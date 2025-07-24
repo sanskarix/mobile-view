@@ -55,6 +55,7 @@ export const Conferencing = () => {
           <p className="text-muted-foreground">Add your favourite video conferencing apps for your meetings</p>
         </div>
 
+        <div className="border rounded-lg p-6 bg-card">
         <div className="space-y-6">
           {conferencingApps.map((app, index) => (
             <div key={index} className="border rounded-lg p-6">
@@ -104,6 +105,7 @@ export const Conferencing = () => {
             <Plus className="h-4 w-4 mr-2" />
             Add
           </Button>
+        </div>
         </div>
       </div>
     </div>
