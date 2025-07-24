@@ -68,7 +68,7 @@ export const Header = ({ metaData }: HeaderProps) => {
         {/* Left section: Back button, title, and optional description */}
         <div className="flex flex-col justify-center space-y-1">
           <div className="flex items-center space-x-4">
-            {metaData.enabled !== undefined && (
+            {metaData && metaData.enabled !== undefined && (
               <button
                 onClick={() => navigate('/event-types')}
                 className="text-muted-foreground hover:text-foreground transition-colors"
