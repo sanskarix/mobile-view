@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from '../../../components/ui/button';
@@ -7,15 +6,20 @@ import { Label } from '../../../components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select';
 import { Separator } from '../../../components/ui/separator';
 import { Plus, Trash2 } from 'lucide-react';
-
 export const TeamBookingLimits = () => {
-  const { teamId } = useParams();
-  const [limits, setLimits] = useState<Array<{ id: string; value: string; period: string }>>([]);
-
+  const {
+    teamId
+  } = useParams();
+  const [limits, setLimits] = useState<Array<{
+    id: string;
+    value: string;
+    period: string;
+  }>>([]);
   const handleSave = () => {
-    console.log('Saving booking limits:', { limits });
+    console.log('Saving booking limits:', {
+      limits
+    });
   };
-
   const addLimit = () => {
     const newLimit = {
       id: Date.now().toString(),
@@ -24,19 +28,16 @@ export const TeamBookingLimits = () => {
     };
     setLimits([...limits, newLimit]);
   };
-
   const removeLimit = (id: string) => {
     setLimits(limits.filter(limit => limit.id !== id));
   };
-
   const updateLimit = (id: string, field: 'value' | 'period', value: string) => {
-    setLimits(limits.map(limit => 
-      limit.id === id ? { ...limit, [field]: value } : limit
-    ));
+    setLimits(limits.map(limit => limit.id === id ? {
+      ...limit,
+      [field]: value
+    } : limit));
   };
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6 mx-[24px]">
       <div>
         <h3 className="text-lg font-medium">Booking Limits</h3>
         <p className="text-sm text-muted-foreground">
@@ -58,23 +59,16 @@ export const TeamBookingLimits = () => {
           </Button>
         </div>
 
-        {limits.length > 0 && (
-          <div className="space-y-3">
-            {limits.map((limit) => (
-              <div key={limit.id} className="flex items-center space-x-3 p-3 border rounded-lg">
+        {limits.length > 0 && <div className="space-y-3">
+            {limits.map(limit => <div key={limit.id} className="flex items-center space-x-3 p-3 border rounded-lg">
                 <div className="flex-1">
                   <Label className="text-sm">Limit</Label>
-                  <Input
-                    type="number"
-                    value={limit.value}
-                    onChange={(e) => updateLimit(limit.id, 'value', e.target.value)}
-                    className="mt-1"
-                  />
+                  <Input type="number" value={limit.value} onChange={e => updateLimit(limit.id, 'value', e.target.value)} className="mt-1" />
                 </div>
                 
                 <div className="flex-1">
                   <Label className="text-sm">Per</Label>
-                  <Select value={limit.period} onValueChange={(value) => updateLimit(limit.id, 'period', value)}>
+                  <Select value={limit.period} onValueChange={value => updateLimit(limit.id, 'period', value)}>
                     <SelectTrigger className="mt-1">
                       <SelectValue />
                     </SelectTrigger>
@@ -87,24 +81,15 @@ export const TeamBookingLimits = () => {
                   </Select>
                 </div>
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeLimit(limit.id)}
-                  className="mt-6 text-destructive hover:text-destructive"
-                >
+                <Button variant="ghost" size="icon" onClick={() => removeLimit(limit.id)} className="mt-6 text-destructive hover:text-destructive">
                   <Trash2 className="h-4 w-4" />
                 </Button>
-              </div>
-            ))}
-          </div>
-        )}
+              </div>)}
+          </div>}
 
-        {limits.length === 0 && (
-          <div className="text-center py-8 text-muted-foreground">
+        {limits.length === 0 && <div className="text-center py-8 text-muted-foreground">
             <p className="text-sm">No booking limits set. Click "Add limit" to create one.</p>
-          </div>
-        )}
+          </div>}
       </div>
 
       {/* Action Buttons */}
@@ -113,6 +98,5 @@ export const TeamBookingLimits = () => {
           Save Changes
         </Button>
       </div>
-    </div>
-  );
+    </div>;
 };
