@@ -678,7 +678,7 @@ export const EditRoutingForm = () => {
               <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-muted-foreground/20">
                 S
               </div>
-              <span>Setup</span>
+              <span>Form Setup</span>
             </div>
           </button>
           <button onClick={() => setActiveTab('form')} className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${activeTab === 'form' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'}`}>
