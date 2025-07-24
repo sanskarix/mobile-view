@@ -91,13 +91,8 @@ export const Header = ({ metaData }: HeaderProps) => {
         </div>
 
         {/* Right section: Toggle, Save, Profile */}
-<<<<<<< HEAD
-        <div className="flex items-center space-x-4 ml-auto">
-          {metaData && metaData.enabled !== undefined && metaData.onEnabledChange && (
-=======
         <div className="flex items-center space-x-2 ml-auto">
-          {metaData.enabled !== undefined && metaData.onEnabledChange && (
->>>>>>> origin/main
+          {metaData && metaData.enabled !== undefined && metaData.onEnabledChange && (
             <>
               <div className="flex items-center space-x-2">
                 <TooltipProvider delayDuration={0}>
