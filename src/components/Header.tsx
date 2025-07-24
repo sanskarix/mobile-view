@@ -91,7 +91,7 @@ export const Header = ({ metaData }: HeaderProps) => {
 
         {/* Right section: Toggle, Save, Profile */}
         <div className="flex items-center space-x-4 ml-auto">
-          {metaData.enabled !== undefined && metaData.onEnabledChange && (
+          {metaData && metaData.enabled !== undefined && metaData.onEnabledChange && (
             <>
               <div className="flex items-center space-x-2">
                 <Switch
