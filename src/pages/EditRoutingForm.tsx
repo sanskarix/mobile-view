@@ -181,57 +181,105 @@ export const EditRoutingForm = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'setup':
-        return <div className="p-6 w-full">
-            <div className="px-8 pt-6 pb-6 space-y-4 w-full max-w-full">
-              <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" value={formName} onChange={e => setFormName(e.target.value)} />
+        return <div className="flex w-full">
+            {/* Form Setup - Left Side */}
+            <div className="w-1/2 p-6">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input id="name" value={formName} onChange={e => setFormName(e.target.value)} />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Textarea id="description" value={formDescription} onChange={e => setFormDescription(e.target.value)} rows={3} />
+                </div>
+                
+                {/* Form link with copy and preview */}
+                <div className="space-y-2">
+                  <Label>Form Link</Label>
+                  <div className="flex items-center space-x-2">
+                    <Input value={`cal.id/forms/${formId}`} readOnly className="flex-1" />
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant="outline" size="icon" onClick={handleCopyLink}>
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Copy Link</TooltipContent>
+                    </Tooltip>
+                    
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button variant="outline" size="icon" onClick={handlePreview}>
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Preview</TooltipContent>
+                    </Tooltip>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-2">
+                  <Checkbox id="send-email" checked={sendEmailToOwner} onCheckedChange={checked => setSendEmailToOwner(checked === true)} />
+                  <div className="space-y-1">
+                    <Label htmlFor="send-email">Send Email to Owner</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Sends an email to the owner when the form is submitted
+                    </p>
+                  </div>
+                </div>
+                
+                <Button onClick={handleDownloadResponses} className="w-full">
+                  <Download className="h-4 w-4 mr-2" />
+                  Download Responses
+                </Button>
               </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea id="description" value={formDescription} onChange={e => setFormDescription(e.target.value)} rows={3} />
-              </div>
-              
-              {/* Form link with copy and preview */}
-              <div className="space-y-2">
-                <Label>Form Link</Label>
-                <div className="flex items-center space-x-2">
-                  <Input value={`cal.id/forms/${formId}`} readOnly className="flex-1" />
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button variant="outline" size="icon" onClick={handleCopyLink}>
-                        <Copy className="h-4 w-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>Copy Link</TooltipContent>
-                  </Tooltip>
-                  
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button variant="outline" size="icon" onClick={handlePreview}>
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>Preview</TooltipContent>
-                  </Tooltip>
+            </div>
+            
+            {/* Form Preview - Right Side */}
+            <div className="w-1/2 p-6 border-l border-border">
+              <div className="space-y-4">
+                <h3 className="font-semibold text-lg">Form Preview</h3>
+                <div className="border rounded-lg p-6 bg-white">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-medium text-lg mb-2">{formName || 'Form Name'}</h4>
+                      <p className="text-muted-foreground text-sm">{formDescription || 'Form description will appear here'}</p>
+                    </div>
+                    
+                    {formFields.length > 0 ? (
+                      <div className="space-y-4">
+                        <div className="border-t pt-4">
+                          {formFields.map((field, index) => (
+                            <div key={field.id} className="mb-4">
+                              <label className="block text-sm font-medium mb-1">
+                                {field.label || 'Field Label'}
+                                {field.required && <span className="text-red-500 ml-1">*</span>}
+                              </label>
+                              {field.type === 'short-text' && <input type="text" className="w-full p-2 border border-gray-300 rounded" placeholder="Enter text..." disabled />}
+                              {field.type === 'long-text' && <textarea className="w-full p-2 border border-gray-300 rounded" rows={3} placeholder="Enter details..." disabled />}
+                              {field.type === 'email' && <input type="email" className="w-full p-2 border border-gray-300 rounded" placeholder="Enter email..." disabled />}
+                              {field.type === 'phone' && <input type="tel" className="w-full p-2 border border-gray-300 rounded" placeholder="Enter phone..." disabled />}
+                              {field.type === 'number' && <input type="number" className="w-full p-2 border border-gray-300 rounded" placeholder="Enter number..." disabled />}
+                              {(field.type === 'single-selection' || field.type === 'multiple-selection') && (
+                                <select className="w-full p-2 border border-gray-300 rounded" disabled>
+                                  <option>Select option...</option>
+                                </select>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                        <Button disabled className="w-full">Submit</Button>
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 text-muted-foreground">
+                        <p>No fields added yet. Add fields in the Form tab to see the preview.</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-              
-              <div className="flex items-start space-x-2">
-                <Checkbox id="send-email" checked={sendEmailToOwner} onCheckedChange={checked => setSendEmailToOwner(checked === true)} />
-                <div className="space-y-1">
-                  <Label htmlFor="send-email">Send Email to Owner</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Sends an email to the owner when the form is submitted
-                  </p>
-                </div>
-              </div>
-              
-              <Button onClick={handleDownloadResponses} className="w-full">
-                <Download className="h-4 w-4 mr-2" />
-                Download Responses
-              </Button>
             </div>
           </div>;
       case 'form':

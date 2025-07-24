@@ -311,7 +311,7 @@ export const EditAvailability = () => {
           {/* Schedule Selector and Timezone - Side by Side */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Schedule Selector - Left Side (2/3 width) */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 border border-border rounded-lg p-6 space-y-6">
               
               {weekDays.map((daySchedule, dayIndex) => <div key={dayIndex} className="flex items-start space-x-6">
                   <div className="flex items-center space-x-4 min-w-[140px] flex-shrink-0">
@@ -345,7 +345,7 @@ export const EditAvailability = () => {
             </div>
 
             {/* Timezone Section - Right Side (1/3 width) */}
-            <div className="space-y-4">
+            <div className="border border-border rounded-lg p-6 space-y-4">
               <h3 className="text-sm font-medium min-w-[80px] text-lg ">Timezone</h3>
               <Select value={timezone} onValueChange={setTimezone}>
                 <SelectTrigger className="w-full">
@@ -361,7 +361,7 @@ export const EditAvailability = () => {
           </div>
 
           {/* Date Overrides Section - Full Width */}
-          <div className="space-y-4">
+          <div className="border border-border rounded-lg p-6 space-y-4">
             <div className="flex items-center space-x-2">
               <h3 className="text-sm font-medium min-w-[80px] -bottom-1 ">Date overrides</h3>
               <Tooltip>

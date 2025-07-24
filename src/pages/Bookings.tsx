@@ -568,7 +568,7 @@ export default function Bookings() {
       }
       if (meeting.status === 'unconfirmed') {
         return <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" onClick={e => {
+            <Button variant="outline" size="sm" style={{ backgroundColor: 'rgba(0, 140, 68, 0.5)', borderColor: '#008c44', color: '#008c44' }} onClick={e => {
             e.stopPropagation();
             toast({
               description: "Meeting accepted",
@@ -578,7 +578,7 @@ export default function Bookings() {
               <CheckCircle className="h-4 w-4 mr-1" />
               Accept
             </Button>
-            <Button variant="outline" size="sm" onClick={e => {
+            <Button variant="outline" size="sm" style={{ backgroundColor: 'rgba(241, 53, 44, 0.5)', borderColor: '#f1352c', color: '#f1352c' }} onClick={e => {
             e.stopPropagation();
             toast({
               description: "Meeting rejected",
@@ -1149,11 +1149,15 @@ export default function Bookings() {
                     </div>
                   </div>
                   <div className="flex gap-3">
+                    <span className="font-medium text-gray-600 min-w-16">Where:</span>
+                    <span className="text-gray-900">{selectedMeeting.location.name}</span>
+                  </div>
+                  <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">With:</span>
                     <div className="flex flex-wrap gap-1">
                       {selectedMeeting.attendees.map((attendee, index) => <Tooltip key={index}>
                           <TooltipTrigger asChild>
-                            <button className="text-blue-600 hover:text-blue-800 hover:underline" onClick={() => copyToClipboard(attendee.email)}>
+                            <button className="text-foreground hover:text-foreground hover:underline" onClick={() => copyToClipboard(attendee.email)}>
                               {attendee.name}
                               {index < selectedMeeting.attendees.length - 1 && ','}
                             </button>
@@ -1164,10 +1168,12 @@ export default function Bookings() {
                         </Tooltip>)}
                     </div>
                   </div>
-                  <div className="flex gap-3">
-                    <span className="font-medium text-gray-600 min-w-16">Where:</span>
-                    <span className="text-gray-900">{selectedMeeting.location.name}</span>
-                  </div>
+                  {selectedMeeting.additionalNotes && (
+                    <div className="flex gap-3">
+                      <span className="font-medium text-gray-600 min-w-16">Additional notes:</span>
+                      <span className="text-gray-900">{selectedMeeting.additionalNotes}</span>
+                    </div>
+                  )}
                 </div> : <div className="space-y-3 mb-6 p-4 bg-gray-50 rounded-lg my-0">
                   <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">Event:</span>
@@ -1178,11 +1184,15 @@ export default function Bookings() {
                     <span className="text-gray-900">{selectedMeeting.date} {selectedMeeting.time} - {selectedMeeting.endTime}</span>
                   </div>
                   <div className="flex gap-3">
+                    <span className="font-medium text-gray-600 min-w-16">Where:</span>
+                    <span className="text-gray-900">{selectedMeeting.location.name}</span>
+                  </div>
+                  <div className="flex gap-3">
                     <span className="font-medium text-gray-600 min-w-16">With:</span>
                     <div className="flex flex-wrap gap-1">
                       {selectedMeeting.attendees.map((attendee, index) => <Tooltip key={index}>
                           <TooltipTrigger asChild>
-                            <button className="text-blue-600 hover:text-blue-800 hover:underline" onClick={() => copyToClipboard(attendee.email)}>
+                            <button className="text-foreground hover:text-foreground hover:underline" onClick={() => copyToClipboard(attendee.email)}>
                               {attendee.name}
                               {index < selectedMeeting.attendees.length - 1 && ','}
                             </button>
@@ -1193,10 +1203,12 @@ export default function Bookings() {
                         </Tooltip>)}
                     </div>
                   </div>
-                  <div className="flex gap-3">
-                    <span className="font-medium text-gray-600 min-w-16">Where:</span>
-                    <span className="text-gray-900">{selectedMeeting.location.name}</span>
-                  </div>
+                  {selectedMeeting.additionalNotes && (
+                    <div className="flex gap-3">
+                      <span className="font-medium text-gray-600 min-w-16">Additional notes:</span>
+                      <span className="text-gray-900">{selectedMeeting.additionalNotes}</span>
+                    </div>
+                  )}
                 </div>}
 
               <div className="mb-6">

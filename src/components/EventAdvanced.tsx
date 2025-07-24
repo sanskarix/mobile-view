@@ -161,7 +161,7 @@ export const EventAdvanced = () => {
     color: '#384252'
   }}>
       {/* Add to calendar */}
-      <div className="space-y-6">
+      <div className="border border-border rounded-lg p-6 space-y-6">
         <div>
           <h3 className="font-semibold mb-4" style={{
           fontSize: '16px',
@@ -235,7 +235,7 @@ export const EventAdvanced = () => {
       </div>
 
       {/* Layout */}
-      <div className="border-t border-gray-200 pt-8">
+      <div className="border border-border rounded-lg p-6">
         <h3 className="font-semibold mb-4" style={{
         fontSize: '16px',
         color: '#384252'
@@ -292,7 +292,7 @@ export const EventAdvanced = () => {
       </div>
 
       {/* Booking questions */}
-      <div className="border-t border-gray-200 pt-8">
+      <div className="border border-border rounded-lg p-6">
         <h3 className="font-semibold mb-4" style={{
         fontSize: '16px',
         color: '#384252'
@@ -344,9 +344,9 @@ export const EventAdvanced = () => {
       </div>
 
       {/* Settings toggles */}
-      <div className="border-t border-gray-200 pt-8 space-y-8">
+      <div className="border border-border rounded-lg p-6 space-y-8">
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between border-b border-border pb-6">
             <div className="flex-1">
               <h3 className="font-medium" style={{
               fontSize: '14px',
@@ -403,7 +403,7 @@ export const EventAdvanced = () => {
         </div>
 
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between border-b border-border pb-6">
             <div className="flex-1">
               <h3 className="font-medium" style={{
               fontSize: '14px',
@@ -435,7 +435,7 @@ export const EventAdvanced = () => {
             </div>}
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between border-b border-border pb-6">
           <div className="flex-1">
             <h3 className="font-medium" style={{
             fontSize: '14px',
@@ -453,7 +453,7 @@ export const EventAdvanced = () => {
           <Switch checked={settings.requiresEmailVerification} onCheckedChange={value => handleToggle('requiresEmailVerification', value)} className="mx-[18px]" />
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between border-b border-border pb-6">
           <div className="flex-1">
             <h3 className="font-medium" style={{
             fontSize: '14px',
