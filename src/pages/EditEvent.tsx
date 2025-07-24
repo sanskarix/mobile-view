@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useOutletContext } from 'react-router-dom';
-import { Settings, Shield, Zap, RotateCcw, Smartphone, Workflow, Webhook, Bolt, Clock2 } from 'lucide-react';
+import { Shield, Zap, Workflow, Webhook, Bolt, Clock2, Code, RefreshCcw, Blocks } from 'lucide-react';
 import { EventSetup } from '../components/EventSetup';
 import { EventAvailability } from '../components/EventAvailability';
 import { EventLimits } from '../components/EventLimits';
@@ -32,16 +32,16 @@ const tabs = [{
 }, {
   id: 'embed',
   name: 'Embed',
-  icon: Settings
+  icon: Code
 },
 {
   id: 'recurring',
   name: 'Recurring',
-  icon: RotateCcw
+  icon: RefreshCcw
 }, {
   id: 'apps',
   name: 'Apps',
-  icon: Smartphone
+  icon: Blocks
 }, {
   id: 'workflows',
   name: 'Workflows',
@@ -108,9 +108,9 @@ export const EditEvent = () => {
     });
   }, [setHeaderMeta]);
 
-  return <div className="min-h-screen bg-background px-8 pt-6 pb-6 space-y-6">
+  return <div className="min-h-screen bg-background">
       {/* Left-aligned Horizontal Tabs with Underlines */}
-      <div className="bg-background">
+      <div className="bg-background px-8">
         <div className="">
           <nav className="flex" aria-label="Tabs">
             {tabs.map(tabItem => <button key={tabItem.id} onClick={() => setActiveTab(tabItem.id)} className={`py-4 px-4 border-b-2 font-medium text-sm whitespace-nowrap transition-colors flex items-center space-x-2 ${activeTab === tabItem.id ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'}`} title={tabItem.name}>
@@ -122,7 +122,7 @@ export const EditEvent = () => {
       </div>
 
       {/* Content with proper alignment */}
-      <div className="bg-background">
+      <div className="bg-background px-8 pt-6 pb-6">
         <div className="p-0 max-w-none mx-auto space-y-6">
           {renderTabContent()}
         </div>
