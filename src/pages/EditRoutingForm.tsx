@@ -347,7 +347,7 @@ export const EditRoutingForm = () => {
                               </SelectItem>)}
                           </SelectContent>
                         </Select>
-                      </div> : <div className="space-y-6 p-4 border rounded-lg bg-muted/20 transition-all duration-300 animate-in slide-in-from-top-2">
+                      </div> : <div className="space-y-6 p-4 transition-all duration-300 animate-in -space-y-64 ">
                         <div className="space-y-2">
                           <Input value={newRoute.name} onChange={e => setNewRoute(prev => ({
                         ...prev,
