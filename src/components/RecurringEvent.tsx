@@ -14,13 +14,13 @@ export const RecurringEvent = () => {
           <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
           <div>
             <p style={{ fontSize: '14px', color: '#384252' }}>
-              <strong>Experimental:</strong> Recurring Events are currently experimental and cause some issues sometimes when checking for availability. We are working on fixing this.
+              <strong>Experimental:</strong> Recurring Events are currently experimental. We are working on it.
             </p>
           </div>
         </div>
 
         {/* Recurring Event Card */}
-        <div className="border border-border rounded-lg p-4 bg-card">
+        {/* <div className="border border-border rounded-lg p-4 bg-card">
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <Switch id="enable-recurring" checked={isRecurringEnabled} onCheckedChange={setIsRecurringEnabled} />
@@ -65,7 +65,7 @@ export const RecurringEvent = () => {
               </div>
             )}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

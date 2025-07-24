@@ -169,7 +169,7 @@ export const EventSetup = ({
               meetingLink: e.target.value
             }))} 
             placeholder="https://zoom.us/j/..." 
-            className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background h-10" 
+            className="w-full px-3 py-2 border border-border rounded-lg bg-background h-10" 
           />
         </div>
       );
@@ -188,7 +188,7 @@ export const EventSetup = ({
               }))} 
               placeholder="Enter the meeting address..." 
               rows={3} 
-              className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background" 
+              className="w-full px-3 py-2 border border-border rounded-lg  bg-background" 
             />
           </div>
           <div className="space-y-3">
@@ -215,7 +215,7 @@ export const EventSetup = ({
                     googleMapsLink: e.target.value
                   }))} 
                   placeholder="https://maps.google.com/..." 
-                  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background h-10" 
+                  className="w-full px-3 py-2 border border-border rounded-lg  bg-background h-10" 
                 />
               </div>
             )}
@@ -237,7 +237,7 @@ export const EventSetup = ({
                 phone: e.target.value
               }))} 
               placeholder="+1 (555) 000-0000" 
-              className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring bg-background h-10" 
+              className="w-full px-3 py-2 border border-border rounded-lg  bg-background h-10" 
             />
           </div>
           <div className="flex items-center">
@@ -265,17 +265,17 @@ export const EventSetup = ({
   return (
     <div className="p-0 max-w-none mx-auto space-y-6">
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-2">Title</label>
-        <input 
-          type="text" 
-          value={formData.title} 
-          onChange={e => handleFormChange('title', e.target.value)} 
-          className="w-full px-2 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm text-gray-600 h-10" 
+        <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+        <input
+          type="text"
+          value={formData.title}
+          onChange={e => handleFormChange('title', e.target.value)}
+          className="w-full px-2 py-3 border border-border rounded-lg bg-background text-sm text-gray-600 h-10"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-2">Description</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
         <div className="border border-border rounded-lg bg-background">
           <div className="flex items-center space-x-2 p-3 border-b border-border">
             <button className="p-2 hover:bg-muted rounded transition-colors" onClick={() => document.execCommand('bold')}>
@@ -295,7 +295,7 @@ export const EventSetup = ({
                     placeholder="Enter URL" 
                     value={linkUrl} 
                     onChange={e => setLinkUrl(e.target.value)} 
-                    className="w-full px-3 py-2 border border-border rounded mb-2 text-sm bg-background h-10" 
+                    className="w-full px-3 py-2 border border-border rounded mb-2 text-sm text-gray-600 bg-background h-10" 
                     autoFocus 
                   />
                   <div className="flex justify-end space-x-2">
@@ -347,11 +347,11 @@ export const EventSetup = ({
           <span className="inline-flex items-center px-4 py-3 border border-r-0 border-border bg-muted text-muted-foreground text-sm rounded-l-lg h-10">
             cal.id/sanskar/
           </span>
-          <input 
-            type="text" 
-            value={formData.url} 
-            onChange={e => handleFormChange('url', e.target.value)} 
-            className="flex-1 px-4 py-3 border border-border focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-sm text-gray-600 h-10" 
+          <input
+            type="text"
+            value={formData.url}
+            onChange={e => handleFormChange('url', e.target.value)}
+            className="flex-1 px-4 py-3 border border-border  bg-background text-sm text-gray-600 h-10"
           />
           <div className="flex items-center border border-l-0 border-border rounded-r-lg bg-background h-10">
             <button 
@@ -378,8 +378,7 @@ export const EventSetup = ({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-4">Available durations</label>
-        
+        <label className="block text-sm font-medium text-gray-700 mb-4">Available durations</label>
         <div className="relative" ref={durationDropdownRef}>
           <div 
             className="w-full min-h-[40px] px-3 py-2 border border-border rounded-lg focus-within:ring-2 focus-within:ring-ring bg-background cursor-text flex flex-wrap items-center gap-2" 
@@ -406,9 +405,9 @@ export const EventSetup = ({
             
             <div className="ml-auto">
               {formData.showDurationDropdown ? (
-                <ChevronUp className="h-4 w-4 text-gray-400" />
+                <ChevronUp className="h-4 w-4 text-muted-foreground transition-transform" />
               ) : (
-                <ChevronDown className="h-4 w-4 text-gray-400" />
+                <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform" />
               )}
             </div>
           </div>
@@ -435,7 +434,7 @@ export const EventSetup = ({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-2">Default duration</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Default duration</label>
         <CustomSelect 
           value={formData.defaultDuration} 
           onValueChange={value => handleFormChange('defaultDuration', value)} 
@@ -460,7 +459,7 @@ export const EventSetup = ({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-2">Location</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
         <CustomSelect 
           value={formData.location} 
           onValueChange={value => handleFormChange('location', value)} 

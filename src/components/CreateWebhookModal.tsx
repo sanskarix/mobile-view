@@ -1,7 +1,8 @@
-
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Plus, Activity } from 'lucide-react';
+import { X, Activity, ChevronUp, ChevronDown } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
 import { Switch } from './ui/switch';
+import { CustomSelect } from './ui/custom-select';
 
 interface CreateWebhookModalProps {
   isOpen: boolean;
@@ -34,7 +35,7 @@ export const CreateWebhookModal: React.FC<CreateWebhookModalProps> = ({
 
   const availableEventTriggers = [
     'Booking Canceled',
-    'Booking Created', 
+    'Booking Created',
     'Booking Rejected',
     'Booking Requested',
     'Booking Payment Initiated',
@@ -68,7 +69,7 @@ export const CreateWebhookModal: React.FC<CreateWebhookModalProps> = ({
     } else {
       setFormData({
         subscriberUrl: '',
-        eventTriggers: [],
+        eventTriggers: availableEventTriggers,
         eventTriggersInput: '',
         showEventTriggerDropdown: false,
         payloadTemplate: 'default',
@@ -100,7 +101,7 @@ export const CreateWebhookModal: React.FC<CreateWebhookModalProps> = ({
   };
 
   const getAvailableTriggers = () => {
-    return availableEventTriggers.filter(trigger => 
+    return availableEventTriggers.filter(trigger =>
       !formData.eventTriggers.includes(trigger) &&
       trigger.toLowerCase().includes(formData.eventTriggersInput.toLowerCase())
     );
@@ -129,61 +130,65 @@ export const CreateWebhookModal: React.FC<CreateWebhookModalProps> = ({
   };
 
   const handlePingTest = () => {
-    // Simulate ping test
     setFormData(prev => ({
       ...prev,
       testResponse: 'No data yet'
     }));
   };
 
-  if (!isOpen) return null;
+  const clearAllEventTriggers = () => {
+    setFormData(prev => ({
+      ...prev,
+      eventTriggers: []
+    }));
+  };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h2 className="text-lg font-semibold">Create Webhook</h2>
-            <p className="text-sm text-gray-600">Create a webhook for this team event type</p>
-          </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <X className="h-5 w-5" />
-          </button>
-        </div>
+    <Dialog open={isOpen} onOpenChange={open => !open && onClose()}>
+      <DialogContent className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{editingWebhook ? 'Edit Webhook' : 'Create Webhook'}</DialogTitle>
+          <DialogDescription>
+            {editingWebhook ? 'Update this webhook configuration.' : 'Create a new webhook for this event type.'}
+          </DialogDescription>
+        </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* === URL === */}
           <div>
             <label className="block text-sm font-medium mb-2">Subscriber URL</label>
             <input
               type="url"
               value={formData.subscriberUrl}
               onChange={e => setFormData(prev => ({ ...prev, subscriberUrl: e.target.value }))}
-              placeholder=""
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
               required
             />
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="enable-webhook"
-                checked={formData.enableWebhook}
-                onCheckedChange={checked => setFormData(prev => ({ ...prev, enableWebhook: checked }))}
-              />
-              <label htmlFor="enable-webhook" className="text-sm font-medium">Enable Webhook</label>
-            </div>
+          {/* === Enable Webhook === */}
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="enable-webhook"
+              checked={formData.enableWebhook}
+              onCheckedChange={checked => setFormData(prev => ({ ...prev, enableWebhook: checked }))}
+            />
+            <label htmlFor="enable-webhook" className="text-sm font-medium">Enable Webhook</label>
           </div>
 
+          {/* === Event Triggers === */}
           <div>
-            <label className="block text-sm font-medium mb-2">Event Triggers</label>
-            
-            {/* Event Triggers Input Field with Tags */}
+            <label className="block text-sm font-medium text-gray-700 mb-2">Event Triggers</label>
             <div className="relative" ref={dropdownRef}>
-              <div 
-                className="w-full min-h-[120px] px-3 py-2 border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-blue-500 bg-white flex flex-wrap content-start gap-2"
+              <div
+                className="w-full min-h-[40px] px-3 py-2 border border-border rounded-lg focus-within:ring-2 focus-within:ring-ring bg-background cursor-text flex flex-wrap items-center gap-2"
+                onClick={() =>
+                  setFormData(prev => ({
+                    ...prev,
+                    showEventTriggerDropdown: !prev.showEventTriggerDropdown,
+                  }))
+                }
               >
-                {/* Selected Event Trigger Tags */}
                 {formData.eventTriggers.map(trigger => (
                   <span
                     key={trigger}
@@ -192,32 +197,44 @@ export const CreateWebhookModal: React.FC<CreateWebhookModalProps> = ({
                     {trigger}
                     <button
                       type="button"
-                      onClick={() => removeEventTrigger(trigger)}
+                      onClick={e => {
+                        e.stopPropagation();
+                        removeEventTrigger(trigger);
+                      }}
                       className="ml-1 text-gray-500 hover:text-gray-600"
                     >
                       <X className="h-3 w-3" />
                     </button>
                   </span>
                 ))}
-                
-                {/* Input for typing */}
-                <input
-                  type="text"
-                  value={formData.eventTriggersInput}
-                  onChange={e => setFormData(prev => ({ 
-                    ...prev, 
-                    eventTriggersInput: e.target.value,
-                    showEventTriggerDropdown: true
-                  }))}
-                  onFocus={() => setFormData(prev => ({ ...prev, showEventTriggerDropdown: true }))}
-                  placeholder={formData.eventTriggers.length === 0 ? "Type to search event triggers..." : ""}
-                  className="flex-1 min-w-[200px] outline-none text-sm"
-                />
+
+                {formData.eventTriggers.length === 0 && (
+                  <span className="text-gray-400 text-sm">Search event triggers...</span>
+                )}
+
+                <div className="ml-auto flex items-center gap-2">
+                  {formData.eventTriggers.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={e => {
+                        e.stopPropagation();
+                        clearAllEventTriggers();
+                      }}
+                      className="text-gray-400 hover:text-red-600"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+
+                  {formData.showEventTriggerDropdown ? (
+                    <ChevronUp className="h-4 w-4 text-muted-foreground transition-transform" />
+                  ) : (
+                    <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform" />
+                  )}
+                </div>
               </div>
-              
-              {/* Dropdown for available triggers */}
-              {formData.showEventTriggerDropdown && getAvailableTriggers().length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto">
+              {formData.showEventTriggerDropdown && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-popover border border-border rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto animate-in fade-in-0 zoom-in-95 duration-200">
                   {getAvailableTriggers().map(trigger => (
                     <button
                       key={trigger}
@@ -228,109 +245,107 @@ export const CreateWebhookModal: React.FC<CreateWebhookModalProps> = ({
                       {trigger}
                     </button>
                   ))}
+                  {getAvailableTriggers().length === 0 && (
+                    <div className="px-3 py-2 text-gray-500 text-sm">No more triggers available</div>
+                  )}
                 </div>
               )}
             </div>
           </div>
 
+          {/* === No-show timing === */}
           <div>
-            <label className="block text-sm font-medium mb-2">How long after the users don't show up on cal video meeting?</label>
+            <label className="block text-sm font-medium mb-2">
+              Time after no-show on Cal video meeting
+            </label>
             <div className="flex items-center space-x-2">
               <input
                 type="number"
                 value={formData.noShowDuration}
                 onChange={e => setFormData(prev => ({ ...prev, noShowDuration: e.target.value }))}
-                className="w-20 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-border rounded-lg text-sm"
               />
-              <select
+              <CustomSelect
                 value={formData.noShowUnit}
-                onChange={e => setFormData(prev => ({ ...prev, noShowUnit: e.target.value }))}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white"
-              >
-                <option value="mins">mins</option>
-                <option value="hours">hours</option>
-              </select>
+                onValueChange={value => setFormData(prev => ({ ...prev, noShowUnit: value }))}
+                className="w-full"
+                options={[
+                  { value: 'mins', label: 'mins' },
+                  { value: 'hours', label: 'hours' }
+                ]}
+              />
             </div>
           </div>
 
+          {/* === Secret === */}
           <div>
             <label className="block text-sm font-medium mb-2">Secret</label>
             <input
               type="password"
               value={formData.secret}
               onChange={e => setFormData(prev => ({ ...prev, secret: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-3">Payload Template</label>
-            <div className="flex space-x-4">
-              <button
-                type="button"
-                onClick={() => setFormData(prev => ({ ...prev, payloadTemplate: 'default' }))}
-                className={`px-4 py-2 border rounded-lg text-sm transition-colors ${
-                  formData.payloadTemplate === 'default'
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-gray-300 text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                Default
-              </button>
-              <button
-                type="button"
-                onClick={() => setFormData(prev => ({ ...prev, payloadTemplate: 'custom' }))}
-                className={`px-4 py-2 border rounded-lg text-sm transition-colors ${
-                  formData.payloadTemplate === 'custom'
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-gray-300 text-gray-600 hover:bg-gray-50'
-                }`}
-              >
-                Custom
-              </button>
+          {/* === Payload Template === */}
+          <div className='w-full'>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Payload Template</label>
+            <div className="flex gap-2">
+              {['default', 'custom'].map(option => (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => setFormData(prev => ({ ...prev, payloadTemplate: option }))}
+                  className={`w-full px-4 py-2 border rounded-lg text-sm ${
+                    formData.payloadTemplate === option
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                  }`}
+                >
+                  {option.charAt(0).toUpperCase() + option.slice(1)}
+                </button>
+              ))}
             </div>
-            
+
             {formData.payloadTemplate === 'custom' && (
-              <div className="mt-4">
-                <textarea
-                  value={formData.customPayload}
-                  onChange={e => setFormData(prev => ({ ...prev, customPayload: e.target.value }))}
-                  placeholder="Enter your custom payload template..."
-                  rows={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm font-mono"
-                />
-              </div>
+              <textarea
+                value={formData.customPayload}
+                onChange={e => setFormData(prev => ({ ...prev, customPayload: e.target.value }))}
+                placeholder="Enter your custom payload template..."
+                rows={6}
+                className="mt-4 w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-mono"
+              />
             )}
           </div>
 
-          {/* Ping Test Section */}
+          {/* === Webhook Test === */}
           <div className="border-t pt-6">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex justify-between items-center mb-4">
               <div>
-                <h3 className="font-medium">Webhook test</h3>
-                <p className="text-sm text-gray-600">Please ping test before creating.</p>
+                <h3 className="font-medium text-sm  text-gray-700">Webhook Test</h3>
+                <p className="text-sm text-gray-600">Ping before creating</p>
               </div>
               <button
                 type="button"
                 onClick={handlePingTest}
-                className="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors"
+                disabled={!formData.subscriberUrl.trim()}
+                className="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50"
               >
                 <Activity className="h-4 w-4 mr-2" />
-                Ping test
+                Ping Test
               </button>
             </div>
-            
             <div>
-              <label className="block text-sm font-medium mb-2">Webhook response</label>
-              <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg min-h-[80px]">
-                <p className="text-sm text-gray-600">
-                  {formData.testResponse || 'No data yet'}
-                </p>
+              <label className="block text-sm text-gray-700 font-medium mb-2">Response</label>
+              <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg min-h-[80px] text-sm text-gray-600">
+                {formData.testResponse || 'No data yet'}
               </div>
             </div>
           </div>
 
-          <div className="flex justify-end space-x-3 pt-4 border-t">
+          {/* === Footer Buttons === */}
+          <DialogFooter className="pt-4">
             <button
               type="button"
               onClick={onClose}
@@ -340,13 +355,13 @@ export const CreateWebhookModal: React.FC<CreateWebhookModalProps> = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90"
             >
               {editingWebhook ? 'Update Webhook' : 'Create Webhook'}
             </button>
-          </div>
+          </DialogFooter>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };

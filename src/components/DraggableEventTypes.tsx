@@ -156,7 +156,7 @@ const DraggableEventCard: React.FC<DraggableEventCardProps> = ({
             
             <div className="flex-1 min-w-0">
               <div className="flex items-center mb-2 space-x-3">
-                <h3 className="font-semibold text-foreground text-base">
+                <h3 className="font-semibold text-foreground text-medium">
                   {event.title}
                 </h3>
                 

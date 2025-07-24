@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ChevronDown, Clock, Edit, ExternalLink } from 'lucide-react';
+import { Clock2, Earth, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { CustomSelect } from './ui/custom-select';
 
@@ -67,9 +67,7 @@ export const EventAvailability = () => {
       {/* Timezone section */}
       <div className="flex items-center justify-between pt-6 border-t border-border">
         <div className="flex items-center space-x-2">
-          <div className="w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center">
-            <div className="w-2 h-2 bg-white rounded-full"></div>
-          </div>
+          <Earth className='w-4 h-4'></Earth>
           <span style={{ fontSize: '14px', color: '#384252' }}>Asia/Calcutta</span>
         </div>
         <button
@@ -77,7 +75,7 @@ export const EventAvailability = () => {
           className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition-colors"
           style={{ fontSize: '14px' }}
         >
-          <Clock className="h-4 w-4" />
+          <Clock2 className="h-4 w-4" />
           <span>Edit Availability</span>
           <ExternalLink className="h-3 w-3" />
         </button>

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Plus, Webhook, Trash2 } from 'lucide-react';
+import { Plus, Webhook, Trash2, Edit } from 'lucide-react';
 import { Switch } from './ui/switch';
 import { CreateWebhookModal } from './CreateWebhookModal';
 
@@ -16,7 +16,6 @@ export const EventWebhooks = () => {
   const [webhooks, setWebhooks] = useState<WebhookConfig[]>([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingWebhook, setEditingWebhook] = useState<WebhookConfig | null>(null);
-  const [hoveredWebhook, setHoveredWebhook] = useState<string | null>(null);
 
   const handleCreateWebhook = (webhookData: any) => {
     if (editingWebhook) {
@@ -66,16 +65,16 @@ export const EventWebhooks = () => {
   };
 
   return (
-    <div className="p-0 max-w-none mx-auto space-y-6" style={{ fontSize: '14px', color: '#384252' }}>
+    <div className="p-0 max-w-none mx-auto space-y-6">
       {webhooks.length === 0 ? (
         <div className="text-center py-12 bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg">
           <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
             <Webhook className="h-6 w-6 text-gray-400" />
           </div>
-          <p className="mb-4" style={{ fontSize: '14px', color: '#384252' }}>No webhooks configured</p>
+          <p className="text-sm font-medium mb-4">No webhooks configured</p>
           <button 
             onClick={() => setShowCreateModal(true)} 
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium" 
+            className="px-4 py-2 bg-primary text-white rounded-lg  hover:bg-primary/90 font-medium" 
             style={{ fontSize: '14px' }}
           >
             Create Webhook
@@ -84,11 +83,10 @@ export const EventWebhooks = () => {
       ) : (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold" style={{ fontSize: '14px', color: '#384252' }}>Configured Webhooks</h3>
+            <h3 className="font-medium">Configured Webhooks</h3>
             <button 
               onClick={() => setShowCreateModal(true)} 
-              className="flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium" 
-              style={{ fontSize: '14px' }}
+              className="flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 font-medium text-sm" 
             >
               <Plus className="h-4 w-4 mr-1" />
               Create Webhook
@@ -108,8 +106,6 @@ export const EventWebhooks = () => {
                   borderColor: 'rgba(0, 140, 68, 0.3)',
                   backgroundColor: 'rgba(0, 140, 68, 0.05)'
                 } : {}}
-                onMouseEnter={() => setHoveredWebhook(webhook.id)}
-                onMouseLeave={() => setHoveredWebhook(null)}
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-3">
@@ -140,9 +136,9 @@ export const EventWebhooks = () => {
                     />
                     <button
                       onClick={() => editWebhook(webhook)}
-                      className="px-3 py-1 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded font-medium transition-colors"
+                      className="p-1 text-sm text-blue-600 hover:bg-gray-200 rounded font-medium transition-colors"
                     >
-                      Edit
+                      <Edit className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => deleteWebhook(webhook.id)}
@@ -171,11 +167,6 @@ export const EventWebhooks = () => {
                       >
                         +{webhook.events.length - 3} more
                       </span>
-                      {hoveredWebhook === webhook.id && (
-                        <div className="absolute bottom-full left-0 mb-2 p-2 bg-gray-800 text-white text-xs rounded shadow-lg z-10 whitespace-nowrap">
-                          {webhook.events.slice(3).join(', ')}
-                        </div>
-                      )}
                     </div>
                   )}
                 </div>

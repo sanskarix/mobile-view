@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { Switch } from './ui/switch';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 interface HeaderMeta {
   title: string;
@@ -86,19 +87,30 @@ export const Header = ({ metaData }: HeaderProps) => {
         </div>
 
         {/* Right section: Toggle, Save, Profile */}
-        <div className="flex items-center space-x-4 ml-auto">
+        <div className="flex items-center space-x-2 ml-auto">
           {metaData.enabled !== undefined && metaData.onEnabledChange && (
             <>
               <div className="flex items-center space-x-2">
-                <Switch
-                  checked={metaData.enabled}
-                  onCheckedChange={metaData.onEnabledChange}
-                />
+                <TooltipProvider delayDuration={0}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div>
+                        <Switch
+                          checked={metaData.enabled}
+                          onCheckedChange={metaData.onEnabledChange}
+                        />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {metaData.enabled ? "Disable" : "Enable"}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
               <div className="w-px h-6 bg-border" />
               <button
                 onClick={() => console.log('Save clicked')}
-                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
+                className="px-3 py-1 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
               >
                 Save
               </button>
@@ -112,8 +124,8 @@ export const Header = ({ metaData }: HeaderProps) => {
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
               className="flex items-center space-x-3 rounded-lg transition-colors w-full"
             >
-              <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-                <span className="text-sm font-medium text-primary-foreground">SY</span>
+              <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center">
+                <span className="text-xs font-medium text-primary-foreground">SY</span>
               </div>
               <span className="text-sm font-medium text-foreground">Sanskar Yadav</span>
               <ChevronDown className="h-4 w-4 text-muted-foreground" />

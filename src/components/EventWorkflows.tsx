@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ExternalLink, Mail, MessageSquare, Clock } from 'lucide-react';
+import { Edit, ExternalLink, Mail, MessageSquare, PencilLine } from 'lucide-react';
 import { Switch } from './ui/switch';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 const workflowTemplates = [{
   id: 'sms-reminder',
   name: 'SMS Reminder - 10 minutes before',
@@ -31,26 +32,16 @@ export const EventWorkflows = () => {
   const toggleWorkflow = (workflowId: string) => {
     setActiveWorkflows(prev => prev.includes(workflowId) ? prev.filter(id => id !== workflowId) : [...prev, workflowId]);
   };
-  return <div className="p-0 max-w-none mx-auto space-y-6" style={{
-    fontSize: '14px',
-    color: '#384252'
-  }}>
+  return <div className="p-0 max-w-none mx-auto space-y-6">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <span style={{
-            fontSize: '14px',
-            color: '#384252'
-          }}>
+            <span className='text-sm font-medium text-grey-700'>
               {activeWorkflows.length} Active
             </span>
             <div className="flex items-center space-x-1">
-              <span style={{
-              color: '#384252'
-            }}>•</span>
-              <a href="/workflows" className="text-blue-600 hover:text-blue-700 flex items-center space-x-1" style={{
-              fontSize: '14px'
-            }}>
+              <span>•</span>
+              <a href="/workflows" className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center space-x-1">
                 <span>Create New Workflow</span>
                 <ExternalLink className="h-3 w-3" />
               </a>
@@ -65,20 +56,10 @@ export const EventWorkflows = () => {
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${activeWorkflows.includes(workflow.id) ? 'bg-[#008c44]/10' : 'bg-muted'}`}>
                     <workflow.icon className={`h-5 w-5 ${activeWorkflows.includes(workflow.id) ? 'text-[#008c44]' : 'text-muted-foreground'}`} />
                   </div>
-                  <div className="flex-1">
-                    <h4 className="font-semibold mb-1" style={{
-                  fontSize: '14px',
-                  color: '#384252'
-                }}>{workflow.name}</h4>
-                    <p className="mb-2" style={{
-                  fontSize: '14px',
-                  color: '#384252'
-                }}>{workflow.description}</p>
-                    <div className="flex items-center space-x-3" style={{
-                  fontSize: '12px',
-                  color: '#384252'
-                }}>
-                      
+                  <div className="font-normal text-sm flex-1">
+                    <h4 className="font-semibold mb-1">{workflow.name}</h4>
+                    <p className="mb-2">{workflow.description}</p>
+                    <div className="text-xs flex items-center space-x-3">
                       <span>•</span>
                       <span>{workflow.action}</span>
                       <span>•</span>
@@ -87,16 +68,24 @@ export const EventWorkflows = () => {
                                   
                   </div>
                 </div>
-              </div>
-              
-              <div className="flex items-center justify-between pt-3 border-t border-border">
-                <span style={{
-              fontSize: '14px',
-              color: '#384252'
-            }}>
-                  {activeWorkflows.includes(workflow.id) ? 'Enabled' : 'Disabled'}
-                </span>
-                <Switch checked={activeWorkflows.includes(workflow.id)} onCheckedChange={() => toggleWorkflow(workflow.id)} />
+                <div className='flex items-center mt-1'>
+                  <PencilLine className="h-5 w-5 mr-4" />
+                  <TooltipProvider delayDuration={0}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div>
+                          <Switch 
+                            checked={activeWorkflows.includes(workflow.id)} 
+                            onCheckedChange={() => toggleWorkflow(workflow.id)} 
+                          />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        {activeWorkflows.includes(workflow.id) ? "Disable" : "Enable"}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
               </div>
             </div>)}
         </div>
