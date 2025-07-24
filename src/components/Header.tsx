@@ -18,6 +18,10 @@ interface HeaderProps {
 }
 
 export const Header = ({ metaData }: HeaderProps) => {
+  // Defensive check to ensure metaData is defined
+  if (!metaData) {
+    return null;
+  }
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showHelpDropdown, setShowHelpDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
