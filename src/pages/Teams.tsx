@@ -88,33 +88,8 @@ export const Teams = () => {
     <div className="max-w-6xl mx-auto">
           
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {teams.map((team, index) => (
-              <div key={team.id} className="bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start space-x-3 flex-1">
-                    <div className="h-10 w-10 rounded-lg bg-muted/50 flex items-center justify-center flex-shrink-0 hover:bg-muted/70 transition-colors group/icon">
-                      <Users className="h-5 w-5 group-hover/icon:scale-110 transition-transform" style={{ color: team.color || '#6366f1' }} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center mb-2 space-x-3">
-                        <h3 className="font-semibold text-foreground text-base">{team.name}</h3>
-                        <div className="relative flex items-center space-x-1 px-2 py-1 bg-muted/50 rounded text-xs text-muted-foreground">
-                          <span>cal.id/team/{team.url}</span>
-                        </div>
-                      </div>
-                      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{team.description}</p>
-                      <div className="flex items-center">
-                        <span className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded mr-2">
-                          <Users className="h-3 w-3 mr-1" />
-                          {team.memberCount || 1} member{(team.memberCount || 1) !== 1 ? 's' : ''}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="space-y-8">
+            {teams.map((team, index) => <TeamCard key={team.id} team={team} isOnlyTeam={teams.length === 1} onTeamUpdate={handleTeamUpdate} onTeamDelete={handleTeamDelete} />)}
           </div>
 
           {/* Add new team button */}
