@@ -42,7 +42,7 @@ const workflowTemplates = [
     iconColor: 'text-yellow-600'
   },
   {
-    id: 'text-reminder-host',
+    id: 'whatsapp-reminder-guests',
     title: 'WhatsApp reminder to guests',
     description: 'Never miss an event — set automated text reminders',
     icon: MessageCircle,
