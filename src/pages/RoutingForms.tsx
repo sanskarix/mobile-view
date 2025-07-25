@@ -236,7 +236,7 @@ export const RoutingForms = () => {
             </div>
           </div> :
       // Forms display
-      <div className="pt-6 pb-6 space-y-4 w-full max-w-full px-[16px] py-[16px]">
+      <div className="pt-6 pb-6 space-y-4 w-full max-w-full">
             {/* Teams Filter and New Button */}
             <div className="flex items-center justify-between mb-8">
               <div className="relative">
