@@ -24,48 +24,28 @@ const workflowTemplates = [
     title: 'Send thank you email',
     description: 'Build relationships with a quick thanks',
     icon: Mail,
-    iconColor: 'text-red-600'
+    iconColor: 'text-green-600'
   },
-  {
-    id: 'email-additional-resources',
-    title: 'Email additional resources',
-    description: 'Send links for additional resources to your invitees',
-    icon: Mail,
-    iconColor: 'text-blue-600'
-  },
-  {
-    id: 'email-reminder-someone-else',
-    title: 'Email reminder to someone else',
-    description: 'Prompt non-attendees so they can help prepare for your meeting',
-    icon: Mail,
-    iconColor: 'text-orange-600'
-  },
-  {
-    id: 'request-followup-meeting',
-    title: 'Request follow-up meeting',
-    description: "Don't wait to meet again",
-    icon: Mail,
-    iconColor: 'text-purple-600'
-  },
-  {
-    id: 'email-feedback-survey',
-    title: 'Email your own feedback survey',
-    description: 'Email a survey link from a third party like Typeform or Google Forms to get feedback from invitees after your event',
-    icon: Mail,
-    iconColor: 'text-pink-600'
-  },
-  {
-    id: 'email-no-shows',
-    title: 'Email no-shows to book a new time',
-    description: 'Follow up with invitees who didn\'t show up to the meeting',
-    icon: Mail,
-    iconColor: 'text-red-600'
-  },
+
   {
     id: 'text-reminder-host',
     title: 'Text reminder to host',
     description: 'Never miss an event — set automated text reminders',
     icon: MessageSquare,
+    iconColor: 'text-yellow-600'
+  },
+  {
+    id: 'text-reminder-invitee',
+    title: 'Text reminder to invitees',
+    description: 'Never miss an event — set automated text reminders',
+    icon: MessageSquare,
+    iconColor: 'text-yellow-600'
+  },
+  {
+    id: 'text-reminder-host',
+    title: 'WhatsApp reminder to guests',
+    description: 'Never miss an event — set automated text reminders',
+    icon: MessageCircle,
     iconColor: 'text-green-600'
   }
 ];
