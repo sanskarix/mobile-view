@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Switch } from './ui/switch';
@@ -6,7 +5,6 @@ import { Card, CardContent } from './ui/card';
 import { MoreHorizontal, Download, Copy, Trash2, Edit, ExternalLink, Clock, Route } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-
 interface RoutingFormCardProps {
   form: {
     id: string;
@@ -27,7 +25,6 @@ interface RoutingFormCardProps {
   onCopyLink: (formId: string) => void;
   copiedLink: string | null;
 }
-
 export const RoutingFormCard: React.FC<RoutingFormCardProps> = ({
   form,
   onEdit,
@@ -39,12 +36,10 @@ export const RoutingFormCard: React.FC<RoutingFormCardProps> = ({
   copiedLink
 }) => {
   const [isEnabled, setIsEnabled] = useState(form.enabled);
-
   const handleToggle = (checked: boolean) => {
     setIsEnabled(checked);
     onToggle(form.id, checked);
   };
-
   const handleCardClick = (e: React.MouseEvent) => {
     // Prevent card click when interacting with controls
     if ((e.target as HTMLElement).closest('.card-controls')) {
@@ -52,22 +47,10 @@ export const RoutingFormCard: React.FC<RoutingFormCardProps> = ({
     }
     onEdit(form.id);
   };
-
-  return (
-    <div className="bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer w-full animate-fade-in" onClick={handleCardClick}>
+  return <div className="bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer w-full animate-fade-in" onClick={handleCardClick}>
       <div className="flex items-start justify-between">
         <div className="flex items-start space-x-3 flex-1">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            className="h-10 w-10 rounded-lg bg-muted/50 flex items-center justify-center flex-shrink-0 hover:bg-muted/70 transition-colors group/icon"
-          >
-            <Route 
-              className="h-5 w-5 group-hover/icon:scale-110 transition-transform" 
-              style={{ color: '#6366f1' }}
-            />
-          </button>
+          
           
           <div className="flex-1 min-w-0">
             <div className="flex items-center mb-2 space-x-3">
@@ -80,13 +63,10 @@ export const RoutingFormCard: React.FC<RoutingFormCardProps> = ({
                 <span>cal.id/forms/{form.id}</span>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onCopyLink(form.id);
-                      }}
-                      className="p-1 hover:bg-muted rounded flex items-center justify-center"
-                    >
+                    <button onClick={e => {
+                    e.stopPropagation();
+                    onCopyLink(form.id);
+                  }} className="p-1 hover:bg-muted rounded flex items-center justify-center">
                       <Copy className="h-3 w-3" />
                     </button>
                   </TooltipTrigger>
@@ -96,13 +76,10 @@ export const RoutingFormCard: React.FC<RoutingFormCardProps> = ({
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        window.open(`https://cal.id/forms/${form.id}`, '_blank');
-                      }}
-                      className="p-1 hover:bg-muted rounded flex items-center justify-center"
-                    >
+                    <button onClick={e => {
+                    e.stopPropagation();
+                    window.open(`https://cal.id/forms/${form.id}`, '_blank');
+                  }} className="p-1 hover:bg-muted rounded flex items-center justify-center">
                       <ExternalLink className="h-3 w-3" />
                     </button>
                   </TooltipTrigger>
@@ -110,11 +87,9 @@ export const RoutingFormCard: React.FC<RoutingFormCardProps> = ({
                     Preview
                   </TooltipContent>
                 </Tooltip>
-                {copiedLink === form.id && (
-                  <div className="absolute top-full mt-1 left-1/2 ml-2 px-2 py-1 bg-foreground text-background text-xs rounded animate-fade-in whitespace-nowrap z-50">
+                {copiedLink === form.id && <div className="absolute top-full mt-1 left-1/2 ml-2 px-2 py-1 bg-foreground text-background text-xs rounded animate-fade-in whitespace-nowrap z-50">
                     Copied!
-                  </div>
-                )}
+                  </div>}
               </div>
             </div>
             
@@ -134,18 +109,11 @@ export const RoutingFormCard: React.FC<RoutingFormCardProps> = ({
         </div>
         
         <div className="flex items-center space-x-2 ml-4 card-controls">
-          <Switch
-            checked={isEnabled}
-            onCheckedChange={handleToggle}
-            onClick={(e) => e.stopPropagation()}
-          />
+          <Switch checked={isEnabled} onCheckedChange={handleToggle} onClick={e => e.stopPropagation()} />
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button
-                onClick={(e) => e.stopPropagation()}
-                className="p-2 hover:bg-muted rounded-lg transition-colors"
-              >
+              <button onClick={e => e.stopPropagation()} className="p-2 hover:bg-muted rounded-lg transition-colors">
                 <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
               </button>
             </DropdownMenuTrigger>
@@ -170,6 +138,5 @@ export const RoutingFormCard: React.FC<RoutingFormCardProps> = ({
           </DropdownMenu>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
