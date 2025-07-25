@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Plus, Mail, MessageSquare, ArrowLeft } from 'lucide-react';
+import { Plus, Mail, MessageSquare, MessageCircle, ArrowLeft } from 'lucide-react';
 import { HeaderMeta } from '@/components/Layout';
 
 const workflowTemplates = [
