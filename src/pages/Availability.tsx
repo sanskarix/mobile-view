@@ -115,7 +115,7 @@ export const Availability = () => {
   ];
 
   return (
-    <div className="px-6 pt-3 pb-6 space-y-6 w-full max-w-full">
+    <div className="px-8 pt-3 pb-6 space-y-6 w-full max-w-full">
       <div className="flex items-center justify-between mb-6">
         {/* Custom Tabs */}
         <div className="flex">
