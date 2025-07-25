@@ -34,6 +34,8 @@ import { Teams } from "./pages/Teams";
 import { RoutingForms } from "./pages/RoutingForms";
 import { EditRoutingForm } from "./pages/EditRoutingForm";
 import { Workflows } from "./pages/Workflows";
+import { WorkflowTemplates } from "./pages/WorkflowTemplates";
+import { WorkflowBuilder } from "./pages/WorkflowBuilder";
 import Home from "./pages/Home";
 import { HeaderProvider } from "./contexts/HeaderContext";
 
@@ -60,6 +62,9 @@ const App = () => (
               <Route path="routing-forms" element={<RoutingForms />} />
               <Route path="routing-forms/:formId/edit" element={<EditRoutingForm />} />
               <Route path="workflows" element={<Workflows />} />
+              <Route path="workflows/templates" element={<WorkflowTemplates />} />
+              <Route path="workflows/new" element={<WorkflowBuilder />} />
+              <Route path="workflows/:workflowId/edit" element={<WorkflowBuilder />} />
               <Route path="insights" element={<div className="p-8">Insights page coming soon</div>} />
             </Route>
             
