@@ -187,7 +187,7 @@ export const RoutingForms = () => {
       {/* Header */}
       
 
-      <div className="px-8 py-6">
+      <div className="">
         {routingForms.length === 0 ?
       // Empty state
       <div className="max-w-6xl mx-auto">
