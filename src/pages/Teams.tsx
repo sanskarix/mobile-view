@@ -77,7 +77,7 @@ export const Teams = () => {
     // Dispatch custom event to notify other components
     window.dispatchEvent(new Event('teamsUpdated'));
   };
-  return <div className="p-8">
+  return <div className="">
       {teams.length === 0 ?
     // Empty state
     <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
@@ -95,7 +95,7 @@ export const Teams = () => {
           </Button>
         </div> :
     // Teams display
-    <div className="max-w-6xl mx-auto">
+    <div className="px-8 pt-3 pb-6 space-y-4 w-full max-w-full">
           
 
           <div className="space-y-4">
