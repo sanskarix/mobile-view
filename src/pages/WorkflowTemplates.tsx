@@ -26,7 +26,6 @@ const workflowTemplates = [
     icon: Mail,
     iconColor: 'text-green-600'
   },
-
   {
     id: 'text-reminder-host',
     title: 'Text reminder to host',
@@ -69,15 +68,21 @@ export const WorkflowTemplates = () => {
         triggerTiming: 'custom',
         customTime: '24',
         timeUnit: 'hours',
+        selectedEventTypes: ['1', '2', '3'], // Pre-select some event types
         actions: [{
           id: '1',
           type: 'email-host',
           expanded: false,
           senderName: 'OneHash',
           messageTemplate: 'Reminder',
-          emailSubject: 'Reminder: {EVENT_NAME} - {EVENT_DATE}',
-          emailBody: 'Hi,\n\nThis is a reminder about your upcoming event.\n\nEvent: {EVENT_NAME}\nDate & Time: {EVENT_DATE} - {EVENT_END_TIME} {TIMEZONE}\n\nBest regards,\nOneHash Cal',
-          includeCalendar: true
+          emailSubject: 'Reminder: Your upcoming meeting {EVENT_NAME}',
+          emailBody: 'Hi,\n\nThis is a reminder about your upcoming event.\n\nEvent: {EVENT_NAME}\nDate & Time: {EVENT_DATE} - {EVENT_END_TIME} {TIMEZONE}\nLocation: {LOCATION}\n\nPlease be prepared for the meeting.\n\nBest regards,\nOneHash Cal',
+          includeCalendar: true,
+          phoneNumber: '',
+          countryCode: '+1',
+          verificationCode: '',
+          senderId: '',
+          textMessage: ''
         }]
       },
       'email-reminder-invitee': {
@@ -86,30 +91,44 @@ export const WorkflowTemplates = () => {
         triggerTiming: 'custom',
         customTime: '24',
         timeUnit: 'hours',
+        selectedEventTypes: ['1', '2'], // Pre-select some event types
         actions: [{
           id: '1',
           type: 'email-attendees',
           expanded: false,
           senderName: 'OneHash',
           messageTemplate: 'Reminder',
-          emailSubject: 'Reminder: {EVENT_NAME} - {EVENT_DATE}',
-          emailBody: 'Hi {ATTENDEE_FIRST_NAME},\n\nThis is a reminder about your upcoming event.\n\nEvent: {EVENT_NAME}\nDate & Time: {EVENT_DATE} - {EVENT_END_TIME} {TIMEZONE}\nLocation: {LOCATION}\n\nSee you soon!',
-          includeCalendar: true
+          emailSubject: 'Reminder: {EVENT_NAME} tomorrow at {EVENT_TIME}',
+          emailBody: 'Hi {ATTENDEE_FIRST_NAME},\n\nThis is a friendly reminder about your upcoming meeting tomorrow.\n\nEvent: {EVENT_NAME}\nDate & Time: {EVENT_DATE} - {EVENT_END_TIME} {TIMEZONE}\nLocation: {LOCATION}\n\nWe look forward to seeing you!\n\nBest regards,\n{ORGANIZER_NAME}',
+          includeCalendar: true,
+          phoneNumber: '',
+          countryCode: '+1',
+          verificationCode: '',
+          senderId: '',
+          textMessage: ''
         }]
       },
       'thank-you-email': {
         workflowName: 'Send thank you email',
         trigger: 'after-event',
-        triggerTiming: 'immediately',
+        triggerTiming: 'custom',
+        customTime: '1',
+        timeUnit: 'hours',
+        selectedEventTypes: ['1', '2', '3'], // Pre-select some event types
         actions: [{
           id: '1',
           type: 'email-attendees',
           expanded: false,
           senderName: 'OneHash',
-          messageTemplate: 'Thankyou',
+          messageTemplate: 'Thank You',
           emailSubject: 'Thank you for attending {EVENT_NAME}',
-          emailBody: 'Hi {ATTENDEE_FIRST_NAME},\n\nThank you for attending {EVENT_NAME}. It was great meeting with you!\n\nBest regards,\n{ORGANIZER_NAME}',
-          includeCalendar: false
+          emailBody: 'Hi {ATTENDEE_FIRST_NAME},\n\nThank you for taking the time to meet with us today. It was great discussing {EVENT_NAME} with you.\n\nIf you have any follow-up questions or need additional information, please don\'t hesitate to reach out.\n\nWe appreciate your time and look forward to working with you.\n\nBest regards,\n{ORGANIZER_NAME}',
+          includeCalendar: false,
+          phoneNumber: '',
+          countryCode: '+1',
+          verificationCode: '',
+          senderId: '',
+          textMessage: ''
         }]
       },
       'text-reminder-host': {
@@ -118,45 +137,67 @@ export const WorkflowTemplates = () => {
         triggerTiming: 'custom',
         customTime: '1',
         timeUnit: 'hours',
+        selectedEventTypes: ['4', '5'], // Pre-select team event types
         actions: [{
           id: '1',
           type: 'sms-specific',
           expanded: false,
+          senderName: 'OneHash',
           messageTemplate: 'Reminder',
-          textMessage: 'Reminder: {EVENT_NAME} starts in 1 hour at {EVENT_TIME}. Location: {LOCATION}',
+          emailSubject: '',
+          emailBody: '',
+          includeCalendar: false,
           phoneNumber: '',
           countryCode: '+1',
-          senderId: 'OneHash'
+          verificationCode: '',
+          senderId: 'OneHash',
+          textMessage: '📅 Reminder: {EVENT_NAME} starts in 1 hour at {EVENT_TIME}. Location: {LOCATION}. Be prepared! - OneHash Cal'
         }]
       },
       'text-reminder-invitee': {
         workflowName: 'Text reminder to invitees',
         trigger: 'before-event',
         triggerTiming: 'custom',
-        customTime: '1',
+        customTime: '2',
         timeUnit: 'hours',
+        selectedEventTypes: ['1', '2', '3'], // Pre-select some event types
         actions: [{
           id: '1',
           type: 'sms-attendees',
           expanded: false,
+          senderName: 'OneHash',
           messageTemplate: 'Reminder',
-          textMessage: 'Hi {ATTENDEE_FIRST_NAME}, reminder: {EVENT_NAME} starts in 1 hour at {EVENT_TIME}.',
-          senderId: 'OneHash'
+          emailSubject: '',
+          emailBody: '',
+          includeCalendar: false,
+          phoneNumber: '',
+          countryCode: '+1',
+          verificationCode: '',
+          senderId: 'OneHash',
+          textMessage: '📅 Hi {ATTENDEE_FIRST_NAME}! Reminder: {EVENT_NAME} starts in 2 hours at {EVENT_TIME}. See you there! 👋'
         }]
       },
       'whatsapp-reminder-guests': {
         workflowName: 'WhatsApp reminder to guests',
         trigger: 'before-event',
         triggerTiming: 'custom',
-        customTime: '2',
+        customTime: '3',
         timeUnit: 'hours',
+        selectedEventTypes: ['1', '2', '4'], // Pre-select some event types
         actions: [{
           id: '1',
           type: 'whatsapp-attendee',
           expanded: false,
+          senderName: 'OneHash',
           messageTemplate: 'Reminder',
-          textMessage: 'Hi {ATTENDEE_FIRST_NAME}! Reminder: {EVENT_NAME} starts in 2 hours at {EVENT_TIME}. Looking forward to seeing you!',
-          senderId: 'OneHash'
+          emailSubject: '',
+          emailBody: '',
+          includeCalendar: false,
+          phoneNumber: '',
+          countryCode: '+1',
+          verificationCode: '',
+          senderId: 'OneHash',
+          textMessage: '👋 Hi {ATTENDEE_FIRST_NAME}!\n\n📅 Reminder: {EVENT_NAME} starts in 3 hours at {EVENT_TIME}.\n\n📍 Location: {LOCATION}\n\nLooking forward to seeing you! 😊\n\n- {ORGANIZER_NAME} via OneHash Cal'
         }]
       }
     };
@@ -166,7 +207,15 @@ export const WorkflowTemplates = () => {
 
   const handleTemplateSelect = (template: any) => {
     const templateData = getTemplateData(template.id);
-    navigate('/workflows/new', { state: { template: { ...template, ...templateData } } });
+    // Navigate directly to workflow builder with pre-filled template data
+    navigate('/workflows/new', { 
+      state: { 
+        template: { 
+          ...template, 
+          ...templateData 
+        } 
+      } 
+    });
   };
 
   const handleCreateCustomWorkflow = () => {
@@ -192,7 +241,14 @@ export const WorkflowTemplates = () => {
                     <h3 className="font-semibold mb-2">{template.title}</h3>
                     <p className="text-sm text-muted-foreground">{template.description}</p>
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleTemplateSelect(template);
+                    }}
+                  >
                     Add workflow
                   </Button>
                 </div>
