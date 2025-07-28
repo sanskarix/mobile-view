@@ -387,7 +387,7 @@ export const WorkflowBuilder = () => {
                 </div>
 
                 {trigger && (
-                  <div className="transition-all duration-500 ease-in-out animate-in slide-in-from-bottom-4 space-y-4">
+                  <div className="animate-fade-in space-y-4">
                     <div>
                       <Label className="text-sm">
                         How long {trigger === 'before-event' ? 'before' : 'after'} {
