@@ -102,7 +102,7 @@ export const WorkflowTemplates = () => {
               className="gap-2"
             >
               <Plus className="h-4 w-4" />
-              Build your own workflow
+              Build your own w  orkflow
             </Button>
           </div>
         </div>
