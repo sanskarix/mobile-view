@@ -229,26 +229,10 @@ export const WorkflowBuilder = () => {
   };
 
   return (
-    <div className="p-8 min-h-screen">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center space-x-4 mb-8">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={() => navigate('/workflows/templates')}
-            className="gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </Button>
-          <div>
-            <h1 className="text-2xl font-semibold">Create a workflow</h1>
-            <p className="text-sm text-muted-foreground">Sanskar Yadav</p>
-          </div>
-        </div>
-        
-        <div className={`transition-all duration-500 ${isCentered ? 'flex items-center justify-center min-h-[40vh]' : ''}`}>
-          <div className={`w-full max-w-lg space-y-6 ${isCentered ? 'text-center' : ''}`}>
+    <div className="flex p-6 bg-card p-8 justify-center">
+      <div className="max-w-4xl mx-auto p-6 bg-card">
+        <div className={`transition-all duration-500 ${isCentered ? 'transition-all duration-500 p-6 bg-card' : ''}`}>
+          <div className={`class=w-full space-y-6 border rounded-lg p-6 bg-card  ${isCentered ? 'text-center' : ''}`}>
             {/* Initial centered section */}
             <div className="space-y-6">
               <div>
@@ -323,7 +307,7 @@ export const WorkflowBuilder = () => {
 
         {/* Trigger Section - Shows after event types selected */}
         {showTriggerSection && (
-          <div className="animate-fade-in mt-8">
+          <div className="transition-all duration-500 mt-8 ">
             <Card>
               <CardHeader>
                 <CardTitle>When this happens</CardTitle>
