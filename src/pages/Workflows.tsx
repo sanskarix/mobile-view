@@ -83,6 +83,7 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
           {/* Trigger and event type info in same row */}
           <div className="flex items-center gap-2 flex-wrap">
             <span className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded">
+              <bolt-SVGFESpecularLightingElement className="h-4 w-4 mr-2" />
               {workflow.eventTypeInfo}
             </span>
             <span className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded">
