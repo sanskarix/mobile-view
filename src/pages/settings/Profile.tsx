@@ -24,14 +24,15 @@ export const Profile = () => {
   const [phoneError, setPhoneError] = useState(false);
   const [showLinkDialog, setShowLinkDialog] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
+  const [username, setUsername] = useState('sanskar');
 
   const countries = [
     { code: '+91', flag: '🇮🇳' },
-    { code: '+1', flag: '🇺🇸' },
+    { code: '+1-us', flag: '🇺🇸', display: '+1' },
     { code: '+44', flag: '🇬🇧' },
     { code: '+971', flag: '🇦🇪' },
     { code: '+61', flag: '🇦🇺' },
-    { code: '+1', flag: '🇨🇦' },
+    { code: '+1-ca', flag: '🇨🇦', display: '+1' },
   ];
 
   const handlePhoneChange = (value: string) => {
@@ -131,7 +132,7 @@ export const Profile = () => {
                 <div className="flex items-center px-3 bg-muted border border-r-0 rounded-l-md text-sm text-muted-foreground">
                   cal.id/
                 </div>
-                <Input id="username" value="sanskar" className="rounded-l-none" />
+                <Input id="username" value={username} onChange={(e) => setUsername(e.target.value)} className="rounded-l-none" />
               </div>
             </div>
 
@@ -233,8 +234,8 @@ export const Profile = () => {
                     </SelectTrigger>
                     <SelectContent>
                       {countries.map((country) => (
-                        <SelectItem key={country.code} value={country.code}>
-                          {country.flag} {country.code}
+                        <SelectItem key={country.code} value={country.display || country.code}>
+                          {country.flag} {country.display || country.code}
                         </SelectItem>
                       ))}
                     </SelectContent>
