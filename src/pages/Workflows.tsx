@@ -89,9 +89,6 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
             <span className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded">
               {workflow.trigger}
             </span>
-            <div className="flex items-center space-x-1">
-              {getActionIcons(workflow.actions || [workflow.action])}
-            </div>
           </div>
         </div>
       </div>
