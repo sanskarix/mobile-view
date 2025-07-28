@@ -290,7 +290,7 @@ export const WorkflowBuilder = () => {
       <div className="w-full mx-auto p-6 bg-background"> 
         {/* Workflow Name Section - Centered initially */}
         <div
-          className={`transition-all duration-700 ease-in-out ${
+          className={`workflow-center-transition ${
             isCentered ? 'mx-auto max-w-lg text-center mt-32' : 'mx-auto max-w-2xl'
           }`}
         >
