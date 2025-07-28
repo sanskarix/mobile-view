@@ -63,9 +63,7 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
             <span className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded">
               {workflow.eventTypeInfo}
             </span>
-            {workflow.enabled && <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
-                Active
-              </span>}
+            {workflow.enabled}
           </div>
         </div>
       </div>
