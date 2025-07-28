@@ -24,23 +24,13 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
   onCopyLink,
   copiedLink
 }) => {
-  return (
-    <div
-      className="bg-card border border-border rounded-lg p-6 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer"
-      onClick={() => onEdit(workflow.id)}
-    >
+  return <div className="bg-card border border-border rounded-lg p-6 hover:border-border/60 transition-all hover:shadow-sm">
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-2">
             <h3 className="font-semibold text-foreground text-base">{workflow.title}</h3>
-            <div
-              className="flex items-center space-x-2"
-              onClick={(e) => e.stopPropagation()} // prevent card click when interacting inside
-            >
-              <Switch
-                checked={workflow.enabled}
-                onCheckedChange={(checked) => onToggle(workflow.id, checked)}
-              />
+            <div className="flex items-center space-x-2">
+              <Switch checked={workflow.enabled} onCheckedChange={checked => onToggle(workflow.id, checked)} />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="p-2">
@@ -57,10 +47,7 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
                   <DropdownMenuItem onClick={() => onCopyLink(workflow.id)}>
                     {copiedLink === workflow.id ? 'Copied!' : 'Copy link'}
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => onDelete(workflow.id)}
-                    className="text-destructive"
-                  >
+                  <DropdownMenuItem onClick={() => onDelete(workflow.id)} className="text-destructive">
                     Delete
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -84,10 +71,8 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export const Workflows = () => {
   const {
     setHeaderMeta

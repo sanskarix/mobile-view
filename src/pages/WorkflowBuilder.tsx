@@ -9,158 +9,166 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { Plus, ArrowLeft, ChevronDown, Trash2 } from 'lucide-react';
+import { Plus, ArrowLeft, ChevronDown, Trash2, Mail, MessageSquare, MessageCircle } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { HeaderMeta } from '@/components/Layout';
+
 const VariableDropdown: React.FC<{
   onSelect: (variable: string) => void;
-}> = ({
-  onSelect
-}) => {
-  const variables = ['{EVENT_NAME}', '{EVENT_DATE}', '{EVENT_TIME}', '{EVENT_END_TIME}', '{TIMEZONE}', '{LOCATION}', '{ORGANIZER_NAME}', '{ATTENDEE}', '{ATTENDEE_FIRST_NAME}'];
-  return <DropdownMenu>
+}> = ({ onSelect }) => {
+  const variables = [
+    '{EVENT_NAME}',
+    '{EVENT_DATE}',
+    '{EVENT_TIME}',
+    '{EVENT_END_TIME}',
+    '{TIMEZONE}',
+    '{LOCATION}',
+    '{ORGANIZER_NAME}',
+    '{ATTENDEE}',
+    '{ATTENDEE_FIRST_NAME}'
+  ];
+
+  return (
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" className="text-xs">
           Add variable
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {variables.map(variable => <DropdownMenuItem key={variable} onClick={() => onSelect(variable)}>
+        {variables.map((variable) => (
+          <DropdownMenuItem key={variable} onClick={() => onSelect(variable)}>
             {variable}
-          </DropdownMenuItem>)}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
-    </DropdownMenu>;
+    </DropdownMenu>
+  );
 };
+
 export const WorkflowBuilder = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const {
-    setHeaderMeta
-  } = useOutletContext<{
-    setHeaderMeta: (meta: HeaderMeta) => void;
-  }>();
+  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
+  
   const template = location.state?.template;
-  const [workflowName, setWorkflowName] = useState(template?.title || '');
-  const [selectedEventTypes, setSelectedEventTypes] = useState<string[]>([]);
-  const [trigger, setTrigger] = useState('');
-  const [triggerTiming, setTriggerTiming] = useState('immediately');
-  const [customTime, setCustomTime] = useState('');
-  const [timeUnit, setTimeUnit] = useState('hours');
+  const editWorkflow = location.state?.editWorkflow;
+  
+  // Initial states - use template or edit data if available
+  const [workflowName, setWorkflowName] = useState(
+    editWorkflow?.title || template?.workflowName || ''
+  );
+  const [selectedEventTypes, setSelectedEventTypes] = useState<string[]>(
+    editWorkflow?.eventTypes || template?.eventTypes || []
+  );
+  const [trigger, setTrigger] = useState(
+    editWorkflow?.triggerType || template?.trigger || ''
+  );
+  const [triggerTiming, setTriggerTiming] = useState(
+    editWorkflow?.triggerTiming || template?.triggerTiming || 'immediately'
+  );
+  const [customTime, setCustomTime] = useState(
+    editWorkflow?.customTime || template?.customTime || ''
+  );
+  const [timeUnit, setTimeUnit] = useState(
+    editWorkflow?.timeUnit || template?.timeUnit || 'hours'
+  );
 
   // Progressive reveal states
-  const [showEventTypeSection, setShowEventTypeSection] = useState(false);
-  const [showTriggerSection, setShowTriggerSection] = useState(false);
-  const [showActionsSection, setShowActionsSection] = useState(false);
-  const [isCentered, setIsCentered] = useState(true);
-  const [actions, setActions] = useState([{
-    id: '1',
-    type: 'email-attendees',
-    expanded: false,
-    senderName: 'OneHash',
-    messageTemplate: 'Reminder',
-    emailSubject: 'Reminder: {EVENT_NAME} - {EVENT_DATE}',
-    emailBody: 'Hi {ATTENDEE},\n\nThis is a reminder about your upcoming event.\n\nEvent: {EVENT_NAME}\nDate & Time: {EVENT_DATE} - {EVENT_END_TIME} {TIMEZONE}\n\nThis reminder was triggered by a Workflow in OneHash Cal.',
-    includeCalendar: false,
-    phoneNumber: '',
-    countryCode: '+1',
-    verificationCode: '',
-    senderId: '',
-    textMessage: ''
-  }]);
-  const triggerOptions = [{
-    value: 'new-booking',
-    label: 'When new event is booked'
-  }, {
-    value: 'before-event',
-    label: 'Before event starts'
-  }, {
-    value: 'event-rescheduled',
-    label: 'When event is rescheduled'
-  }, {
-    value: 'after-event',
-    label: 'After event ends'
-  }, {
-    value: 'event-cancelled',
-    label: 'When event is canceled'
-  }, {
-    value: 'no-show',
-    label: 'Invitee is marked no-show'
-  }];
-  const actionOptions = [{
-    value: 'email-host',
-    label: 'Send email to host'
-  }, {
-    value: 'email-attendees',
-    label: 'Send email to attendees'
-  }, {
-    value: 'email-specific',
-    label: 'Send email to a specific email address'
-  }, {
-    value: 'sms-attendees',
-    label: 'Send SMS to attendees'
-  }, {
-    value: 'sms-specific',
-    label: 'Send SMS to a specific number'
-  }, {
-    value: 'whatsapp-attendee',
-    label: 'Send WhatsApp message to attendee'
-  }, {
-    value: 'whatsapp-specific',
-    label: 'Send WhatsApp message to a specific number'
-  }];
-  const eventTypes = {
-    personal: [{
+  const [showEventTypeSection, setShowEventTypeSection] = useState(!!editWorkflow);
+  const [showTriggerSection, setShowTriggerSection] = useState(!!editWorkflow);
+  const [showTimingSection, setShowTimingSection] = useState(!!editWorkflow);
+  const [showActionsSection, setShowActionsSection] = useState(!!editWorkflow);
+  const [isCentered, setIsCentered] = useState(!editWorkflow);
+  const [expandedActionIndex, setExpandedActionIndex] = useState(0);
+
+  const [actions, setActions] = useState(
+    editWorkflow?.actions || template?.actions || [{
       id: '1',
-      name: '15 Minute Meeting'
-    }, {
-      id: '2',
-      name: '30 Minute Meeting'
-    }, {
-      id: '3',
-      name: 'Quick Call'
-    }],
-    teams: [{
-      id: '4',
-      name: 'Team Standup'
-    }, {
-      id: '5',
-      name: 'Project Review'
-    }, {
-      id: '6',
-      name: 'Client Meeting'
+      type: 'email-attendees',
+      expanded: true,
+      senderName: 'OneHash',
+      messageTemplate: 'Reminder',
+      emailSubject: 'Reminder: {EVENT_NAME} - {EVENT_DATE}',
+      emailBody: 'Hi {ATTENDEE},\n\nThis is a reminder about your upcoming event.\n\nEvent: {EVENT_NAME}\nDate & Time: {EVENT_DATE} - {EVENT_END_TIME} {TIMEZONE}\n\nThis reminder was triggered by a Workflow in OneHash Cal.',
+      includeCalendar: false,
+      phoneNumber: '',
+      countryCode: '+1',
+      verificationCode: '',
+      senderId: '',
+      textMessage: ''
     }]
+  );
+
+  const triggerOptions = [
+    { value: 'new-booking', label: 'When new event is booked' },
+    { value: 'before-event', label: 'Before event starts' },
+    { value: 'event-rescheduled', label: 'When event is rescheduled' },
+    { value: 'after-event', label: 'After event ends' },
+    { value: 'event-cancelled', label: 'When event is canceled' },
+    { value: 'no-show', label: 'Invitee is marked no-show' }
+  ];
+
+  const actionOptions = [
+    { value: 'email-host', label: 'Send email to host' },
+    { value: 'email-attendees', label: 'Send email to attendees' },
+    { value: 'email-specific', label: 'Send email to a specific email address' },
+    { value: 'sms-attendees', label: 'Send SMS to attendees' },
+    { value: 'sms-specific', label: 'Send SMS to a specific number' },
+    { value: 'whatsapp-attendee', label: 'Send WhatsApp message to attendee' },
+    { value: 'whatsapp-specific', label: 'Send WhatsApp message to a specific number' }
+  ];
+
+  const eventTypes = {
+    personal: [
+      { id: '1', name: '15 Minute Meeting' },
+      { id: '2', name: '30 Minute Meeting' },
+      { id: '3', name: 'Quick Call' }
+    ],
+    teams: [
+      { id: '4', name: 'Team Standup' },
+      { id: '5', name: 'Project Review' },
+      { id: '6', name: 'Client Meeting' }
+    ]
   };
+
   useEffect(() => {
     setHeaderMeta({
-      title: 'Create Workflow',
-      description: 'Build your custom workflow'
+      title: editWorkflow ? 'Edit Workflow' : 'Create Workflow',
+      description: editWorkflow ? 'Edit your workflow' : 'Build your custom workflow'
     });
-  }, [setHeaderMeta]);
+  }, [setHeaderMeta, editWorkflow]);
 
-  // Watch for text input to move sections up
+  // Progressive reveal logic - only for new workflows
   useEffect(() => {
-    if (workflowName.trim() && !showEventTypeSection) {
+    if (!editWorkflow && workflowName.trim() && !showEventTypeSection) {
       setShowEventTypeSection(true);
       setIsCentered(false);
     }
-  }, [workflowName, showEventTypeSection]);
+  }, [workflowName, showEventTypeSection, editWorkflow]);
 
-  // Watch for event type selection
   useEffect(() => {
-    if (selectedEventTypes.length > 0 && !showTriggerSection) {
+    if (!editWorkflow && selectedEventTypes.length > 0 && !showTriggerSection) {
       setShowTriggerSection(true);
     }
-  }, [selectedEventTypes, showTriggerSection]);
+  }, [selectedEventTypes, showTriggerSection, editWorkflow]);
 
-  // Watch for trigger selection
   useEffect(() => {
-    if (trigger && triggerTiming && !showActionsSection) {
+    if (!editWorkflow && trigger && !showTimingSection) {
+      setShowTimingSection(true);
+    }
+  }, [trigger, showTimingSection, editWorkflow]);
+
+  useEffect(() => {
+    if (!editWorkflow && trigger && (triggerTiming === 'immediately' || (triggerTiming === 'custom' && customTime)) && !showActionsSection) {
       setShowActionsSection(true);
     }
-  }, [trigger, triggerTiming, showActionsSection]);
+  }, [trigger, triggerTiming, customTime, showActionsSection, editWorkflow]);
+
   const getTriggerText = () => {
     const selectedTrigger = triggerOptions.find(t => t.value === trigger);
     if (!selectedTrigger) return '';
+    
     const baseText = selectedTrigger.label.toLowerCase();
     if (triggerTiming === 'immediately') {
       return `Immediately when ${baseText.replace('when ', '').replace('before ', '').replace('after ', '')}`;
@@ -175,6 +183,7 @@ export const WorkflowBuilder = () => {
       }
     }
   };
+
   const handleEventTypeSelection = (categoryId: string, typeId: string) => {
     const isSelected = selectedEventTypes.includes(typeId);
     if (isSelected) {
@@ -183,11 +192,20 @@ export const WorkflowBuilder = () => {
       setSelectedEventTypes(prev => [...prev, typeId]);
     }
   };
+
   const addAction = () => {
+    if (actions.length >= 5) return; // Max 5 actions
+    
+    // Collapse current expanded action
+    setActions(prev => prev.map((action, index) => ({
+      ...action,
+      expanded: false
+    })));
+
     const newAction = {
       id: Date.now().toString(),
       type: 'email-attendees',
-      expanded: false,
+      expanded: true,
       senderName: 'OneHash',
       messageTemplate: 'Reminder',
       emailSubject: '',
@@ -199,23 +217,29 @@ export const WorkflowBuilder = () => {
       senderId: '',
       textMessage: ''
     };
+    
     setActions([...actions, newAction]);
+    setExpandedActionIndex(actions.length);
   };
+
   const removeAction = (actionId: string) => {
     setActions(actions.filter(action => action.id !== actionId));
   };
+
   const updateAction = (actionId: string, field: string, value: any) => {
-    setActions(actions.map(action => action.id === actionId ? {
-      ...action,
-      [field]: value
-    } : action));
+    setActions(actions.map(action => 
+      action.id === actionId ? { ...action, [field]: value } : action
+    ));
   };
-  const toggleActionExpanded = (actionId: string) => {
-    setActions(actions.map(action => action.id === actionId ? {
+
+  const toggleActionExpanded = (actionId: string, index: number) => {
+    setActions(actions.map((action, i) => ({
       ...action,
-      expanded: !action.expanded
-    } : action));
+      expanded: action.id === actionId ? !action.expanded : false
+    })));
+    setExpandedActionIndex(index);
   };
+
   const insertVariable = (actionId: string, field: string, variable: string) => {
     const action = actions.find(a => a.id === actionId);
     if (action) {
@@ -223,41 +247,96 @@ export const WorkflowBuilder = () => {
       updateAction(actionId, field, currentValue + variable);
     }
   };
+
   const isEmailAction = (type: string) => {
     return type.includes('email');
   };
+
   const isSMSAction = (type: string) => {
     return type.includes('sms') || type.includes('whatsapp');
   };
+
+  const getActionIcon = (type: string) => {
+    if (type.includes('email')) return <Mail className="h-4 w-4" />;
+    if (type.includes('whatsapp')) return <MessageCircle className="h-4 w-4" />;
+    if (type.includes('sms')) return <MessageSquare className="h-4 w-4" />;
+    return <Mail className="h-4 w-4" />;
+  };
+
   const handleSaveWorkflow = () => {
-    // Save workflow logic here
+    const newWorkflow = {
+      id: editWorkflow?.id || `workflow-${Date.now()}`,
+      title: workflowName,
+      trigger: getTriggerText(),
+      action: actions.map(a => actionOptions.find(opt => opt.value === a.type)?.label).join(', '),
+      enabled: editWorkflow?.enabled || true,
+      eventTypeInfo: selectedEventTypes.length === 1 ? 
+        `Active on ${eventTypes.personal.concat(eventTypes.teams).find(et => et.id === selectedEventTypes[0])?.name}` :
+        selectedEventTypes.length > 1 ? 
+        `Active on ${selectedEventTypes.length} event types` : 
+        'Active on all event types',
+      teamName: 'Personal',
+      createdAt: editWorkflow?.createdAt || new Date().toISOString(),
+      // Store full workflow data
+      triggerType: trigger,
+      triggerTiming,
+      customTime,
+      timeUnit,
+      eventTypes: selectedEventTypes,
+      actions
+    };
+
+    // Save to localStorage
+    const savedWorkflows = localStorage.getItem('workflows');
+    let workflows = savedWorkflows ? JSON.parse(savedWorkflows) : [];
+    
+    if (editWorkflow) {
+      workflows = workflows.map((w: any) => w.id === editWorkflow.id ? newWorkflow : w);
+    } else {
+      workflows.push(newWorkflow);
+    }
+    
+    localStorage.setItem('workflows', JSON.stringify(workflows));
     navigate('/workflows');
   };
-  return <div className="flex p-6 bg-card p-8 justify-center">
-      <div className="w-full mx-auto p-6 bg-card"> 
-        <div
-          className={`transition-all duration-500 ${isCentered ? 'transition-all duration-500 p-6 bg-card' : ''}`}
-          style={{ marginLeft: '400px', marginRight: '400px' }} // <-- Added margin here
-        >
-          <div className={`class=w-full space-y-6 border rounded-lg p-6 bg-card  ${isCentered ? 'text-center' : ''}`}>
-            {/* Initial centered section */}
-            <div className="space-y-6">
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="p-8">
+        <div className={`transition-all duration-700 ease-in-out ${
+          isCentered 
+            ? 'flex items-center justify-center min-h-[60vh]' 
+            : 'max-w-2xl mx-auto'
+        }`}>
+          
+          {/* Initial centered section */}
+          <div className={`w-full space-y-6 ${isCentered ? 'max-w-md' : ''}`}>
+            <div className={`space-y-4 ${isCentered ? 'text-center' : ''}`}>
               <div>
-                <Label htmlFor="workflow-name" className={isCentered ? 'text-lg font-medium' : ''}>
+                <Label htmlFor="workflow-name" className={`block ${isCentered ? 'text-lg font-medium' : 'text-sm'}`}>
                   Workflow name
                 </Label>
-                <Input id="workflow-name" value={workflowName} onChange={e => setWorkflowName(e.target.value)} className="mt-2" placeholder="Enter workflow name" />
+                <Input
+                  id="workflow-name"
+                  value={workflowName}
+                  onChange={(e) => setWorkflowName(e.target.value)}
+                  className="mt-2"
+                  placeholder="Enter workflow name"
+                />
               </div>
 
-              {/* Event Type Selection - Shows after name is entered */}
-              {showEventTypeSection && <div className={`animate-fade-in ${isCentered ? '' : 'animate-slide-in-right'}`}>
-                  <Label className={isCentered ? 'text-lg font-medium' : ''}>
+              {/* Event Type Selection */}
+              {showEventTypeSection && (
+                <div className={`animate-fade-in transition-all duration-500 ${isCentered ? 'opacity-100' : 'opacity-100'}`}>
+                  <Label className={`block ${isCentered ? 'text-lg font-medium' : 'text-sm'}`}>
                     Which event types will this apply to?
                   </Label>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" className="w-full mt-2 justify-between">
-                        {selectedEventTypes.length > 0 ? `${selectedEventTypes.length} event types selected` : 'Select event types...'}
+                        {selectedEventTypes.length > 0 
+                          ? `${selectedEventTypes.length} event types selected` 
+                          : 'Select event types...'}
                         <ChevronDown className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
@@ -265,68 +344,115 @@ export const WorkflowBuilder = () => {
                       <div className="p-4 space-y-4">
                         <div>
                           <h4 className="font-medium mb-2">Personal</h4>
-                          {eventTypes.personal.map(type => <div key={type.id} className="flex items-center space-x-2 mb-2">
-                              <Checkbox id={type.id} checked={selectedEventTypes.includes(type.id)} onCheckedChange={() => handleEventTypeSelection('personal', type.id)} />
+                          {eventTypes.personal.map((type) => (
+                            <div key={type.id} className="flex items-center space-x-2 mb-2">
+                              <Checkbox
+                                id={type.id}
+                                checked={selectedEventTypes.includes(type.id)}
+                                onCheckedChange={() => handleEventTypeSelection('personal', type.id)}
+                              />
                               <Label htmlFor={type.id} className="text-sm">{type.name}</Label>
-                            </div>)}
+                            </div>
+                          ))}
                         </div>
                         <Separator />
                         <div>
                           <h4 className="font-medium mb-2">Teams</h4>
-                          {eventTypes.teams.map(type => <div key={type.id} className="flex items-center space-x-2 mb-2">
-                              <Checkbox id={type.id} checked={selectedEventTypes.includes(type.id)} onCheckedChange={() => handleEventTypeSelection('teams', type.id)} />
+                          {eventTypes.teams.map((type) => (
+                            <div key={type.id} className="flex items-center space-x-2 mb-2">
+                              <Checkbox
+                                id={type.id}
+                                checked={selectedEventTypes.includes(type.id)}
+                                onCheckedChange={() => handleEventTypeSelection('teams', type.id)}
+                              />
                               <Label htmlFor={type.id} className="text-sm">{type.name}</Label>
-                            </div>)}
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </DropdownMenuContent>
                   </DropdownMenu>
-                </div>}
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Trigger Section - Shows after event types selected */}
-        {showTriggerSection && <div className="transition-all duration-500 mt-8 "
-          style={{ marginLeft: '400px', marginRight: '400px' }} // <-- Added margin here
-        >
+        {/* Trigger Section */}
+        {showTriggerSection && (
+          <div className="animate-slide-in-right max-w-2xl mx-auto mt-8">
             <Card>
               <CardHeader>
                 <CardTitle>When this happens</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  
                   <Select value={trigger} onValueChange={setTrigger}>
-                    <SelectTrigger className="mt-2">
+                    <SelectTrigger>
                       <SelectValue placeholder="Select an occurrence" />
                     </SelectTrigger>
                     <SelectContent>
-                      {triggerOptions.map(option => <SelectItem key={option.value} value={option.value}>
+                      {triggerOptions.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
                           {option.label}
-                        </SelectItem>)}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
 
-                {trigger && <div className="animate-fade-in space-y-4">
+                {/* Timing Section */}
+                {showTimingSection && trigger && (
+                  <div className="animate-fade-in space-y-4">
                     <div>
-                      <Label className="text-sm ">
-                        How long {trigger === 'before-event' ? 'before' : 'after'} {triggerOptions.find(t => t.value === trigger)?.label.toLowerCase().replace('when ', '').replace('before ', '').replace('after ', '')}?
+                      <Label className="text-sm font-medium">
+                        How long {trigger === 'before-event' ? 'before' : 'after'} {
+                          triggerOptions.find(t => t.value === trigger)?.label
+                            .toLowerCase()
+                            .replace('when ', '')
+                            .replace('before ', '')
+                            .replace('after ', '')
+                        }?
                       </Label>
                       
-                      <div className="mt-2 space-y-3">
+                      <div className="mt-3 space-y-3">
                         <div className="flex items-center space-x-2">
-                          <input type="radio" id="immediately" name="timing" value="immediately" checked={triggerTiming === 'immediately'} onChange={e => setTriggerTiming(e.target.value)} />
-                          <Label htmlFor="immediately" className="text-sm text-muted-foreground ">
-                            Immediately when {triggerOptions.find(t => t.value === trigger)?.label.toLowerCase().replace('when ', '').replace('before ', '').replace('after ', '')}
+                          <input
+                            type="radio"
+                            id="immediately"
+                            name="timing"
+                            value="immediately"
+                            checked={triggerTiming === 'immediately'}
+                            onChange={(e) => setTriggerTiming(e.target.value)}
+                          />
+                          <Label htmlFor="immediately" className="text-sm">
+                            Immediately when {
+                              triggerOptions.find(t => t.value === trigger)?.label
+                                .toLowerCase()
+                                .replace('when ', '')
+                                .replace('before ', '')
+                                .replace('after ', '')
+                            }
                           </Label>
                         </div>
                         
                         <div className="flex items-center space-x-2">
-                          <input type="radio" id="custom" name="timing" value="custom" checked={triggerTiming === 'custom'} onChange={e => setTriggerTiming(e.target.value)} />
+                          <input
+                            type="radio"
+                            id="custom"
+                            name="timing"
+                            value="custom"
+                            checked={triggerTiming === 'custom'}
+                            onChange={(e) => setTriggerTiming(e.target.value)}
+                          />
                           <div className="flex items-center space-x-2 flex-1">
-                            <Input value={customTime} onChange={e => setCustomTime(e.target.value)} className="w-20" placeholder="24" onClick={() => setTriggerTiming('custom')} />
+                            <Input
+                              value={customTime}
+                              onChange={(e) => setCustomTime(e.target.value)}
+                              className="w-20"
+                              placeholder="24"
+                              onClick={() => setTriggerTiming('custom')}
+                            />
                             <Select value={timeUnit} onValueChange={setTimeUnit}>
                               <SelectTrigger className="w-24">
                                 <SelectValue />
@@ -338,77 +464,118 @@ export const WorkflowBuilder = () => {
                               </SelectContent>
                             </Select>
                             <span className="text-sm text-muted-foreground">
-                              {trigger === 'before-event' ? 'before' : 'after'} {triggerOptions.find(t => t.value === trigger)?.label.toLowerCase().replace('when ', '').replace('before ', '').replace('after ', '')}
+                              {trigger === 'before-event' ? 'before' : 'after'} {
+                                triggerOptions.find(t => t.value === trigger)?.label
+                                  .toLowerCase()
+                                  .replace('when ', '')
+                                  .replace('before ', '')
+                                  .replace('after ', '')
+                              }
                             </span>
                           </div>
                         </div>
                       </div>
                       
-                      
+                      <p className="text-xs text-muted-foreground mt-2">
+                        *When testing this workflow, be aware that Emails and SMS can only be scheduled at least 1 hour in advance
+                      </p>
                     </div>
-
-                    {triggerTiming === 'immediately' || triggerTiming === 'custom' && customTime}
-                  </div>}
+                  </div>
+                )}
               </CardContent>
             </Card>
-          </div>}
+          </div>
+        )}
 
-        {/* Actions Section - Shows after trigger is configured */}
-        {showActionsSection && <div className="animate-fade-in mt-8" style={{ marginLeft: '400px', marginRight: '400px' }}>
+        {/* Actions Section */}
+        {showActionsSection && (
+          <div className="animate-slide-in-right max-w-2xl mx-auto mt-8">
             <Card>
               <CardHeader>
                 <CardTitle>Do this</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {actions.map((action, index) => <Card key={action.id} className="border">
-                    <Collapsible open={action.expanded} onOpenChange={() => toggleActionExpanded(action.id)}>
+                {actions.map((action, index) => (
+                  <Card 
+                    key={action.id} 
+                    className="border cursor-pointer hover:border-primary/50 transition-colors"
+                    onClick={() => !action.expanded ? toggleActionExpanded(action.id, index) : undefined}
+                  >
+                    <Collapsible open={action.expanded} onOpenChange={() => toggleActionExpanded(action.id, index)}>
                       <div className="p-4">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-3 flex-1">
-                            <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
-                              <span className="text-xs font-medium">📧</span>
+                            <div className="w-8 h-8 bg-primary/10 rounded flex items-center justify-center">
+                              {getActionIcon(action.type)}
                             </div>
-                            <Select value={action.type} onValueChange={value => updateAction(action.id, 'type', value)}>
-                              <SelectTrigger className="w-64">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {actionOptions.map(option => <SelectItem key={option.value} value={option.value}>
-                                    {option.label}
-                                  </SelectItem>)}
-                              </SelectContent>
-                            </Select>
+                            {action.expanded ? (
+                              <Select value={action.type} onValueChange={(value) => updateAction(action.id, 'type', value)}>
+                                <SelectTrigger className="w-64">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {actionOptions.map((option) => (
+                                    <SelectItem key={option.value} value={option.value}>
+                                      {option.label}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            ) : (
+                              <span className="text-sm font-medium">
+                                {actionOptions.find(opt => opt.value === action.type)?.label}
+                              </span>
+                            )}
                           </div>
                           <div className="flex items-center space-x-2">
-                            <CollapsibleTrigger asChild>
+                            <CollapsibleTrigger asChild onClick={(e) => e.stopPropagation()}>
                               <Button variant="ghost" size="sm" className="p-2">
                                 <ChevronDown className={`h-4 w-4 transition-transform ${action.expanded ? 'rotate-180' : ''}`} />
                               </Button>
                             </CollapsibleTrigger>
-                            {actions.length > 1 && <Button variant="ghost" size="sm" onClick={() => removeAction(action.id)} className="p-2">
+                            {actions.length > 1 && (
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  removeAction(action.id);
+                                }} 
+                                className="p-2 text-destructive hover:text-destructive"
+                              >
                                 <Trash2 className="h-4 w-4" />
-                              </Button>}
+                              </Button>
+                            )}
                           </div>
                         </div>
 
                         <CollapsibleContent className="mt-4">
                           <div className="space-y-4">
-                            {isEmailAction(action.type) && <>
+                            {isEmailAction(action.type) && (
+                              <>
                                 <div>
                                   <Label htmlFor={`sender-${action.id}`}>Sender name</Label>
-                                  <Input id={`sender-${action.id}`} value={action.senderName} onChange={e => updateAction(action.id, 'senderName', e.target.value)} className="mt-1" />
+                                  <Input
+                                    id={`sender-${action.id}`}
+                                    value={action.senderName}
+                                    onChange={(e) => updateAction(action.id, 'senderName', e.target.value)}
+                                    className="mt-1"
+                                  />
                                 </div>
 
                                 <div>
                                   <Label htmlFor={`template-${action.id}`}>Choose a template</Label>
-                                  <Select value={action.messageTemplate} onValueChange={value => updateAction(action.id, 'messageTemplate', value)}>
+                                  <Select 
+                                    value={action.messageTemplate} 
+                                    onValueChange={(value) => updateAction(action.id, 'messageTemplate', value)}
+                                  >
                                     <SelectTrigger className="mt-1">
                                       <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
                                       <SelectItem value="Custom">Custom</SelectItem>
                                       <SelectItem value="Reminder">Reminder</SelectItem>
-                                      <SelectItem value="Thank You">Thank You</SelectItem>
+                                      <SelectItem value="Thankyou">Thank you</SelectItem>
                                     </SelectContent>
                                   </Select>
                                 </div>
@@ -416,73 +583,108 @@ export const WorkflowBuilder = () => {
                                 <div>
                                   <div className="flex items-center justify-between">
                                     <Label htmlFor={`subject-${action.id}`}>Subject Line</Label>
-                                    <VariableDropdown onSelect={variable => insertVariable(action.id, 'emailSubject', variable)} />
+                                    <VariableDropdown onSelect={(variable) => insertVariable(action.id, 'emailSubject', variable)} />
                                   </div>
-                                  <Input id={`subject-${action.id}`} value={action.emailSubject} onChange={e => updateAction(action.id, 'emailSubject', e.target.value)} className="mt-1" />
+                                  <Input
+                                    id={`subject-${action.id}`}
+                                    value={action.emailSubject}
+                                    onChange={(e) => updateAction(action.id, 'emailSubject', e.target.value)}
+                                    className="mt-1"
+                                  />
                                 </div>
 
                                 <div>
                                   <div className="flex items-center justify-between">
                                     <Label htmlFor={`body-${action.id}`}>Email Body</Label>
-                                    <VariableDropdown onSelect={variable => insertVariable(action.id, 'emailBody', variable)} />
+                                    <VariableDropdown onSelect={(variable) => insertVariable(action.id, 'emailBody', variable)} />
                                   </div>
-                                  <Textarea id={`body-${action.id}`} value={action.emailBody} onChange={e => updateAction(action.id, 'emailBody', e.target.value)} className="mt-1 min-h-32" placeholder="Enter email content..." />
+                                  <Textarea
+                                    id={`body-${action.id}`}
+                                    value={action.emailBody}
+                                    onChange={(e) => updateAction(action.id, 'emailBody', e.target.value)}
+                                    className="mt-1 min-h-24"
+                                  />
                                 </div>
 
                                 <div className="flex items-center space-x-2">
-                                  <Checkbox id={`calendar-${action.id}`} checked={action.includeCalendar} onCheckedChange={checked => updateAction(action.id, 'includeCalendar', checked)} />
+                                  <Checkbox
+                                    id={`calendar-${action.id}`}
+                                    checked={action.includeCalendar}
+                                    onCheckedChange={(checked) => updateAction(action.id, 'includeCalendar', checked)}
+                                  />
                                   <Label htmlFor={`calendar-${action.id}`} className="text-sm">
                                     Include Calendar Event
                                   </Label>
                                 </div>
-                              </>}
+                              </>
+                            )}
 
-                            {isSMSAction(action.type) && <>
-                                <div>
-                                  <Label htmlFor={`phone-${action.id}`}>Custom Phone Number</Label>
-                                  <div className="flex mt-1">
-                                    <Select value={action.countryCode} onValueChange={value => updateAction(action.id, 'countryCode', value)}>
-                                      <SelectTrigger className="w-20">
-                                        <SelectValue />
-                                      </SelectTrigger>
-                                      <SelectContent>
-                                        <SelectItem value="+1">+1</SelectItem>
-                                        <SelectItem value="+44">+44</SelectItem>
-                                        <SelectItem value="+91">+91</SelectItem>
-                                      </SelectContent>
-                                    </Select>
-                                    <Input id={`phone-${action.id}`} value={action.phoneNumber} onChange={e => updateAction(action.id, 'phoneNumber', e.target.value)} className="flex-1 ml-2" placeholder="Phone number" />
-                                    <Button size="sm" className="ml-2">
-                                      Send Code
-                                    </Button>
-                                  </div>
-                                </div>
-
-                                {action.phoneNumber && <div>
-                                    <Label htmlFor={`verification-${action.id}`}>Verification code</Label>
+                            {isSMSAction(action.type) && (
+                              <>
+                                {(action.type === 'sms-specific' || action.type === 'whatsapp-specific') && (
+                                  <div>
+                                    <Label htmlFor={`phone-${action.id}`}>Custom Phone Number</Label>
                                     <div className="flex mt-1">
-                                      <Input id={`verification-${action.id}`} value={action.verificationCode} onChange={e => updateAction(action.id, 'verificationCode', e.target.value)} className="flex-1" placeholder="Enter verification code" />
-                                      <Button size="sm" className="ml-2">
-                                        Verify
+                                      <Select value={action.countryCode} onValueChange={(value) => updateAction(action.id, 'countryCode', value)}>
+                                        <SelectTrigger className="w-20 rounded-r-none">
+                                          <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          <SelectItem value="+1">+1</SelectItem>
+                                          <SelectItem value="+44">+44</SelectItem>
+                                          <SelectItem value="+91">+91</SelectItem>
+                                        </SelectContent>
+                                      </Select>
+                                      <Input
+                                        id={`phone-${action.id}`}
+                                        value={action.phoneNumber}
+                                        onChange={(e) => updateAction(action.id, 'phoneNumber', e.target.value)}
+                                        className="rounded-l-none"
+                                        placeholder="Phone number"
+                                      />
+                                      <Button variant="outline" className="ml-2">
+                                        Send code
                                       </Button>
                                     </div>
-                                  </div>}
+                                    
+                                    {action.phoneNumber && (
+                                      <div className="mt-2 flex">
+                                        <Input
+                                          placeholder="Verification code"
+                                          value={action.verificationCode}
+                                          onChange={(e) => updateAction(action.id, 'verificationCode', e.target.value)}
+                                        />
+                                        <Button variant="outline" className="ml-2">
+                                          Verify
+                                        </Button>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
 
                                 <div>
                                   <Label htmlFor={`sender-id-${action.id}`}>Sender ID</Label>
-                                  <Input id={`sender-id-${action.id}`} value={action.senderId} onChange={e => updateAction(action.id, 'senderId', e.target.value)} className="mt-1" />
+                                  <Input
+                                    id={`sender-id-${action.id}`}
+                                    value={action.senderId}
+                                    onChange={(e) => updateAction(action.id, 'senderId', e.target.value)}
+                                    className="mt-1"
+                                  />
                                 </div>
 
                                 <div>
-                                  <Label htmlFor={`template-${action.id}`}>Choose a template</Label>
-                                  <Select value={action.messageTemplate} onValueChange={value => updateAction(action.id, 'messageTemplate', value)}>
+                                  <Label htmlFor={`sms-template-${action.id}`}>Choose a template</Label>
+                                  <Select 
+                                    value={action.messageTemplate} 
+                                    onValueChange={(value) => updateAction(action.id, 'messageTemplate', value)}
+                                  >
                                     <SelectTrigger className="mt-1">
                                       <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>
                                       <SelectItem value="Custom">Custom</SelectItem>
                                       <SelectItem value="Reminder">Reminder</SelectItem>
-                                      <SelectItem value="Thank You">Thank You</SelectItem>
+                                      <SelectItem value="Thankyou">Thank you</SelectItem>
                                     </SelectContent>
                                   </Select>
                                 </div>
@@ -490,37 +692,48 @@ export const WorkflowBuilder = () => {
                                 <div>
                                   <div className="flex items-center justify-between">
                                     <Label htmlFor={`text-message-${action.id}`}>Text Message</Label>
-                                    <VariableDropdown onSelect={variable => insertVariable(action.id, 'textMessage', variable)} />
+                                    <VariableDropdown onSelect={(variable) => insertVariable(action.id, 'textMessage', variable)} />
                                   </div>
-                                  <Textarea id={`text-message-${action.id}`} value={action.textMessage} onChange={e => updateAction(action.id, 'textMessage', e.target.value)} className="mt-1 min-h-32" placeholder="Enter text message..." />
+                                  <Textarea
+                                    id={`text-message-${action.id}`}
+                                    value={action.textMessage}
+                                    onChange={(e) => updateAction(action.id, 'textMessage', e.target.value)}
+                                    className="mt-1"
+                                  />
                                 </div>
-                              </>}
+                              </>
+                            )}
                           </div>
                         </CollapsibleContent>
                       </div>
                     </Collapsible>
-                  </Card>)}
-                
-                <Button variant="ghost" onClick={addAction} className="w-full border-dashed border-2">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add action
-                </Button>
-                
-                <div className="text-right text-xs text-muted-foreground">
-                  {actions.length}/5 actions added
+                  </Card>
+                ))}
+
+                {actions.length < 5 && (
+                  <Button
+                    onClick={addAction}
+                    variant="outline"
+                    className="w-full border-dashed"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add action
+                  </Button>
+                )}
+
+                <div className="flex space-x-4 pt-4">
+                  <Button onClick={() => navigate('/workflows')} variant="outline" className="flex-1">
+                    Cancel
+                  </Button>
+                  <Button onClick={handleSaveWorkflow} className="flex-1">
+                    {editWorkflow ? 'Update Workflow' : 'Save Workflow'}
+                  </Button>
                 </div>
               </CardContent>
             </Card>
-
-            <div className="flex justify-end space-x-2 pt-6 mt-8">
-              <Button variant="outline" onClick={() => navigate('/workflows')}>
-                Delete Workflow
-              </Button>
-              <Button onClick={handleSaveWorkflow}>
-                Save Workflow
-              </Button>
-            </div>
-          </div>}
+          </div>
+        )}
       </div>
-    </div>;
+    </div>
+  );
 };
