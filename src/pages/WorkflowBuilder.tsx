@@ -469,7 +469,7 @@ export const WorkflowBuilder = () => {
 
         {/* Actions Section - Shows with animation after trigger is configured */}
         {showActionsSection && (
-          <div className="transition-all duration-700 ease-in-out animate-in slide-in-from-bottom-8 mt-8 mx-auto max-w-2xl">
+          <div className="workflow-section-transition animate-slide-in-bottom mt-8 mx-auto max-w-2xl">
             <Card>
               <CardHeader>
                 <CardTitle>Do this</CardTitle>
