@@ -20,7 +20,7 @@ export const Impersonation = () => {
         <div className="border rounded-lg p-6 bg-card">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-medium mb-2">User Impersonation</h2>
+              <h2 className="text-lg font-medium mb-1">User Impersonation</h2>
               <p className="text-sm text-muted-foreground">
                 Allows our support team to temporarily sign in as you to help us quickly resolve any issues you report to us.
               </p>

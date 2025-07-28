@@ -1,11 +1,21 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/ui/button';
 import { Checkbox } from '../../components/ui/checkbox';
-import { Plus } from 'lucide-react';
+import { ImportIcon, Plus } from 'lucide-react';
+import { useOutletContext } from 'react-router-dom';
+import type { HeaderMeta } from  '../Settings';
 
 export const Import = () => {
   const [notifyBookers, setNotifyBookers] = useState(true);
+  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
+  
+  useEffect(() => {
+    setHeaderMeta({
+      title: 'Import',
+      description: "Import configuration from third-party services.",
+    });
+  }, [setHeaderMeta]);
 
   const handleNotifyBookersChange = (checked: boolean | "indeterminate") => {
     setNotifyBookers(checked === true);
@@ -18,25 +28,23 @@ export const Import = () => {
   return (
     <div className="min-h-screen bg-background flex justify-center">
       <div className="px-8 py-6 w-full">
-        <div className="border rounded-lg p-6 bg-card">
-        <div className="space-y-6">
-          <div className="border border-border rounded-lg p-4 bg-card">
-            <div className="flex items-center space-x-2">
-              <Checkbox 
-                checked={notifyBookers}
-                onCheckedChange={handleNotifyBookersChange}
-              />
-              <span className="text-sm">Notify past bookers about your migration</span>
+          <div className="flex justify-between border border-border rounded-lg p-6 bg-card">
+            <div className="flex flex-col items-start">
+              <h2 className='text-lg font-medium mb-1'>Import form Calendly</h2>
+              <div className='flex items-center space-x-2'>
+                <Checkbox 
+                  checked={notifyBookers}
+                  onCheckedChange={handleNotifyBookersChange}
+                />
+                <p className='text-sm'>Notify past bookers about your migration</p>
+              </div>
             </div>
-          </div>
-          
-          <div className="text-center">
-            <Button onClick={handleImport}>
-              <Plus className="h-4 w-4 mr-2" />
-              Import
-            </Button>
-          </div>
-        </div>
+            <div className='flex items-center'>
+              <Button onClick={handleImport}>
+                <ImportIcon />
+                Import
+              </Button>
+            </div>
         </div>
       </div>
     </div>

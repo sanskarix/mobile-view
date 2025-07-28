@@ -18,7 +18,7 @@ export const Password = () => {
       <div className="px-8 py-6 w-full">
         <div className="flex border rounded-lg p-6 bg-card">
           <div className="flex flex-col items-start">
-            <p className="text-medium font-semibold">Your account is managed by Google</p>
+            <p className="text-lg font-medium mb-1">Your account is managed by Google</p>
             <p className="text-sm text-muted-foreground">
               To change your email, password, enable two-factor authentication and more, please visit your Google account settings.
             </p>
