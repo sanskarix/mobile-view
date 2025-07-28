@@ -476,9 +476,9 @@ export const WorkflowBuilder = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 {actions.map((action, index) => (
-                  <Card 
-                    key={action.id} 
-                    className="border cursor-pointer" 
+                  <Card
+                    key={action.id}
+                    className="border action-card action-tile-clickable"
                     onClick={() => !action.expanded && toggleActionExpanded(action.id)}
                   >
                     <Collapsible open={action.expanded} onOpenChange={() => toggleActionExpanded(action.id)}>
