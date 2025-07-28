@@ -235,7 +235,7 @@ export const Workflows = () => {
       <div className="p-8">
         {workflows.length === 0 ? (
           // Empty state
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-full mx-auto">
             {/* Teams Filter Dropdown */}
             <div className="mb-8">
               <div className="relative inline-block">
