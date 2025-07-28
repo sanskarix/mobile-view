@@ -313,7 +313,7 @@ export const WorkflowBuilder = () => {
                       <div className="mt-2 space-y-3">
                         <div className="flex items-center space-x-2">
                           <input type="radio" id="immediately" name="timing" value="immediately" checked={triggerTiming === 'immediately'} onChange={e => setTriggerTiming(e.target.value)} />
-                          <Label htmlFor="immediately" className="font-normal ">
+                          <Label htmlFor="immediately" className="text-sm text-muted-foreground ">
                             Immediately when {triggerOptions.find(t => t.value === trigger)?.label.toLowerCase().replace('when ', '').replace('before ', '').replace('after ', '')}
                           </Label>
                         </div>
