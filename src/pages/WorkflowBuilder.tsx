@@ -234,8 +234,11 @@ export const WorkflowBuilder = () => {
     navigate('/workflows');
   };
   return <div className="flex p-6 bg-card p-8 justify-center">
-      <div className="max-w-4xl mx-auto p-6 bg-card">
-        <div className={`transition-all duration-500 ${isCentered ? 'transition-all duration-500 p-6 bg-card' : ''}`}>
+      <div className="w-full mx-auto p-6 bg-card"> 
+        <div
+          className={`transition-all duration-500 ${isCentered ? 'transition-all duration-500 p-6 bg-card' : ''}`}
+          style={{ marginLeft: '400px', marginRight: '400px' }} // <-- Added margin here
+        >
           <div className={`class=w-full space-y-6 border rounded-lg p-6 bg-card  ${isCentered ? 'text-center' : ''}`}>
             {/* Initial centered section */}
             <div className="space-y-6">
@@ -284,7 +287,9 @@ export const WorkflowBuilder = () => {
         </div>
 
         {/* Trigger Section - Shows after event types selected */}
-        {showTriggerSection && <div className="transition-all duration-500 mt-8 ">
+        {showTriggerSection && <div className="transition-all duration-500 mt-8 "
+          style={{ marginLeft: '400px', marginRight: '400px' }} // <-- Added margin here
+        >
             <Card>
               <CardHeader>
                 <CardTitle>When this happens</CardTitle>
@@ -349,7 +354,7 @@ export const WorkflowBuilder = () => {
           </div>}
 
         {/* Actions Section - Shows after trigger is configured */}
-        {showActionsSection && <div className="animate-fade-in mt-8">
+        {showActionsSection && <div className="animate-fade-in mt-8" style={{ marginLeft: '400px', marginRight: '400px' }}>
             <Card>
               <CardHeader>
                 <CardTitle>Do this</CardTitle>
@@ -507,7 +512,7 @@ export const WorkflowBuilder = () => {
               </CardContent>
             </Card>
 
-            <div className="flex justify-end space-x-2 pt-6 border-t mt-8">
+            <div className="flex justify-end space-x-2 pt-6 mt-8">
               <Button variant="outline" onClick={() => navigate('/workflows')}>
                 Delete Workflow
               </Button>
