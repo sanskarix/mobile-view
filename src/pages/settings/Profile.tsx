@@ -12,6 +12,7 @@ import type { HeaderMeta } from  '../Settings';
 
 export const Profile = () => {
   const [fullName, setFullName] = useState('Sanskar Yadav');
+  const [username, setUsername] = useState('sanskaryadav');
   const [emails, setEmails] = useState([
     { email: 'sanskarix@gmail.com', isPrimary: true }
   ]);

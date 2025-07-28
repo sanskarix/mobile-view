@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Plus, Workflow, ChevronDown, Copy, ExternalLink, Download, Code, MoreHorizontal } from 'lucide-react';
+import { Plus, Workflow, ChevronDown, Copy, ExternalLink, Download, Code, MoreHorizontal, Mail, MessageSquare, MessageCircle } from 'lucide-react';
 import { CreateWorkflowModal } from '@/components/CreateWorkflowModal';
 import { HeaderMeta } from '@/components/Layout';
 import { Switch } from '@/components/ui/switch';
@@ -59,11 +59,15 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
             {workflow.trigger} • {workflow.action}
           </p>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex items-center justify-between">
             <span className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded">
               {workflow.eventTypeInfo}
             </span>
-            {workflow.enabled}
+            <div className="flex items-center space-x-1">
+              {workflow.action.includes('email') && <Mail className="h-3 w-3 text-muted-foreground" />}
+              {workflow.action.includes('SMS') && <MessageSquare className="h-3 w-3 text-muted-foreground" />}
+              {workflow.action.includes('WhatsApp') && <MessageCircle className="h-3 w-3 text-green-600" />}
+            </div>
           </div>
         </div>
       </div>
@@ -121,46 +125,52 @@ export const Workflows = () => {
     })), ...exampleTeams]);
   }, []);
 
-  // Load sample workflows
+  // Load sample workflows and check for saved ones
   useEffect(() => {
-    const sampleWorkflows = [{
-      id: 'workflow-1',
-      title: 'Meeting Reminder Emails',
-      trigger: '24 hours after new event is booked',
-      action: 'Send emails to attendees',
-      enabled: true,
-      eventTypeInfo: 'Active on 3 event types',
-      teamName: 'Personal',
-      createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
-    }, {
-      id: 'workflow-2',
-      title: 'Post-Meeting Follow Up',
-      trigger: 'Immediately when after event ends',
-      action: 'Send emails to host',
-      enabled: true,
-      eventTypeInfo: 'Active on Team Standup',
-      teamName: 'Support Team',
-      createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
-    }, {
-      id: 'workflow-3',
-      title: 'Cancellation Notification',
-      trigger: 'Immediately when event is canceled',
-      action: 'Send SMS to attendees',
-      enabled: false,
-      eventTypeInfo: 'Active on all event types',
-      teamName: 'Sales Team',
-      createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
-    }, {
-      id: 'workflow-4',
-      title: 'No-Show Alert',
-      trigger: 'Immediately when invitee is marked no-show',
-      action: 'Send emails to host',
-      enabled: true,
-      eventTypeInfo: 'Active on 2 event types',
-      teamName: 'Development Team',
-      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
-    }];
-    setWorkflows(sampleWorkflows);
+    const savedWorkflows = localStorage.getItem('workflows');
+    let loadedWorkflows = savedWorkflows ? JSON.parse(savedWorkflows) : [];
+    
+    // If no saved workflows, use sample data
+    if (loadedWorkflows.length === 0) {
+      loadedWorkflows = [{
+        id: 'workflow-1',
+        title: 'Meeting Reminder Emails',
+        trigger: '24 hours after new event is booked',
+        action: 'Send emails to attendees',
+        enabled: true,
+        eventTypeInfo: 'Active on 3 event types',
+        teamName: 'Personal',
+        createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+      }, {
+        id: 'workflow-2',
+        title: 'Post-Meeting Follow Up',
+        trigger: 'Immediately when after event ends',
+        action: 'Send emails to host',
+        enabled: true,
+        eventTypeInfo: 'Active on Team Standup',
+        teamName: 'Support Team',
+        createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+      }, {
+        id: 'workflow-3',
+        title: 'Cancellation Notification',
+        trigger: 'Immediately when event is canceled',
+        action: 'Send SMS to attendees',
+        enabled: false,
+        eventTypeInfo: 'Active on all event types',
+        teamName: 'Sales Team',
+        createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
+      }, {
+        id: 'workflow-4',
+        title: 'No-Show Alert',
+        trigger: 'Immediately when invitee is marked no-show',
+        action: 'Send emails to host',
+        enabled: true,
+        eventTypeInfo: 'Active on 2 event types',
+        teamName: 'Development Team',
+        createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+      }];
+    }
+    setWorkflows(loadedWorkflows);
   }, []);
   const handleCreateWorkflow = () => {
     navigate('/workflows/templates');
@@ -170,7 +180,8 @@ export const Workflows = () => {
     navigate('/workflows/new');
   };
   const handleWorkflowEdit = (workflowId: string) => {
-    navigate(`/workflows/${workflowId}/edit`);
+    const workflow = workflows.find(w => w.id === workflowId);
+    navigate('/workflows/new', { state: { editWorkflow: workflow } });
   };
   const handleWorkflowToggle = (workflowId: string, enabled: boolean) => {
     setWorkflows(prev => prev.map(workflow => workflow.id === workflowId ? {

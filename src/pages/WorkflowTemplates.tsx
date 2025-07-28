@@ -61,8 +61,112 @@ export const WorkflowTemplates = () => {
     });
   }, [setHeaderMeta]);
 
+  const getTemplateData = (templateId: string) => {
+    const templateData = {
+      'email-reminder-host': {
+        workflowName: 'Email reminder to host',
+        trigger: 'before-event',
+        triggerTiming: 'custom',
+        customTime: '24',
+        timeUnit: 'hours',
+        actions: [{
+          id: '1',
+          type: 'email-host',
+          expanded: false,
+          senderName: 'OneHash',
+          messageTemplate: 'Reminder',
+          emailSubject: 'Reminder: {EVENT_NAME} - {EVENT_DATE}',
+          emailBody: 'Hi,\n\nThis is a reminder about your upcoming event.\n\nEvent: {EVENT_NAME}\nDate & Time: {EVENT_DATE} - {EVENT_END_TIME} {TIMEZONE}\n\nBest regards,\nOneHash Cal',
+          includeCalendar: true
+        }]
+      },
+      'email-reminder-invitee': {
+        workflowName: 'Email reminder to invitee',
+        trigger: 'before-event',
+        triggerTiming: 'custom',
+        customTime: '24',
+        timeUnit: 'hours',
+        actions: [{
+          id: '1',
+          type: 'email-attendees',
+          expanded: false,
+          senderName: 'OneHash',
+          messageTemplate: 'Reminder',
+          emailSubject: 'Reminder: {EVENT_NAME} - {EVENT_DATE}',
+          emailBody: 'Hi {ATTENDEE_FIRST_NAME},\n\nThis is a reminder about your upcoming event.\n\nEvent: {EVENT_NAME}\nDate & Time: {EVENT_DATE} - {EVENT_END_TIME} {TIMEZONE}\nLocation: {LOCATION}\n\nSee you soon!',
+          includeCalendar: true
+        }]
+      },
+      'thank-you-email': {
+        workflowName: 'Send thank you email',
+        trigger: 'after-event',
+        triggerTiming: 'immediately',
+        actions: [{
+          id: '1',
+          type: 'email-attendees',
+          expanded: false,
+          senderName: 'OneHash',
+          messageTemplate: 'Thankyou',
+          emailSubject: 'Thank you for attending {EVENT_NAME}',
+          emailBody: 'Hi {ATTENDEE_FIRST_NAME},\n\nThank you for attending {EVENT_NAME}. It was great meeting with you!\n\nBest regards,\n{ORGANIZER_NAME}',
+          includeCalendar: false
+        }]
+      },
+      'text-reminder-host': {
+        workflowName: 'Text reminder to host',
+        trigger: 'before-event',
+        triggerTiming: 'custom',
+        customTime: '1',
+        timeUnit: 'hours',
+        actions: [{
+          id: '1',
+          type: 'sms-specific',
+          expanded: false,
+          messageTemplate: 'Reminder',
+          textMessage: 'Reminder: {EVENT_NAME} starts in 1 hour at {EVENT_TIME}. Location: {LOCATION}',
+          phoneNumber: '',
+          countryCode: '+1',
+          senderId: 'OneHash'
+        }]
+      },
+      'text-reminder-invitee': {
+        workflowName: 'Text reminder to invitees',
+        trigger: 'before-event',
+        triggerTiming: 'custom',
+        customTime: '1',
+        timeUnit: 'hours',
+        actions: [{
+          id: '1',
+          type: 'sms-attendees',
+          expanded: false,
+          messageTemplate: 'Reminder',
+          textMessage: 'Hi {ATTENDEE_FIRST_NAME}, reminder: {EVENT_NAME} starts in 1 hour at {EVENT_TIME}.',
+          senderId: 'OneHash'
+        }]
+      },
+      'whatsapp-reminder-guests': {
+        workflowName: 'WhatsApp reminder to guests',
+        trigger: 'before-event',
+        triggerTiming: 'custom',
+        customTime: '2',
+        timeUnit: 'hours',
+        actions: [{
+          id: '1',
+          type: 'whatsapp-attendee',
+          expanded: false,
+          messageTemplate: 'Reminder',
+          textMessage: 'Hi {ATTENDEE_FIRST_NAME}! Reminder: {EVENT_NAME} starts in 2 hours at {EVENT_TIME}. Looking forward to seeing you!',
+          senderId: 'OneHash'
+        }]
+      }
+    };
+    
+    return templateData[templateId as keyof typeof templateData] || {};
+  };
+
   const handleTemplateSelect = (template: any) => {
-    navigate('/workflows/new', { state: { template } });
+    const templateData = getTemplateData(template.id);
+    navigate('/workflows/new', { state: { template: { ...template, ...templateData } } });
   };
 
   const handleCreateCustomWorkflow = () => {
