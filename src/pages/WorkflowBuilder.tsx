@@ -274,7 +274,7 @@ export const WorkflowBuilder = () => {
       title: workflowName,
       trigger: getTriggerText(),
       action: getActionDisplayName(actions[0]?.type || 'email-attendees'),
-      actions: actions.map(action => getActionDisplayName(action.type)),
+      actions: actions.map(action => getActionDisplayName(action.type || 'email-attendees')),
       enabled: editWorkflow?.enabled ?? true,
       eventTypeInfo: `Active on ${selectedEventTypes.length} event type${selectedEventTypes.length !== 1 ? 's' : ''}`,
       teamName: 'Personal',
