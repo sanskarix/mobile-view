@@ -311,7 +311,7 @@ export const WorkflowBuilder = () => {
 
               {/* Event Type Selection - Shows with animation after name is entered */}
               {showEventTypeSection && (
-                <div className={`transition-all duration-700 ease-in-out animate-in slide-in-from-bottom-4 ${isCentered ? '' : 'animate-in slide-in-from-right-4'}`}>
+                <div className={`workflow-section-transition animate-slide-in-bottom ${isCentered ? '' : 'animate-slide-in-right'}`}>
                   <Label className={isCentered ? 'text-lg font-medium' : ''}>
                     Which event types will this apply to?
                   </Label>
