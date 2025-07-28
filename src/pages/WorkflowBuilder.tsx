@@ -339,9 +339,7 @@ export const WorkflowBuilder = () => {
                         </div>
                       </div>
                       
-                      <p className="text-xs text-muted-foreground mt-2">
-                        *When testing this workflow, be aware that Emails and SMS can only be scheduled at least 1 hour in advance
-                      </p>
+                      
                     </div>
 
                     {(triggerTiming === 'immediately' || triggerTiming === 'custom' && customTime) && <div className="p-4 bg-muted/50 rounded-lg">
