@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Plus, MoreHorizontal, Copy, Trash2, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
@@ -7,6 +7,8 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { BulkUpdateModal } from '../components/BulkUpdateModal';
 import { TeamAvailability } from '../components/TeamAvailability';
+import { useOutletContext } from 'react-router-dom';
+import type { HeaderMeta } from '../components/Layout';
 
 interface Schedule {
   id: string;
@@ -24,7 +26,15 @@ export const Availability = () => {
   const [isBulkUpdateModalOpen, setIsBulkUpdateModalOpen] = useState(false);
   const [newScheduleName, setNewScheduleName] = useState('');
   const navigate = useNavigate();
-
+  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
+  
+  useEffect(() => {
+    setHeaderMeta({
+      title: 'Availability',
+      description: 'View and manage all your scheduled appointments.'
+    });
+  }, [setHeaderMeta]);
+  
   const [schedules, setSchedules] = useState<Schedule[]>([
     {
       id: 'working-hours',

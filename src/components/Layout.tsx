@@ -9,6 +9,7 @@ export interface HeaderMeta {
   description?: string;
   enabled?: boolean;
   onEnabledChange?: (enabled: boolean) => void;
+  onTitleChange?: (title: string) => void;
 }
 
 export const Layout = () => {

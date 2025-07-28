@@ -46,11 +46,7 @@ export const CreateTeamEventModal: React.FC<CreateTeamEventModalProps> = ({
               placeholder="Quick Chat"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className={!title ? "border-red-300" : ""}
             />
-            {!title && (
-              <p className="text-sm text-red-500">Please fill in this field.</p>
-            )}
           </div>
           
           <div className="space-y-2">

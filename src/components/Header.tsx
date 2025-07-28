@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   ChevronDown, Moon, HelpCircle, MapPin, LogOut, User, Settings,
-  FileIcon, Mail, ArrowLeft
+  FileIcon, Mail, ArrowLeft,
+  Edit
 } from 'lucide-react';
 import { Switch } from './ui/switch';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -12,6 +13,7 @@ interface HeaderMeta {
   description?: string;
   enabled?: boolean;
   onEnabledChange?: (enabled: boolean) => void;
+  onTitleChange?: (title: string) => void;
 }
 
 interface HeaderProps {
@@ -71,15 +73,19 @@ export const Header = ({ metaData }: HeaderProps) => {
           <div className="flex items-center space-x-4">
             {metaData && metaData.enabled !== undefined && (
               <button
-                onClick={() => navigate('/event-types')}
+                onClick={() => navigate(-1)}
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 <ArrowLeft className="h-4 w-4" />
               </button>
             )}
             <div className="flex flex-col">
-              <h1 className="text-xl font-semibold text-foreground">
+              <h1 className="flex items-center text-xl font-semibold text-foreground">
                 {metaData.title}
+                { metaData.onTitleChange && <Edit
+                  className='h-4 w-4 ml-1'
+                  onClick={() => metaData.onTitleChange && metaData.onTitleChange(metaData.title)}
+                />}
               </h1>
               {metaData.description && (
                 <p className="text-sm text-muted-foreground">

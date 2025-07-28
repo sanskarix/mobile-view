@@ -10,6 +10,9 @@ import { DateOverrideModal } from '../components/DateOverrideModal';
 import { CopyTimesModal } from '../components/CopyTimesModal';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/tooltip';
 import { Card, CardContent } from '../components/ui/card';
+import { useOutletContext } from 'react-router-dom';
+import type { HeaderMeta } from '../components/Layout';
+
 interface TimeSlot {
   id: string;
   startTime: string;
@@ -43,6 +46,7 @@ export const EditAvailability = () => {
   const [isCopyModalOpen, setIsCopyModalOpen] = useState(false);
   const [copySourceDay, setCopySourceDay] = useState('');
   const [editingOverride, setEditingOverride] = useState<DateOverride | null>(null);
+  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
   const [dateOverrides, setDateOverrides] = useState<DateOverride[]>([{
     id: '1',
     date: new Date(2025, 6, 15),
@@ -154,17 +158,27 @@ export const EditAvailability = () => {
     label: 'Europe/Amsterdam (GMT+01:00)'
   }];
   useEffect(() => {
-    // Set initial title based on scheduleId or new schedule name from state
+    let title = 'New Schedule';
+
     if (location.state?.newScheduleName) {
-      setScheduleTitle(location.state.newScheduleName);
+      title = location.state.newScheduleName;
     } else if (scheduleId === 'working-hours') {
-      setScheduleTitle('Working Hours');
+      title = 'Working Hours';
     } else if (scheduleId === 'additional-hours') {
-      setScheduleTitle('Additional hours');
-    } else {
-      setScheduleTitle('New Schedule');
+      title = 'Additional hours';
     }
-  }, [scheduleId, location.state]);
+
+    setScheduleTitle(title);
+
+    setHeaderMeta({
+      title,
+      description: 'Mon - Fri, 9:00 AM - 5:00 PM',
+      enabled: isSetToDefault,
+      onEnabledChange: setIsSetToDefault,
+      onTitleChange: (newTitle: string) => setScheduleTitle(newTitle)
+    });
+  }, [scheduleId, location.state, setHeaderMeta, isSetToDefault]);
+
   const handleDayToggle = (dayIndex: number) => {
     const updated = [...weekDays];
     updated[dayIndex].enabled = !updated[dayIndex].enabled;
@@ -272,41 +286,8 @@ export const EditAvailability = () => {
     setEditingOverride(null);
   };
   return <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-        <div className="px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button onClick={() => navigate('/availability')} className="p-2 hover:bg-muted rounded-lg transition-colors">
-                <ArrowLeft className="h-5 w-5" />
-              </button>
-              <div className="flex items-center space-x-2">
-                {isEditingTitle ? <div className="flex items-center space-x-2">
-                    <Input value={scheduleTitle} onChange={e => setScheduleTitle(e.target.value)} className="text-xl font-semibold border-none p-0 h-auto bg-transparent focus:ring-0" onBlur={handleSaveTitle} onKeyDown={e => e.key === 'Enter' && handleSaveTitle()} autoFocus />
-                  </div> : <div className="flex items-center space-x-2">
-                    <h1 className="text-xl font-semibold">{scheduleTitle}</h1>
-                    <button onClick={() => setIsEditingTitle(true)} className="p-1 hover:bg-muted rounded transition-colors">
-                      <Edit3 className="h-4 w-4 text-muted-foreground" />
-                    </button>
-                  </div>}
-                <div>
-                  <p className="text-sm text-muted-foreground mx-0 py-0 ">Mon - Fri, 9:00 AM - 5:00 PM</p>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-sm">
-                <span className="text-muted-foreground">Set to Default</span>
-                <Switch checked={isSetToDefault} onCheckedChange={setIsSetToDefault} />
-              </div>
-              <Button>Save</Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Content */}
-      <div className="px-6 py-8">
+      <div className="px-8 pt-6 pb-6">
         <div className="max-w-full mx-auto space-y-8">
           {/* Schedule Selector and Timezone - Side by Side */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

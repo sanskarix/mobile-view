@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
@@ -6,8 +6,9 @@ import { Textarea } from '../../components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../../components/ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '../../components/ui/popover';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../../components/ui/dropdown-menu';
 import { Bold, Italic, Link, MoreHorizontal, Plus, Trash2, Info } from 'lucide-react';
+import { useOutletContext } from 'react-router-dom';
+import type { HeaderMeta } from  '../Settings';
 
 export const Profile = () => {
   const [fullName, setFullName] = useState('Sanskar Yadav');
@@ -24,7 +25,14 @@ export const Profile = () => {
   const [phoneError, setPhoneError] = useState(false);
   const [showLinkDialog, setShowLinkDialog] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
-  const [username, setUsername] = useState('sanskar');
+  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
+
+  useEffect(() => {
+    setHeaderMeta({
+      title: 'Profile Settings',
+      description: 'Manage your profile settings including personal information, email addresses and more.',
+    });
+  }, [setHeaderMeta]);
 
   const countries = [
     { code: '+91', flag: '🇮🇳' },

@@ -6,6 +6,8 @@ import { CreateRoutingFormModal } from '../components/CreateRoutingFormModal';
 import { Switch } from '../components/ui/switch';
 import { RoutingFormEmbedModal } from '../components/RoutingFormEmbedModal';
 import { RoutingFormCard } from '../components/RoutingFormCard';
+import { useOutletContext } from 'react-router-dom';
+import type { HeaderMeta } from '../components/Layout';
 export const RoutingForms = () => {
   const navigate = useNavigate();
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -16,6 +18,14 @@ export const RoutingForms = () => {
   const [routingForms, setRoutingForms] = useState<any[]>([]);
   const [teams, setTeams] = useState<any[]>([]);
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
+  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
+
+  useEffect(() => {
+    setHeaderMeta({
+      title: 'Routing Forms',
+      description: 'Create forms to direct attendees to the correct destinations',
+    });
+  }, [setHeaderMeta]);
 
   // Load teams from localStorage
   useEffect(() => {
@@ -187,7 +197,7 @@ export const RoutingForms = () => {
       {/* Header */}
       
 
-      <div className="p-8">
+      <div className="px-8 py-6">
         {routingForms.length === 0 ?
       // Empty state
       <div className="max-w-6xl mx-auto">

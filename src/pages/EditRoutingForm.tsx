@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { ArrowLeft, FileText, AlertTriangle, BarChart3, Plus, ChevronDown, ChevronUp, Copy, ExternalLink, Download, Code, Eye, Trash2, X } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../components/ui/tooltip';
 import { RoutingFormEmbedModal } from '../components/RoutingFormEmbedModal';
+import { useOutletContext } from 'react-router-dom';
+import type { HeaderMeta } from '../components/Layout';
 export interface FormField {
   id: string;
   label: string;
@@ -49,6 +51,18 @@ export const EditRoutingForm = () => {
   const [fallbackRouteValue, setFallbackRouteValue] = useState('');
   const [activeTab, setActiveTab] = useState<'setup' | 'form' | 'routing' | 'reporting' | 'embed'>('setup');
   const [showEmbedModal, setShowEmbedModal] = useState(false);
+  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
+
+
+  useEffect(() => {
+    setHeaderMeta({
+      title: formName,
+      description: formDescription,
+      enabled: true,  
+      onEnabledChange: () => {},
+    });
+  }, [setHeaderMeta]);
+
   const [newRoute, setNewRoute] = useState<Route>({
     id: '',
     name: 'Route 1',
@@ -183,7 +197,7 @@ export const EditRoutingForm = () => {
       case 'setup':
         return <div className="flex w-full">
             {/* Form Setup - Left Side */}
-            <div className="w-1/2 p-6">
+            <div className="w-1/2 py-6">
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Name</Label>
@@ -698,66 +712,32 @@ export const EditRoutingForm = () => {
         return null;
     }
   };
-  return <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-border bg-background">
-        <div className="flex items-center justify-between px-6 py-4">
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate('/routing-forms')} className="p-2">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <div>
-              <h1 className="text-lg font-semibold">{formName}</h1>
-              <p className="text-sm text-muted-foreground">hwllUGELBVWufl</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <Button>Save</Button>
-          </div>
-        </div>
-      </div>
-
+  return <div className="min-h-screen bg-background px-8 py-6">
       {/* Navigation Tabs */}
-      <div className="border-b border-border px-6">
+      <div className="border-b border-border">
         <div className="flex space-x-0">
           <button onClick={() => setActiveTab('setup')} className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${activeTab === 'setup' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'}`}>
             <div className="flex items-center space-x-2">
-              <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-muted-foreground/20">
-                S
-              </div>
               <span>Form Setup</span>
             </div>
           </button>
           <button onClick={() => setActiveTab('form')} className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${activeTab === 'form' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'}`}>
             <div className="flex items-center space-x-2">
-              <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-muted-foreground/20">
-                F
-              </div>
               <span>Form</span>
             </div>
           </button>
           <button onClick={() => setActiveTab('routing')} className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${activeTab === 'routing' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'}`}>
             <div className="flex items-center space-x-2">
-              <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-muted-foreground/20">
-                R
-              </div>
               <span>Routing</span>
             </div>
           </button>
           <button onClick={handleReporting} className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${activeTab === 'reporting' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'}`}>
             <div className="flex items-center space-x-2">
-              <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-muted-foreground/20">
-                Re
-              </div>
               <span>Reporting</span>
             </div>
           </button>
           <button onClick={() => setActiveTab('embed')} className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${activeTab === 'embed' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'}`}>
             <div className="flex items-center space-x-2">
-              <div className="h-5 w-5 rounded-full flex items-center justify-center text-xs font-medium bg-muted-foreground/20">
-                E
-              </div>
               <span>Embed</span>
             </div>
           </button>

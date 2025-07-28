@@ -59,13 +59,6 @@ export const EventWorkflows = () => {
                   <div className="font-normal text-sm flex-1">
                     <h4 className="font-semibold mb-1">{workflow.name}</h4>
                     <p className="mb-2">{workflow.description}</p>
-                    <div className="text-xs flex items-center space-x-3">
-                      <span>•</span>
-                      <span>{workflow.action}</span>
-                      <span>•</span>
-                      <span>{workflow.timing}</span>
-                    </div>
-                                  
                   </div>
                 </div>
                 <div className='flex items-center mt-1'>

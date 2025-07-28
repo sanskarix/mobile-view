@@ -12,6 +12,7 @@ import { useToast } from '../hooks/use-toast';
 import type { DateRange } from 'react-day-picker';
 import type { HeaderMeta } from '../components/Layout';
 import { useOutletContext } from 'react-router-dom';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../components/ui/dialog';
 interface Meeting {
   id: string;
   title: string;
@@ -568,7 +569,7 @@ export default function Bookings() {
       }
       if (meeting.status === 'unconfirmed') {
         return <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" style={{ backgroundColor: 'rgba(0, 140, 68, 0.5)', borderColor: '#008c44', color: '#008c44' }} onClick={e => {
+            <Button variant="outline" size="sm" onClick={e => {
             e.stopPropagation();
             toast({
               description: "Meeting accepted",
@@ -578,7 +579,7 @@ export default function Bookings() {
               <CheckCircle className="h-4 w-4 mr-1" />
               Accept
             </Button>
-            <Button variant="outline" size="sm" style={{ backgroundColor: 'rgba(241, 53, 44, 0.5)', borderColor: '#f1352c', color: '#f1352c' }} onClick={e => {
+            <Button variant="outline" size="sm" onClick={e => {
             e.stopPropagation();
             toast({
               description: "Meeting rejected",
@@ -598,48 +599,75 @@ export default function Bookings() {
             Cancel
           </Button>;
       }
-      return <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm" onClick={e => {
-          e.stopPropagation();
-          handleReschedule();
-        }}>
-            Reschedule
-          </Button>
-          <Button variant="outline" size="sm" onClick={e => {
-          e.stopPropagation();
-          handleCancelEvent(meeting);
-        }}>
-            Cancel
-          </Button>
-          <div className="relative">
+      return (
+        <div className="flex flex-col space-y-8">
+          <div className="flex items-center space-x-2">
             <Button variant="outline" size="sm" onClick={e => {
-            e.stopPropagation();
-            setShowEditDropdown(showEditDropdown === meeting.id ? null : meeting.id);
-          }}>
-              Edit
+              e.stopPropagation();
+              handleReschedule();
+            }}>
+              Reschedule
             </Button>
-            {showEditDropdown === meeting.id && <div className="absolute top-full right-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-48">
-                <button className="w-full px-3 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground flex items-center gap-2" onClick={e => {
+            <Button variant="outline" size="sm" onClick={e => {
               e.stopPropagation();
-              setSelectedMeeting(meeting);
-              setShowEditLocation(true);
-              setShowEditDropdown(null);
+              handleCancelEvent(meeting);
             }}>
-                  <MapPin className="h-4 w-4" />
-                  Edit location
-                </button>
-                <button className="w-full px-3 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground flex items-center gap-2" onClick={e => {
-              e.stopPropagation();
-              setSelectedMeeting(meeting);
-              setShowAddGuests(true);
-              setShowEditDropdown(null);
-            }}>
-                  <UserPlus className="h-4 w-4" />
-                  Add guests
-                </button>
-              </div>}
+              Cancel
+            </Button>
+            <div className="relative">
+              <Button variant="outline" size="sm" onClick={e => {
+                e.stopPropagation();
+                setShowEditDropdown(showEditDropdown === meeting.id ? null : meeting.id);
+              }}>
+                Edit
+              </Button>
+              {showEditDropdown === meeting.id && (
+                <div className="absolute top-full right-0 mt-1 bg-popover border border-border rounded-md shadow-lg z-50 min-w-4">
+                  <button className="w-full px-3 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground flex items-center gap-2" onClick={e => {
+                    e.stopPropagation();
+                    setSelectedMeeting(meeting);
+                    setShowEditLocation(true);
+                    setShowEditDropdown(null);
+                  }}>
+                    <MapPin className="h-4 w-4" />
+                    Edit location
+                  </button>
+                  <button className="w-full px-3 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground flex items-center gap-2" onClick={e => {
+                    e.stopPropagation();
+                    setSelectedMeeting(meeting);
+                    setShowAddGuests(true);
+                    setShowEditDropdown(null);
+                  }}>
+                    <UserPlus className="h-4 w-4" />
+                    Add guests
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>;
+
+          <div className="flex justify-end">
+            {isHost ? (
+              <button
+                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                onClick={e => {
+                  e.stopPropagation();
+                  setExpandedMeeting(isExpanded ? null : meeting.id);
+                }}
+              >
+                <span>Details</span>
+                {isExpanded ? (
+                  <ChevronUp className="h-4 w-4" />
+                ) : (
+                  <ChevronDown className="h-4 w-4" />
+                )}
+              </button>
+            ) : (
+              <span className="text-sm text-muted-foreground">Host</span>
+            )}
+          </div>
+        </div>
+      );
     };
     return <div className={`bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow ${isHost ? 'cursor-pointer' : ''}`} onClick={() => {
       if (isHost) {
@@ -698,7 +726,7 @@ export default function Bookings() {
 
               {/* Location/Meeting Link and Details button in same line */}
               <div className="flex items-center justify-between">
-                <div className="flex flex-col space-y-2">
+                <div className="flex flex-col space-y-2 flex-1">
                   <div className="flex items-center space-x-2">
                     {meeting.location.type === 'online' ? <button className="flex items-center space-x-2 text-sm text-primary hover:text-primary/80 transition-colors">
                         <Video className="h-4 w-4" />
@@ -724,17 +752,7 @@ export default function Bookings() {
                         </div>}
                     </div>}
                 </div>
-
-                {/* Details button or Host label - moved to extreme right */}
-                <div className="ml-auto">
-                  {isHost ? <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors" onClick={e => {
-                  e.stopPropagation();
-                  setExpandedMeeting(isExpanded ? null : meeting.id);
-                }}>
-                      <span>Details</span>
-                      {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                    </button> : <span className="text-sm text-muted-foreground">Host</span>}
-                </div>
+                
               </div>
             </div>
           </div>
@@ -1046,13 +1064,19 @@ export default function Bookings() {
           </div>}
 
         {/* Meeting Notes Modal */}
-        {showMeetingNotes && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-2xl shadow-xl">
-              <h2 className="text-xl font-semibold mb-2">Your Notes</h2>
-              <p className="text-sm text-gray-600 mb-6">These notes are only visible to you</p>
-              
+        {showMeetingNotes && (
+          <Dialog open={showMeetingNotes} onOpenChange={setShowMeetingNotes}>
+            <DialogContent className="max-w-2xl w-full">
+              <DialogHeader>
+                <DialogTitle>Your Notes</DialogTitle>
+                <DialogDescription>
+                  These notes are only visible to you
+                </DialogDescription>
+              </DialogHeader>
+
+              {/* Toolbar */}
               <div className="mb-6">
-                <div className="flex items-center space-x-1 mb-3 p-3 border border-gray-200 rounded-t-md bg-gray-50">
+                <div className="flex items-center space-x-1 p-3 border border-gray-200 rounded-t-md bg-gray-50">
                   <Button variant="ghost" size="sm"><Bold className="h-4 w-4" /></Button>
                   <Button variant="ghost" size="sm"><Italic className="h-4 w-4" /></Button>
                   <Button variant="ghost" size="sm"><Underline className="h-4 w-4" /></Button>
@@ -1062,19 +1086,28 @@ export default function Bookings() {
                   <Button variant="ghost" size="sm"><Undo className="h-4 w-4" /></Button>
                   <Button variant="ghost" size="sm"><Redo className="h-4 w-4" /></Button>
                 </div>
-                <textarea value={meetingNotes} onChange={e => setMeetingNotes(e.target.value)} className="w-full h-32 p-4 border border-gray-200 rounded-b-md border-t-0 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Add your meeting notes here..." />
+
+                {/* Textarea */}
+                <textarea
+                  value={meetingNotes}
+                  onChange={(e) => setMeetingNotes(e.target.value)}
+                  className="w-full h-32 p-4 border border-gray-200 rounded-b-md border-t-0 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Add your meeting notes here..."
+                />
               </div>
-              
-              <div className="flex justify-end space-x-3">
+
+              {/* Footer Buttons */}
+              <DialogFooter>
                 <Button variant="outline" onClick={() => setShowMeetingNotes(false)}>
                   Cancel
                 </Button>
                 <Button onClick={() => setShowMeetingNotes(false)}>
                   Save
                 </Button>
-              </div>
-            </div>
-          </div>}
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
 
         {/* Cancel Selection Modal - First popup for recurring events - Made bigger */}
         {showCancelSelection && selectedMeeting && <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">

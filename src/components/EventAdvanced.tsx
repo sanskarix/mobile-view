@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Monitor, Smartphone, Tablet, Copy, Info, Plus, X } from 'lucide-react';
+import { Monitor, Smartphone, Tablet, Copy, Info, Plus, X, PencilLine } from 'lucide-react';
 import { Switch } from './ui/switch';
 import { CustomSelect } from './ui/custom-select';
 import { BookingQuestionModal } from './BookingQuestionModal';
@@ -156,7 +156,7 @@ export const EventAdvanced = () => {
     required: false,
     key: 'rescheduleReason'
   }];
-  return <div className="p-0 max-w-none mx-auto space-y-8" style={{
+  return <div className="p-0 max-w-none mx-auto space-y-4" style={{
     fontSize: '14px',
     color: '#384252'
   }}>
@@ -219,7 +219,7 @@ export const EventAdvanced = () => {
             </label>
           </div>
           
-          {!settings.useOrganizerEmail && <div className="ml-8">
+          {!settings.useOrganizerEmail && <div>
               <CustomSelect value={settings.organizerEmail} onValueChange={value => setSettings(prev => ({
             ...prev,
             organizerEmail: value
@@ -306,7 +306,7 @@ export const EventAdvanced = () => {
           Customize the questions asked on the booking page
         </p>
         
-        <div className="space-y-4 mb-6">
+        <div className="space-y-2 mb-6">
           {bookingQuestions.map((question, index) => <div key={index} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
               <div className="flex items-center space-x-4 flex-1">
                 <div className="flex-1">
@@ -326,12 +326,10 @@ export const EventAdvanced = () => {
                     {question.type}
                   </p>
                 </div>
-                <button onClick={() => handleEditQuestion(question)} style={{
-              fontSize: '14px'
-            }} className="text-blue-600 hover:text-blue-700 mx-[12px]">
-                  Edit
-                </button>
               </div>
+              <button onClick={() => handleEditQuestion(question)} className="mr-3">
+                <PencilLine className='w-5 h-5'></PencilLine>
+              </button>
               <Switch checked={bookingQuestionStates[question.key]} onCheckedChange={value => handleBookingQuestionToggle(question.key, value)} />
             </div>)}
         </div>
@@ -343,10 +341,9 @@ export const EventAdvanced = () => {
         </button>
       </div>
 
-      {/* Settings toggles */}
-      <div className="border border-border rounded-lg p-6 space-y-8">
+      <div className="border border-border rounded-lg p-6 space-y-6">
         <div className="space-y-6">
-          <div className="flex items-center justify-between border-b border-border pb-6">
+          <div className="flex items-center justify-between">
             <div className="flex-1">
               <h3 className="font-medium" style={{
               fontSize: '14px',
@@ -364,8 +361,8 @@ export const EventAdvanced = () => {
             <Switch checked={settings.requiresConfirmation} onCheckedChange={value => handleToggle('requiresConfirmation', value)} className="mx-[19px]" />
           </div>
 
-          {settings.requiresConfirmation && <div className="ml-4 space-y-4">
-              <div className="space-y-3">
+          {settings.requiresConfirmation && <div className="space-y-2">
+              <div className="space-y-2">
                 <div className="flex items-center">
                   <input type="radio" id="always" name="confirmationType" value="always" checked={settings.confirmationType === 'always'} onChange={e => setSettings(prev => ({
                 ...prev,
@@ -377,13 +374,10 @@ export const EventAdvanced = () => {
                   <input type="radio" id="notice" name="confirmationType" value="notice" checked={settings.confirmationType === 'notice'} onChange={e => setSettings(prev => ({
                 ...prev,
                 confirmationType: e.target.value
-              }))} className="mr-2" />
+              }))} className="" />
                   <label htmlFor="notice" className="text-sm flex items-center space-x-2">
                     <span>When booked with less than</span>
-                    <input type="number" value={settings.confirmationMinutes} onChange={e => setSettings(prev => ({
-                  ...prev,
-                  confirmationMinutes: e.target.value
-                }))} className="w-16 px-2 py-1 border border-border rounded text-sm bg-background" />
+                    <input type="number" value={settings.confirmationMinutes} onChange={e => setSettings(prev => ({...prev,confirmationMinutes: e.target.value}))} className="w-16 px-3 py-2 border border-border rounded-lg text-sm bg-background" />
                     <CustomSelect value={settings.confirmationTimeUnit} onValueChange={value => setSettings(prev => ({
                   ...prev,
                   confirmationTimeUnit: value
@@ -393,7 +387,7 @@ export const EventAdvanced = () => {
                 </div>
               </div>
               
-              <div className="flex items-center">
+              <div className="flex items-center ml-2">
                 <input type="checkbox" id="unconfirmed-block" checked={settings.unconfirmedBlock} onChange={e => handleToggle('unconfirmedBlock', e.target.checked)} className="mr-2" />
                 <label htmlFor="unconfirmed-block" className="text-sm">
                   Unconfirmed bookings still block calendar slots
@@ -401,9 +395,11 @@ export const EventAdvanced = () => {
               </div>
             </div>}
         </div>
-
+      </div>
+                
+      <div className="border border-border rounded-lg p-6 space-y-6"> 
         <div className="space-y-6">
-          <div className="flex items-center justify-between border-b border-border pb-6">
+          <div className="flex items-center justify-between">
             <div className="flex-1">
               <h3 className="font-medium" style={{
               fontSize: '14px',
@@ -421,7 +417,7 @@ export const EventAdvanced = () => {
             <Switch checked={settings.enableCaptcha} onCheckedChange={value => handleToggle('enableCaptcha', value)} className="mx-[18px]" />
           </div>
           
-          {settings.enableCaptcha && <div className="ml-4">
+          {settings.enableCaptcha && <div className="">
               <label className="block mb-2" style={{
             fontSize: '14px',
             color: '#384252'
@@ -434,8 +430,10 @@ export const EventAdvanced = () => {
           }))} options={captchaOptions} className="w-32" />
             </div>}
         </div>
-
-        <div className="flex items-center justify-between border-b border-border pb-6">
+      </div>
+      
+      <div className="border border-border rounded-lg p-6 space-y-6"> 
+        <div className="flex items-center justify-between">
           <div className="flex-1">
             <h3 className="font-medium" style={{
             fontSize: '14px',
@@ -452,8 +450,10 @@ export const EventAdvanced = () => {
           </div>
           <Switch checked={settings.requiresEmailVerification} onCheckedChange={value => handleToggle('requiresEmailVerification', value)} className="mx-[18px]" />
         </div>
+      </div>
 
-        <div className="flex items-center justify-between border-b border-border pb-6">
+      <div className="border border-border rounded-lg p-6 space-y-6">
+        <div className="flex items-center justify-between">
           <div className="flex-1">
             <h3 className="font-medium" style={{
             fontSize: '14px',
@@ -470,7 +470,9 @@ export const EventAdvanced = () => {
           </div>
           <Switch checked={settings.hideNotesInCalendar} onCheckedChange={value => handleToggle('hideNotesInCalendar', value)} className="mx-[18px]" />
         </div>
-
+      </div>
+        
+      <div className="border border-border rounded-lg p-6 space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
             <h3 className="font-medium" style={{
@@ -488,7 +490,9 @@ export const EventAdvanced = () => {
           </div>
           <Switch checked={settings.disableCancelReschedule} onCheckedChange={value => handleToggle('disableCancelReschedule', value)} className="mx-[18px]" />
         </div>
+      </div>
 
+      <div className="border border-border rounded-lg p-6 space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
             <h3 className="font-medium" style={{
@@ -506,8 +510,9 @@ export const EventAdvanced = () => {
           </div>
           <Switch checked={settings.hideCalendarEventDetails} onCheckedChange={value => handleToggle('hideCalendarEventDetails', value)} className="mx-[18px]" />
         </div>
+      </div>
 
-        {/* Redirect on booking */}
+      <div className="border border-border rounded-lg p-6 space-y-6">
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex-1">
@@ -527,7 +532,7 @@ export const EventAdvanced = () => {
             <Switch checked={settings.redirectOnBooking} onCheckedChange={value => handleToggle('redirectOnBooking', value)} className="mx-[18px]" />
           </div>
           
-          {settings.redirectOnBooking && <div className="ml-4 space-y-3">
+          {settings.redirectOnBooking && <div className="space-y-3">
               <input type="url" value={settings.redirectUrl} onChange={e => setSettings(prev => ({
             ...prev,
             redirectUrl: e.target.value
@@ -545,8 +550,9 @@ export const EventAdvanced = () => {
               </div>
             </div>}
         </div>
+      </div>
 
-        {/* Private Links */}
+      <div className="border border-border rounded-lg p-6 space-y-6">
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex-1">
@@ -566,7 +572,7 @@ export const EventAdvanced = () => {
             <Switch checked={settings.privateLinks} onCheckedChange={value => handleToggle('privateLinks', value)} className="mx-[18px]" />
           </div>
           
-          {settings.privateLinks && <div className="ml-4 space-y-3">
+          {settings.privateLinks && <div className="space-y-3">
               {privateLinks.map((link, index) => <div key={index} className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg py-[12px] px-[12px]">
                   <span className="flex-1" style={{
               fontSize: '14px',
@@ -574,10 +580,10 @@ export const EventAdvanced = () => {
             }}>
                     {link}
                   </span>
-                  <button onClick={() => handleCopyPrivateLink(link)} className="p-1 hover:bg-gray-200 rounded" title="Copy private link">
+                  <button onClick={() => handleCopyPrivateLink(link)} className="p-1 hover:bg-gray-200 rounded">
                     <Copy className="h-4 w-4 text-gray-500" />
                   </button>
-                  {privateLinks.length > 1 && <button onClick={() => removePrivateLink(link)} className="p-1 hover:bg-gray-200 rounded" title="Remove link">
+                  {privateLinks.length > 1 && <button onClick={() => removePrivateLink(link)} className="p-1 hover:bg-gray-200 rounded">
                       <X className="h-4 w-4 text-red-500" />
                     </button>}
                 </div>)}
@@ -588,8 +594,9 @@ export const EventAdvanced = () => {
               </button>
             </div>}
         </div>
+      </div>
 
-        {/* Offer seats */}
+      <div className="border border-border rounded-lg p-6 space-y-6">
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex-1">
@@ -609,7 +616,7 @@ export const EventAdvanced = () => {
             <Switch checked={settings.offerSeats} onCheckedChange={value => handleToggle('offerSeats', value)} className="mx-[18px]" />
           </div>
           
-          {settings.offerSeats && <div className="ml-4 space-y-4">
+          {settings.offerSeats && <div className="space-y-4">
               <div className="flex items-center space-x-4">
                 <input type="number" value={settings.seats} onChange={e => setSettings(prev => ({
               ...prev,
@@ -645,7 +652,9 @@ export const EventAdvanced = () => {
               </div>
             </div>}
         </div>
+      </div>
 
+      <div className="border border-border rounded-lg p-6 space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
             <h3 className="font-medium" style={{
@@ -663,8 +672,9 @@ export const EventAdvanced = () => {
           </div>
           <Switch checked={settings.lockTimezoneOnBooking} onCheckedChange={value => handleToggle('lockTimezoneOnBooking', value)} className="mx-[18px]" />
         </div>
+      </div>
 
-        {/* Event type color */}
+      <div className="border border-border rounded-lg p-6 space-y-6">
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex-1">
@@ -684,7 +694,7 @@ export const EventAdvanced = () => {
             <Switch checked={settings.eventTypeColor} onCheckedChange={value => handleToggle('eventTypeColor', value)} className="mx-[18px]" />
           </div>
           
-          {settings.eventTypeColor && <div className="ml-4 space-y-6 p-4 bg-gray-50 rounded-lg">
+          {settings.eventTypeColor && <div className="space-y-6">
               <div>
                 <label className="block mb-3 font-medium" style={{
               fontSize: '14px',
@@ -696,7 +706,7 @@ export const EventAdvanced = () => {
                   <input type="color" value={`#${settings.lightThemeColor}`} onChange={e => setSettings(prev => ({
                 ...prev,
                 lightThemeColor: e.target.value.slice(1)
-              }))} className="w-12 h-10 border border-gray-300 rounded cursor-pointer" />
+              }))} className="w-10 h-10 border border-gray-300 rounded cursor-pointer" />
                   <input type="text" value={settings.lightThemeColor} onChange={e => setSettings(prev => ({
                 ...prev,
                 lightThemeColor: e.target.value.replace('#', '')
@@ -716,7 +726,7 @@ export const EventAdvanced = () => {
                   <input type="color" value={`#${settings.darkThemeColor}`} onChange={e => setSettings(prev => ({
                 ...prev,
                 darkThemeColor: e.target.value.slice(1)
-              }))} className="w-12 h-10 border border-gray-300 rounded cursor-pointer" />
+              }))} className="w-10 h-10 border border-gray-300 rounded cursor-pointer" />
                   <input type="text" value={settings.darkThemeColor} onChange={e => setSettings(prev => ({
                 ...prev,
                 darkThemeColor: e.target.value.replace('#', '')
