@@ -255,6 +255,9 @@ export const WorkflowBuilder = () => {
   };
 
   const getActionDisplayName = (type: string) => {
+    if (!type) {
+      return 'Send email to attendees';
+    }
     const option = actionOptions.find(opt => opt.value === type);
     return option ? option.label : type;
   };
