@@ -6,7 +6,6 @@ import { CreateWorkflowModal } from '@/components/CreateWorkflowModal';
 import { HeaderMeta } from '@/components/Layout';
 import { Switch } from '@/components/ui/switch';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-
 interface WorkflowCardProps {
   workflow: any;
   onEdit: (workflowId: string) => void;
@@ -16,7 +15,6 @@ interface WorkflowCardProps {
   onCopyLink: (workflowId: string) => void;
   copiedLink: string | null;
 }
-
 const WorkflowCard: React.FC<WorkflowCardProps> = ({
   workflow,
   onEdit,
@@ -26,17 +24,13 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
   onCopyLink,
   copiedLink
 }) => {
-  return (
-    <div className="bg-card border border-border rounded-lg p-6 hover:border-border/60 transition-all hover:shadow-sm">
+  return <div className="bg-card border border-border rounded-lg p-6 hover:border-border/60 transition-all hover:shadow-sm">
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="font-semibold text-foreground text-lg">{workflow.title}</h3>
+            <h3 className="font-semibold text-foreground text-base">{workflow.title}</h3>
             <div className="flex items-center space-x-2">
-              <Switch
-                checked={workflow.enabled}
-                onCheckedChange={(checked) => onToggle(workflow.id, checked)}
-              />
+              <Switch checked={workflow.enabled} onCheckedChange={checked => onToggle(workflow.id, checked)} />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="p-2">
@@ -69,20 +63,20 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
             <span className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded">
               {workflow.eventTypeInfo}
             </span>
-            {workflow.enabled && (
-              <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
+            {workflow.enabled && <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs rounded">
                 Active
-              </span>
-            )}
+              </span>}
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export const Workflows = () => {
-  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
+  const {
+    setHeaderMeta
+  } = useOutletContext<{
+    setHeaderMeta: (meta: HeaderMeta) => void;
+  }>();
   const navigate = useNavigate();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showTeamDropdown, setShowTeamDropdown] = useState(false);
@@ -90,7 +84,6 @@ export const Workflows = () => {
   const [workflows, setWorkflows] = useState<any[]>([]);
   const [teams, setTeams] = useState<any[]>([]);
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
-
   React.useEffect(() => {
     setHeaderMeta({
       title: 'Workflows',
@@ -107,7 +100,6 @@ export const Workflows = () => {
     };
     const savedTeams = localStorage.getItem('teams');
     const loadedTeams = savedTeams ? JSON.parse(savedTeams) : [];
-
     const exampleTeams = [{
       id: 'team1',
       name: 'Marketing Team',
@@ -172,26 +164,22 @@ export const Workflows = () => {
     }];
     setWorkflows(sampleWorkflows);
   }, []);
-
   const handleCreateWorkflow = () => {
     navigate('/workflows/templates');
   };
-
   const handleWorkflowModalContinue = () => {
     setShowCreateModal(false);
     navigate('/workflows/new');
   };
-
   const handleWorkflowEdit = (workflowId: string) => {
     navigate(`/workflows/${workflowId}/edit`);
   };
-
   const handleWorkflowToggle = (workflowId: string, enabled: boolean) => {
-    setWorkflows(prev => prev.map(workflow => 
-      workflow.id === workflowId ? { ...workflow, enabled } : workflow
-    ));
+    setWorkflows(prev => prev.map(workflow => workflow.id === workflowId ? {
+      ...workflow,
+      enabled
+    } : workflow));
   };
-
   const handleWorkflowDuplicate = (workflowId: string) => {
     const workflowToDuplicate = workflows.find(w => w.id === workflowId);
     if (workflowToDuplicate) {
@@ -205,17 +193,14 @@ export const Workflows = () => {
       setWorkflows(prev => [...prev, duplicatedWorkflow]);
     }
   };
-
   const handleWorkflowDelete = (workflowId: string) => {
     setWorkflows(prev => prev.filter(workflow => workflow.id !== workflowId));
   };
-
   const handleCopyLink = (workflowId: string) => {
     navigator.clipboard.writeText(`https://cal.id/workflows/${workflowId}`);
     setCopiedLink(workflowId);
     setTimeout(() => setCopiedLink(null), 2000);
   };
-
   const getFilteredTeams = () => {
     const allOption = {
       id: 'all',
@@ -229,52 +214,35 @@ export const Workflows = () => {
     }));
     return [allOption, ...teamOptions];
   };
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <div className="p-8">
-        {workflows.length === 0 ? (
-          // Empty state
-          <div className="max-w-full mx-auto">
+        {workflows.length === 0 ?
+      // Empty state
+      <div className="max-w-full mx-auto">
             {/* Teams Filter Dropdown */}
             <div className="mb-8">
               <div className="relative inline-block">
-                <button 
-                  onClick={() => setShowTeamDropdown(!showTeamDropdown)} 
-                  className="flex items-center space-x-2 px-3 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm"
-                >
+                <button onClick={() => setShowTeamDropdown(!showTeamDropdown)} className="flex items-center space-x-2 px-3 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm">
                   <span>Teams: All</span>
                   <ChevronDown className="h-4 w-4" />
                 </button>
 
-                {showTeamDropdown && (
-                  <div className="absolute top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-10">
+                {showTeamDropdown && <div className="absolute top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-10">
                     <div className="py-2">
-                      {getFilteredTeams().map(team => (
-                        <button 
-                          key={team.id} 
-                          onClick={() => {
-                            setSelectedTeamFilter(team.id);
-                            setShowTeamDropdown(false);
-                          }} 
-                          className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-muted transition-colors"
-                        >
+                      {getFilteredTeams().map(team => <button key={team.id} onClick={() => {
+                  setSelectedTeamFilter(team.id);
+                  setShowTeamDropdown(false);
+                }} className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-muted transition-colors">
                           <div className="flex items-center">
-                            {team.id === 'all' ? (
-                              <div className="h-5 w-5 mr-2" />
-                            ) : (
-                              <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium mr-2">
+                            {team.id === 'all' ? <div className="h-5 w-5 mr-2" /> : <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium mr-2">
                                 {team.avatar}
-                              </div>
-                            )}
+                              </div>}
                             <span>{team.name}</span>
                           </div>
                           {team.checked && <div className="h-2 w-2 bg-primary rounded-full" />}
-                        </button>
-                      ))}
+                        </button>)}
                     </div>
-                  </div>
-                )}
+                  </div>}
               </div>
             </div>
 
@@ -294,49 +262,33 @@ export const Workflows = () => {
                 Create Workflow
               </Button>
             </div>
-          </div>
-        ) : (
-          // Workflows display
-          <div className="pb-6 space-y-4 w-full max-w-full">
+          </div> :
+      // Workflows display
+      <div className="pb-6 space-y-4 w-full max-w-full">
             {/* Teams Filter and New Button */}
             <div className="flex items-center justify-between mb-8">
               <div className="relative">
-                <button 
-                  onClick={() => setShowTeamDropdown(!showTeamDropdown)} 
-                  className="flex items-center space-x-2 px-3 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm"
-                >
+                <button onClick={() => setShowTeamDropdown(!showTeamDropdown)} className="flex items-center space-x-2 px-3 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm">
                   <span>Teams: All</span>
                   <ChevronDown className="h-4 w-4" />
                 </button>
 
-                {showTeamDropdown && (
-                  <div className="absolute top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-10">
+                {showTeamDropdown && <div className="absolute top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-10">
                     <div className="py-2">
-                      {getFilteredTeams().map(team => (
-                        <button 
-                          key={team.id} 
-                          onClick={() => {
-                            setSelectedTeamFilter(team.id);
-                            setShowTeamDropdown(false);
-                          }} 
-                          className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-muted transition-colors"
-                        >
+                      {getFilteredTeams().map(team => <button key={team.id} onClick={() => {
+                  setSelectedTeamFilter(team.id);
+                  setShowTeamDropdown(false);
+                }} className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-muted transition-colors">
                           <div className="flex items-center">
-                            {team.id === 'all' ? (
-                              <div className="h-5 w-5 mr-2" />
-                            ) : (
-                              <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium mr-2">
+                            {team.id === 'all' ? <div className="h-5 w-5 mr-2" /> : <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium mr-2">
                                 {team.avatar}
-                              </div>
-                            )}
+                              </div>}
                             <span>{team.name}</span>
                           </div>
                           {team.checked && <div className="h-2 w-2 bg-primary rounded-full" />}
-                        </button>
-                      ))}
+                        </button>)}
                     </div>
-                  </div>
-                )}
+                  </div>}
               </div>
 
               <Button onClick={handleCreateWorkflow}>
@@ -347,29 +299,12 @@ export const Workflows = () => {
 
             {/* Workflows List - Single Column */}
             <div className="space-y-4">
-              {workflows.map(workflow => (
-                <WorkflowCard 
-                  key={workflow.id} 
-                  workflow={workflow} 
-                  onEdit={handleWorkflowEdit} 
-                  onToggle={handleWorkflowToggle} 
-                  onDuplicate={handleWorkflowDuplicate} 
-                  onDelete={handleWorkflowDelete} 
-                  onCopyLink={handleCopyLink}
-                  copiedLink={copiedLink}
-                />
-              ))}
+              {workflows.map(workflow => <WorkflowCard key={workflow.id} workflow={workflow} onEdit={handleWorkflowEdit} onToggle={handleWorkflowToggle} onDuplicate={handleWorkflowDuplicate} onDelete={handleWorkflowDelete} onCopyLink={handleCopyLink} copiedLink={copiedLink} />)}
             </div>
-          </div>
-        )}
+          </div>}
 
         {/* Create Workflow Modal */}
-        <CreateWorkflowModal
-          open={showCreateModal}
-          onOpenChange={setShowCreateModal}
-          onContinue={handleWorkflowModalContinue}
-        />
+        <CreateWorkflowModal open={showCreateModal} onOpenChange={setShowCreateModal} onContinue={handleWorkflowModalContinue} />
       </div>
-    </div>
-  );
+    </div>;
 };
