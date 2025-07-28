@@ -233,11 +233,11 @@ export const WorkflowBuilder = () => {
   };
 
   const isEmailAction = (type: string) => {
-    return type.includes('email');
+    return type && type.includes('email');
   };
 
   const isSMSAction = (type: string) => {
-    return type.includes('sms') || type.includes('whatsapp');
+    return type && (type.includes('sms') || type.includes('whatsapp'));
   };
 
   const getActionIcon = (type: string) => {
