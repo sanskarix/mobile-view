@@ -4,7 +4,7 @@ import { Button } from '../../components/ui/button';
 import { Checkbox } from '../../components/ui/checkbox';
 import { Plus } from 'lucide-react';
 
-export const ImportCalendly = () => {
+export const Import = () => {
   const [notifyBookers, setNotifyBookers] = useState(true);
 
   const handleNotifyBookersChange = (checked: boolean | "indeterminate") => {
@@ -17,12 +17,7 @@ export const ImportCalendly = () => {
 
   return (
     <div className="min-h-screen bg-background flex justify-center">
-      <div className="p-8 max-w-4xl w-full">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-semibold mb-2">Calendly</h1>
-          <p className="text-muted-foreground">Import configuration from third-party services</p>
-        </div>
-
+      <div className="px-8 py-6 w-full">
         <div className="border rounded-lg p-6 bg-card">
         <div className="space-y-6">
           <div className="border border-border rounded-lg p-4 bg-card">
@@ -36,7 +31,7 @@ export const ImportCalendly = () => {
           </div>
           
           <div className="text-center">
-            <Button onClick={handleImport} className="bg-blue-600 hover:bg-blue-700">
+            <Button onClick={handleImport}>
               <Plus className="h-4 w-4 mr-2" />
               Import
             </Button>

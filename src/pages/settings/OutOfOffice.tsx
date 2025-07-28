@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
@@ -9,8 +9,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Popover, PopoverContent, PopoverTrigger } from '../../components/ui/popover';
 import { Calendar } from '../../components/ui/calendar';
 import { Clock, Plus, Calendar as CalendarIcon, Search, Edit, Trash2 } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, set } from 'date-fns';
 import { cn } from '../../lib/utils';
+import { useOutletContext } from 'react-router-dom';
+import type { HeaderMeta } from  '../Settings';
+
 export const OutOfOffice = () => {
   const [showOOODialog, setShowOOODialog] = useState(false);
   const [dateRange, setDateRange] = useState<{
@@ -21,6 +24,7 @@ export const OutOfOffice = () => {
   const [notes, setNotes] = useState('');
   const [provideTeamMember, setProvideTeamMember] = useState(false);
   const [selectedTeamMember, setSelectedTeamMember] = useState('');
+  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
   const [oooSchedules, setOOOSchedules] = useState<Array<{
     id: string;
     dateRange: string;
@@ -89,16 +93,25 @@ export const OutOfOffice = () => {
   const handleDeleteOOO = (id: string) => {
     setOOOSchedules(oooSchedules.filter(schedule => schedule.id !== id));
   };
+
+  useEffect(() => {
+    setHeaderMeta({
+      title: 'Out of Office',
+      description: "Let your bookers know when you're OOO.",
+    });
+  }, [setHeaderMeta]);
+
   return <div className="min-h-screen bg-background flex justify-center">
-      <div className="p-8 max-w-4xl w-full">
-        <div className="mb-8 flex items-center justify-between">
-          <div className="text-center flex-1">
-            <h1 className="text-2xl font-semibold mb-2">Out of office</h1>
-            <p className="text-muted-foreground">Let your bookers know when you're OOO.</p>
-          </div>
+      <div className="px-8 py-6 w-full">
+        <div className='w-full flex justify-end mb-4'>
+          <Button onClick={setShowOOODialog.bind(null, true)}>
+            <Plus className="h-4 w-4"/>
+            Add
+          </Button>
+      </div>
+        <div className="flex items-center justify-between">
           <Dialog open={showOOODialog} onOpenChange={setShowOOODialog}>
             <DialogTrigger asChild>
-              
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
@@ -254,24 +267,6 @@ export const OutOfOffice = () => {
                   </div>
                 </div>
               </div>)}
-
-            {/* Vertical dotted line */}
-            <div className="flex justify-center my-6">
-              <div className="h-16 border-l-2 border-dashed border-muted-foreground/30"></div>
-            </div>
-
-            {/* Add button below schedules */}
-            <div className="text-center">
-              <Dialog open={showOOODialog} onOpenChange={setShowOOODialog}>
-                <DialogTrigger asChild>
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add
-                  </Button>
-                </DialogTrigger>
-                {/* Dialog content same as above */}
-              </Dialog>
-            </div>
           </div> : <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-6">
               <Clock className="h-10 w-10 text-muted-foreground" />
@@ -283,16 +278,6 @@ export const OutOfOffice = () => {
               Communicate to your bookers when you're not available to take bookings. 
               They can still book you upon your return or you can forward them to a team member.
             </p>
-
-            <Dialog open={showOOODialog} onOpenChange={setShowOOODialog}>
-              <DialogTrigger asChild>
-                <Button className="bg-blue-600 hover:bg-blue-700">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add
-                </Button>
-              </DialogTrigger>
-              {/* Dialog content same as above */}
-            </Dialog>
           </div>}
         </div>
       </div>

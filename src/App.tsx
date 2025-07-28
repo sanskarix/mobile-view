@@ -11,7 +11,7 @@ import { Calendars } from "./pages/settings/Calendars";
 import { Conferencing } from "./pages/settings/Conferencing";
 import { Appearance } from "./pages/settings/Appearance";
 import { OutOfOffice } from "./pages/settings/OutOfOffice";
-import { ImportCalendly } from "./pages/settings/ImportCalendly";
+import { Import} from "./pages/settings/Import";
 import { Webhooks } from "./pages/settings/Webhooks";
 import { ApiKeys } from "./pages/settings/ApiKeys";
 import { EventTypes } from "./pages/EventTypes";
@@ -77,7 +77,7 @@ const App = () => (
               <Route path="out-of-office" element={<OutOfOffice />} />
               <Route path="security/password" element={<Password />} />
               <Route path="security/impersonation" element={<Impersonation />} />
-              <Route path="import/calendly" element={<ImportCalendly />} />
+              <Route path="others/import" element={<Import />} />
               <Route path="developer/webhooks" element={<Webhooks />} />
               <Route path="developer/api-keys" element={<ApiKeys />} />
               <Route path="teams/new" element={<TeamNew />} />

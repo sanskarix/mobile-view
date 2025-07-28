@@ -30,8 +30,8 @@ export const Profile = () => {
 
   useEffect(() => {
     setHeaderMeta({
-      title: 'Profile Settings',
-      description: 'Manage your profile settings including personal information, email addresses and more.',
+      title: 'Profile',
+      description: 'Manage settings for your OneHash Cal profile.',
     });
   }, [setHeaderMeta]);
 
@@ -110,13 +110,8 @@ export const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex justify-center">
-      <div className="p-8 max-w-4xl w-full">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-semibold mb-2">Profile</h1>
-          <p className="text-muted-foreground">Manage settings for your Cal ID</p>
-        </div>
-
+    <div className="w-full min-h-screen bg-background flex justify-center">
+      <div className="px-8 py-6 w-full">
         <div className="space-y-8 mb-12">
           {/* Profile Information Section */}
           <div className="border rounded-lg p-6 bg-card space-y-8">
