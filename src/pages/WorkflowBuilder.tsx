@@ -74,8 +74,8 @@ export const WorkflowBuilder = () => {
   );
   const [isCentered, setIsCentered] = useState(!workflowName.trim());
 
-  const [actions, setActions] = useState(
-    editWorkflow?.actions || template?.actions || [{
+  const [actions, setActions] = useState(() => {
+    const loadedActions = editWorkflow?.actions || template?.actions || [{
       id: '1',
       type: 'email-attendees',
       expanded: true, // First action starts expanded
@@ -89,8 +89,14 @@ export const WorkflowBuilder = () => {
       verificationCode: '',
       senderId: '',
       textMessage: ''
-    }]
-  );
+    }];
+
+    // Ensure all actions have a valid type
+    return loadedActions.map(action => ({
+      ...action,
+      type: action.type || 'email-attendees'
+    }));
+  });
 
   const triggerOptions = [
     { value: 'new-booking', label: 'When new event is booked' },
