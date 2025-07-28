@@ -294,7 +294,7 @@ export const WorkflowBuilder = () => {
                   
                   <Select value={trigger} onValueChange={setTrigger}>
                     <SelectTrigger className="mt-2">
-                      <SelectValue placeholder="Select trigger..." />
+                      <SelectValue placeholder="Select an occurrence" />
                     </SelectTrigger>
                     <SelectContent>
                       {triggerOptions.map(option => <SelectItem key={option.value} value={option.value}>
