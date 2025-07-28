@@ -342,9 +342,7 @@ export const WorkflowBuilder = () => {
                       
                     </div>
 
-                    {(triggerTiming === 'immediately' || triggerTiming === 'custom' && customTime) && <div className="p-4 bg-muted/50 rounded-lg">
-                        <span className="text-sm font-medium">{getTriggerText()}</span>
-                      </div>}
+                    {triggerTiming === 'immediately' || triggerTiming === 'custom' && customTime}
                   </div>}
               </CardContent>
             </Card>
