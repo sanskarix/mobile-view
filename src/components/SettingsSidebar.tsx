@@ -117,20 +117,20 @@ export const SettingsSidebar = () => {
             )}
             <div className="space-y-1">
               {section.items.map((item) => (
-                <NavLink
-                  key={item.name}
-                  to={item.href}
-                  className={({ isActive }) =>
-                    `group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-                      isActive
-                        ? 'bg-primary text-primary-foreground shadow-sm'
-                        : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                    }`
-                  }
-                >
-                  <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
-                  {item.name}
-                </NavLink>
+                <NavLink 
+            key={item.name} 
+            to={item.href} 
+            className={({ isActive }) => 
+              `group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
+                isActive 
+                  ? 'bg-primary text-primary-foreground shadow-sm' 
+                  : 'text-muted-foreground hover:bg-[#CBD0D6] hover:text-[#001629]'
+              }`
+            }
+          >
+            <item.icon className="mr-3 h-5 w-5 flex-shrink-0" />
+            {item.name}
+          </NavLink>
               ))}
             </div>
           </div>

@@ -110,7 +110,7 @@ export const Profile = () => {
 
         <div className="space-y-8 mb-12">
           {/* Profile Information Section */}
-          <div className="space-y-8">
+          <div className="border rounded-lg p-6 bg-card space-y-8">
             {/* Profile Picture */}
             <div className="space-y-4">
               <Label className="text-base font-medium">Profile Picture</Label>
