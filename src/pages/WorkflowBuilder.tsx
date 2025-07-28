@@ -496,7 +496,7 @@ export const WorkflowBuilder = () => {
                             </div>
                             {/* Action name as text in card view, dropdown in expanded view */}
                             {action.expanded ? (
-                              <Select value={action.type} onValueChange={value => updateAction(action.id, 'type', value)}>
+                              <Select value={action.type || 'email-attendees'} onValueChange={value => updateAction(action.id, 'type', value)}>
                                 <SelectTrigger className="w-64">
                                   <SelectValue />
                                 </SelectTrigger>
