@@ -83,7 +83,7 @@ export const EditRoutingForm = () => {
       identifier: '',
       type: 'short-text',
       required: false,
-      collapsed: true
+      collapsed: false
     };
     setFormFields(prev => [...prev, newField]);
   };
@@ -297,8 +297,8 @@ export const EditRoutingForm = () => {
             </div>
           </div>;
       case 'form':
-        return <div className="p-6 w-full">
-            <div className="px-8 pt-6 pb-6 space-y-4 w-full max-w-full ">
+        return <div className="w-full">
+            <div className="pt-6 pb-6 space-y-4 w-full max-w-full ">
               {formFields.length === 0 ? <div className="flex-1 flex items-center justify-center min-h-[600px]">
                   <div className="text-center space-y-4">
                     <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto">
@@ -335,6 +335,13 @@ export const EditRoutingForm = () => {
                         
                         <div className={`transition-all duration-200 ${field.collapsed ? 'max-h-0 overflow-hidden opacity-0' : 'max-h-none opacity-100'}`}>
                           {!field.collapsed && <div className="mt-4 space-y-4 animate-in slide-in-from-top-2">
+                            <div className="space-y-2">
+                                <Label>Label</Label>
+                                <Input value={field.identifier} onChange={e => handleUpdateField(field.id, {
+                          identifier: e.target.value
+                        })} placeholder="This is what your users would see." />
+                              </div>
+
                               <div className="space-y-2">
                                 <Label>Identifier</Label>
                                 <Input value={field.identifier} onChange={e => handleUpdateField(field.id, {
@@ -389,8 +396,8 @@ export const EditRoutingForm = () => {
             </div>
           </div>;
       case 'routing':
-        return <div className="p-6 w-full">
-            <div className="px-8 pt-6 pb-6 space-y-4 w-full max-w-full ">
+        return <div className="w-full">
+            <div className="py-6 space-y-4 w-full max-w-full ">
               <div className="bg-card border border-border rounded-lg p-6">
                 <div className="space-y-6">
                   <div className="space-y-4">
@@ -586,8 +593,7 @@ export const EditRoutingForm = () => {
             </div>
           </div>;
       case 'embed':
-        return <div className="p-6 w-full">
-            <div className="max-w-4xl mx-auto">
+        return <div className="w-full py-6">
               <div className="space-y-8">
                 {/* Embed Type Selection */}
                 <div className="flex gap-2 w-full">
@@ -595,13 +601,10 @@ export const EditRoutingForm = () => {
                     <span className="font-medium text-sm">Inline</span>
                   </button>
                   <button className="flex-1 px-6 py-3 border-2 rounded-lg text-center transition-all border-gray-200 hover:border-gray-300">
-                    <span className="font-medium text-sm">Floating Button</span>
+                    <span className="font-medium text-sm">Floating pop-up</span>
                   </button>
                   <button className="flex-1 px-6 py-3 border-2 rounded-lg text-center transition-all border-gray-200 hover:border-gray-300">
                     <span className="font-medium text-sm">Pop up</span>
-                  </button>
-                  <button className="flex-1 px-6 py-3 border-2 rounded-lg text-center transition-all border-gray-200 hover:border-gray-300">
-                    <span className="font-medium text-sm">Email</span>
                   </button>
                 </div>
 
@@ -610,10 +613,6 @@ export const EditRoutingForm = () => {
                   <div className="w-3/5">
                     <div className="overflow-x-auto">
                       <div className="p-4 bg-gray-50 rounded-lg">
-                        <p className="text-sm text-gray-600 mb-4">
-                          Embed the form directly into your webpage
-                        </p>
-                        
                         <div className="space-y-6">
                           <div className="space-y-4">
                             <div>
@@ -674,7 +673,6 @@ export const EditRoutingForm = () => {
                   <div className="w-2/5">
                     <div className="space-y-4">
                       <div>
-                        <h3 className="font-semibold mb-2">Preview</h3>
                         <div className="border rounded-lg p-4 bg-white">
                           <div className="w-full h-80 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
                             <div className="text-center">
@@ -706,7 +704,6 @@ export const EditRoutingForm = () => {
                   </div>
                 </div>
               </div>
-            </div>
           </div>;
       default:
         return null;

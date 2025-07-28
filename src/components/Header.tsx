@@ -100,11 +100,11 @@ export const Header = ({ metaData }: HeaderProps) => {
         <div className="flex items-center space-x-2 ml-auto">
           {metaData && metaData.enabled !== undefined && metaData.onEnabledChange && (
             <>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center jus">
                 <TooltipProvider delayDuration={0}>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <div>
+                      <div className='flex items-center'>
                         <Switch
                           checked={metaData.enabled}
                           onCheckedChange={metaData.onEnabledChange}
