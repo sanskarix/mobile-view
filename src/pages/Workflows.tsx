@@ -59,7 +59,6 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onClick={() => onEdit(workflow.id)}>
-                    <Edit className="h-4 w-4 mr-2" />
                     Edit
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => onDuplicate(workflow.id)}>
