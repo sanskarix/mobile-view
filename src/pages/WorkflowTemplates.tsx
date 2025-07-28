@@ -72,33 +72,6 @@ export const WorkflowTemplates = () => {
   return (
     <div className="p-8">
       <div className="space-y-4 w-full max-w-full">
-        <div className="flex justify-between">
-          <div className="flex items-center space-x-4">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate('/workflows')}
-              className="gap-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back
-            </Button>
-            <div>
-              <h1 className="text-2xl font-semibold">Choose a workflow template</h1>
-            </div>
-          </div>
-          <div className="">
-            <Button 
-              onClick={handleCreateCustomWorkflow}
-              className="gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              Build your own Workflow
-            </Button>
-          </div>
-
-        </div>
-        
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {workflowTemplates.map((template) => (
