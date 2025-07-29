@@ -78,7 +78,7 @@ const App = () => (
               <Route path="out-of-office" element={<OutOfOffice />} />
               <Route path="security/password" element={<Password />} />
               <Route path="security/impersonation" element={<Impersonation />} />
-              <Route path="others/import" element={<Import />} />
+              <Route path="others/import" element={<ImportCalendly />} />
               <Route path="developer/webhooks" element={<Webhooks />} />
               <Route path="developer/api-keys" element={<ApiKeys />} />
               <Route path="teams/new" element={<TeamNew />} />
