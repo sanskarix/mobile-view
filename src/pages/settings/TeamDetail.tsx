@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '../../components/ui/button';
-import { ArrowLeft, Users, Calendar, Palette, Clock, User } from 'lucide-react';
+import { ArrowLeft, Users, Calendar, Palette, Clock2, User } from 'lucide-react';
 
 export const TeamDetail = () => {
   const { teamId, section } = useParams();
@@ -34,7 +34,7 @@ export const TeamDetail = () => {
     { id: 'members', name: 'Members', icon: Users },
     { id: 'event-types', name: 'Event Types', icon: Calendar },
     { id: 'appearance', name: 'Appearance', icon: Palette },
-    { id: 'booking-limits', name: 'Booking Limits', icon: Clock },
+    { id: 'booking-limits', name: 'Booking Limits', icon: Clock2 },
   ];
 
   if (!team) {

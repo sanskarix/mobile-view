@@ -28,7 +28,7 @@ import {
   Edit, 
   Copy as CopyIcon, 
   Trash2, 
-  Clock, 
+  Clock2, 
   Copy, 
   GripVertical 
 } from 'lucide-react';
@@ -224,7 +224,7 @@ const DraggableEventCard: React.FC<DraggableEventCardProps> = ({
               <div className="flex items-center">
                 {event.durations?.map(duration => (
                   <span key={duration} className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded mr-2">
-                    <Clock className="h-3 w-3 mr-1" />
+                    <Clock2 className="h-3 w-3 mr-1" />
                     {duration}m
                   </span>
                 ))}
@@ -433,7 +433,7 @@ export const DraggableEventTypes: React.FC<DraggableEventTypesProps> = ({
                   <div className="flex items-center">
                     {activeEvent.durations?.map(duration => (
                       <span key={duration} className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded mr-2">
-                        <Clock className="h-3 w-3 mr-1" />
+                        <Clock2 className="h-3 w-3 mr-1" />
                         {duration}m
                       </span>
                     ))}
