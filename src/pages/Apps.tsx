@@ -160,7 +160,7 @@ export const Apps = () => {
   });
 
   const tabs = [
-    { id: 'store', label: 'Store' },
+    { id: 'all', label: 'All' },
     { id: 'installed', label: 'Installed' }
   ];
 
