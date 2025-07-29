@@ -869,9 +869,31 @@ export default function Bookings() {
           }, {
             value: 'canceled',
             label: 'Canceled'
-          }].map(tab => <button key={tab.value} onClick={() => setActiveTab(tab.value)} className={`px-4 py-2 text-sm font-medium transition-colors relative hover:before:content-[''] hover:before:absolute hover:before:bottom-0 hover:before:left-0 hover:before:w-full hover:before:h-0.5 hover:before:bg-gray-300 ${activeTab === tab.value ? 'text-foreground border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}>
-                {tab.label}
-              </button>)}
+            }].map(tab => <button
+              key={tab.value}
+              onClick={() => setActiveTab(tab.value)}
+              className={`px-6 py-4 text-sm font-medium transition-colors relative hover:before:content-[''] hover:before:absolute hover:before:bottom-0 hover:before:left-0 hover:before:w-full hover:before:h-0.5 hover:before:bg-gray-300 ${activeTab === tab.value ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              style={{
+                WebkitTextSizeAdjust: '100%',
+                tabSize: 4,
+                WebkitTapHighlightColor: 'transparent',
+                boxSizing: 'border-box',
+                WebkitAppearance: 'button',
+                backgroundColor: 'transparent',
+                backgroundImage: 'none',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                fontSize: '0.875rem',
+                lineHeight: '1.25rem',
+                fontWeight: 500,
+                transitionProperty: 'color, background-color, border-color, text-decoration-color, fill, stroke',
+                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                transitionDuration: '150ms',
+              }}
+            >
+              {tab.label}
+            </button>
           </div>
           
           {/* Action Buttons */}
