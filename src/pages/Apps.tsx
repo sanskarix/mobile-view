@@ -224,7 +224,7 @@ export const Apps = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="px-8 pt-3 pb-6 space-y-4 w-full max-w-full">
       {/* Tab Navigation */}
       <div className="">
         <div className="px-8">
