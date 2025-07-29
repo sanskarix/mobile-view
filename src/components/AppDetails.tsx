@@ -41,29 +41,11 @@ export const AppDetails: React.FC<AppDetailsProps> = ({
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Left Column - Product Images */}
-          <div className="space-y-4">
-            <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-              <img
-                src={productImages[0]}
-                alt={`${app.name} screenshot 1`}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-                <img
-                  src={productImages[1]}
-                  alt={`${app.name} screenshot 2`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-                <img
-                  src={productImages[0]}
-                  alt={`${app.name} screenshot 3`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+          <div className="bg-slate-100 border rounded-lg overflow-hidden p-3">
+            <div className="aspect-video bg-muted rounded-lg overflow-hidden" />
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="aspect-video bg-muted rounded-lg overflow-hidden" />
+              <div className="aspect-video bg-muted rounded-lg overflow-hidden" />
             </div>
           </div>
 
