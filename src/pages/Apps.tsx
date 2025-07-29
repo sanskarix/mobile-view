@@ -240,6 +240,9 @@ export const Apps = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="p-8">
+        {/* Header Section */}
+        <div className="text-center mb-8 space-y-4>
+        
           {/* Search Bar */}
           <div className="relative max-w-md mx-auto">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
