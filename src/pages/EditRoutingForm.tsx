@@ -400,7 +400,7 @@ export const EditRoutingForm = () => {
 
       case 'routing':
         return (
-          <div className="p-6 w-full">
+          <div className="w-full">
             <div className="px-8 pt-6 pb-6 space-y-4 w-full max-w-full">
               <div className="bg-card border border-border rounded-lg p-6">
                 <div className="space-y-6">
