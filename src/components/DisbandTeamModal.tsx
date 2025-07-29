@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Dialog, DialogContent } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
 import { AlertTriangle } from 'lucide-react';
 
