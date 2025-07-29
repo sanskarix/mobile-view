@@ -170,6 +170,7 @@ export const Apps = () => {
   const [showMoreOptions, setShowMoreOptions] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Integrations');
+  const [installedApps, setInstalledApps] = useState<App[]>([]);
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
     
   useEffect(() => {
@@ -226,6 +227,7 @@ export const Apps = () => {
             ))}
           </div>
         </div>
+      </div>
 
       <div className="">
         {/* Search Bar */}
@@ -266,7 +268,7 @@ export const Apps = () => {
 
           {/* Apps Grid */}
           <div className="flex-1">
-            {selectedTab === 'store' ? (
+            {selectedTab === 'all' ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {filteredStoreApps.map((app) => (
                   <div
@@ -308,7 +310,7 @@ export const Apps = () => {
                     <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <h3 className="text-lg font-semibold mb-2">No apps installed</h3>
                     <p className="text-muted-foreground">
-                      Browse the Store tab to install your first app.
+                      Browse the All tab to install your first app.
                     </p>
                   </div>
                 ) : (
