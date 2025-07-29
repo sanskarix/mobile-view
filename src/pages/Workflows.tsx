@@ -223,11 +223,13 @@ export const Workflows = () => {
     }));
     return [allOption, ...teamOptions];
   };
-  return <div className="min-h-screen bg-background">
-      <div className="p-8">
-        {workflows.length === 0 ?
-      // Empty state
-      <div className="max-w-full mx-auto">
+
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="px-8 py-6">
+        {workflows.length === 0 ? (
+          // Empty state
+          <div className="max-w-full mx-auto">
             {/* Teams Filter Dropdown */}
             <div className="mb-8">
               <div className="relative inline-block">
