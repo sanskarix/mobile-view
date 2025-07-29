@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
+import { Dialog, DialogContent } from './ui/dialog';
 import { Button } from './ui/button';
 import { AlertTriangle } from 'lucide-react';
 
@@ -14,9 +15,6 @@ export const DisbandTeamModal = ({ open, onClose, onConfirm, teamName }: Disband
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
-        <DialogHeader className="sr-only">
-          <DialogTitle>Disband Team</DialogTitle>
-        </DialogHeader>
         <div className="space-y-6">
           <div className="flex items-start space-x-4">
             <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">

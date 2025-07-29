@@ -11,7 +11,7 @@ import { Calendars } from "./pages/settings/Calendars";
 import { Conferencing } from "./pages/settings/Conferencing";
 import { Appearance } from "./pages/settings/Appearance";
 import { OutOfOffice } from "./pages/settings/OutOfOffice";
-import { ImportCalendly } from "./pages/settings/ImportCalendly";
+import { Import} from "./pages/settings/Import";
 import { Webhooks } from "./pages/settings/Webhooks";
 import { ApiKeys } from "./pages/settings/ApiKeys";
 import { EventTypes } from "./pages/EventTypes";
@@ -31,12 +31,12 @@ import { TeamAppearance } from "./pages/settings/teams/TeamAppearance";
 import { TeamBookingLimits } from "./pages/settings/teams/TeamBookingLimits";
 import SchedulingComingSoon from "./pages/SchedulingComingSoon";
 import { Teams } from "./pages/Teams";
-import { Apps } from "./pages/Apps";
 import { RoutingForms } from "./pages/RoutingForms";
 import { EditRoutingForm } from "./pages/EditRoutingForm";
 import { Workflows } from "./pages/Workflows";
 import { WorkflowTemplates } from "./pages/WorkflowTemplates";
 import { WorkflowBuilder } from "./pages/WorkflowBuilder";
+import { Apps } from "./pages/Apps";
 import Home from "./pages/Home";
 import { HeaderProvider } from "./contexts/HeaderContext";
 
@@ -78,7 +78,7 @@ const App = () => (
               <Route path="out-of-office" element={<OutOfOffice />} />
               <Route path="security/password" element={<Password />} />
               <Route path="security/impersonation" element={<Impersonation />} />
-              <Route path="others/import" element={<ImportCalendly />} />
+              <Route path="others/import" element={<Import />} />
               <Route path="developer/webhooks" element={<Webhooks />} />
               <Route path="developer/api-keys" element={<ApiKeys />} />
               <Route path="teams/new" element={<TeamNew />} />

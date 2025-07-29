@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
+import { Dialog, DialogContent } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -49,10 +50,10 @@ export const InviteTeamMemberModal = ({ open, onClose, onMemberAdded }: InviteTe
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-semibold mb-2">Invite team member</DialogTitle>
-        </DialogHeader>
         <div className="space-y-6">
+          <div>
+            <h2 className="text-xl font-semibold mb-2">Invite team member</h2>
+          </div>
 
           <div className="flex border rounded-lg p-1">
             <button
