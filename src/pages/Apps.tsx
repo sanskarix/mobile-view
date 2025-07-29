@@ -183,7 +183,13 @@ export const Apps = () => {
   }, [setHeaderMeta]);
 
   const handleInstallApp = (app: App) => {
-    setInstalledApps(prev => [...prev, { ...app, installed: true }]);
+    // Add a new install with unique timestamp to allow multiple installs
+    const newInstall = {
+      ...app,
+      installed: true,
+      installId: Date.now().toString() + Math.random().toString(36).substr(2, 9)
+    };
+    setInstalledApps(prev => [...prev, newInstall]);
   };
 
   const getInstalledCount = (appId: string) => {
