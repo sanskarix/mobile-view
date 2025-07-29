@@ -235,12 +235,10 @@ export const EditRoutingForm = () => {
             {/* Form Preview - Right Side */}
             <div className="w-1/2 pl-6">
               <div className="space-y-4">
-                <h3 className="font-semibold text-lg">Form Preview</h3>
                 <div className="border rounded-lg p-6 bg-white">
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-medium text-lg mb-2">{formName || 'Form Name'}</h4>
-                      <p className="text-muted-foreground text-sm">{formDescription || 'Form description will appear here'}</p>
+                      <h4 className="font-medium text-sm">Preview</h4>
                     </div>
 
                     {formFields.length > 0 ? (
