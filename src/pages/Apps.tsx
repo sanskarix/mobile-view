@@ -166,10 +166,11 @@ const InstalledAppCard: React.FC<InstalledAppCardProps> = ({ app, onDelete }) =>
 };
 
 export const Apps = () => {
-  const [selectedTab, setSelectedTab] = useState('all');
+  const [selectedTab, setSelectedTab] = useState('store');
   const [showMoreOptions, setShowMoreOptions] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Integrations');
+  const [installedApps, setInstalledApps] = useState<App[]>([]);
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
     
   useEffect(() => {
@@ -201,7 +202,7 @@ export const Apps = () => {
   });
 
   const tabs = [
-    { id: 'all', label: 'All' },
+    { id: 'store', label: 'Store' },
     { id: 'installed', label: 'Installed' }
   ];
 
@@ -210,37 +211,39 @@ export const Apps = () => {
       {/* Tab Navigation */}
       <div className="">
         <div className="">
-          <div className="flex items-center">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setSelectedTab(tab.id)}
-                className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
-                  selectedTab === tab.id
-                    ? 'border-primary text-primary'
-                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
+          <div className="flex items-center justify-between">
+            <div>
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setSelectedTab(tab.id)}
+                  className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+                    selectedTab === tab.id
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            <div>
+              <div className="relative w-80">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <input 
+                  type="text" 
+                  placeholder="Search integrations..." 
+                  value={searchQuery} 
+                  onChange={e => setSearchQuery(e.target.value)} 
+                  className="w-full pl-10 pr-4 py-2 border border-border rounded-lg bg-background text-sm" 
+                />
+              </div>
+            </div>
           </div>
         </div>
+      </div>
 
       <div className="">
-        {/* Search Bar */}
-        <div className="mb-8">
-          <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search integrations..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-        </div>
-
         <div className="flex gap-8">
           {/* Sidebar Filters */}
           <div className="w-64 flex-shrink-0 space-y-6">
@@ -326,7 +329,7 @@ export const Apps = () => {
             )}
           </div>
         </div>
-      </div>
+        </div>
     </div>
   );
 };
