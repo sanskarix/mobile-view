@@ -72,10 +72,10 @@ export const AppDetails: React.FC<AppDetailsProps> = ({
             {/* Install Status & Button */}
             <div className="mt-6">
               <button className="bg-slate-100 rounded border-transparent text-slate-600 text-xs font-medium gap-2 h-7 leading-5 whitespace-nowrap transition-colors border-8 mr-2 px-4">
-                <p>1 active install</p>
+                1 active install
               </button>
               <button className="bg-blue-600 rounded text-white text-sm font-medium gap-2 h-7 leading-5 whitespace-nowrap transition-colors border-transparent w-auto self-stretch px-8">
-                <p>Install Another</p>
+                Install Another
               </button>
             </div>
 
