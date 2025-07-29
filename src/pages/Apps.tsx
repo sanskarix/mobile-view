@@ -186,6 +186,10 @@ export const Apps = () => {
     setInstalledApps(prev => [...prev, { ...app, installed: true }]);
   };
 
+  const getInstalledCount = (appId: string) => {
+    return installedApps.filter(installed => installed.id === appId).length;
+  };
+
   const handleDeleteApp = (appId: string) => {
     setInstalledApps(prev => prev.filter(app => app.id !== appId));
   };
