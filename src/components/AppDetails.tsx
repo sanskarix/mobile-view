@@ -80,11 +80,16 @@ export const AppDetails: React.FC<AppDetailsProps> = ({
             </div>
 
             {/* Description */}
-            <div>
-              <p className="text-foreground leading-relaxed">
-                {app.description}
-              </p>
-            </div>
+            <p className="leading-relaxed text-xs mt-3 text-gray-700">
+              <div>
+                Google Calendar is a time management and scheduling
+                service developed by Google. Allows users to create
+                and edit events, with options available for type and
+                time. Available to anyone that has a Gmail account
+                on both mobile and web versions.
+              </div>
+            </p>
+            <div className="mt-6" />
 
             {/* How to Get Started */}
             <div>
