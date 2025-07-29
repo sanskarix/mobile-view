@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Plus, MoreHorizontal, Settings, Trash2, Search, ChevronDown } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../components/ui/dropdown-menu';
-import type { HeaderMeta } from '../components/Layout';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { HeaderMeta } from '@/components/Layout';
+import { Search, Zap, Settings, Trash2, Package } from 'lucide-react';
 
 interface App {
   id: string;
@@ -94,15 +94,91 @@ const availableApps: App[] = [
     logo: '⭐'
   },
   {
-    id: 'chartmogul',
-    name: 'ChartMogul',
-    category: 'Analytics',
-    description: 'Subscription analytics and metrics',
-    logo: '📊'
+    id: 'typeform',
+    name: 'Typeform',
+    description: 'Form builder',
+    icon: '📝',
+    category: 'productivity',
+    installed: false
+  },
+  {
+    id: 'linear',
+    name: 'Linear',
+    description: 'Issue tracking',
+    icon: '🎯',
+    category: 'productivity',
+    installed: true
+  },
+  {
+    id: 'figma',
+    name: 'Figma',
+    description: 'Design collaboration',
+    icon: '🎨',
+    category: 'productivity',
+    installed: true
+  },
+  {
+    id: 'github',
+    name: 'GitHub',
+    description: 'Code repository',
+    icon: '🐙',
+    category: 'productivity',
+    installed: false
+  },
+  {
+    id: 'asana',
+    name: 'Asana',
+    description: 'Project management',
+    icon: '✅',
+    category: 'productivity',
+    installed: false
   }
 ];
 
 const categories = ['All Integrations', 'Social', 'Analytics', 'Automation', 'Marketing', 'Development', 'Forms', 'Other'];
+
+interface InstalledAppCardProps {
+  app: App;
+  onDelete: (appId: string) => void;
+}
+
+const InstalledAppCard: React.FC<InstalledAppCardProps> = ({ app, onDelete }) => {
+  const [showOptions, setShowOptions] = useState(false);
+
+  return (
+    <div className="bg-card border border-border rounded-lg p-6 hover:border-border/60 transition-all hover:shadow-sm group">
+      <div className="flex flex-col items-center text-center space-y-4">
+        <div className="w-12 h-12 rounded-lg bg-muted/50 flex items-center justify-center text-2xl">
+          {app.icon}
+        </div>
+        <div className="space-y-2">
+          <h3 className="font-semibold text-sm">{app.name}</h3>
+          <p className="text-xs text-muted-foreground">{app.description}</p>
+        </div>
+        <div className="w-full space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full"
+            onClick={() => console.log(`App settings for ${app.name}`)}
+          >
+            <Settings className="h-3 w-3 mr-1" />
+            App settings
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full text-destructive hover:text-destructive"
+            onClick={() => onDelete(app.id)}
+          >
+            <Trash2 className="h-3 w-3 mr-1" />
+            Delete App
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const Apps = () => {
   const [selectedTab, setSelectedTab] = useState('store');
@@ -128,7 +204,15 @@ export const Apps = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Integrations');
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
-  
+  const [selectedTab, setSelectedTab] = useState('store');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [sortBy, setSortBy] = useState('featured');
+  const [appList, setAppList] = useState<App[]>(apps);
+  const [installedApps, setInstalledApps] = useState<App[]>(
+    apps.filter(app => app.installed)
+  );
+    
   useEffect(() => {
     setHeaderMeta({
       title: 'Apps',
@@ -136,15 +220,44 @@ export const Apps = () => {
     });
   }, [setHeaderMeta]);
 
-  const handleInstallApp = (app: App) => {
-    const newApp = { ...app, installed: true };
-    setInstalledApps(prev => [...prev, newApp]);
+  const handleToggleInstall = (appId: string) => {
+    setAppList(prev => prev.map(app => {
+      if (app.id === appId) {
+        const updatedApp = { ...app, installed: !app.installed };
+        // Update installed apps list
+        if (updatedApp.installed) {
+          setInstalledApps(prevInstalled => {
+            const exists = prevInstalled.find(installedApp => installedApp.id === appId);
+            return exists ? prevInstalled : [...prevInstalled, updatedApp];
+          });
+        } else {
+          setInstalledApps(prevInstalled => prevInstalled.filter(installedApp => installedApp.id !== appId));
+        }
+        return updatedApp;
+      }
+      return app;
+    }));
   };
 
   const handleDeleteApp = (appId: string) => {
+    setAppList(prev => prev.map(app =>
+      app.id === appId ? { ...app, installed: false } : app
+    ));
     setInstalledApps(prev => prev.filter(app => app.id !== appId));
-    setShowMoreOptions(null);
   };
+
+  const getFilteredApps = () => {
+    const sourceApps = selectedTab === 'store' ? appList : installedApps;
+    return sourceApps.filter(app => {
+      const matchesSearch = app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           app.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === 'all' || app.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  };
+
+  const filteredApps = getFilteredApps();
+
 
   const handleAppSettings = (appId: string) => {
     console.log('Opening settings for app:', appId);
@@ -159,82 +272,84 @@ export const Apps = () => {
     return matchesSearch && matchesCategory && notInstalled;
   });
 
+  // Get available categories for installed apps
+  const getAvailableCategories = () => {
+    if (selectedTab === 'store') {
+      return appCategories;
+    }
+
+    const installedCategories = [...new Set(installedApps.map(app => app.category))];
+    const availableCategories = appCategories.filter(category =>
+      category.id === 'all' || installedCategories.includes(category.id)
+    );
+    return availableCategories;
+  };
+
+  const availableCategories = getAvailableCategories();
+
   const tabs = [
     { id: 'store', label: 'Store' },
     { id: 'installed', label: 'Installed' }
   ];
 
   return (
-    <div className="px-8 pt-3 pb-6 space-y-6 w-full max-w-full">
-      <div className="flex items-center justify-between mb-6">
-        {/* Custom Tabs */}
-        <div className="flex">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setSelectedTab(tab.id)}
-              className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
-                selectedTab === tab.id
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+    <div className="min-h-screen bg-background">
+      {/* Tab Navigation */}
+      <div className="">
+        <div className="px-8">
+          <div className="flex items-center">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setSelectedTab(tab.id)}
+                className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+                  selectedTab === tab.id
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
-
-        {selectedTab === 'installed' && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors">
-                Categories
-                <ChevronDown className="h-4 w-4 ml-2" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              {categories.map((category) => (
-                <DropdownMenuItem
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={selectedCategory === category ? 'bg-muted' : ''}
-                >
-                  {category}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
       </div>
 
-      {/* Tab Content */}
-      <div className="space-y-6">
-        {selectedTab === 'store' && (
-          <div className="space-y-6">
-            {/* Header Section */}
-            <div className="text-center py-8">
-              <h2 className="text-2xl font-semibold mb-2">Ghost integrations.</h2>
-              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                All your favourite apps, plugins and tools, integrated with Ghost
-              </p>
-              
-              {/* Search */}
-              <div className="relative max-w-md mx-auto">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Search integrations..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 w-full"
-                />
-              </div>
-            </div>
+      <div className="p-8">
+        {/* Search Bar */}
+        <div className="mb-8">
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search integrations..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+        </div>
 
-            {/* Filter Info */}
-            {selectedCategory !== 'All Integrations' && (
-              <div className="text-sm text-muted-foreground">
-                Showing {selectedCategory} apps
+        <div className="flex gap-8">
+          {/* Sidebar Filters */}
+          <div className="w-64 flex-shrink-0 space-y-6">
+            {/* Sort By */}
+
+            {/* Filter By Category */}
+            <div>
+              <div className="space-y-2">
+                {availableCategories.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => setSelectedCategory(category.id)}
+                    className={`block w-full text-left text-sm py-1 px-3 rounded-md transition-all ${
+                      selectedCategory === category.id
+                      ? 'block w-full text-left text-sm py-1 px-3 rounded-md transition-all text-foreground font-medium bg-blue-50 text-blue-700 shadow-sm border-blue-200'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                    }`}
+                  >
+                    {category.name}
+                  </button>
+                ))}
               </div>
             )}
 
@@ -274,15 +389,33 @@ export const Apps = () => {
               ))}
             </div>
 
-            {filteredStoreApps.length === 0 && (
+          {/* Apps Grid */}
+          <div className="flex-1">
+            {selectedTab === 'installed' && installedApps.length === 0 ? (
               <div className="text-center py-12">
-                <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Search className="h-6 w-6 text-muted-foreground" />
-                </div>
-                <h3 className="font-medium mb-2">No apps found</h3>
-                <p className="text-muted-foreground text-sm">
-                  Try adjusting your search or category filter
+                <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">No apps installed</h3>
+                <p className="text-muted-foreground">
+                  Browse the Store tab to install your first app.
                 </p>
+              </div>
+            ) : sortedApps.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {sortedApps.map((app) => (
+                  selectedTab === 'store' ? (
+                    <AppCard
+                      key={app.id}
+                      app={app}
+                      onToggleInstall={handleToggleInstall}
+                    />
+                  ) : (
+                    <InstalledAppCard
+                      key={app.id}
+                      app={app}
+                      onDelete={handleDeleteApp}
+                    />
+                  )
+                ))}
               </div>
             )}
           </div>

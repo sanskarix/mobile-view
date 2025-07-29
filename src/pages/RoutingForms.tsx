@@ -248,7 +248,7 @@ export const RoutingForms = () => {
       // Forms display
       <div className="pb-6 space-y-4 w-full max-w-full">
             {/* Teams Filter and New Button */}
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-4">
               <div className="relative">
                 <button onClick={() => setShowTeamDropdown(!showTeamDropdown)} className="flex items-center space-x-2 px-3 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm">
                   <span>Teams: All</span>

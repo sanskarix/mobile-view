@@ -855,23 +855,29 @@ export default function Bookings() {
           {/* Tabs - with underline hover effect */}
           <div className="flex border-b border-border">
             {[{
-            value: 'upcoming',
-            label: 'Upcoming'
-          }, {
-            value: 'unconfirmed',
-            label: 'Unconfirmed'
-          }, {
-            value: 'recurring',
-            label: 'Recurring'
-          }, {
-            value: 'past',
-            label: 'Past'
-          }, {
-            value: 'canceled',
-            label: 'Canceled'
-          }].map(tab => <button key={tab.value} onClick={() => setActiveTab(tab.value)} className={`px-4 py-2 text-sm font-medium transition-colors relative hover:before:content-[''] hover:before:absolute hover:before:bottom-0 hover:before:left-0 hover:before:w-full hover:before:h-0.5 hover:before:bg-gray-300 ${activeTab === tab.value ? 'text-foreground border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}>
+              value: 'upcoming',
+              label: 'Upcoming'
+            }, {
+              value: 'unconfirmed',
+              label: 'Unconfirmed'
+            }, {
+              value: 'recurring',
+              label: 'Recurring'
+            }, {
+              value: 'past',
+              label: 'Past'
+            }, {
+              value: 'canceled',
+              label: 'Canceled'
+            }].map(tab => (
+              <button
+                key={tab.value}
+                onClick={() => setActiveTab(tab.value)}
+                className={`px-6 py-4 text-sm font-medium transition-colors relative hover:before:content-[''] hover:before:absolute hover:before:bottom-0 hover:before:left-0 hover:before:w-full hover:before:h-0.5 hover:before:bg-gray-300 ${activeTab === tab.value ? 'text-primary border-b-2 border-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              >
                 {tab.label}
-              </button>)}
+              </button>
+            ))}
           </div>
           
           {/* Action Buttons */}
