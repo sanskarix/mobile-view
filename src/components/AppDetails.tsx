@@ -53,17 +53,19 @@ export const AppDetails: React.FC<AppDetailsProps> = ({
           <div className="space-y-6">
             {/* App Header */}
             <div className="flex items-start gap-4">
-              <div className="w-16 h-16 bg-muted/50 rounded-lg flex items-center justify-center border border-border flex-shrink-0">
-                <span className="text-3xl">{app.logo}</span>
-              </div>
+              <div className="w-16 h-16 bg-muted/50 rounded-lg flex items-center justify-center border border-border flex-shrink-0" />
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-2xl font-bold">{app.name}</h1>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 text-sm font-medium rounded-full">
-                    {app.category}
-                  </span>
+                <div className="text-2xl font-normal leading-8 gap-3 mb-2">
+                  Google Calendar
                 </div>
-                <p className="text-muted-foreground">Published by Cal.com</p>
+                <div className="flex flex-row">
+                  <span className="px-1 py-0.5 bg-slate-100 text-gray-700 text-xs font-medium rounded border border-slate-100 self-stretch w-auto overflow-hidden">
+                    Social
+                  </span>
+                  <p className="text-slate-500 mt-0.5 text-xs">
+                    &nbsp;• Published by Cal.id
+                  </p>
+                </div>
               </div>
             </div>
 
