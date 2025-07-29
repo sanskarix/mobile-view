@@ -184,41 +184,58 @@ export const Apps = () => {
       <div className="">
         <div className="">
           <div className="flex items-center justify-between">
-            <div>
+            <div className="flex-1">
               {tabs.map(tab => <button key={tab.id} onClick={() => setSelectedTab(tab.id)} className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${selectedTab === tab.id ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'}`}>
                   {tab.label}
                 </button>)}
             </div>
-            <div>
-              <div className="relative w-80">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input type="text" placeholder="Search integrations..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-border rounded-lg bg-background text-sm" />
-              </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Horizontal Filters Section */}
+      <div className="">
+        <div className="flex items-center justify-between gap-4">
+          {/* Search Bar */}
+          <div className="relative w-80 flex-shrink-0">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <input 
+              type="text" 
+              placeholder="Search integrations..." 
+              value={searchQuery} 
+              onChange={e => setSearchQuery(e.target.value)} 
+              className="w-full pl-10 pr-4 py-2 border border-border rounded-lg bg-background text-sm" 
+            />
+          </div>
+          
+          {/* Horizontal Category Filters */}
+          <div className="w-1/2 overflow-x-auto">
+            <div className="flex gap-2 pb-2">
+              {categories.map(category => (
+                <button 
+                  key={category} 
+                  onClick={() => setSelectedCategory(category)} 
+                  className={`flex-shrink-0 px-4 py-2 text-sm rounded-full border transition-all ${
+                    selectedCategory === category 
+                      ? 'bg-primary text-primary-foreground border-primary' 
+                      : 'bg-background text-muted-foreground border-border hover:text-foreground hover:border-muted-foreground'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
       <div className="">
-        <div className="flex gap-4">
-          {/* Sidebar Filters */}
-          <div className="w-48 flex-shrink-0 space-y-6">
-            {/* Filter By Category */}
-            <div>
-              <div className="space-y-2">
-                {categories.map(category => <button key={category} onClick={() => setSelectedCategory(category)} className={`block w-full text-left text-sm py-1 px-3 rounded-md transition-all ${selectedCategory === category ? 'text-foreground font-medium bg-blue-50 text-blue-700 shadow-sm border-blue-200' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'}`}>
-                    {category}
-                  </button>)}
-              </div>
-            </div>
-          </div>
-
-          {/* Apps Grid */}
-          <div className="flex-1">
+        {/* Apps Grid */}
+        <div className="w-full">
             {selectedTab === 'store' ? <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {filteredStoreApps.map(app => {
               const isInstalled = installedApps.some(installed => installed.id === app.id);
-              return <div key={app.id} className="bg-card rounded-lg border border-border hover:shadow-md transition-all p-4 aspect-square flex flex-col relative">
+              return <div key={app.id} className="h-64 w-full bg-card rounded-lg border border-border hover:shadow-md transition-all p-4 aspect-square flex flex-col relative">
                       {/* Status Tags */}
                       <div className="absolute top-3 right-3 flex gap-1">
                         {isInstalled && <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">
@@ -264,9 +281,8 @@ export const Apps = () => {
                     {installedApps.map(app => <InstalledAppCard key={app.id} app={app} onDelete={handleDeleteApp} />)}
                   </div>}
               </div>}
-          </div>
         </div>
-        </div>
+      </div>
     </div>;
 
   // Show AppDetails if an app is selected
