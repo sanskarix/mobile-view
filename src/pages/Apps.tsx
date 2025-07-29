@@ -4,6 +4,7 @@ import { useOutletContext } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { HeaderMeta } from '@/components/Layout';
+import { AppDetails } from '@/components/AppDetails';
 
 interface App {
   id: string;
@@ -12,6 +13,7 @@ interface App {
   description: string;
   logo: string;
   installed?: boolean;
+  installId?: string;
 }
 
 const availableApps: App[] = [
@@ -171,6 +173,7 @@ export const Apps = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Integrations');
   const [installedApps, setInstalledApps] = useState<App[]>([]);
+  const [selectedApp, setSelectedApp] = useState<App | null>(null);
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
     
   useEffect(() => {
@@ -181,7 +184,17 @@ export const Apps = () => {
   }, [setHeaderMeta]);
 
   const handleInstallApp = (app: App) => {
-    setInstalledApps(prev => [...prev, { ...app, installed: true }]);
+    // Add a new install with unique timestamp to allow multiple installs
+    const newInstall = {
+      ...app,
+      installed: true,
+      installId: Date.now().toString() + Math.random().toString(36).substr(2, 9)
+    };
+    setInstalledApps(prev => [...prev, newInstall]);
+  };
+
+  const getInstalledCount = (appId: string) => {
+    return installedApps.filter(installed => installed.id === appId).length;
   };
 
   const handleDeleteApp = (appId: string) => {
@@ -197,8 +210,7 @@ export const Apps = () => {
     const matchesSearch = app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          app.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'All Integrations' || app.category === selectedCategory;
-    const notInstalled = !installedApps.some(installed => installed.id === app.id);
-    return matchesSearch && matchesCategory && notInstalled;
+    return matchesSearch && matchesCategory;
   });
 
   const tabs = [
@@ -206,7 +218,7 @@ export const Apps = () => {
     { id: 'installed', label: 'Installed' }
   ];
 
-  return (
+  const mainContent = (
     <div className="px-8 pt-0 pb-6 space-y-4 w-full max-w-full">
       {/* Tab Navigation */}
       <div className="">
@@ -269,40 +281,61 @@ export const Apps = () => {
 
           {/* Apps Grid */}
           <div className="flex-1">
-            {selectedTab === 'store' ? (
+            {selectedTab === 'all' ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {filteredStoreApps.map((app) => (
-                  <div
-                    key={app.id}
-                    className="bg-card rounded-lg border border-border hover:shadow-md transition-all p-4"
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="w-12 h-12 bg-muted/50 rounded-lg flex items-center justify-center border border-border">
-                        <span className="text-xl">{app.logo}</span>
-                      </div>
-                      <Button
-                        onClick={() => handleInstallApp(app)}
-                        size="sm"
-                        className="flex items-center px-3 py-1.5 text-xs"
-                      >
-                        <Plus className="h-3 w-3 mr-1" />
-                        Add
-                      </Button>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-2">
-                        <h4 className="font-medium text-sm">{app.name}</h4>
-                        <span className="px-2 py-0.5 bg-muted text-muted-foreground rounded-full text-xs font-medium">
-                          {app.category}
+                {filteredStoreApps.map((app) => {
+                  const isInstalled = installedApps.some(installed => installed.id === app.id);
+                  return (
+                    <div
+                      key={app.id}
+                      className="bg-card rounded-lg border border-border hover:shadow-md transition-all p-4 aspect-square flex flex-col relative"
+                    >
+                      {/* Status Tags */}
+                      <div className="absolute top-3 right-3 flex gap-1">
+                        {isInstalled && (
+                          <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">
+                            installed
+                          </span>
+                        )}
+                        <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded">
+                          default
                         </span>
                       </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2">
-                        {app.description}
-                      </p>
+
+                      {/* Left-aligned content */}
+                      <div className="flex-1 flex flex-col justify-start text-left space-y-3">
+                        <div className="w-12 h-12 bg-muted/50 rounded-lg flex items-center justify-center border border-border">
+                          <span className="text-2xl">{app.logo}</span>
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-base">{app.name}</h4>
+                          <p className="text-sm text-muted-foreground line-clamp-3">
+                            {app.description}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Side by side buttons */}
+                      <div className="flex gap-2 mt-4">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => setSelectedApp(app)}
+                        >
+                          Details
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => handleInstallApp(app)}
+                        >
+                          Install
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="space-y-4">
@@ -311,7 +344,7 @@ export const Apps = () => {
                     <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <h3 className="text-lg font-semibold mb-2">No apps installed</h3>
                     <p className="text-muted-foreground">
-                      Browse the Store tab to install your first app.
+                      Browse the All tab to install your first app.
                     </p>
                   </div>
                 ) : (
@@ -332,4 +365,19 @@ export const Apps = () => {
         </div>
     </div>
   );
+
+  // Show AppDetails if an app is selected
+  if (selectedApp) {
+    return (
+      <AppDetails
+        app={selectedApp}
+        isInstalled={installedApps.some(installed => installed.id === selectedApp.id)}
+        installedCount={getInstalledCount(selectedApp.id)}
+        onBack={() => setSelectedApp(null)}
+        onInstall={() => handleInstallApp(selectedApp)}
+      />
+    );
+  }
+
+  return mainContent;
 };
