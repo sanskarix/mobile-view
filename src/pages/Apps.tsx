@@ -184,7 +184,7 @@ export const Apps = () => {
           ))}
         </div>
 
-        {selectedTab === 'installed' && (
+        {selectedTab === 'all' && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors">
