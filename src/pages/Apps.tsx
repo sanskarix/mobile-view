@@ -246,7 +246,7 @@ export const Apps = () => {
         </div>
       </div>
 
-      <div className="p-8">
+      <div className="">
         {/* Search Bar */}
         <div className="mb-8">
           <div className="relative max-w-md">
