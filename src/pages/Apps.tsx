@@ -446,7 +446,7 @@ export const Apps = () => {
                     onClick={() => setSelectedCategory(category.id)}
                     className={`block w-full text-left text-sm py-1 px-3 rounded-md transition-all ${
                       selectedCategory === category.id
-                        ? 'text-foreground font-medium bg-blue-50 text-blue-700 shadow-sm border border-blue-200'
+                      ? 'block w-full text-left text-sm py-1 px-3 rounded-md transition-all text-foreground font-medium bg-blue-50 text-blue-700 shadow-sm border-blue-200'
                         : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                     }`}
                   >
