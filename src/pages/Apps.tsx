@@ -20,7 +20,7 @@ const availableApps: App[] = [
     id: 'instagram',
     name: 'Instagram',
     category: 'Social',
-    description: 'Connect your Instagram account for social media management',
+    description: 'Connect your favourite apps, plugins and tools',
     logo: '📷'
   },
   {
