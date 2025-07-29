@@ -86,7 +86,7 @@ export const EditRoutingForm = () => {
       identifier: '',
       type: 'short-text',
       required: false,
-      collapsed: true
+      collapsed: false
     };
     setFormFields(prev => [...prev, newField]);
   };
@@ -169,14 +169,14 @@ export const EditRoutingForm = () => {
   ];
 
   const handleReporting = () => {
-    navigate('/apps');
+    // TODO: redirect to reporting page
   };
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'setup':
         return (
-          <div className="flex w-full py-6">
+          <div className="flex w-full px-8 py-6">
             {/* Form Setup - Left Side */}
             <div className="w-1/2 py-6 border rounded-lg p-6">
               <div className="space-y-4">
@@ -233,7 +233,7 @@ export const EditRoutingForm = () => {
             </div>
 
             {/* Form Preview - Right Side */}
-            <div className="w-1/2 p-6">
+            <div className="w-1/2 pl-6">
               <div className="space-y-4">
                 <h3 className="font-semibold text-lg">Form Preview</h3>
                 <div className="border rounded-lg p-6 bg-white">
@@ -282,7 +282,7 @@ export const EditRoutingForm = () => {
       case 'form':
         return (
           <div className="w-full">
-            <div className="px-8 pt-6 pb-6 space-y-4 w-full max-w-full">
+            <div className="px-8 py-6 space-y-4 w-full max-w-full">
               {formFields.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center min-h-[600px]">
                   <div className="text-center space-y-4">
@@ -332,11 +332,20 @@ export const EditRoutingForm = () => {
                           {!field.collapsed && (
                             <div className="mt-4 space-y-4 animate-in slide-in-from-top-2">
                               <div className="space-y-2">
+                                <Label>Label</Label>
+                                <Input
+                                  value={field.identifier}
+                                  onChange={e => handleUpdateField(field.id, { identifier: e.target.value })}
+                                  placeholder="This is what your users would see"
+                                />
+                              </div>
+
+                              <div className="space-y-2">
                                 <Label>Identifier</Label>
                                 <Input
                                   value={field.identifier}
                                   onChange={e => handleUpdateField(field.id, { identifier: e.target.value })}
-                                  placeholder="Identifies field by this name."
+                                  placeholder="Identifies field by this name"
                                 />
                               </div>
 
@@ -401,7 +410,7 @@ export const EditRoutingForm = () => {
       case 'routing':
         return (
           <div className="w-full">
-            <div className="px-8 pt-6 pb-6 space-y-4 w-full max-w-full">
+            <div className="px-8 py-6 space-y-4 w-full max-w-full">
               <div className="bg-card border border-border rounded-lg p-6">
                 <div className="space-y-6">
                   <div className="space-y-4">
@@ -656,7 +665,9 @@ export const EditRoutingForm = () => {
         );
 
       case 'embed':
-        return <EventEmbed />;
+        return <div className='px-8 py-6 space-y-4 w-full max-w-full'>
+          <EventEmbed />
+          </div>;
 
       default:
         return null;
@@ -664,9 +675,9 @@ export const EditRoutingForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background px-8 py-6">
+    <div className="min-h-screen bg-background">
       {/* Navigation Tabs */}
-      <div className="border-b border-border">
+      <div className="border-b border-border px-8">
         <div className="flex space-x-0">
           <button
             onClick={() => setActiveTab('setup')}
@@ -674,7 +685,7 @@ export const EditRoutingForm = () => {
               }`}
           >
             <div className="flex items-center space-x-2">
-              <span>Form Setup</span>
+              <span>Details</span>
             </div>
           </button>
           <button
