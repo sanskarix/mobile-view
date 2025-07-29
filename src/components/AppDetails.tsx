@@ -9,6 +9,7 @@ interface App {
   description: string;
   logo: string;
   installed?: boolean;
+  installId?: string;
 }
 
 interface AppDetailsProps {
