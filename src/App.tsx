@@ -31,6 +31,7 @@ import { TeamAppearance } from "./pages/settings/teams/TeamAppearance";
 import { TeamBookingLimits } from "./pages/settings/teams/TeamBookingLimits";
 import SchedulingComingSoon from "./pages/SchedulingComingSoon";
 import { Teams } from "./pages/Teams";
+import { Apps } from "./pages/Apps";
 import { RoutingForms } from "./pages/RoutingForms";
 import { EditRoutingForm } from "./pages/EditRoutingForm";
 import { Workflows } from "./pages/Workflows";
