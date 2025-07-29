@@ -269,38 +269,47 @@ export const Apps = () => {
           <div className="flex-1">
             {selectedTab === 'all' ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {filteredStoreApps.map((app) => (
-                  <div
-                    key={app.id}
-                    className="bg-card rounded-lg border border-border hover:shadow-md transition-all p-4"
-                  >
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="w-12 h-12 bg-muted/50 rounded-lg flex items-center justify-center border border-border">
-                        <span className="text-xl">{app.logo}</span>
+                {filteredStoreApps.map((app) => {
+                  const isInstalled = installedApps.some(installed => installed.id === app.id);
+                  return (
+                    <div
+                      key={app.id}
+                      className="bg-card rounded-lg border border-border hover:shadow-md transition-all p-6 aspect-square flex flex-col"
+                    >
+                      <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4">
+                        <div className="w-16 h-16 bg-muted/50 rounded-lg flex items-center justify-center border border-border">
+                          <span className="text-3xl">{app.logo}</span>
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-base">{app.name}</h4>
+                          <p className="text-sm text-muted-foreground line-clamp-2">
+                            {app.description}
+                          </p>
+                        </div>
                       </div>
-                      <Button
-                        onClick={() => handleInstallApp(app)}
-                        size="sm"
-                        className="flex items-center px-3 py-1.5 text-xs"
-                      >
-                        <Plus className="h-3 w-3 mr-1" />
-                        Add
-                      </Button>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-2">
-                        <h4 className="font-medium text-sm">{app.name}</h4>
-                        <span className="px-2 py-0.5 bg-muted text-muted-foreground rounded-full text-xs font-medium">
-                          {app.category}
-                        </span>
+
+                      <div className="flex flex-col space-y-2 mt-4">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full"
+                          onClick={() => console.log(`Details for ${app.name}`)}
+                        >
+                          Details
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="w-full"
+                          onClick={() => handleInstallApp(app)}
+                          disabled={isInstalled}
+                          variant={isInstalled ? "secondary" : "default"}
+                        >
+                          {isInstalled ? "Installed" : "Install"}
+                        </Button>
                       </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2">
-                        {app.description}
-                      </p>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="space-y-4">
