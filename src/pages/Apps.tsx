@@ -161,6 +161,38 @@ const apps: App[] = [
     icon: '📝',
     category: 'productivity',
     installed: false
+  },
+  {
+    id: 'linear',
+    name: 'Linear',
+    description: 'Issue tracking',
+    icon: '🎯',
+    category: 'productivity',
+    installed: true
+  },
+  {
+    id: 'figma',
+    name: 'Figma',
+    description: 'Design collaboration',
+    icon: '🎨',
+    category: 'productivity',
+    installed: true
+  },
+  {
+    id: 'github',
+    name: 'GitHub',
+    description: 'Code repository',
+    icon: '🐙',
+    category: 'productivity',
+    installed: false
+  },
+  {
+    id: 'asana',
+    name: 'Asana',
+    description: 'Project management',
+    icon: '✅',
+    category: 'productivity',
+    installed: false
   }
 ];
 
