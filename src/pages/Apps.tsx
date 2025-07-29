@@ -405,9 +405,6 @@ export const Apps = () => {
 
             {/* Filter By Category */}
             <div>
-              <h3 className="font-medium text-sm mb-4 text-muted-foreground uppercase tracking-wide">
-                Filter By
-              </h3>
               <div className="space-y-2">
                 {availableCategories.map((category) => (
                   <button
