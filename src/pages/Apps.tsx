@@ -295,7 +295,7 @@ export const Apps = () => {
                   Browse the store to find and install apps that enhance your workflow
                 </p>
                 <Button
-                  onClick={() => setSelectedTab('store')}
+                  onClick={() => setSelectedTab('all')}
                   className="mt-4"
                 >
                   Browse Store
