@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Plus, ExternalLink, Search, Copy, Calendar, Clock, Users, Video, Coffee, Briefcase, GraduationCap, Heart, Zap, Target, User } from 'lucide-react';
+import { Plus, ExternalLink, Search, Copy, Calendar, Clock2, Users, Video, Coffee, Briefcase, GraduationCap, Heart, Zap, Target, User } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { CreateEventModal } from '../components/CreateEventModal';
 import { CreateTeamEventModal } from '../components/CreateTeamEventModal';
@@ -37,7 +37,7 @@ const getEventIcon = (title: string) => {
   if (lowerTitle.includes('coffee') || lowerTitle.includes('chat')) return 'Coffee';
   if (lowerTitle.includes('demo') || lowerTitle.includes('presentation')) return 'Video';
   if (lowerTitle.includes('meeting') || lowerTitle.includes('sync')) return 'Users';
-  if (lowerTitle.includes('consultation') || lowerTitle.includes('1:1')) return 'Clock';
+  if (lowerTitle.includes('consultation') || lowerTitle.includes('1:1')) return 'Clock2';
   if (lowerTitle.includes('training') || lowerTitle.includes('workshop')) return 'GraduationCap';
   if (lowerTitle.includes('review') || lowerTitle.includes('assessment')) return 'Target';
   if (lowerTitle.includes('strategy') || lowerTitle.includes('planning')) return 'Zap';
@@ -74,9 +74,9 @@ export const EventTypes = () => {
           url: 'sanskar',
           avatar: 'S',
           eventTypes: [
-            { id: 'p1', title: '15 Minute Meeting', description: 'Quick catch-up call for brief discussions', url: '/sanskar/15min', durations: [15], bookingsToday: 3, isActive: true, icon: Clock, iconName: 'Clock', iconColor: '#6366f1' },
+            { id: 'p1', title: '15 Minute Meeting', description: 'Quick catch-up call for brief discussions', url: '/sanskar/15min', durations: [15], bookingsToday: 3, isActive: true, icon: Clock2, iconName: 'Clock2', iconColor: '#6366f1' },
             { id: 'p2', title: '30 Minute Meeting', description: 'Standard meeting for detailed conversations', url: '/sanskar/30min', durations: [30], bookingsToday: 5, isActive: true, icon: Users, iconName: 'Users', iconColor: '#8b5cf6' },
-            { id: 'p3', title: '1 Hour Consultation', description: 'In-depth consultation and planning session', url: '/sanskar/consultation', durations: [60], bookingsToday: 2, isActive: true, icon: Clock, iconName: 'Clock', iconColor: '#ec4899' },
+            { id: 'p3', title: '1 Hour Consultation', description: 'In-depth consultation and planning session', url: '/sanskar/consultation', durations: [60], bookingsToday: 2, isActive: true, icon: Clock2, iconName: 'Clock2', iconColor: '#ec4899' },
             { id: 'p4', title: 'Coffee Chat', description: 'Informal coffee meeting for networking', url: '/sanskar/coffee', durations: [30], bookingsToday: 1, isActive: true, icon: Coffee, iconName: 'Coffee', iconColor: '#f97316' },
             { id: 'p5', title: 'Demo Session', description: 'Product demonstration and Q&A', url: '/sanskar/demo', durations: [45], bookingsToday: 4, isActive: true, icon: Video, iconName: 'Video', iconColor: '#ef4444' },
             { id: 'p6', title: 'Job Interview', description: 'Job interview and candidate assessment', url: '/sanskar/interview', durations: [60], bookingsToday: 0, isActive: true, icon: Briefcase, iconName: 'Briefcase', iconColor: '#22c55e' },
@@ -96,7 +96,7 @@ export const EventTypes = () => {
             { id: 'm2', title: 'Product Review', description: 'Product feature review and feedback', url: '/meta/product-review', durations: [45], bookingsToday: 5, isActive: true, icon: Target, iconName: 'Target', iconColor: '#8b5cf6' },
             { id: 'm3', title: 'Design Critique', description: 'UI/UX design review session', url: '/meta/design-critique', durations: [30], bookingsToday: 3, isActive: true, icon: Target, iconName: 'Target', iconColor: '#ec4899' },
             { id: 'm4', title: 'Engineering Sync', description: 'Team engineering synchronization', url: '/meta/eng-sync', durations: [30], bookingsToday: 12, isActive: true, icon: Users, iconName: 'Users', iconColor: '#f97316' },
-            { id: 'm5', title: 'Leadership 1:1', description: 'One-on-one with engineering leadership', url: '/meta/leadership', durations: [30], bookingsToday: 2, isActive: true, icon: Clock, iconName: 'Clock', iconColor: '#ef4444' },
+            { id: 'm5', title: 'Leadership 1:1', description: 'One-on-one with engineering leadership', url: '/meta/leadership', durations: [30], bookingsToday: 2, isActive: true, icon: Clock2, iconName: 'Clock2', iconColor: '#ef4444' },
             { id: 'm6', title: 'Code Review', description: 'Collaborative code review session', url: '/meta/code-review', durations: [45], bookingsToday: 7, isActive: true, icon: Target, iconName: 'Target', iconColor: '#22c55e' },
             { id: 'm7', title: 'Architecture Discussion', description: 'System architecture planning meeting', url: '/meta/architecture', durations: [60], bookingsToday: 1, isActive: true, icon: Zap, iconName: 'Zap', iconColor: '#10b981' },
             { id: 'm8', title: 'Sprint Planning', description: 'Agile sprint planning session', url: '/meta/sprint-planning', durations: [90], bookingsToday: 1, isActive: true, icon: Zap, iconName: 'Zap', iconColor: '#06b6d4' },
@@ -149,10 +149,10 @@ export const EventTypes = () => {
             { id: 'o1', title: 'Client Onboarding', description: 'New client setup and training session', url: '/onehash/onboarding', durations: [60], bookingsToday: 5, isActive: true, icon: GraduationCap, iconName: 'GraduationCap', iconColor: '#6366f1' },
             { id: 'o2', title: 'Product Demo', description: 'ERP software demonstration', url: '/onehash/demo', durations: [45], bookingsToday: 8, isActive: true, icon: Video, iconName: 'Video', iconColor: '#8b5cf6' },
             { id: 'o3', title: 'Implementation Planning', description: 'ERP implementation strategy meeting', url: '/onehash/implementation', durations: [90], bookingsToday: 2, isActive: true, icon: Zap, iconName: 'Zap', iconColor: '#ec4899' },
-            { id: 'o4', title: 'Support Session', description: 'Customer support and troubleshooting', url: '/onehash/support', durations: [30], bookingsToday: 12, isActive: true, icon: Clock, iconName: 'Clock', iconColor: '#f97316' },
+            { id: 'o4', title: 'Support Session', description: 'Customer support and troubleshooting', url: '/onehash/support', durations: [30], bookingsToday: 12, isActive: true, icon: Clock2, iconName: 'Clock2', iconColor: '#f97316' },
             { id: 'o5', title: 'Feature Request', description: 'Product feature discussion and planning', url: '/onehash/feature', durations: [45], bookingsToday: 3, isActive: true, icon: Target, iconName: 'Target', iconColor: '#ef4444' },
             { id: 'o6', title: 'Training Workshop', description: 'User training and best practices', url: '/onehash/training', durations: [120], bookingsToday: 1, isActive: true, icon: GraduationCap, iconName: 'GraduationCap', iconColor: '#22c55e' },
-            { id: 'o7', title: 'Sales Consultation', description: 'Pre-sales consultation and needs analysis', url: '/onehash/sales', durations: [45], bookingsToday: 6, isActive: true, icon: Clock, iconName: 'Clock', iconColor: '#10b981' },
+            { id: 'o7', title: 'Sales Consultation', description: 'Pre-sales consultation and needs analysis', url: '/onehash/sales', durations: [45], bookingsToday: 6, isActive: true, icon: Clock2, iconName: 'Clock2', iconColor: '#10b981' },
             { id: 'o8', title: 'Integration Planning', description: 'Third-party integration discussion', url: '/onehash/integration', durations: [60], bookingsToday: 1, isActive: true, icon: Zap, iconName: 'Zap', iconColor: '#06b6d4' },
             { id: 'o9', title: 'Business Review', description: 'Quarterly business review meeting', url: '/onehash/review', durations: [90], bookingsToday: 0, isActive: true, icon: Target, iconName: 'Target', iconColor: '#3b82f6' },
             { id: 'o10', title: 'Custom Development', description: 'Custom feature development discussion', url: '/onehash/custom', durations: [60], bookingsToday: 2, isActive: true, icon: Target, iconName: 'Target', iconColor: '#64748b' },

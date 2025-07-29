@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Plus, Workflow, ChevronDown, MoreHorizontal, Mail, MessageSquare, MessageCircle } from 'lucide-react';
+import { Plus, Workflow, ChevronDown, MoreHorizontal, Mail, MessageSquare, MessageCircle, Clock2, Check, Zap } from 'lucide-react';
 import { CreateWorkflowModal } from '@/components/CreateWorkflowModal';
 import { HeaderMeta } from '@/components/Layout';
 import { Switch } from '@/components/ui/switch';
@@ -26,21 +26,39 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
   onCopyLink,
   copiedLink
 }) => {
+  const handleCardClick = () => {
+    onEdit(workflow.id);
+  };
+
   return (
-    <div className="bg-card border border-border rounded-lg p-6 hover:border-border/60 transition-all hover:shadow-sm">
+    <div
+      className="bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer"
+      onClick={handleCardClick}
+    >
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-2">
             <h3 className="font-semibold text-foreground text-base">{workflow.title}</h3>
             <div className="flex items-center space-x-2">
-              <Switch checked={workflow.enabled} onCheckedChange={checked => onToggle(workflow.id, checked)} />
+              <Switch
+                checked={workflow.enabled}
+                onCheckedChange={checked => {
+                  onToggle(workflow.id, checked);
+                }}
+                onClick={e => e.stopPropagation()} // prevent card click
+              />
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="p-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="p-2"
+                    onClick={e => e.stopPropagation()} // prevent card click
+                  >
                     <MoreHorizontal className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" onClick={e => e.stopPropagation()}>
                   <DropdownMenuItem onClick={() => onEdit(workflow.id)}>
                     Edit
                   </DropdownMenuItem>
@@ -50,7 +68,10 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
                   <DropdownMenuItem onClick={() => onCopyLink(workflow.id)}>
                     {copiedLink === workflow.id ? 'Copied!' : 'Copy link'}
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onDelete(workflow.id)} className="text-destructive">
+                  <DropdownMenuItem
+                    onClick={() => onDelete(workflow.id)}
+                    className="text-destructive"
+                  >
                     Delete
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -58,25 +79,26 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
             </div>
           </div>
 
-          <p className="text-muted-foreground text-sm mb-3">
-            {workflow.trigger} • {workflow.action}
-          </p>
+          <p className="text-muted-foreground text-sm mb-3">{workflow.trigger}</p>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-start space-x-2">
             <span className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded">
+              <Zap className="w-3 h-3 mr-1" />
               {workflow.eventTypeInfo}
             </span>
-            <div className="flex items-center space-x-1">
-              {workflow.action.includes('email') && <Mail className="h-3 w-3 text-muted-foreground" />}
-              {workflow.action.includes('SMS') && <MessageSquare className="h-3 w-3 text-muted-foreground" />}
-              {workflow.action.includes('WhatsApp') && <MessageCircle className="h-3 w-3 text-green-600" />}
-            </div>
+            <span className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded">
+              <div className="flex items-center">
+                <Check className="h-3 w-3 mr-1" />
+                <span className="mr-1">2 Actions added</span>
+              </div>
+            </span>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 
 export const Workflows = () => {
   const {
@@ -174,7 +196,18 @@ export const Workflows = () => {
         eventTypeInfo: 'Active on 2 event types',
         teamName: 'Development Team',
         createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
-      }];
+      },
+      {
+        id: 'workflow-5',
+        title: 'No-Show Alert',
+        trigger: 'Immediately when invitee is marked no-show',
+        action: 'Send whatsapp to attendees',
+        enabled: true,
+        eventTypeInfo: 'Active on 1 event types',
+        teamName: 'Development Team',
+        createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+      }
+    ];
     }
     setWorkflows(loadedWorkflows);
   }, []);
@@ -308,7 +341,7 @@ export const Workflows = () => {
           <div className="pb-6 space-y-4 w-full max-w-full">
 
             {/* Teams Filter and New Button */}
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-4">
               <div className="relative">
                 <button 
                   onClick={() => setShowTeamDropdown(!showTeamDropdown)} 
@@ -349,7 +382,7 @@ export const Workflows = () => {
               </div>
 
               <Button onClick={handleCreateWorkflow}>
-                <Plus className="h-4 w-4 mr-2" />
+                <Plus className="h-4 w-4" />
                 Create Workflow
               </Button>
             </div>

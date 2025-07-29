@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { ArrowLeft, User, Settings, Calendar, Video, Palette, Clock, Shield, Lock, Users, Download, Code, Webhook, Key, ChevronDown, ChevronRight } from 'lucide-react';
+import { ArrowLeft, User, Settings, Calendar, Video, Palette, Clock2, Shield, Lock, Users, Download, Code, Webhook, Key, ChevronDown, ChevronRight } from 'lucide-react';
 
 export const SettingsSidebar = () => {
   const location = useLocation();
@@ -65,7 +65,7 @@ export const SettingsSidebar = () => {
         { name: 'Calendars', href: '/settings/calendars', icon: Calendar },
         { name: 'Conferencing', href: '/settings/conferencing', icon: Video },
         { name: 'Appearance', href: '/settings/appearance', icon: Palette },
-        { name: 'Out of office', href: '/settings/out-of-office', icon: Clock },
+        { name: 'Out of office', href: '/settings/out-of-office', icon: Clock2 },
       ]
     },
     {

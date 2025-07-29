@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../components/ui/button';
-import { Users, MoreHorizontal, Edit, ExternalLink, UserPlus, Trash2, Clock } from 'lucide-react';
+import { Users, MoreHorizontal, Edit, ExternalLink, UserPlus, Trash2, Clock2 } from 'lucide-react';
 import { CreateTeamModal } from '../components/CreateTeamModal';
 import { TeamCard } from '../components/TeamCard';
 import { useNavigate } from 'react-router-dom';
@@ -123,7 +123,7 @@ export const Teams = () => {
                           Team
                         </span>
                         <div className="flex items-center text-xs text-muted-foreground">
-                          <Clock className="h-3 w-3 mr-1" />
+                          <Clock2 className="h-3 w-3 mr-1" />
                           <span>Active</span>
                         </div>
                       </div>

@@ -8,7 +8,7 @@ import { Textarea } from '../../components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../../components/ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '../../components/ui/popover';
 import { Calendar } from '../../components/ui/calendar';
-import { Clock, Plus, Calendar as CalendarIcon, Search, Edit, Trash2 } from 'lucide-react';
+import { Clock2, Plus, Calendar as CalendarIcon, Search, Edit, Trash2 } from 'lucide-react';
 import { format, set } from 'date-fns';
 import { cn } from '../../lib/utils';
 import { useOutletContext } from 'react-router-dom';
@@ -269,7 +269,7 @@ export const OutOfOffice = () => {
               </div>)}
           </div> : <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-6">
-              <Clock className="h-10 w-10 text-muted-foreground" />
+              <Clock2 className="h-10 w-10 text-muted-foreground" />
             </div>
             
             <h2 className="text-xl font-semibold mb-4">Create an OOO</h2>
