@@ -20,7 +20,7 @@ const availableApps: App[] = [
     id: 'instagram',
     name: 'Instagram',
     category: 'Social',
-    description: 'Connect your favourite apps, plugins and tools',
+    description: 'Connect all your favourite apps, plugins and tools',
     logo: '📷'
   },
   {
@@ -132,7 +132,7 @@ export const Apps = () => {
   useEffect(() => {
     setHeaderMeta({
       title: 'Apps',
-      description: 'Connect your favorite apps and integrations'
+      description: 'Connect all your favourite apps, plugins and tools'
     });
   }, [setHeaderMeta]);
 
