@@ -193,6 +193,49 @@ const AppCard: React.FC<AppCardProps> = ({ app, onToggleInstall }) => {
   );
 };
 
+interface InstalledAppCardProps {
+  app: App;
+  onDelete: (appId: string) => void;
+}
+
+const InstalledAppCard: React.FC<InstalledAppCardProps> = ({ app, onDelete }) => {
+  const [showOptions, setShowOptions] = useState(false);
+
+  return (
+    <div className="bg-card border border-border rounded-lg p-6 hover:border-border/60 transition-all hover:shadow-sm group">
+      <div className="flex flex-col items-center text-center space-y-4">
+        <div className="w-12 h-12 rounded-lg bg-muted/50 flex items-center justify-center text-2xl">
+          {app.icon}
+        </div>
+        <div className="space-y-2">
+          <h3 className="font-semibold text-sm">{app.name}</h3>
+          <p className="text-xs text-muted-foreground">{app.description}</p>
+        </div>
+        <div className="w-full space-y-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full"
+            onClick={() => console.log(`App settings for ${app.name}`)}
+          >
+            <Settings className="h-3 w-3 mr-1" />
+            App settings
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full text-destructive hover:text-destructive"
+            onClick={() => onDelete(app.id)}
+          >
+            <Trash2 className="h-3 w-3 mr-1" />
+            Delete App
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const Apps = () => {
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
   const [selectedTab, setSelectedTab] = useState('store');
