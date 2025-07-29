@@ -213,11 +213,6 @@ export const Apps = () => {
           <div className="space-y-6">
             {/* Header Section */}
             <div className="text-center py-8">
-              <h2 className="text-2xl font-semibold mb-2">Ghost integrations.</h2>
-              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                All your favourite apps, plugins and tools, integrated with Ghost
-              </p>
-              
               {/* Search */}
               <div className="relative max-w-md mx-auto">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
