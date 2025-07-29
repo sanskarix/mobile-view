@@ -92,32 +92,24 @@ export const AppDetails: React.FC<AppDetailsProps> = ({
             <div className="mt-6" />
 
             {/* How to Get Started */}
-            <div>
-              <h3 className="text-lg font-semibold mb-3">How to Get Started</h3>
-              <ol className="space-y-2 text-sm text-muted-foreground">
+            <div className="mt-6">
+              <h3 className="text-base font-semibold leading-7 mb-3">How to Get Started</h3>
+              <ol className="text-xs text-gray-700 leading-5">
                 <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-5 h-5 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-medium">
-                    1
+                  <span className="block">
+                    <span className="text-xs">- Log in to your </span>
+                    <span className="text-xs">Instagram</span>
+                    <span className="text-xs"> account by installing the app.</span>
                   </span>
-                  <span>Log in to your {app.name} account by installing the app.</span>
                 </li>
-                <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-5 h-5 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-medium">
-                    2
-                  </span>
-                  <span>Set up the Client SDK on your website.</span>
+                <li className="text-xs gap-3 mt-2">
+                  - Set up the Client SDK on your website.
                 </li>
-                <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-5 h-5 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-medium">
-                    3
-                  </span>
-                  <span>Add app.cal.com to your Outbound Domains.</span>
+                <li className="text-xs gap-3 mt-2">
+                  - Add app.cal.com to your Outbound Domains.
                 </li>
-                <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-5 h-5 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-medium">
-                    4
-                  </span>
-                  <span>Once a booking event occurs, your tracking data will be captured automatically.</span>
+                <li className="text-xs gap-3 mt-2">
+                  - Once a booking event occurs, your tracking data will be captured.
                 </li>
               </ol>
             </div>
