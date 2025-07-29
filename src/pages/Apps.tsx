@@ -181,7 +181,7 @@ const InstalledAppCard: React.FC<InstalledAppCardProps> = ({ app, onDelete }) =>
 };
 
 export const Apps = () => {
-  const [selectedTab, setSelectedTab] = useState('store');
+  const [selectedTab, setSelectedTab] = useState('all');
   const [showMoreOptions, setShowMoreOptions] = useState<string | null>(null);
   const [installedApps, setInstalledApps] = useState<App[]>([
     {
@@ -288,7 +288,7 @@ export const Apps = () => {
   const availableCategories = getAvailableCategories();
 
   const tabs = [
-    { id: 'store', label: 'Store' },
+    { id: 'all', label: 'All' },
     { id: 'installed', label: 'Installed' }
   ];
 
@@ -313,26 +313,48 @@ export const Apps = () => {
             ))}
           </div>
         </div>
+
+        {selectedTab === 'all' && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors">
+                Categories
+                <ChevronDown className="h-4 w-4 ml-2" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              {categories.map((category) => (
+                <DropdownMenuItem
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={selectedCategory === category ? 'bg-muted' : ''}
+                >
+                  {category}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
 
-      <div className="p-8">
-        {/* Search Bar */}
-        <div className="mb-8">
-          <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search integrations..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-        </div>
-
-        <div className="flex gap-8">
-          {/* Sidebar Filters */}
-          <div className="w-64 flex-shrink-0 space-y-6">
-            {/* Sort By */}
+      {/* Tab Content */}
+      <div className="space-y-6">
+        {selectedTab === 'all' && (
+          <div className="space-y-6">
+            {/* Header Section */}
+            <div className="text-center py-8">
+              {/* Search */}
+              <div className="relative max-w-md mx-auto">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Search integrations..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 w-full"
+                />
+              </div>
+            </div>
 
             {/* Filter By Category */}
             <div>
@@ -433,7 +455,7 @@ export const Apps = () => {
                   Browse the store to find and install apps that enhance your workflow
                 </p>
                 <Button
-                  onClick={() => setSelectedTab('store')}
+                  onClick={() => setSelectedTab('all')}
                   className="mt-4"
                 >
                   Browse Store
