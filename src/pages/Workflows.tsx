@@ -71,7 +71,7 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
           </div>
         </div>
       </div>
-    </div>;
+    </div>
 };
 export const Workflows = () => {
   const {
@@ -273,7 +273,8 @@ export const Workflows = () => {
                 Create Workflow
               </Button>
             </div>
-          </div> :
+          </div>
+        ) : (
       // Workflows display
       <div className="pb-6 space-y-4 w-full max-w-full">
             {/* Teams Filter and New Button */}
@@ -312,10 +313,12 @@ export const Workflows = () => {
             <div className="space-y-4">
               {workflows.map(workflow => <WorkflowCard key={workflow.id} workflow={workflow} onEdit={handleWorkflowEdit} onToggle={handleWorkflowToggle} onDuplicate={handleWorkflowDuplicate} onDelete={handleWorkflowDelete} onCopyLink={handleCopyLink} copiedLink={copiedLink} />)}
             </div>
-          </div>}
+          </div>
+        )}
 
         {/* Create Workflow Modal */}
         <CreateWorkflowModal open={showCreateModal} onOpenChange={setShowCreateModal} onContinue={handleWorkflowModalContinue} />
       </div>
-    </div>;
+    </div>
+  );
 };

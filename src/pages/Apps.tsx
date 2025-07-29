@@ -4,7 +4,12 @@ import { useOutletContext } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { HeaderMeta } from '@/components/Layout';
-import { Search, Zap, Settings, Trash2, Package } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem
+} from '@/components/ui/dropdown-menu';
 
 interface App {
   id: string;
@@ -183,35 +188,15 @@ const InstalledAppCard: React.FC<InstalledAppCardProps> = ({ app, onDelete }) =>
 export const Apps = () => {
   const [selectedTab, setSelectedTab] = useState('all');
   const [showMoreOptions, setShowMoreOptions] = useState<string | null>(null);
-  const [installedApps, setInstalledApps] = useState<App[]>([
-    {
-      id: 'google-analytics',
-      name: 'Google Analytics',
-      category: 'Analytics',
-      description: 'Track and analyze your website traffic',
-      logo: '📈',
-      installed: true
-    },
-    {
-      id: 'zapier',
-      name: 'Zapier',
-      category: 'Automation',
-      description: 'Automate workflows with 6000+ apps',
-      logo: '🧡',
-      installed: true
-    }
-  ]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Integrations');
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
-  const [selectedTab, setSelectedTab] = useState('store');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
-  const [appList, setAppList] = useState<App[]>(apps);
-  const [installedApps, setInstalledApps] = useState<App[]>(
-    apps.filter(app => app.installed)
-  );
+  // You may need to adjust the following lines to use the correct initial data for appList and installedApps
+  // For now, let's use availableApps as the source
+  const [appList, setAppList] = useState<App[]>(availableApps);
+  const [installedApps, setInstalledApps] = useState<App[]>(availableApps.filter(app => app.installed));
     
   useEffect(() => {
     setHeaderMeta({
@@ -275,12 +260,12 @@ export const Apps = () => {
   // Get available categories for installed apps
   const getAvailableCategories = () => {
     if (selectedTab === 'store') {
-      return appCategories;
+      return categories;
     }
 
     const installedCategories = [...new Set(installedApps.map(app => app.category))];
-    const availableCategories = appCategories.filter(category =>
-      category.id === 'all' || installedCategories.includes(category.id)
+    const availableCategories = categories.filter(category =>
+      category === 'All Integrations' || installedCategories.includes(category)
     );
     return availableCategories;
   };
@@ -373,7 +358,7 @@ export const Apps = () => {
                   </button>
                 ))}
               </div>
-            )}
+            </div>
 
             {/* Apps Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -410,36 +395,6 @@ export const Apps = () => {
                 </div>
               ))}
             </div>
-
-          {/* Apps Grid */}
-          <div className="flex-1">
-            {selectedTab === 'installed' && installedApps.length === 0 ? (
-              <div className="text-center py-12">
-                <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No apps installed</h3>
-                <p className="text-muted-foreground">
-                  Browse the Store tab to install your first app.
-                </p>
-              </div>
-            ) : sortedApps.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {sortedApps.map((app) => (
-                  selectedTab === 'store' ? (
-                    <AppCard
-                      key={app.id}
-                      app={app}
-                      onToggleInstall={handleToggleInstall}
-                    />
-                  ) : (
-                    <InstalledAppCard
-                      key={app.id}
-                      app={app}
-                      onDelete={handleDeleteApp}
-                    />
-                  )
-                ))}
-              </div>
-            )}
           </div>
         )}
 
