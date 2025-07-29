@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { HeaderMeta } from '@/components/Layout';
-import { Search, Zap } from 'lucide-react';
+import { Search, Zap, Settings, Trash2, Package } from 'lucide-react';
 
 interface App {
   id: string;
@@ -195,10 +195,14 @@ const AppCard: React.FC<AppCardProps> = ({ app, onToggleInstall }) => {
 
 export const Apps = () => {
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
+  const [selectedTab, setSelectedTab] = useState('store');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
   const [appList, setAppList] = useState<App[]>(apps);
+  const [installedApps, setInstalledApps] = useState<App[]>(
+    apps.filter(app => app.installed)
+  );
 
   useEffect(() => {
     setHeaderMeta({
@@ -208,17 +212,42 @@ export const Apps = () => {
   }, [setHeaderMeta]);
 
   const handleToggleInstall = (appId: string) => {
-    setAppList(prev => prev.map(app => 
-      app.id === appId ? { ...app, installed: !app.installed } : app
-    ));
+    setAppList(prev => prev.map(app => {
+      if (app.id === appId) {
+        const updatedApp = { ...app, installed: !app.installed };
+        // Update installed apps list
+        if (updatedApp.installed) {
+          setInstalledApps(prevInstalled => {
+            const exists = prevInstalled.find(installedApp => installedApp.id === appId);
+            return exists ? prevInstalled : [...prevInstalled, updatedApp];
+          });
+        } else {
+          setInstalledApps(prevInstalled => prevInstalled.filter(installedApp => installedApp.id !== appId));
+        }
+        return updatedApp;
+      }
+      return app;
+    }));
   };
 
-  const filteredApps = appList.filter(app => {
-    const matchesSearch = app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         app.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || app.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  const handleDeleteApp = (appId: string) => {
+    setAppList(prev => prev.map(app =>
+      app.id === appId ? { ...app, installed: false } : app
+    ));
+    setInstalledApps(prev => prev.filter(app => app.id !== appId));
+  };
+
+  const getFilteredApps = () => {
+    const sourceApps = selectedTab === 'store' ? appList : installedApps;
+    return sourceApps.filter(app => {
+      const matchesSearch = app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           app.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === 'all' || app.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  };
+
+  const filteredApps = getFilteredApps();
 
   const sortedApps = [...filteredApps].sort((a, b) => {
     if (sortBy === 'featured') {
@@ -237,14 +266,53 @@ export const Apps = () => {
     return 0;
   });
 
+  // Get available categories for installed apps
+  const getAvailableCategories = () => {
+    if (selectedTab === 'store') {
+      return appCategories;
+    }
+
+    const installedCategories = [...new Set(installedApps.map(app => app.category))];
+    const availableCategories = appCategories.filter(category =>
+      category.id === 'all' || installedCategories.includes(category.id)
+    );
+    return availableCategories;
+  };
+
+  const availableCategories = getAvailableCategories();
+
+  const tabs = [
+    { id: 'store', label: 'Store' },
+    { id: 'installed', label: 'Installed' }
+  ];
+
   return (
     <div className="min-h-screen bg-background">
+      {/* Tab Navigation */}
+      <div className="bg-background border-b border-border">
+        <div className="px-8">
+          <div className="flex items-center">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setSelectedTab(tab.id)}
+                className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+                  selectedTab === tab.id
+                    ? 'border-primary text-primary'
+                    : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="p-8">
-        {/* Header Section */}
-        <div className="text-center mb-8 space-y-4">
-        
-          {/* Search Bar */}
-          <div className="relative max-w-md mx-auto">
+        {/* Search Bar */}
+        <div className="mb-8">
+          <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search integrations..."
@@ -297,12 +365,14 @@ export const Apps = () => {
                 Filter By
               </h3>
               <div className="space-y-2">
-                {appCategories.map((category) => (
+                {availableCategories.map((category) => (
                   <button
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`block w-full text-left text-sm py-1 px-0 transition-colors ${
-                      selectedCategory === category.id ? 'text-foreground font-medium' : 'text-muted-foreground hover:text-foreground'
+                    className={`block w-full text-left text-sm py-1 px-3 rounded-md transition-all ${
+                      selectedCategory === category.id
+                        ? 'text-foreground font-medium bg-blue-50 text-blue-700 shadow-sm border border-blue-200'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                     }`}
                   >
                     {category.name}
@@ -314,14 +384,30 @@ export const Apps = () => {
 
           {/* Apps Grid */}
           <div className="flex-1">
-            {sortedApps.length > 0 ? (
+            {selectedTab === 'installed' && installedApps.length === 0 ? (
+              <div className="text-center py-12">
+                <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2">No apps installed</h3>
+                <p className="text-muted-foreground">
+                  Browse the Store tab to install your first app.
+                </p>
+              </div>
+            ) : sortedApps.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {sortedApps.map((app) => (
-                  <AppCard
-                    key={app.id}
-                    app={app}
-                    onToggleInstall={handleToggleInstall}
-                  />
+                  selectedTab === 'store' ? (
+                    <AppCard
+                      key={app.id}
+                      app={app}
+                      onToggleInstall={handleToggleInstall}
+                    />
+                  ) : (
+                    <InstalledAppCard
+                      key={app.id}
+                      app={app}
+                      onDelete={handleDeleteApp}
+                    />
+                  )
                 ))}
               </div>
             ) : (
