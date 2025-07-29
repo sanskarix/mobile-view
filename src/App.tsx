@@ -11,7 +11,7 @@ import { Calendars } from "./pages/settings/Calendars";
 import { Conferencing } from "./pages/settings/Conferencing";
 import { Appearance } from "./pages/settings/Appearance";
 import { OutOfOffice } from "./pages/settings/OutOfOffice";
-import { Import} from "./pages/settings/Import";
+import { ImportCalendly } from "./pages/settings/ImportCalendly";
 import { Webhooks } from "./pages/settings/Webhooks";
 import { ApiKeys } from "./pages/settings/ApiKeys";
 import { EventTypes } from "./pages/EventTypes";
