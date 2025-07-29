@@ -667,7 +667,7 @@ export const EditRoutingForm = () => {
     <div className="min-h-screen bg-background px-8 py-6">
       {/* Navigation Tabs */}
       <div className="border-b border-border">
-        <div className="flex space-x-0">
+        <div className="flex space-x-4">
           <button
             onClick={() => setActiveTab('setup')}
             className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${activeTab === 'setup' ? 'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
