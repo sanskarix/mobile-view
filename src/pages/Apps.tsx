@@ -4,6 +4,7 @@ import { useOutletContext } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { HeaderMeta } from '@/components/Layout';
+import { AppDetails } from '@/components/AppDetails';
 
 interface App {
   id: string;
