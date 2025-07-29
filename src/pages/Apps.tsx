@@ -166,26 +166,8 @@ const InstalledAppCard: React.FC<InstalledAppCardProps> = ({ app, onDelete }) =>
 };
 
 export const Apps = () => {
-  const [selectedTab, setSelectedTab] = useState('store');
+  const [selectedTab, setSelectedTab] = useState('all');
   const [showMoreOptions, setShowMoreOptions] = useState<string | null>(null);
-  const [installedApps, setInstalledApps] = useState<App[]>([
-    {
-      id: 'google-analytics',
-      name: 'Google Analytics',
-      category: 'Analytics',
-      description: 'Track and analyze your website traffic',
-      logo: '📈',
-      installed: true
-    },
-    {
-      id: 'zapier',
-      name: 'Zapier',
-      category: 'Automation',
-      description: 'Automate workflows with 6000+ apps',
-      logo: '🧡',
-      installed: true
-    }
-  ]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Integrations');
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
@@ -219,7 +201,7 @@ export const Apps = () => {
   });
 
   const tabs = [
-    { id: 'store', label: 'Store' },
+    { id: 'all', label: 'All' },
     { id: 'installed', label: 'Installed' }
   ];
 
@@ -244,7 +226,6 @@ export const Apps = () => {
             ))}
           </div>
         </div>
-      </div>
 
       <div className="">
         {/* Search Bar */}
