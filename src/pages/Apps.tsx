@@ -274,37 +274,49 @@ export const Apps = () => {
                   return (
                     <div
                       key={app.id}
-                      className="bg-card rounded-lg border border-border hover:shadow-md transition-all p-6 aspect-square flex flex-col"
+                      className="bg-card rounded-lg border border-border hover:shadow-md transition-all p-4 aspect-square flex flex-col relative"
                     >
-                      <div className="flex-1 flex flex-col items-center justify-center text-center space-y-4">
-                        <div className="w-16 h-16 bg-muted/50 rounded-lg flex items-center justify-center border border-border">
-                          <span className="text-3xl">{app.logo}</span>
+                      {/* Status Tags */}
+                      <div className="absolute top-3 right-3 flex gap-1">
+                        {isInstalled && (
+                          <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">
+                            installed
+                          </span>
+                        )}
+                        <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded">
+                          default
+                        </span>
+                      </div>
+
+                      {/* Left-aligned content */}
+                      <div className="flex-1 flex flex-col justify-start text-left space-y-3">
+                        <div className="w-12 h-12 bg-muted/50 rounded-lg flex items-center justify-center border border-border">
+                          <span className="text-2xl">{app.logo}</span>
                         </div>
                         <div className="space-y-2">
                           <h4 className="font-semibold text-base">{app.name}</h4>
-                          <p className="text-sm text-muted-foreground line-clamp-2">
+                          <p className="text-sm text-muted-foreground line-clamp-3">
                             {app.description}
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex flex-col space-y-2 mt-4">
+                      {/* Side by side buttons */}
+                      <div className="flex gap-2 mt-4">
                         <Button
                           variant="outline"
                           size="sm"
-                          className="w-full"
-                          onClick={() => console.log(`Details for ${app.name}`)}
+                          className="flex-1"
+                          onClick={() => setSelectedApp(app)}
                         >
                           Details
                         </Button>
                         <Button
                           size="sm"
-                          className="w-full"
+                          className="flex-1"
                           onClick={() => handleInstallApp(app)}
-                          disabled={isInstalled}
-                          variant={isInstalled ? "secondary" : "default"}
                         >
-                          {isInstalled ? "Installed" : "Install"}
+                          Install
                         </Button>
                       </div>
                     </div>
