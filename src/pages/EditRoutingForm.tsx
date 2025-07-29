@@ -233,7 +233,7 @@ export const EditRoutingForm = () => {
             </div>
 
             {/* Form Preview - Right Side */}
-            <div className="w-1/2 p-6 border-l border-border">
+            <div className="w-1/2 p-6">
               <div className="space-y-4">
                 <h3 className="font-semibold text-lg">Form Preview</h3>
                 <div className="border rounded-lg p-6 bg-white">
