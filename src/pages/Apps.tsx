@@ -18,13 +18,6 @@ interface App {
 
 const availableApps: App[] = [
   {
-    id: 'instagram',
-    name: 'Instagram',
-    category: 'Social',
-    description: 'Connect all your favourite apps, plugins and tools',
-    logo: '📷'
-  },
-  {
     id: 'zapier',
     name: 'Zapier',
     category: 'Automation',
@@ -256,9 +249,9 @@ export const Apps = () => {
       </div>
 
       <div className="">
-        <div className="flex gap-8">
+        <div className="flex gap-4">
           {/* Sidebar Filters */}
-          <div className="w-64 flex-shrink-0 space-y-6">
+          <div className="w-48 flex-shrink-0 space-y-6">
             {/* Filter By Category */}
             <div>
               <div className="space-y-2">
@@ -304,7 +297,7 @@ export const Apps = () => {
 
                       {/* Left-aligned content */}
                       <div className="flex-1 flex flex-col justify-start text-left space-y-3">
-                        <div className="w-12 h-12 bg-muted/50 rounded-lg flex items-center justify-center border border-border">
+                        <div className="w-8 h-8">
                           <span className="text-2xl">{app.logo}</span>
                         </div>
                         <div className="space-y-2">
