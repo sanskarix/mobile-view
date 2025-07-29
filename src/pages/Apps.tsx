@@ -235,7 +235,7 @@ export const Apps = () => {
                           <span className="text-2xl">{app.logo}</span>
                         </div>
                         <div className="space-y-2">
-                          <h4 className="font-semibold text-small">{app.name}</h4>
+                          <h4 className="font-semibold text-sm">{app.name}</h4>
                           <p className="text-muted-foreground line-clamp-3 text-xs">
                             {app.description}
                           </p>
