@@ -402,37 +402,6 @@ export const Apps = () => {
           {/* Sidebar Filters */}
           <div className="w-64 flex-shrink-0 space-y-6">
             {/* Sort By */}
-            <div>
-              <h3 className="font-medium text-sm mb-4 text-muted-foreground uppercase tracking-wide">
-                Sort By
-              </h3>
-              <div className="space-y-2">
-                <button
-                  onClick={() => setSortBy('featured')}
-                  className={`block w-full text-left text-sm py-1 px-0 transition-colors ${
-                    sortBy === 'featured' ? 'text-foreground font-medium' : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  Most popular
-                </button>
-                <button
-                  onClick={() => setSortBy('a-z')}
-                  className={`block w-full text-left text-sm py-1 px-0 transition-colors ${
-                    sortBy === 'a-z' ? 'text-foreground font-medium' : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  A - Z
-                </button>
-                <button
-                  onClick={() => setSortBy('installed')}
-                  className={`block w-full text-left text-sm py-1 px-0 transition-colors ${
-                    sortBy === 'installed' ? 'text-foreground font-medium' : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  Installed
-                </button>
-              </div>
-            </div>
 
             {/* Filter By Category */}
             <div>
