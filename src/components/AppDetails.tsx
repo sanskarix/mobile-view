@@ -35,18 +35,7 @@ export const AppDetails: React.FC<AppDetailsProps> = ({
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b border-border bg-card/50">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <Button
-            variant="ghost"
-            onClick={onBack}
-            className="flex items-center gap-2 mb-4"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            App Store
-          </Button>
-        </div>
-      </div>
+      <div className="border-b border-border bg-card/50" />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
