@@ -197,12 +197,11 @@ export const Apps = () => {
     const matchesSearch = app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          app.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'All Integrations' || app.category === selectedCategory;
-    const notInstalled = !installedApps.some(installed => installed.id === app.id);
-    return matchesSearch && matchesCategory && notInstalled;
+    return matchesSearch && matchesCategory;
   });
 
   const tabs = [
-    { id: 'all', label: 'All' },
+    { id: 'all', label: 'Store' },
     { id: 'installed', label: 'Installed' }
   ];
 
