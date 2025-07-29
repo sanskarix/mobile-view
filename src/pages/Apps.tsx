@@ -171,6 +171,7 @@ export const Apps = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Integrations');
   const [installedApps, setInstalledApps] = useState<App[]>([]);
+  const [selectedApp, setSelectedApp] = useState<App | null>(null);
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
     
   useEffect(() => {
