@@ -241,7 +241,7 @@ export const Apps = () => {
     <div className="min-h-screen bg-background">
       <div className="p-8">
         {/* Header Section */}
-        <div className="text-center mb-8 space-y-4>
+        <div className="text-center mb-8 space-y-4">
         
           {/* Search Bar */}
           <div className="relative max-w-md mx-auto">
