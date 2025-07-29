@@ -224,7 +224,7 @@ export const Apps = () => {
   ];
 
   return (
-    <div className="px-8 pt-0 pb-6 space-y-4 w-full max-w-full">
+    <div className="px-8 pt-0 pb-6 space-y-4 w-full max-w-full border-b">
       {/* Tab Navigation */}
       <div className="">
         <div className="">
