@@ -59,7 +59,7 @@ const App = () => (
               <Route path="availability/:scheduleId" element={<EditAvailability />} />
               <Route path="scheduling-coming-soon" element={<SchedulingComingSoon />} />
               <Route path="teams" element={<Teams />} />
-              <Route path="apps" element={<div className="p-8">Apps page coming soon</div>} />
+              <Route path="apps" element={<Apps />} />
               <Route path="routing-forms" element={<RoutingForms />} />
               <Route path="routing-forms/:formId/edit" element={<EditRoutingForm />} />
               <Route path="workflows" element={<Workflows />} />
