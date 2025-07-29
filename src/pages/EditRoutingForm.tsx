@@ -176,7 +176,7 @@ export const EditRoutingForm = () => {
     switch (activeTab) {
       case 'setup':
         return (
-          <div className="flex w-full py-4">
+          <div className="flex w-full py-6">
             {/* Form Setup - Left Side */}
             <div className="w-1/2 py-6 border rounded-lg p-6">
               <div className="space-y-4">
