@@ -1,10 +1,9 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/ui/button';
 import { Checkbox } from '../../components/ui/checkbox';
 import { ImportIcon, Plus } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
-import type { HeaderMeta } from  '../Settings';
+import type { HeaderMeta } from  '../../components/Layout';
 
 export const Import = () => {
   const [notifyBookers, setNotifyBookers] = useState(true);
