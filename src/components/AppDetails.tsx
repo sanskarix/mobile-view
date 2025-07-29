@@ -70,20 +70,13 @@ export const AppDetails: React.FC<AppDetailsProps> = ({
             </div>
 
             {/* Install Status & Button */}
-            <div className="space-y-3">
-              {isInstalled && installedCount > 0 && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                  {installedCount} active install{installedCount > 1 ? 's' : ''}
-                </div>
-              )}
-              <Button
-                onClick={onInstall}
-                className="w-full sm:w-auto"
-                size="lg"
-              >
-                {isInstalled ? 'Install another' : 'Install App'}
-              </Button>
+            <div className="mt-6">
+              <button className="bg-slate-100 rounded border-transparent text-slate-600 text-xs font-medium gap-2 h-7 leading-5 whitespace-nowrap transition-colors border-8 mr-2 px-4">
+                <p>1 active install</p>
+              </button>
+              <button className="bg-blue-600 rounded text-white text-sm font-medium gap-2 h-7 leading-5 whitespace-nowrap transition-colors border-transparent w-auto self-stretch px-8">
+                <p>Install Another</p>
+              </button>
             </div>
 
             {/* Description */}
