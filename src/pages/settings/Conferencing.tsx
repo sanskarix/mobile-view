@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '../../components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../../components/ui/dropdown-menu';
 import { MoreHorizontal, Plus, Video, Settings, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
+import type { HeaderMeta } from  '../Settings';
 
 export const Conferencing = () => {
   const navigate = useNavigate();
+  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
   
   const conferencingApps = [
     {
@@ -47,16 +50,24 @@ export const Conferencing = () => {
     console.log(`Removing ${appName}`);
   };
 
+  useEffect(() => {
+    setHeaderMeta({
+      title: 'Conferencing',
+      description: 'Add your favourite video conferencing apps for your meetings.',
+    });
+  }, [setHeaderMeta]);
+
   return (
     <div className="min-h-screen bg-background flex justify-center">
-      <div className="p-8 max-w-4xl w-full">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-semibold mb-2">Conferencing</h1>
-          <p className="text-muted-foreground">Add your favourite video conferencing apps for your meetings</p>
+      <div className="px-8 py-6 w-full">
+        <div className='w-full flex justify-end mb-4'>
+            <Button onClick={handleAddApp}>
+              <Plus/>
+              Add
+            </Button>
         </div>
-
-        <div className="border rounded-lg p-6 bg-card">
-        <div className="space-y-6">
+        <div className="rounded-lg bg-card">
+        <div className="space-y-2">
           {conferencingApps.map((app, index) => (
             <div key={index} className="border rounded-lg p-6">
               <div className="flex items-start justify-between">
@@ -92,19 +103,6 @@ export const Conferencing = () => {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Vertical dotted line */}
-        <div className="flex justify-center my-6">
-          <div className="h-16 border-l-2 border-dashed border-muted-foreground/30"></div>
-        </div>
-
-        {/* Add new app button */}
-        <div className="text-center">
-          <Button onClick={handleAddApp} className="bg-blue-600 hover:bg-blue-700">
-            <Plus className="h-4 w-4 mr-2" />
-            Add
-          </Button>
         </div>
         </div>
       </div>

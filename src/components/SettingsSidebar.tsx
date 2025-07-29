@@ -76,9 +76,9 @@ export const SettingsSidebar = () => {
       ]
     },
     {
-      title: 'Import',
+      title: 'Others',
       items: [
-        { name: 'Calendly', href: '/settings/import/calendly', icon: Download },
+        { name: 'Import', href: '/settings/others/import', icon: Download },
       ]
     },
     {

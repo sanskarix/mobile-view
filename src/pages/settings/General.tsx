@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { Label } from '../../components/ui/label';
@@ -9,12 +9,15 @@ import { Calendar } from '../../components/ui/calendar';
 import { Calendar as CalendarIcon, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '../../lib/utils';
+import { useOutletContext } from 'react-router-dom';
+import type { HeaderMeta } from  '../Settings';
 export const General = () => {
   const [dynamicGroupLinks, setDynamicGroupLinks] = useState(true);
   const [searchEngineIndexing, setSearchEngineIndexing] = useState(true);
   const [monthlyDigest, setMonthlyDigest] = useState(true);
   const [scheduleTimezoneOpen, setScheduleTimezoneOpen] = useState(false);
   const [noEndDate, setNoEndDate] = useState(false);
+  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
   const [dateRange, setDateRange] = useState<{
     from?: Date;
     to?: Date;
@@ -39,13 +42,16 @@ export const General = () => {
   const handleDeleteTravelSchedule = (id: string) => {
     setTravelSchedules(travelSchedules.filter(schedule => schedule.id !== id));
   };
-  return <div className="min-h-screen bg-background flex justify-center">
-      <div className="p-8 max-w-4xl w-full">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-semibold mb-2">General</h1>
-          <p className="text-muted-foreground">Manage settings for your language and timezone</p>
-        </div>
 
+  useEffect(() => {
+    setHeaderMeta({
+      title: 'General',
+      description: 'Manage settings for your language and timezone.',
+    });
+  }, [setHeaderMeta]);
+
+  return <div className="min-h-screen bg-background flex justify-center">
+      <div className="px-8  py-6 w-full">
         <div className="border rounded-lg p-6 bg-card">
         <div className="space-y-6">
           {/* Language */}
