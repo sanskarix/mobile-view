@@ -1,12 +1,11 @@
-
 import React, { useEffect, useState } from 'react';
 import { Button } from '../../components/ui/button';
 import { Checkbox } from '../../components/ui/checkbox';
 import { ImportIcon, Plus } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
-import type { HeaderMeta } from  '../Settings';
+import type { HeaderMeta } from  '../../components/Layout';
 
-export const Import = () => {
+export const ImportCalendly = () => {
   const [notifyBookers, setNotifyBookers] = useState(true);
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
   
@@ -30,7 +29,7 @@ export const Import = () => {
       <div className="px-8 py-6 w-full">
           <div className="flex justify-between border border-border rounded-lg p-6 bg-card">
             <div className="flex flex-col items-start">
-              <h2 className='text-lg font-medium mb-1'>Import form Calendly</h2>
+              <h2 className='text-lg font-medium mb-1'>Import from Calendly</h2>
               <div className='flex items-center space-x-2'>
                 <Checkbox 
                   checked={notifyBookers}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -120,28 +120,28 @@ export const CreateTeamModal = ({ open, onClose, onTeamCreated }: CreateTeamModa
     <>
       <Dialog open={open} onOpenChange={handleClose}>
         <DialogContent className="max-w-2xl p-0 gap-0">
-          <div className="bg-muted/30 px-8 py-6 border-b">
-            <h2 className="text-xl font-semibold mb-2">
+          <DialogHeader className="bg-muted/30 px-8 py-6 border-b">
+            <DialogTitle className="text-xl font-semibold mb-2">
               {step === 1 && "Create a new team"}
               {step === 2 && "Add team members"}
               {step === 3 && "Add a new team event type"}
-            </h2>
+            </DialogTitle>
             <p className="text-muted-foreground text-sm">
               {step === 1 && "Create a new team to collaborate with users."}
               {step === 2 && "Invite others to join your team"}
               {step === 3 && "Create a new event type for people to book times with."}
             </p>
-            
+
             <div className="flex items-center space-x-2 mt-4">
               <span className="text-sm text-muted-foreground">Step {step} of 3</span>
             </div>
-            
+
             <div className="flex space-x-2 mt-2">
               <div className={`h-1 flex-1 rounded ${step >= 1 ? 'bg-foreground' : 'bg-muted'}`} />
               <div className={`h-1 flex-1 rounded ${step >= 2 ? 'bg-foreground' : 'bg-muted'}`} />
               <div className={`h-1 flex-1 rounded ${step >= 3 ? 'bg-foreground' : 'bg-muted'}`} />
             </div>
-          </div>
+          </DialogHeader>
 
           <div className="p-8">
             {

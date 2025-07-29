@@ -11,7 +11,7 @@ import { Calendars } from "./pages/settings/Calendars";
 import { Conferencing } from "./pages/settings/Conferencing";
 import { Appearance } from "./pages/settings/Appearance";
 import { OutOfOffice } from "./pages/settings/OutOfOffice";
-import { Import} from "./pages/settings/Import";
+import { ImportCalendly } from "./pages/settings/ImportCalendly";
 import { Webhooks } from "./pages/settings/Webhooks";
 import { ApiKeys } from "./pages/settings/ApiKeys";
 import { EventTypes } from "./pages/EventTypes";
@@ -31,6 +31,7 @@ import { TeamAppearance } from "./pages/settings/teams/TeamAppearance";
 import { TeamBookingLimits } from "./pages/settings/teams/TeamBookingLimits";
 import SchedulingComingSoon from "./pages/SchedulingComingSoon";
 import { Teams } from "./pages/Teams";
+import { Apps } from "./pages/Apps";
 import { RoutingForms } from "./pages/RoutingForms";
 import { EditRoutingForm } from "./pages/EditRoutingForm";
 import { Workflows } from "./pages/Workflows";
@@ -58,7 +59,7 @@ const App = () => (
               <Route path="availability/:scheduleId" element={<EditAvailability />} />
               <Route path="scheduling-coming-soon" element={<SchedulingComingSoon />} />
               <Route path="teams" element={<Teams />} />
-              <Route path="apps" element={<div className="p-8">Apps page coming soon</div>} />
+              <Route path="apps" element={<Apps />} />
               <Route path="routing-forms" element={<RoutingForms />} />
               <Route path="routing-forms/:formId/edit" element={<EditRoutingForm />} />
               <Route path="workflows" element={<Workflows />} />
@@ -77,7 +78,7 @@ const App = () => (
               <Route path="out-of-office" element={<OutOfOffice />} />
               <Route path="security/password" element={<Password />} />
               <Route path="security/impersonation" element={<Impersonation />} />
-              <Route path="others/import" element={<Import />} />
+              <Route path="others/import" element={<ImportCalendly />} />
               <Route path="developer/webhooks" element={<Webhooks />} />
               <Route path="developer/api-keys" element={<ApiKeys />} />
               <Route path="teams/new" element={<TeamNew />} />
