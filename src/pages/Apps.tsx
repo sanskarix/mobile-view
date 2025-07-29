@@ -105,7 +105,7 @@ const availableApps: App[] = [
 const categories = ['All Integrations', 'Social', 'Analytics', 'Automation', 'Marketing', 'Development', 'Forms', 'Other'];
 
 export const Apps = () => {
-  const [selectedTab, setSelectedTab] = useState('store');
+  const [selectedTab, setSelectedTab] = useState('all');
   const [showMoreOptions, setShowMoreOptions] = useState<string | null>(null);
   const [installedApps, setInstalledApps] = useState<App[]>([
     {
