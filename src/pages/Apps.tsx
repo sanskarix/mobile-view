@@ -357,4 +357,19 @@ export const Apps = () => {
       </div>
     </div>
   );
+
+  // Show AppDetails if an app is selected
+  if (selectedApp) {
+    return (
+      <AppDetails
+        app={selectedApp}
+        isInstalled={installedApps.some(installed => installed.id === selectedApp.id)}
+        installedCount={getInstalledCount(selectedApp.id)}
+        onBack={() => setSelectedApp(null)}
+        onInstall={() => handleInstallApp(selectedApp)}
+      />
+    );
+  }
+
+  return mainContent;
 };
