@@ -209,7 +209,7 @@ export const Apps = () => {
 
       {/* Tab Content */}
       <div className="space-y-6">
-        {selectedTab === 'store' && (
+        {selectedTab === 'all' && (
           <div className="space-y-6">
             {/* Header Section */}
             <div className="text-center py-8">
