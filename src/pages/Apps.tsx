@@ -364,7 +364,7 @@ export const Apps = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Tab Navigation */}
-      <div className="bg-background border-b border-border">
+      <div className="">
         <div className="px-8">
           <div className="flex items-center">
             {tabs.map((tab) => (
