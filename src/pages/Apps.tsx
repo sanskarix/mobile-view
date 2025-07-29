@@ -227,7 +227,7 @@ export const Apps = () => {
     <div className="px-8 pt-3 pb-6 space-y-4 w-full max-w-full">
       {/* Tab Navigation */}
       <div className="">
-        <div className="px-8">
+        <div className="">
           <div className="flex items-center">
             {tabs.map((tab) => (
               <button
