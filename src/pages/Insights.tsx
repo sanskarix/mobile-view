@@ -169,6 +169,14 @@ export const Insights = () => {
   };
 
   return (
+    {/* Main Tabs */ }
+    < Tabs value = { activeTab } onValueChange = { setActiveTab } className = "space-y-6" >
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="bookings">Bookings</TabsTrigger>
+          <TabsTrigger value="routings">Routings</TabsTrigger>
+          <TabsTrigger value="workflows">Workflows</TabsTrigger>
+        </TabsList>
+
     <div className="space-y-6 p-6">
       {/* Header Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -213,14 +221,6 @@ export const Insights = () => {
 
       {/* Alert Cards */}
       {getTabSpecificAlerts()}
-
-      {/* Main Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="bookings">Bookings</TabsTrigger>
-          <TabsTrigger value="routings">Routings</TabsTrigger>
-          <TabsTrigger value="workflows">Workflows</TabsTrigger>
-        </TabsList>
 
         {/* Bookings Tab */}
         <TabsContent value="bookings" className="space-y-6">
