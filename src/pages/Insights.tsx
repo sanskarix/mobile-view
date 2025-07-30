@@ -605,6 +605,54 @@ export const Insights = () => {
               />
             </div>
 
+            {/* Workflow Trends Graph */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Workflow Trends</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={400}>
+                  <LineChart data={workflowTrendsData}>
+                    <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                    <XAxis dataKey="week" />
+                    <YAxis />
+                    <Tooltip
+                      formatter={(value, name) => [value, name]}
+                      labelFormatter={(label) => `Week: ${label}`}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="total"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                      name="Total"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="sent"
+                      stroke="#10b981"
+                      strokeWidth={2}
+                      name="Sent"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="read"
+                      stroke="#f59e0b"
+                      strokeWidth={2}
+                      name="Read"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="failed"
+                      stroke="#ef4444"
+                      strokeWidth={2}
+                      name="Failed"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
             {/* Most Used Workflows */}
             <Card>
               <CardHeader>
