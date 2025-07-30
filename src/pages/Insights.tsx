@@ -100,6 +100,13 @@ export const Insights = () => {
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
   const [activeTab, setActiveTab] = useState('bookings');
   const [dateRange, setDateRange] = useState('7d');
+  const [showCustomDate, setShowCustomDate] = useState(false);
+  const [customDateRange, setCustomDateRange] = useState();
+  const [selectedAccount, setSelectedAccount] = useState('personal');
+  const [selectedEventType, setSelectedEventType] = useState('all');
+  const [selectedForm, setSelectedForm] = useState('all');
+  const [selectedBookingStatus, setSelectedBookingStatus] = useState('all');
+  const [selectedWorkflowType, setSelectedWorkflowType] = useState('email');
 
   React.useEffect(() => {
     setHeaderMeta({
