@@ -118,9 +118,24 @@ export const Insights = () => {
     </Card>
   );
 
-<<<<<<< HEAD
   const getTabSpecificAlerts = () => {
     if (activeTab === 'bookings') {
+      return (
+        <div className="grid gap-4 md:grid-cols-2">
+          <Alert>
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>
+              No-show rate increased by 12% this week. Consider implementing reminder workflows.
+            </AlertDescription>
+          </Alert>
+          <Alert>
+            <CheckCircle className="h-4 w-4" />
+            <AlertDescription>
+              Your most popular booking time (11 AM) has 89% attendance rate!
+            </AlertDescription>
+          </Alert>
+        </div>
+      );
     } else if (activeTab === 'routings') {
       return (
         <div className="grid gap-4 md:grid-cols-2">
@@ -157,9 +172,6 @@ export const Insights = () => {
       );
     }
   };
-
-=======
->>>>>>> origin/main
   return (
     <div className="space-y-6 p-6">
       {/* Main Tabs */}
@@ -190,34 +202,8 @@ export const Insights = () => {
         </div>
       </div>
 
-<<<<<<< HEAD
         {/* Alert Cards */}
         {getTabSpecificAlerts()}
-=======
-      {/* Alert Cards */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Alert>
-          <AlertTriangle className="h-4 w-4" />
-          <AlertDescription>
-            No-show rate increased by 12% this week. Consider implementing reminder workflows.
-          </AlertDescription>
-        </Alert>
-        <Alert>
-          <CheckCircle className="h-4 w-4" />
-          <AlertDescription>
-            Conversion rate is up 8% - your new routing logic is performing well!
-          </AlertDescription>
-        </Alert>
-      </div>
-
-      {/* Main Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="bookings">Bookings</TabsTrigger>
-          <TabsTrigger value="routings">Routings</TabsTrigger>
-          <TabsTrigger value="workflows">Workflows</TabsTrigger>
-        </TabsList>
->>>>>>> origin/main
 
         {/* Bookings Tab */}
         <TabsContent value="bookings" className="space-y-6">
