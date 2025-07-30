@@ -134,6 +134,7 @@ export const Apps = () => {
   const [selectedCategory, setSelectedCategory] = useState('All Integrations');
   const [installedApps, setInstalledApps] = useState<App[]>([]);
   const [selectedApp, setSelectedApp] = useState<App | null>(null);
+  const [settingsApp, setSettingsApp] = useState<App | null>(null);
 
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
 
