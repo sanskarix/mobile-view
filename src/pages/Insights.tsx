@@ -39,11 +39,50 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { toast } from 'sonner';
 
 // Mock data
-const totalBookingsOverTimeData = [
-  { week: 'Week 1', bookings: 145 },
-  { week: 'Week 2', bookings: 168 },
-  { week: 'Week 3', bookings: 152 },
-  { week: 'Week 4', bookings: 189 },
+const bookingTrendsData = [
+  {
+    week: 'Week 1',
+    created: 145,
+    completed: 128,
+    rescheduled: 12,
+    canceled: 8,
+    noShowHost: 3,
+    noShowGuest: 5
+  },
+  {
+    week: 'Week 2',
+    created: 168,
+    completed: 149,
+    rescheduled: 15,
+    canceled: 10,
+    noShowHost: 4,
+    noShowGuest: 7
+  },
+  {
+    week: 'Week 3',
+    created: 152,
+    completed: 135,
+    rescheduled: 11,
+    canceled: 6,
+    noShowHost: 2,
+    noShowGuest: 4
+  },
+  {
+    week: 'Week 4',
+    created: 189,
+    completed: 167,
+    rescheduled: 18,
+    canceled: 12,
+    noShowHost: 5,
+    noShowGuest: 8
+  },
+];
+
+const workflowTrendsData = [
+  { week: 'Week 1', sent: 1250, read: 980, failed: 45, total: 1295 },
+  { week: 'Week 2', sent: 1340, read: 1050, failed: 52, total: 1392 },
+  { week: 'Week 3', sent: 1180, read: 920, failed: 38, total: 1218 },
+  { week: 'Week 4', sent: 1420, read: 1110, failed: 65, total: 1485 },
 ];
 
 const totalBookingsData = [
