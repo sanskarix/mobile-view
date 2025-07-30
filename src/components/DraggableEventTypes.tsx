@@ -127,7 +127,7 @@ const DraggableEventCard: React.FC<DraggableEventCardProps> = ({
       
       {/* Card content */}
       <div 
-        className={`bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-md cursor-pointer flex-1 ${
+        className={`bg-card border border-border rounded-lg p-4 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer flex-1 ${
           !isEventActive ? 'opacity-50' : ''
         } ${isSortableDragging ? 'opacity-50 shadow-lg' : ''}`}
         onClick={() => onEventEdit(event.id)}
