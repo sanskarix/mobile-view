@@ -84,6 +84,7 @@ const App = () => (
               <Route path="developer/webhooks" element={<Webhooks />} />
               <Route path="developer/api-keys" element={<ApiKeys />} />
               <Route path="teams/new" element={<TeamNew />} />
+              <Route path="teams/edit" element={<EditTeams />} />
               <Route path="teams/:teamId" element={<TeamDetail />} />
               <Route path="teams/:teamId/:section" element={<TeamDetail />} />
               <Route path="teams/:teamId/profile" element={<TeamProfile />} />
