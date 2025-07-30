@@ -190,17 +190,18 @@ export const Insights = () => {
       {/* Content Area */}
       <div className="space-y-6">
         {/* Account Selector and Filters Row */}
-        <div className="flex items-center gap-4">
-          <Select value={selectedAccount} onValueChange={setSelectedAccount}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="personal">Personal</SelectItem>
-              <SelectItem value="team1">Team 1</SelectItem>
-              <SelectItem value="team2">Team 2</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Select value={selectedAccount} onValueChange={setSelectedAccount}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="personal">Personal</SelectItem>
+                <SelectItem value="team1">Team 1</SelectItem>
+                <SelectItem value="team2">Team 2</SelectItem>
+              </SelectContent>
+            </Select>
 
           {activeTab === 'bookings' && (
             <Select value={selectedEventType} onValueChange={setSelectedEventType}>
@@ -276,6 +277,37 @@ export const Insights = () => {
               </SelectContent>
             </Select>
           )}
+          </div>
+
+          {/* Time Selector and Export */}
+          <div className="flex items-center gap-4">
+            <Select value={dateRange} onValueChange={(value) => {
+              setDateRange(value);
+              setShowCustomDate(value === 'custom');
+            }}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="7d">Last 7 days</SelectItem>
+                <SelectItem value="30d">Last 30 days</SelectItem>
+                <SelectItem value="90d">Last 90 days</SelectItem>
+                <SelectItem value="1y">Last year</SelectItem>
+                <SelectItem value="custom">Custom</SelectItem>
+              </SelectContent>
+            </Select>
+            {showCustomDate && (
+              <DatePickerWithRange
+                className="w-auto"
+                value={customDateRange}
+                onChange={setCustomDateRange}
+              />
+            )}
+            <Button variant="outline" size="sm" onClick={handleExport}>
+              <Download className="mr-2 h-4 w-4" />
+              Export
+            </Button>
+          </div>
         </div>
 
         {/* Tab Content */}
