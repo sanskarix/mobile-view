@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { HeaderMeta } from '@/components/Layout';
 import { AppDetails } from '@/components/AppDetails';
-import { Search, Package, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Package } from 'lucide-react';
 
 interface App {
   id: string;
@@ -118,7 +118,7 @@ const availableApps = [
 ];
 
 const allCategories = [
-  'All',
+  'All Integrations',
   'Social',
   'Analytics',
   'Automation',
@@ -131,12 +131,9 @@ const allCategories = [
 export const Apps = () => {
   const [selectedTab, setSelectedTab] = useState('store');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('All Integrations');
   const [installedApps, setInstalledApps] = useState<App[]>([]);
   const [selectedApp, setSelectedApp] = useState<App | null>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
-  const [scrollContainer, setScrollContainer] = useState<HTMLDivElement | null>(null);
 
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
 
@@ -160,45 +157,9 @@ export const Apps = () => {
     setInstalledApps((prev) => prev.filter((app) => app.installId !== installId));
   };
 
-    const checkScrollability = () => {
-    if (scrollContainer) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollContainer;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth);
-    }
-  };
-
-  const scrollLeft = () => {
-    if (scrollContainer) {
-      scrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollContainer) {
-      scrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
-    }
-  };
-
-  useEffect(() => {
-    checkScrollability();
-  }, [selectedTab, scrollContainer]);
-
-  useEffect(() => {
-    if (scrollContainer) {
-      scrollContainer.addEventListener('scroll', checkScrollability);
-      window.addEventListener('resize', checkScrollability);
-      
-      return () => {
-        scrollContainer.removeEventListener('scroll', checkScrollability);
-        window.removeEventListener('resize', checkScrollability);
-      };
-    }
-  }, [scrollContainer]);
-
   const filteredStoreApps = availableApps.filter((app) => {
     const matchesSearch = app.name.toLowerCase().includes(searchQuery.toLowerCase()) || app.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || app.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'All Integrations' || app.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -207,7 +168,7 @@ export const Apps = () => {
     { id: 'installed', label: 'Installed' },
   ];
 
-  const installedCategories = ['All', ...new Set(installedApps.map(app => app.category))];
+  const installedCategories = ['All Integrations', ...new Set(installedApps.map(app => app.category))];
 
   const mainContent = (
     <div className="px-8 pt-0 pb-6 space-y-4 w-full max-w-full">
@@ -220,7 +181,7 @@ export const Apps = () => {
                   key={tab.id}
                   onClick={() => {
                     setSelectedTab(tab.id);
-                    setSelectedCategory('All');
+                    setSelectedCategory('All Integrations');
                   }}
                   className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-300 ease-in-out ${
                     selectedTab === tab.id
@@ -249,49 +210,22 @@ export const Apps = () => {
             />
           </div>
 
-          <div className="w-1/3 relative flex items-center">
-            {/* Left Arrow */}
-            <button
-              onClick={scrollLeft}
-              className={`absolute left-0 z-10 p-1 rounded-full bg-background border border-border shadow-sm transition-opacity ${
-                canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'
-              }`}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-
-            {/* Scrollable Categories */}
-            <div 
-              ref={setScrollContainer}
-              className="flex-1 overflow-x-auto scrollbar-hide mx-6"
-              onScroll={checkScrollability}
-            >
-              <div className="flex gap-1">
-                {allCategories.map(category => (
-                  <button 
-                    key={category} 
-                    onClick={() => setSelectedCategory(category)} 
-                    className={`flex-shrink-0 px-4 py-2 text-sm rounded-full border transition-all ${
-                      selectedCategory === category 
-                        ? 'bg-primary text-primary-foreground border-primary' 
-                        : 'bg-background text-muted-foreground border-border hover:text-foreground hover:border-muted-foreground'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
+          <div className="relative w-1/2">
+            <div className="flex gap-2 pb-2 overflow-x-auto scroll-smooth scrollbar-hide">
+              {(selectedTab === 'store' ? allCategories : installedCategories).map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`flex-shrink-0 px-4 py-2 text-sm rounded-[8px] transition-all duration-300 ease-in-out ${
+                    selectedCategory === category
+                      ? 'bg-[#007ee5] text-primary-foreground'
+                      : 'bg-[#edf0f4] text-muted-foreground hover:text-foreground'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
             </div>
-
-            {/* Right Arrow */}
-            <button
-              onClick={scrollRight}
-              className={`absolute right-0 z-10 p-1 rounded-full bg-background border border-border shadow-sm transition-opacity ${
-                canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'
-              }`}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
           </div>
         </div>
       </div>
@@ -304,7 +238,7 @@ export const Apps = () => {
               return (
                 <div
                   key={app.id}
-                  className="h-64 w-full bg-card rounded-lg border border-border hover:shadow-md transition-all p-4 flex flex-col relative"
+                  className="h-64 w-full bg-card rounded-lg border border-border hover:shadow-md transition-all p-4 aspect-square flex flex-col relative transform hover:scale-105 duration-300 ease-in-out"
                 >
                   <div className="absolute top-3 right-3 flex gap-1">
                     {isInstalled && (
@@ -313,7 +247,7 @@ export const Apps = () => {
                       </span>
                     )}
                     <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded">
-                      Default
+                      default
                     </span>
                   </div>
                   <div className="flex-1 flex flex-col justify-start text-left space-y-3">
@@ -362,7 +296,7 @@ export const Apps = () => {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {installedApps
-                  .filter(app => selectedCategory === 'All' || app.category === selectedCategory)
+                  .filter(app => selectedCategory === 'All Integrations' || app.category === selectedCategory)
                   .map((app) => (
                     <div
                       key={app.installId}
