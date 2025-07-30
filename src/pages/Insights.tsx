@@ -547,37 +547,6 @@ export const Insights = () => {
               />
             </div>
 
-            {/* Message Pipeline */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Message Flow Pipeline</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {/* Progress Bar */}
-                  <div className="relative">
-                    <div className="flex justify-between text-sm font-medium mb-2">
-                      <span>Messages Triggered</span>
-                      <span>Messages Sent</span>
-                      <span>Messages Read</span>
-                      <span>Messages Failed</span>
-                    </div>
-                    <div className="flex">
-                      <div className="flex-1 bg-blue-200 h-8 flex items-center justify-center text-sm font-medium text-blue-800 first:rounded-l-lg">
-                        4,280 (100%)
-                      </div>
-                      <div className="flex-1 bg-green-200 h-8 flex items-center justify-center text-sm font-medium text-green-800">
-                        4,105 (96%)
-                      </div>
-                      <div className="flex-1 bg-yellow-200 h-8 flex items-center justify-center text-sm font-medium text-yellow-800">
-                        3,204 (78%)
-                      </div>
-                      <div className="flex-1 bg-red-200 h-8 flex items-center justify-center text-sm font-medium text-red-800 last:rounded-r-lg">
-                        175 (4%)
-                      </div>
-                    </div>
-                  </div>
-
                   {/* Summary Table */}
                   <div className="grid grid-cols-4 gap-4 text-center">
                     <div className="space-y-1">
