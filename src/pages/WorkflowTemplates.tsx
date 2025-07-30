@@ -72,7 +72,7 @@ export const WorkflowTemplates = () => {
         actions: [{
           id: '1',
           type: 'email-host',
-          expanded: false,
+          expanded: true,
           senderName: 'OneHash',
           messageTemplate: 'Reminder',
           emailSubject: 'Reminder: {EVENT_NAME} - {EVENT_DATE}',
@@ -89,7 +89,7 @@ export const WorkflowTemplates = () => {
         actions: [{
           id: '1',
           type: 'email-attendees',
-          expanded: false,
+          expanded: true,
           senderName: 'OneHash',
           messageTemplate: 'Reminder',
           emailSubject: 'Reminder: {EVENT_NAME} - {EVENT_DATE}',
@@ -104,7 +104,7 @@ export const WorkflowTemplates = () => {
         actions: [{
           id: '1',
           type: 'email-attendees',
-          expanded: false,
+          expanded: true,
           senderName: 'OneHash',
           messageTemplate: 'Thankyou',
           emailSubject: 'Thank you for attending {EVENT_NAME}',
@@ -121,7 +121,7 @@ export const WorkflowTemplates = () => {
         actions: [{
           id: '1',
           type: 'sms-specific',
-          expanded: false,
+          expanded: true,
           messageTemplate: 'Reminder',
           textMessage: 'Reminder: {EVENT_NAME} starts in 1 hour at {EVENT_TIME}. Location: {LOCATION}',
           phoneNumber: '',
@@ -138,7 +138,7 @@ export const WorkflowTemplates = () => {
         actions: [{
           id: '1',
           type: 'sms-attendees',
-          expanded: false,
+          expanded: true,
           messageTemplate: 'Reminder',
           textMessage: 'Hi {ATTENDEE_FIRST_NAME}, reminder: {EVENT_NAME} starts in 1 hour at {EVENT_TIME}.',
           senderId: 'OneHash'
@@ -153,7 +153,7 @@ export const WorkflowTemplates = () => {
         actions: [{
           id: '1',
           type: 'whatsapp-attendee',
-          expanded: false,
+          expanded: true,
           messageTemplate: 'Reminder',
           textMessage: 'Hi {ATTENDEE_FIRST_NAME}! Reminder: {EVENT_NAME} starts in 2 hours at {EVENT_TIME}. Looking forward to seeing you!',
           senderId: 'OneHash'
@@ -182,7 +182,6 @@ export const WorkflowTemplates = () => {
               <div
                 key={template.id}
                 className="bg-card border border-border rounded-lg p-6 hover:border-border/60 transition-all hover:shadow-sm cursor-pointer"
-                onClick={() => handleTemplateSelect(template)}
               >
                 <div className="flex flex-col items-center text-center space-y-4">
                   <div className="w-12 h-12 rounded-lg bg-muted/50 flex items-center justify-center">

@@ -474,15 +474,6 @@ export const EventSetup = ({
           <a href="#" className="text-primary hover:text-primary/80 transition-colors">App Store</a>.
         </p>
       </div>
-
-      <div className="flex justify-between items-center pt-8 border-t border-border">
-        <div className="flex -space-x-0 mx-0">
-          <button className="flex items-center px-4 py-2 text-sm border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition-colors">
-            <Trash2 className="h-4 w-4 mr-2" />
-            Delete event
-          </button>
-        </div>
-      </div>
     </div>
   );
 };

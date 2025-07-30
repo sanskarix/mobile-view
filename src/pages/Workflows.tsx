@@ -223,7 +223,45 @@ export const Workflows = () => {
 
   const handleWorkflowEdit = (workflowId: string) => {
     const workflow = workflows.find(w => w.id === workflowId);
-    navigate('/workflows/new', { state: { editWorkflow: workflow } });
+    if (workflow) {
+      // Transform workflow data to match WorkflowBuilder expected format
+      const editData = {
+        id: workflow.id,
+        workflowName: workflow.title,
+        trigger: workflow.trigger.includes('24 hours after') ? 'new-booking' : 
+                workflow.trigger.includes('before') ? 'before-event' :
+                workflow.trigger.includes('after') ? 'after-event' :
+                workflow.trigger.includes('canceled') ? 'event-cancelled' :
+                workflow.trigger.includes('no-show') ? 'no-show' :
+                workflow.trigger.includes('rescheduled') ? 'event-rescheduled' : 'new-booking',
+        triggerTiming: workflow.trigger.includes('Immediately') ? 'immediately' : 'custom',
+        customTime: workflow.trigger.includes('24 hours') ? '24' : 
+                   workflow.trigger.includes('1 hour') ? '1' : 
+                   workflow.trigger.includes('2 hours') ? '2' : '24',
+        timeUnit: workflow.trigger.includes('hours') ? 'hours' : 'days',
+        selectedEventTypes: ['1', '2'], // Default selection, could be enhanced
+        actions: [{
+          id: '1',
+          type: workflow.action.includes('emails to attendees') ? 'email-attendees' :
+                workflow.action.includes('emails to host') ? 'email-host' :
+                workflow.action.includes('SMS') ? 'sms-attendees' :
+                workflow.action.includes('whatsapp') ? 'whatsapp-attendee' : 'email-attendees',
+          expanded: true,
+          senderName: 'OneHash',
+          messageTemplate: 'Reminder',
+          emailSubject: `Reminder: {EVENT_NAME} - {EVENT_DATE}`,
+          emailBody: `Hi {ATTENDEE_FIRST_NAME},\n\nThis is a reminder about your upcoming event.\n\nEvent: {EVENT_NAME}\nDate & Time: {EVENT_DATE} - {EVENT_END_TIME} {TIMEZONE}\n\nBest regards,\nOneHash Cal`,
+          includeCalendar: true,
+          phoneNumber: '',
+          countryCode: '+1',
+          verificationCode: '',
+          senderId: 'OneHash',
+          textMessage: workflow.action.includes('SMS') || workflow.action.includes('whatsapp') ? 
+                      `Hi {ATTENDEE_FIRST_NAME}, reminder: {EVENT_NAME} starts soon at {EVENT_TIME}.` : ''
+        }]
+      };
+      navigate('/workflows/new', { state: { editWorkflow: editData } });
+    }
   };
 
   const handleWorkflowToggle = (workflowId: string, enabled: boolean) => {

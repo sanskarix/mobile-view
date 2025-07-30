@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   ChevronDown, Moon, HelpCircle, MapPin, LogOut, User, Settings,
   FileIcon, Mail, ArrowLeft,
-  Edit
+  Edit,
+  Delete,
+  Trash2
 } from 'lucide-react';
 import { Switch } from './ui/switch';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -100,30 +102,37 @@ export const Header = ({ metaData }: HeaderProps) => {
         <div className="flex items-center space-x-2 ml-auto">
           {metaData && metaData.enabled !== undefined && metaData.onEnabledChange && (
             <>
-              <div className="flex items-center space-x-2">
-                <TooltipProvider delayDuration={0}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div>
-                        <Switch
-                          checked={metaData.enabled}
-                          onCheckedChange={metaData.onEnabledChange}
-                        />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      {metaData.enabled ? "Disable" : "Enable"}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className='flex items-center'>
+                      <Switch
+                        checked={metaData.enabled}
+                        onCheckedChange={metaData.onEnabledChange}
+                        className='self-center'
+                      />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {metaData.enabled ? "Disable" : "Enable"}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
               <div className="w-px h-6 bg-border" />
-              <button
-                onClick={() => console.log('Save clicked')}
-                className="px-3 py-1 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
-              >
-                Save
-              </button>
+              <div className="flex items-center">
+                <button
+                  onClick={() => console.log('Save clicked')}
+                  className="px-3 py-1 text-sm border-l border-t border-b rounded-l-md font-medium hover:bg-secondary transition-colors"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => console.log('Save clicked')}
+                  className="px-3 py-1 text-sm border rounded-r-md font-medium hover:bg-secondary transition-colors"
+                >
+                  Save
+                </button>
+              </div>
               <div className="w-px h-6 bg-border" />
             </>
           )}
