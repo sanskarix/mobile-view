@@ -189,6 +189,17 @@ export const Insights = () => {
       );
     }
   };
+
+  const handleExport = () => {
+    toast.success('File downloaded successfully!');
+  };
+
+  const tabs = [
+    { id: 'bookings', label: 'Bookings' },
+    { id: 'routings', label: 'Routings' },
+    { id: 'workflows', label: 'Workflows' }
+  ];
+
   return (
     <div className="space-y-6 p-6">
       {/* Header Controls */}
