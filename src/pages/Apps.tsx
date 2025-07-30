@@ -4,8 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { HeaderMeta } from '@/components/Layout';
 import { AppDetails } from '@/components/AppDetails';
-import { AppSettingsModal } from '@/components/AppSettingsModal';
-import { Search, Package, Settings } from 'lucide-react';
+import { Search, Package } from 'lucide-react';
 
 interface App {
   id: string;
@@ -135,7 +134,6 @@ export const Apps = () => {
   const [selectedCategory, setSelectedCategory] = useState('All Integrations');
   const [installedApps, setInstalledApps] = useState<App[]>([]);
   const [selectedApp, setSelectedApp] = useState<App | null>(null);
-  const [settingsApp, setSettingsApp] = useState<App | null>(null);
 
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
 
@@ -320,10 +318,9 @@ export const Apps = () => {
                           variant="outline"
                           size="sm"
                           className="flex-1"
-                          onClick={() => setSettingsApp(app)}
+                          onClick={() => setSelectedApp(app)}
                         >
-                          <Settings className="mr-2 h-4 w-4" />
-                          Settings
+                          Details
                         </Button>
                         <Button
                           variant="outline"
@@ -356,14 +353,5 @@ export const Apps = () => {
     );
   }
 
-  return (
-    <>
-      {mainContent}
-      <AppSettingsModal
-        app={settingsApp}
-        isOpen={!!settingsApp}
-        onClose={() => setSettingsApp(null)}
-      />
-    </>
-  );
+  return mainContent;
 };

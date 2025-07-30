@@ -36,25 +36,16 @@ import {
   Clock,
   Users,
   Target,
-  BarChart3,
-  Filter,
-  Mail,
-  Phone,
-  MessageSquare,
-  Send,
-  Eye,
-  XCircle
+  BarChart3
 } from 'lucide-react';
 import { HeaderMeta } from '@/components/Layout';
-import { DatePickerWithRange } from '@/components/ui/date-range-picker';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 // Mock data
-const totalBookingsOverTimeData = [
-  { week: 'Week 1', bookings: 145 },
-  { week: 'Week 2', bookings: 168 },
-  { week: 'Week 3', bookings: 152 },
-  { week: 'Week 4', bookings: 189 },
+const bookingConversionData = [
+  { week: 'Week 1', rate: 68 },
+  { week: 'Week 2', rate: 72 },
+  { week: 'Week 3', rate: 65 },
+  { week: 'Week 4', rate: 78 },
 ];
 
 const totalBookingsData = [
@@ -67,6 +58,11 @@ const totalBookingsData = [
   { day: 'Sun', bookings: 8 },
 ];
 
+const showUpData = [
+  { name: 'Attended', value: 85, color: 'hsl(var(--chart-1))' },
+  { name: 'No-show', value: 15, color: 'hsl(var(--chart-2))' },
+];
+
 const popularTimesData = [
   { hour: '9AM', bookings: 12 },
   { hour: '10AM', bookings: 18 },
@@ -76,31 +72,24 @@ const popularTimesData = [
   { hour: '4PM', bookings: 15 },
 ];
 
-const routingResponsesData = [
-  { name: 'John Smith', email: 'john@example.com', city: 'San Francisco', role: 'Product Manager', bookingStatus: 'Accepted', submittedOn: '2024-01-15' },
-  { name: 'Sarah Jones', email: 'sarah@example.com', city: 'New York', role: 'Designer', bookingStatus: 'Pending', submittedOn: '2024-01-14' },
-  { name: 'Mike Brown', email: 'mike@example.com', city: 'Austin', role: 'Developer', bookingStatus: 'Canceled', submittedOn: '2024-01-13' },
-  { name: 'Lisa Wilson', email: 'lisa@example.com', city: 'Seattle', role: 'Marketing Manager', bookingStatus: 'Accepted', submittedOn: '2024-01-12' },
+const routingFunnelData = [
+  { name: 'Form Views', value: 1000, fill: 'hsl(var(--chart-1))' },
+  { name: 'Form Completions', value: 750, fill: 'hsl(var(--chart-2))' },
+  { name: 'Qualified Leads', value: 600, fill: 'hsl(var(--chart-3))' },
+  { name: 'Bookings', value: 420, fill: 'hsl(var(--chart-4))' },
 ];
 
-const workflowMessages = [
-  { workflow: 'Welcome Email', usage: 340, percentage: '28%' },
-  { workflow: 'Reminder SMS', usage: 280, percentage: '23%' },
-  { workflow: 'Follow-up WhatsApp', usage: 245, percentage: '20%' },
-  { workflow: 'Confirmation Email', usage: 190, percentage: '16%' },
-  { workflow: 'Cancellation Notice', usage: 160, percentage: '13%' },
+const workflowAutomationData = [
+  { month: 'Jan', automated: 340, manual: 120 },
+  { month: 'Feb', automated: 380, manual: 95 },
+  { month: 'Mar', automated: 420, manual: 80 },
+  { month: 'Apr', automated: 390, manual: 110 },
 ];
 
 export const Insights = () => {
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
   const [activeTab, setActiveTab] = useState('bookings');
   const [dateRange, setDateRange] = useState('7d');
-  const [showCustomDate, setShowCustomDate] = useState(false);
-  const [selectedAccount, setSelectedAccount] = useState('personal');
-  const [selectedEventType, setSelectedEventType] = useState('all');
-  const [selectedForm, setSelectedForm] = useState('all');
-  const [selectedBookingStatus, setSelectedBookingStatus] = useState('all');
-  const [selectedWorkflowType, setSelectedWorkflowType] = useState('email');
 
   React.useEffect(() => {
     setHeaderMeta({
@@ -129,6 +118,7 @@ export const Insights = () => {
     </Card>
   );
 
+<<<<<<< HEAD
   const getTabSpecificAlerts = () => {
     if (activeTab === 'bookings') {
     } else if (activeTab === 'routings') {
@@ -168,6 +158,8 @@ export const Insights = () => {
     }
   };
 
+=======
+>>>>>>> origin/main
   return (
     <div className="space-y-6 p-6">
       {/* Main Tabs */}
@@ -180,23 +172,7 @@ export const Insights = () => {
       {/* Header Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-4">
-          <Select value={selectedAccount} onValueChange={setSelectedAccount}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="personal">Personal</SelectItem>
-              <SelectItem value="team1">Team 1</SelectItem>
-              <SelectItem value="team2">Team 2</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <Select value={dateRange} onValueChange={(value) => {
-            setDateRange(value);
-            setShowCustomDate(value === 'custom');
-          }}>
+          <Select value={dateRange} onValueChange={setDateRange}>
             <SelectTrigger className="w-[180px]">
               <SelectValue />
             </SelectTrigger>
@@ -205,12 +181,8 @@ export const Insights = () => {
               <SelectItem value="30d">Last 30 days</SelectItem>
               <SelectItem value="90d">Last 90 days</SelectItem>
               <SelectItem value="1y">Last year</SelectItem>
-              <SelectItem value="custom">Custom</SelectItem>
             </SelectContent>
           </Select>
-          {showCustomDate && (
-            <DatePickerWithRange className="w-auto" />
-          )}
           <Button variant="outline" size="sm">
             <Download className="mr-2 h-4 w-4" />
             Export
@@ -218,30 +190,45 @@ export const Insights = () => {
         </div>
       </div>
 
+<<<<<<< HEAD
         {/* Alert Cards */}
         {getTabSpecificAlerts()}
+=======
+      {/* Alert Cards */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <Alert>
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription>
+            No-show rate increased by 12% this week. Consider implementing reminder workflows.
+          </AlertDescription>
+        </Alert>
+        <Alert>
+          <CheckCircle className="h-4 w-4" />
+          <AlertDescription>
+            Conversion rate is up 8% - your new routing logic is performing well!
+          </AlertDescription>
+        </Alert>
+      </div>
+
+      {/* Main Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="bookings">Bookings</TabsTrigger>
+          <TabsTrigger value="routings">Routings</TabsTrigger>
+          <TabsTrigger value="workflows">Workflows</TabsTrigger>
+        </TabsList>
+>>>>>>> origin/main
 
         {/* Bookings Tab */}
         <TabsContent value="bookings" className="space-y-6">
-          {/* Filters */}
-          <div className="flex items-center gap-4">
-            <Select value={selectedEventType} onValueChange={setSelectedEventType}>
-              <SelectTrigger className="w-[200px]">
-                <Filter className="mr-2 h-4 w-4" />
-                <SelectValue placeholder="Event Types" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Event Types</SelectItem>
-                <SelectItem value="sales-demo">Sales Demo</SelectItem>
-                <SelectItem value="discovery-call">Discovery Call</SelectItem>
-                <SelectItem value="technical-interview">Technical Interview</SelectItem>
-                <SelectItem value="follow-up">Follow-up Meeting</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
           {/* Key Metrics */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <MetricCard
+              title="Booking Conversion Rate"
+              value="73.2%"
+              trend={5.1}
+              icon={Target}
+            />
             <MetricCard
               title="Total Bookings"
               value="168"
@@ -249,16 +236,10 @@ export const Insights = () => {
               icon={Calendar}
             />
             <MetricCard
-              title="Events Rescheduled"
-              value="23"
-              trend={-5.2}
-              icon={Clock}
-            />
-            <MetricCard
-              title="Events Canceled"
-              value="12"
-              trend={8.1}
-              icon={XCircle}
+              title="Show-up Rate"
+              value="85%"
+              trend={-2.1}
+              icon={CheckCircle}
             />
             <MetricCard
               title="Avg Meeting Duration"
@@ -269,21 +250,21 @@ export const Insights = () => {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
-            {/* Total Bookings Over Time */}
+            {/* Booking Conversion Trend */}
             <Card>
               <CardHeader>
-                <CardTitle>Total Bookings Over Time</CardTitle>
+                <CardTitle>Booking Conversion Trend</CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={totalBookingsOverTimeData}>
+                  <LineChart data={bookingConversionData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="week" />
                     <YAxis />
                     <Tooltip />
                     <Line 
                       type="monotone" 
-                      dataKey="bookings" 
+                      dataKey="rate" 
                       stroke="hsl(var(--primary))" 
                       strokeWidth={3}
                     />
@@ -292,34 +273,40 @@ export const Insights = () => {
               </CardContent>
             </Card>
 
-            {/* Meeting Overview */}
+            {/* Show-up vs No-show */}
             <Card>
               <CardHeader>
-                <CardTitle>Meeting Overview</CardTitle>
+                <CardTitle>Attendance Rate</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  <div className="space-y-2">
-                    <div className="text-3xl font-bold text-primary">168</div>
-                    <div className="text-sm text-muted-foreground">Total Booked</div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-3xl font-bold text-orange-500">12</div>
-                    <div className="text-sm text-muted-foreground">Cancelled</div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-3xl font-bold text-red-500">25</div>
-                    <div className="text-sm text-muted-foreground">No Show</div>
-                  </div>
-                </div>
-                <div className="mt-6">
-                  <div className="flex justify-between text-sm mb-2">
-                    <span>Attendance Rate</span>
-                    <span>85%</span>
-                  </div>
-                  <div className="w-full bg-muted rounded-full h-2">
-                    <div className="bg-primary h-2 rounded-full" style={{ width: '85%' }} />
-                  </div>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={showUpData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={120}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {showUpData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="flex justify-center gap-4 mt-4">
+                  {showUpData.map((entry, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <div 
+                        className="w-3 h-3 rounded-full" 
+                        style={{ backgroundColor: entry.color }}
+                      />
+                      <span className="text-sm">{entry.name}: {entry.value}%</span>
+                    </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
@@ -389,288 +376,162 @@ export const Insights = () => {
 
         {/* Routings Tab */}
         <TabsContent value="routings" className="space-y-6">
-          {/* Filters */}
-          <div className="flex items-center gap-4">
-            <Select value={selectedForm} onValueChange={setSelectedForm}>
-              <SelectTrigger className="w-[200px]">
-                <Filter className="mr-2 h-4 w-4" />
-                <SelectValue placeholder="Select Forms" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Forms</SelectItem>
-                <SelectItem value="sales-qualification">Sales Qualification</SelectItem>
-                <SelectItem value="technical-assessment">Technical Assessment</SelectItem>
-                <SelectItem value="general-inquiry">General Inquiry</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={selectedBookingStatus} onValueChange={setSelectedBookingStatus}>
-              <SelectTrigger className="w-[200px]">
-                <Filter className="mr-2 h-4 w-4" />
-                <SelectValue placeholder="Booking Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Statuses</SelectItem>
-                <SelectItem value="canceled">Canceled</SelectItem>
-                <SelectItem value="accepted">Accepted</SelectItem>
-                <SelectItem value="rejected">Rejected</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="awaiting-host">Awaiting host</SelectItem>
-                <SelectItem value="no-booking">No booking</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <MetricCard
+              title="Routing Success Rate"
+              value="42%"
+              trend={8.2}
+              icon={Target}
+            />
+            <MetricCard
+              title="Form Completion Rate"
+              value="75%"
+              trend={-3.1}
+              icon={CheckCircle}
+            />
+            <MetricCard
+              title="Avg Completion Time"
+              value="2.4 min"
+              trend={-12.5}
+              icon={Clock}
+            />
+            <MetricCard
+              title="Qualified Leads"
+              value="80%"
+              trend={5.7}
+              icon={Users}
+            />
           </div>
 
-          {/* Big Number Cards */}
-          <div className="grid gap-4 md:grid-cols-3">
-            <Card className="bg-blue-50 border-blue-200">
-              <CardContent className="p-6 text-center">
-                <div className="text-4xl font-bold text-blue-600">1,250</div>
-                <div className="text-sm font-medium text-blue-800 mt-2">Total Responses</div>
-                <div className="text-xs text-blue-600 mt-1">All users who submitted the form</div>
+          <div className="grid gap-6 md:grid-cols-2">
+            {/* Routing Funnel */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Routing Conversion Funnel</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={400}>
+                  <BarChart data={routingFunnelData} layout="horizontal">
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis type="number" />
+                    <YAxis dataKey="name" type="category" width={120} />
+                    <Tooltip />
+                    <Bar dataKey="value" fill="hsl(var(--primary))" />
+                  </BarChart>
+                </ResponsiveContainer>
               </CardContent>
             </Card>
-            <Card className="bg-green-50 border-green-200">
-              <CardContent className="p-6 text-center">
-                <div className="text-4xl font-bold text-green-600">840</div>
-                <div className="text-sm font-medium text-green-800 mt-2">Responses With Booking</div>
-                <div className="text-xs text-green-600 mt-1">Users who went on to book a meeting</div>
-              </CardContent>
-            </Card>
-            <Card className="bg-orange-50 border-orange-200">
-              <CardContent className="p-6 text-center">
-                <div className="text-4xl font-bold text-orange-600">410</div>
-                <div className="text-sm font-medium text-orange-800 mt-2">Responses Without Booking</div>
-                <div className="text-xs text-orange-600 mt-1">Users who did not book after replying</div>
-              </CardContent>
-            </Card>
-          </div>
 
-          {/* Vertical Funnel Chart */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Routing Flow Visualization</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col items-center space-y-4 py-8">
-                {/* Total Responses */}
-                <div className="w-80 h-20 bg-blue-100 rounded-lg flex items-center justify-center border-2 border-blue-300">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-700">1,250</div>
-                    <div className="text-sm text-blue-600">Total Responses</div>
-                  </div>
-                </div>
-                
-                {/* Arrow Down */}
-                <div className="text-muted-foreground">↓</div>
-                
-                {/* Split */}
-                <div className="flex space-x-8">
-                  {/* With Booking */}
-                  <div className="flex flex-col items-center space-y-2">
-                    <div className="text-sm text-green-600 font-medium">67% booked</div>
-                    <div className="w-60 h-16 bg-green-100 rounded-lg flex items-center justify-center border-2 border-green-300">
-                      <div className="text-center">
-                        <div className="text-xl font-bold text-green-700">840</div>
-                        <div className="text-xs text-green-600">With Booking</div>
+            {/* Routing Paths Performance */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Conversion by Routing Path</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {[
+                    { path: 'Sales Qualification', views: 320, conversions: 156, rate: '48.8%' },
+                    { path: 'Technical Assessment', views: 180, conversions: 72, rate: '40.0%' },
+                    { path: 'General Inquiry', views: 500, conversions: 190, rate: '38.0%' },
+                  ].map((path, index) => (
+                    <div key={index} className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="font-medium">{path.path}</span>
+                        <Badge variant="outline">{path.rate}</Badge>
+                      </div>
+                      <div className="w-full bg-muted rounded-full h-2">
+                        <div 
+                          className="bg-primary h-2 rounded-full" 
+                          style={{ width: path.rate }}
+                        />
+                      </div>
+                      <div className="flex justify-between text-sm text-muted-foreground">
+                        <span>{path.conversions} conversions</span>
+                        <span>{path.views} views</span>
                       </div>
                     </div>
-                  </div>
-                  
-                  {/* Without Booking */}
-                  <div className="flex flex-col items-center space-y-2">
-                    <div className="text-sm text-orange-600 font-medium">33% did not book</div>
-                    <div className="w-60 h-16 bg-orange-100 rounded-lg flex items-center justify-center border-2 border-orange-300">
-                      <div className="text-center">
-                        <div className="text-xl font-bold text-orange-700">410</div>
-                        <div className="text-xs text-orange-600">Without Booking</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Responses Table */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Responses</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Booked By</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>City</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Booking Status</TableHead>
-                    <TableHead>Submitted On</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {routingResponsesData.map((response, index) => (
-                    <TableRow key={index}>
-                      <TableCell>
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                      </TableCell>
-                      <TableCell className="font-medium">{response.name}</TableCell>
-                      <TableCell>{response.email}</TableCell>
-                      <TableCell>{response.city}</TableCell>
-                      <TableCell>{response.role}</TableCell>
-                      <TableCell>
-                        <Badge variant={response.bookingStatus === 'Accepted' ? 'default' : 'secondary'}>
-                          {response.bookingStatus}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{response.submittedOn}</TableCell>
-                    </TableRow>
                   ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
         {/* Workflows Tab */}
         <TabsContent value="workflows" className="space-y-6">
-          {/* Filters */}
-          <div className="flex items-center gap-4">
-            <Select value={selectedWorkflowType} onValueChange={setSelectedWorkflowType}>
-              <SelectTrigger className="w-[200px]">
-                <Filter className="mr-2 h-4 w-4" />
-                <SelectValue placeholder="Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="email">
-                  <div className="flex items-center gap-2">
-                    <Mail className="h-4 w-4" />
-                    Email
-                  </div>
-                </SelectItem>
-                <SelectItem value="sms">
-                  <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4" />
-                    SMS
-                  </div>
-                </SelectItem>
-                <SelectItem value="whatsapp">
-                  <div className="flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4" />
-                    WhatsApp
-                  </div>
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Key Metrics */}
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <MetricCard
-              title="Total Messages Triggered"
-              value="4,280"
-              trend={12.3}
+              title="Automation Rate"
+              value="78%"
+              trend={15.2}
+              icon={BarChart3}
+            />
+            <MetricCard
+              title="Avg Response Time"
+              value="4.2 min"
+              trend={-22.1}
+              icon={Clock}
+            />
+            <MetricCard
+              title="Workflow Success Rate"
+              value="94%"
+              trend={2.3}
+              icon={CheckCircle}
+            />
+            <MetricCard
+              title="Active Workflows"
+              value="12"
+              trend={0}
               icon={Target}
             />
-            <MetricCard
-              title="Messages Sent"
-              value="4,105"
-              trend={10.1}
-              icon={Send}
-            />
-            <MetricCard
-              title="Messages Read"
-              value="3,204"
-              trend={8.5}
-              icon={Eye}
-            />
-            <MetricCard
-              title="Messages Failed"
-              value="175"
-              trend={-15.2}
-              icon={XCircle}
-            />
           </div>
 
-          {/* Message Pipeline */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Message Flow Pipeline</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                {/* Progress Bar */}
-                <div className="relative">
-                  <div className="flex justify-between text-sm font-medium mb-2">
-                    <span>Messages Triggered</span>
-                    <span>Messages Sent</span>
-                    <span>Messages Read</span>
-                    <span>Messages Failed</span>
-                  </div>
-                  <div className="flex">
-                    <div className="flex-1 bg-blue-200 h-8 flex items-center justify-center text-sm font-medium text-blue-800 first:rounded-l-lg">
-                      4,280 (100%)
-                    </div>
-                    <div className="flex-1 bg-green-200 h-8 flex items-center justify-center text-sm font-medium text-green-800">
-                      4,105 (96%)
-                    </div>
-                    <div className="flex-1 bg-yellow-200 h-8 flex items-center justify-center text-sm font-medium text-yellow-800">
-                      3,204 (78%)
-                    </div>
-                    <div className="flex-1 bg-red-200 h-8 flex items-center justify-center text-sm font-medium text-red-800 last:rounded-r-lg">
-                      175 (4%)
-                    </div>
-                  </div>
-                </div>
+          <div className="grid gap-6 md:grid-cols-2">
+            {/* Automation vs Manual */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Automated vs Manual Handling</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={workflowAutomationData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="automated" stackId="a" fill="hsl(var(--chart-1))" />
+                    <Bar dataKey="manual" stackId="a" fill="hsl(var(--chart-2))" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
 
-                {/* Summary Table */}
-                <div className="grid grid-cols-4 gap-4 text-center">
-                  <div className="space-y-1">
-                    <div className="text-2xl font-bold">4,280</div>
-                    <div className="text-sm text-muted-foreground">Triggered</div>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="text-2xl font-bold text-green-600">96%</div>
-                    <div className="text-sm text-muted-foreground">Delivery Rate</div>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="text-2xl font-bold text-yellow-600">78%</div>
-                    <div className="text-sm text-muted-foreground">Read Rate</div>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="text-2xl font-bold text-red-600">4%</div>
-                    <div className="text-sm text-muted-foreground">Failure Rate</div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Most Used Workflows */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Most Used Workflows</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {workflowMessages.map((workflow, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 rounded-lg border">
-                    <div className="flex items-center gap-3">
-                      {selectedWorkflowType === 'email' && <Mail className="h-5 w-5 text-blue-500" />}
-                      {selectedWorkflowType === 'sms' && <Phone className="h-5 w-5 text-green-500" />}
-                      {selectedWorkflowType === 'whatsapp' && <MessageSquare className="h-5 w-5 text-green-600" />}
+            {/* Top Automated Actions */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Busiest Automated Actions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {[
+                    { action: 'Send Confirmation Email', triggers: 340, percentage: '28%' },
+                    { action: 'Calendar Sync', triggers: 280, percentage: '23%' },
+                    { action: 'Reminder Notifications', triggers: 245, percentage: '20%' },
+                    { action: 'Follow-up Sequence', triggers: 190, percentage: '16%' },
+                    { action: 'Slack Notifications', triggers: 160, percentage: '13%' },
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 rounded-lg border">
                       <div>
-                        <h4 className="font-medium">{workflow.workflow}</h4>
-                        <p className="text-sm text-muted-foreground">{workflow.usage} messages</p>
+                        <h4 className="font-medium">{item.action}</h4>
+                        <p className="text-sm text-muted-foreground">{item.triggers} triggers</p>
                       </div>
+                      <Badge variant="secondary">{item.percentage}</Badge>
                     </div>
-                    <Badge variant="secondary">{workflow.percentage}</Badge>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
       </Tabs>
     </div>
