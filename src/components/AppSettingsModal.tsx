@@ -9,7 +9,7 @@ interface AppSettingsModalProps {
     name: string;
     description: string;
     logo: string;
-  };
+  } | null;
   isOpen: boolean;
   onClose: () => void;
 }
