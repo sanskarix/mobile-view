@@ -210,23 +210,24 @@ export const Apps = () => {
           
           {/* Horizontal Category Filters */}
           <div className="w-1/2 overflow-x-auto">
-          <div className="flex gap-2 pb-2">
-          {categories.map(category => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`flex-shrink-0 px-4 py-2 text-sm rounded-[8px] transition-all ${
-                selectedCategory === category
-                  ? 'bg-[#007ee5] text-primary-foreground'
-                  : 'bg-[#edf0f4] text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              {category}
-            </button>
-          ))}
+            <div className="flex gap-2 pb-2">
+              {categories.map(category => (
+                <button 
+                  key={category} 
+                  onClick={() => setSelectedCategory(category)} 
+                  className={`flex-shrink-0 px-4 py-2 text-sm rounded-full border transition-all ${
+                    selectedCategory === category 
+                      ? 'bg-primary text-primary-foreground border-primary' 
+                      : 'bg-background text-muted-foreground border-border hover:text-foreground hover:border-muted-foreground'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-
 
       <div className="">
         {/* Apps Grid */}
