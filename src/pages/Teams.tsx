@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../components/ui/button';
-import { Users, MoreHorizontal, Edit, ExternalLink, UserPlus, Trash2, Clock2 } from 'lucide-react';
+import { Users, MoreHorizontal, Edit, ExternalLink, UserPlus, Trash2, Clock2, Plus } from 'lucide-react';
 import { CreateTeamModal } from '../components/CreateTeamModal';
 import { TeamCard } from '../components/TeamCard';
 import { useNavigate } from 'react-router-dom';
@@ -10,13 +10,24 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../components/ui/dropdown-menu';
+import { useOutletContext } from 'react-router-dom';
+import type { HeaderMeta } from '../components/Layout';
+
 export const Teams = () => {
   const navigate = useNavigate();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showDisbandModal, setShowDisbandModal] = useState(false);
   const [teams, setTeams] = useState<any[]>([]);
+  const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
 
+  useEffect(() => {
+    setHeaderMeta({
+      title: 'Teams',
+      description: 'Create and manage teams to use collaborative features.',
+    });
+  }, [setHeaderMeta]);
+  
   // Load teams from localStorage on component mount
   useEffect(() => {
     const loadTeams = () => {
@@ -96,7 +107,14 @@ export const Teams = () => {
         </div> :
     // Teams display
     <div className="px-8 pt-3 pb-6 space-y-4 w-full max-w-full">
-          
+        <div className="flex items-center justify-end mb-4">
+          <Button
+            className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
+          >
+            <Plus className="h-4 w-4" />
+            New team
+          </Button>
+        </div>
 
           <div className="space-y-4">
             {teams.map((team, index) => (
@@ -114,17 +132,6 @@ export const Teams = () => {
                         <h3 className="font-semibold text-foreground text-base">{team.name}</h3>
                         <div className="relative flex items-center space-x-1 px-2 py-1 bg-muted/50 rounded text-xs text-muted-foreground">
                           <span>cal.id/team/{team.url}</span>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground">Team collaboration and scheduling</p>
-                      <div className="flex items-center mt-2">
-                        <span className="inline-flex items-center px-2 py-1 bg-muted text-foreground text-xs rounded mr-2">
-                          <Users className="h-3 w-3 mr-1" />
-                          Team
-                        </span>
-                        <div className="flex items-center text-xs text-muted-foreground">
-                          <Clock2 className="h-3 w-3 mr-1" />
-                          <span>Active</span>
                         </div>
                       </div>
                     </div>
@@ -169,13 +176,6 @@ export const Teams = () => {
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* Add new team button */}
-          <div className="mt-8 text-center">
-            <Button onClick={() => setShowCreateModal(true)} variant="outline">
-              Create another team
-            </Button>
           </div>
         </div>}
 

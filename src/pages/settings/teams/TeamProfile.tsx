@@ -13,12 +13,7 @@ export const TeamProfile = () => {
   const [teamUrl, setTeamUrl] = useState('test1');
   const [bio, setBio] = useState('');
   return <div className="min-h-screen bg-background flex justify-center">
-      <div className="p-8 max-w-4xl w-full">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-semibold mb-2">Team Profile</h1>
-          <p className="text-muted-foreground">Manage your team's public profile information</p>
-        </div>
-
+      <div className="p-8 w-full">
         <div className="border rounded-lg p-6 bg-card">
           <div className="space-y-6">
           <div className="space-y-2">
