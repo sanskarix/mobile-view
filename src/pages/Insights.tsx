@@ -547,39 +547,6 @@ export const Insights = () => {
               />
             </div>
 
-            {/* Message Pipeline */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Message Flow Pipeline</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  {/* Progress Bar */}
-
-
-                  {/* Summary Table */}
-                  <div className="grid grid-cols-4 gap-4 text-center">
-                    <div className="space-y-1">
-                      <div className="text-2xl font-bold">4,280</div>
-                      <div className="text-sm text-muted-foreground">Triggered</div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="text-2xl font-bold text-green-600">96%</div>
-                      <div className="text-sm text-muted-foreground">Delivery Rate</div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="text-2xl font-bold text-yellow-600">78%</div>
-                      <div className="text-sm text-muted-foreground">Read Rate</div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="text-2xl font-bold text-red-600">4%</div>
-                      <div className="text-sm text-muted-foreground">Failure Rate</div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
             {/* Most Used Workflows */}
             <Card>
               <CardHeader>
