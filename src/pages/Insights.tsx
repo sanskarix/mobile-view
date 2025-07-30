@@ -314,7 +314,7 @@ export const Insights = () => {
         {activeTab === 'bookings' && (
           <div className="space-y-6">
             {/* Key Metrics */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
               <MetricCard
                 title="Total Bookings"
                 value="168"
@@ -332,6 +332,12 @@ export const Insights = () => {
                 value="12"
                 trend={8.1}
                 icon={XCircle}
+              />
+              <MetricCard
+                title="No Show"
+                value="25"
+                trend={15.3}
+                icon={AlertTriangle}
               />
               <MetricCard
                 title="Avg Meeting Duration"
