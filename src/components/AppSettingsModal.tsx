@@ -16,25 +16,29 @@ interface AppSettingsModalProps {
 
 const appTemplates = {
   zapier: [
-    { name: 'Email Automation', url: 'https://zapier.com/templates/email-automation' },
-    { name: 'Slack Notifications', url: 'https://zapier.com/templates/slack-notifications' },
-    { name: 'Google Sheets Integration', url: 'https://zapier.com/templates/google-sheets' },
-    { name: 'CRM Sync', url: 'https://zapier.com/templates/crm-sync' },
+    { name: 'Send emails via Gmail for scheduled events', description: 'Gmail', url: 'https://zapier.com/apps/gmail/integrations', buttonText: 'Use Zap' },
+    { name: 'Create Google Sheets rows for scheduled events', description: 'Google Sheets', url: 'https://zapier.com/apps/google-sheets/integrations', buttonText: 'Use Zap' },
+    { name: 'Create Salesforce leads from new bookings', description: 'Salesforce', url: 'https://zapier.com/apps/salesforce/integrations', buttonText: 'Use Zap' },
+    { name: 'Create Todoist tasks for scheduled events', description: 'Todoist', url: 'https://zapier.com/apps/todoist/integrations', buttonText: 'Use Zap' },
+    { name: 'Send emails via Gmail for rescheduled events', description: 'Gmail', url: 'https://zapier.com/apps/gmail/integrations', buttonText: 'Use Zap' },
+    { name: 'Send emails via Gmail for cancelled events', description: 'Gmail', url: 'https://zapier.com/apps/gmail/integrations', buttonText: 'Use Zap' },
+    { name: 'Send emails via Gmail after scheduled meetings end', description: 'Gmail', url: 'https://zapier.com/apps/gmail/integrations', buttonText: 'Use Zap' },
+    { name: 'Add new bookings to Google Calendar', description: 'Google Calendar', url: 'https://zapier.com/apps/google-calendar/integrations', buttonText: 'Use Zap' },
   ],
   plausible: [
-    { name: 'Analytics Dashboard', url: 'https://plausible.io/dashboard' },
-    { name: 'Custom Events', url: 'https://plausible.io/docs/custom-events' },
-    { name: 'Goal Tracking', url: 'https://plausible.io/docs/goal-conversions' },
+    { name: 'Analytics Dashboard', description: 'View your site analytics', url: 'https://plausible.io/dashboard', buttonText: 'Open Dashboard' },
+    { name: 'Custom Events', description: 'Track custom events', url: 'https://plausible.io/docs/custom-events', buttonText: 'Learn More' },
+    { name: 'Goal Tracking', description: 'Set up conversion goals', url: 'https://plausible.io/docs/goal-conversions', buttonText: 'Setup Goals' },
   ],
   'google-analytics': [
-    { name: 'GA4 Setup', url: 'https://analytics.google.com/analytics/web/' },
-    { name: 'Conversion Tracking', url: 'https://support.google.com/analytics/answer/1032415' },
-    { name: 'Custom Reports', url: 'https://support.google.com/analytics/answer/1151300' },
+    { name: 'GA4 Setup', description: 'Configure Google Analytics 4', url: 'https://analytics.google.com/analytics/web/', buttonText: 'Open GA4' },
+    { name: 'Conversion Tracking', description: 'Track conversions', url: 'https://support.google.com/analytics/answer/1032415', buttonText: 'Setup Tracking' },
+    { name: 'Custom Reports', description: 'Create custom reports', url: 'https://support.google.com/analytics/answer/1151300', buttonText: 'Create Report' },
   ],
   default: [
-    { name: 'Getting Started Guide', url: '#' },
-    { name: 'Integration Templates', url: '#' },
-    { name: 'Best Practices', url: '#' },
+    { name: 'Getting Started Guide', description: 'Learn the basics', url: '#', buttonText: 'Get Started' },
+    { name: 'Integration Templates', description: 'Pre-built templates', url: '#', buttonText: 'Browse Templates' },
+    { name: 'Best Practices', description: 'Optimization tips', url: '#', buttonText: 'Learn More' },
   ],
 };
 
