@@ -38,6 +38,7 @@ import { WorkflowTemplates } from "./pages/WorkflowTemplates";
 import { WorkflowBuilder } from "./pages/WorkflowBuilder";
 import { Apps } from "./pages/Apps";
 import Home from "./pages/Home";
+import { Insights } from "./pages/Insights";
 import { HeaderProvider } from "./contexts/HeaderContext";
 
 const queryClient = new QueryClient();
@@ -66,7 +67,7 @@ const App = () => (
               <Route path="workflows/templates" element={<WorkflowTemplates />} />
               <Route path="workflows/new" element={<WorkflowBuilder />} />
               <Route path="workflows/:workflowId/edit" element={<WorkflowBuilder />} />
-              <Route path="insights" element={<div className="p-8">Insights page coming soon</div>} />
+              <Route path="insights" element={<Insights />} />
             </Route>
             
             <Route path="/settings" element={<Settings />}>
