@@ -559,8 +559,26 @@ export const Insights = () => {
                     <XAxis dataKey="week" />
                     <YAxis />
                     <Tooltip
-                      formatter={(value, name) => [value, name]}
-                      labelFormatter={(label) => `Week: ${label}`}
+                      content={({ active, payload, label }) => {
+                        if (active && payload && payload.length) {
+                          return (
+                            <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+                              <p className="text-sm font-medium text-gray-700 mb-2">{label}</p>
+                              {payload.map((entry, index) => (
+                                <div key={index} className="flex items-center gap-2 text-sm">
+                                  <div
+                                    className="w-3 h-3 rounded-full"
+                                    style={{ backgroundColor: entry.color }}
+                                  />
+                                  <span className="text-gray-600">{entry.dataKey}:</span>
+                                  <span className="font-medium text-gray-900">{entry.value}</span>
+                                </div>
+                              ))}
+                            </div>
+                          );
+                        }
+                        return null;
+                      }}
                     />
                     <Line
                       type="monotone"
