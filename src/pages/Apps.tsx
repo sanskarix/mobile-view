@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { HeaderMeta } from '@/components/Layout';
 import { AppDetails } from '@/components/AppDetails';
-import { Search, Package } from 'lucide-react';
+import { Search, Package, Settings } from 'lucide-react';
 
 interface App {
   id: string;
