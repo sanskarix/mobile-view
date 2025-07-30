@@ -36,9 +36,19 @@ import {
   Clock,
   Users,
   Target,
-  BarChart3
+  BarChart3,
+  Filter,
+  Mail,
+  Phone,
+  MessageSquare,
+  Send,
+  Eye,
+  XCircle
 } from 'lucide-react';
 import { HeaderMeta } from '@/components/Layout';
+import { DatePickerWithRange } from '@/components/ui/date-range-picker';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { toast } from 'sonner';
 
 // Mock data
 const bookingConversionData = [
