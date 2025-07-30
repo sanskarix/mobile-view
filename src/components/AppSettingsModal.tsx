@@ -43,6 +43,10 @@ export const AppSettingsModal: React.FC<AppSettingsModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  if (!app) {
+    return null;
+  }
+
   const templates = appTemplates[app.id] || appTemplates.default;
 
   return (
