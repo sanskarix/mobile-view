@@ -131,22 +131,6 @@ export const Insights = () => {
 
   const getTabSpecificAlerts = () => {
     if (activeTab === 'bookings') {
-      return (
-        <div className="grid gap-4 md:grid-cols-2">
-          <Alert>
-            <AlertTriangle className="h-4 w-4" />
-            <AlertDescription>
-              No-show rate increased by 12% this week. Consider implementing reminder workflows.
-            </AlertDescription>
-          </Alert>
-          <Alert>
-            <CheckCircle className="h-4 w-4" />
-            <AlertDescription>
-              Your most popular booking time (11 AM) has 89% attendance rate!
-            </AlertDescription>
-          </Alert>
-        </div>
-      );
     } else if (activeTab === 'routings') {
       return (
         <div className="grid gap-4 md:grid-cols-2">
