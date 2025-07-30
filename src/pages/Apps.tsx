@@ -356,5 +356,14 @@ export const Apps = () => {
     );
   }
 
-  return mainContent;
+  return (
+    <>
+      {mainContent}
+      <AppSettingsModal
+        app={settingsApp}
+        isOpen={!!settingsApp}
+        onClose={() => setSettingsApp(null)}
+      />
+    </>
+  );
 };
