@@ -347,62 +347,69 @@ export const Insights = () => {
               />
             </div>
 
+            {/* Booking Trends Graph */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Booking Trends</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={400}>
+                  <LineChart data={bookingTrendsData}>
+                    <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                    <XAxis dataKey="week" />
+                    <YAxis />
+                    <Tooltip
+                      formatter={(value, name) => [value, name]}
+                      labelFormatter={(label) => `Week: ${label}`}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="created"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                      name="Created"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="completed"
+                      stroke="#10b981"
+                      strokeWidth={2}
+                      name="Completed"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="rescheduled"
+                      stroke="#f59e0b"
+                      strokeWidth={2}
+                      name="Rescheduled"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="canceled"
+                      stroke="#ef4444"
+                      strokeWidth={2}
+                      name="Canceled"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="noShowHost"
+                      stroke="#8b5cf6"
+                      strokeWidth={2}
+                      name="No Show (Host)"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="noShowGuest"
+                      stroke="#ec4899"
+                      strokeWidth={2}
+                      name="No Show (Guest)"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
             <div className="grid gap-6 md:grid-cols-2">
-              {/* Total Bookings Over Time */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Total Bookings Over Time</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={totalBookingsOverTimeData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="week" />
-                      <YAxis />
-                      <Tooltip />
-                      <Line 
-                        type="monotone" 
-                        dataKey="bookings" 
-                        stroke="hsl(var(--primary))" 
-                        strokeWidth={3}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-
-              {/* Meeting Overview */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Meeting Overview</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div className="space-y-2">
-                      <div className="text-3xl font-bold text-primary">168</div>
-                      <div className="text-sm text-muted-foreground">Total Booked</div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="text-3xl font-bold text-orange-500">12</div>
-                      <div className="text-sm text-muted-foreground">Cancelled</div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="text-3xl font-bold text-red-500">25</div>
-                      <div className="text-sm text-muted-foreground">No Show</div>
-                    </div>
-                  </div>
-                  <div className="mt-6">
-                    <div className="flex justify-between text-sm mb-2">
-                      <span>Attendance Rate</span>
-                      <span>85%</span>
-                    </div>
-                    <div className="w-full bg-muted rounded-full h-2">
-                      <div className="bg-primary h-2 rounded-full" style={{ width: '85%' }} />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
               {/* Daily Bookings */}
               <Card>
                 <CardHeader>
@@ -411,7 +418,7 @@ export const Insights = () => {
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={totalBookingsData}>
-                      <CartesianGrid strokeDasharray="3 3" />
+                      <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
                       <XAxis dataKey="day" />
                       <YAxis />
                       <Tooltip />
@@ -429,7 +436,7 @@ export const Insights = () => {
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={popularTimesData}>
-                      <CartesianGrid strokeDasharray="3 3" />
+                      <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
                       <XAxis dataKey="hour" />
                       <YAxis />
                       <Tooltip />
