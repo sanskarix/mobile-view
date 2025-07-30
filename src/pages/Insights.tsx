@@ -403,43 +403,7 @@ export const Insights = () => {
               </CardContent>
             </Card>
 
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Daily Bookings */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Bookings by Day</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={totalBookingsData}>
-                      <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                      <XAxis dataKey="day" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="bookings" fill="hsl(var(--primary))" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
 
-              {/* Popular Booking Times */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Popular Booking Times</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={popularTimesData}>
-                      <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                      <XAxis dataKey="hour" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="bookings" fill="hsl(var(--chart-3))" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            </div>
 
             {/* Top Performing Meeting Types */}
             <Card>
