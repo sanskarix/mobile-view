@@ -31,13 +31,13 @@ const EventTypeDialog: React.FC<EventTypeDialogProps> = ({ open, onOpenChange, o
     personal: [
       { id: '1', name: '15 Minute Meeting' },
       { id: '2', name: '30 Minute Meeting' },
-      { id: '3', name: 'Quick Call' }
+      { id: '3', name: 'Quick Call' },
     ],
     teams: [
       { id: '4', name: 'Team Standup' },
       { id: '5', name: 'Project Review' },
-      { id: '6', name: 'Client Meeting' }
-    ]
+      { id: '6', name: 'Client Meeting' },
+    ],
   };
 
   const currentTypes = eventTypes[selectedTab as keyof typeof eventTypes];
@@ -46,17 +46,13 @@ const EventTypeDialog: React.FC<EventTypeDialogProps> = ({ open, onOpenChange, o
     if (selectAll) {
       setSelectedTypes([]);
     } else {
-      setSelectedTypes(currentTypes.map(type => type.id));
+      setSelectedTypes(currentTypes.map((type) => type.id));
     }
     setSelectAll(!selectAll);
   };
 
   const handleTypeToggle = (typeId: string) => {
-    setSelectedTypes(prev => 
-      prev.includes(typeId) 
-        ? prev.filter(id => id !== typeId)
-        : [...prev, typeId]
-    );
+    setSelectedTypes((prev) => (prev.includes(typeId) ? prev.filter((id) => id !== typeId) : [...prev, typeId]));
   };
 
   return (
@@ -65,54 +61,35 @@ const EventTypeDialog: React.FC<EventTypeDialogProps> = ({ open, onOpenChange, o
         <DialogHeader>
           <DialogTitle>Select Event Types</DialogTitle>
         </DialogHeader>
-        
         <div className="space-y-4">
           <div className="flex border-b">
-            <button
-              className={`px-4 py-2 text-sm ${selectedTab === 'personal' ? 'border-b-2 border-primary' : ''}`}
-              onClick={() => setSelectedTab('personal')}
-            >
+            <button className={`px-4 py-2 text-sm ${selectedTab === 'personal' ? 'border-b-2 border-primary' : ''}`} onClick={() => setSelectedTab('personal')}>
               Personal
             </button>
-            <button
-              className={`px-4 py-2 text-sm ${selectedTab === 'teams' ? 'border-b-2 border-primary' : ''}`}
-              onClick={() => setSelectedTab('teams')}
-            >
+            <button className={`px-4 py-2 text-sm ${selectedTab === 'teams' ? 'border-b-2 border-primary' : ''}`} onClick={() => setSelectedTab('teams')}>
               Teams
             </button>
           </div>
-
           <div className="space-y-3">
             <div className="flex items-center space-x-2">
-              <Checkbox
-                id="select-all"
-                checked={selectAll}
-                onCheckedChange={handleSelectAll}
-              />
-              <Label htmlFor="select-all" className="font-medium">Select All</Label>
+              <Checkbox id="select-all" checked={selectAll} onCheckedChange={handleSelectAll} />
+              <Label htmlFor="select-all" className="font-medium">
+                Select All
+              </Label>
             </div>
-            
             <Separator />
-            
             {currentTypes.map((type) => (
               <div key={type.id} className="flex items-center space-x-2">
-                <Checkbox
-                  id={type.id}
-                  checked={selectedTypes.includes(type.id)}
-                  onCheckedChange={() => handleTypeToggle(type.id)}
-                />
+                <Checkbox id={type.id} checked={selectedTypes.includes(type.id)} onCheckedChange={() => handleTypeToggle(type.id)} />
                 <Label htmlFor={type.id}>{type.name}</Label>
               </div>
             ))}
           </div>
-
           <div className="flex justify-end space-x-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button onClick={() => onApply(selectedTypes)}>
-              Apply
-            </Button>
+            <Button onClick={() => onApply(selectedTypes)}>Apply</Button>
           </div>
         </div>
       </DialogContent>
@@ -120,14 +97,11 @@ const EventTypeDialog: React.FC<EventTypeDialogProps> = ({ open, onOpenChange, o
   );
 };
 
-export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
-  open,
-  onOpenChange,
-  template
-}) => {
+export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({ open, onOpenChange, template }) => {
   const [workflowName, setWorkflowName] = useState('Custom workflow');
   const [selectedEventTypes, setSelectedEventTypes] = useState<string[]>([]);
   const [showEventTypeDialog, setShowEventTypeDialog] = useState(false);
+
   const [actions, setActions] = useState([
     {
       id: '1',
@@ -135,9 +109,10 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
       senderName: 'OneHash',
       messageTemplate: 'Reminder',
       emailSubject: 'Reminder: {EVENT_NAME} - {EVENT_DATE_ddd, MMM D, YYYY h:mma}',
-      emailBody: 'Hi {ATTENDEE},\n\nThis is a reminder about your upcoming event.\n\nEvent: {EVENT_NAME}\n\nDate & Time: {EVENT_DATE_ddd, MMM D, YYYY h:mma} - {EVENT_END_TIME} {TIMEZONE}\n\nAttendees: You & {ORGANIZER}\n\nThis reminder was triggered by a Workflow in OneHash Cal.',
-      includeCalendar: false
-    }
+      emailBody:
+        'Hi {ATTENDEE},\n\nThis is a reminder about your upcoming event.\n\nEvent: {EVENT_NAME}\n\nDate & Time: {EVENT_DATE_ddd, MMM D, YYYY h:mma} - {EVENT_END_TIME} {TIMEZONE}\n\nAttendees: You & {ORGANIZER}\n\nThis reminder was triggered by a Workflow in OneHash Cal.',
+      includeCalendar: false,
+    },
   ]);
 
   const actionOptions = [
@@ -147,7 +122,7 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
     { value: 'sms-attendees', label: 'Send SMS to attendees' },
     { value: 'sms-specific', label: 'Send SMS to a specific number' },
     { value: 'whatsapp-attendee', label: 'Send WhatsApp message to attendee' },
-    { value: 'whatsapp-specific', label: 'Send WhatsApp message to a specific number' }
+    { value: 'whatsapp-specific', label: 'Send WhatsApp message to a specific number' },
   ];
 
   const handleEventTypesApply = (types: string[]) => {
@@ -156,6 +131,9 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
   };
 
   const addAction = () => {
+    if (actions.length >= 5) {
+      return;
+    }
     const newAction = {
       id: Date.now().toString(),
       type: 'email-attendees',
@@ -163,19 +141,19 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
       messageTemplate: 'Reminder',
       emailSubject: '',
       emailBody: '',
-      includeCalendar: false
+      includeCalendar: false,
     };
     setActions([...actions, newAction]);
   };
 
   const removeAction = (actionId: string) => {
-    setActions(actions.filter(action => action.id !== actionId));
+    setActions(actions.filter((action) => action.id !== actionId));
   };
 
   const updateAction = (actionId: string, field: string, value: any) => {
-    setActions(actions.map(action => 
-      action.id === actionId ? { ...action, [field]: value } : action
-    ));
+    setActions(
+      actions.map((action) => (action.id === actionId ? { ...action, [field]: value } : action))
+    );
   };
 
   return (
@@ -192,21 +170,13 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
               <p className="text-sm text-muted-foreground">Sanskar Yadav</p>
             </div>
           </DialogHeader>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Left Column */}
             <div className="space-y-6">
               <div>
                 <Label htmlFor="workflow-name">Workflow name</Label>
-                <Input
-                  id="workflow-name"
-                  value={workflowName}
-                  onChange={(e) => setWorkflowName(e.target.value)}
-                  className="mt-1"
-                />
+                <Input id="workflow-name" value={workflowName} onChange={(e) => setWorkflowName(e.target.value)} className="mt-1" />
               </div>
-
-              {/* When this happens */}
               <Card>
                 <CardHeader>
                   <CardTitle>When this happens</CardTitle>
@@ -221,8 +191,6 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
                   </div>
                 </CardContent>
               </Card>
-
-              {/* Do this */}
               <Card>
                 <CardHeader>
                   <CardTitle>Do this</CardTitle>
@@ -235,10 +203,7 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
                           <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center">
                             <span className="text-xs font-medium">📧</span>
                           </div>
-                          <Select
-                            value={action.type}
-                            onValueChange={(value) => updateAction(action.id, 'type', value)}
-                          >
+                          <Select value={action.type} onValueChange={(value) => updateAction(action.id, 'type', value)}>
                             <SelectTrigger className="w-64">
                               <SelectValue />
                             </SelectTrigger>
@@ -257,18 +222,13 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
                             Edit
                           </Button>
                           {actions.length > 1 && (
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => removeAction(action.id)}
-                            >
+                            <Button variant="ghost" size="sm" onClick={() => removeAction(action.id)}>
                               <Trash2 className="h-4 w-4" />
                               Delete
                             </Button>
                           )}
                         </div>
                       </div>
-
                       {index === 0 && (
                         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
                           <div className="flex items-center space-x-2">
@@ -279,25 +239,14 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
                           </div>
                         </div>
                       )}
-
-                      {/* Action Details */}
                       <div className="space-y-4">
                         <div>
                           <Label htmlFor={`sender-${action.id}`}>Sender name</Label>
-                          <Input
-                            id={`sender-${action.id}`}
-                            value={action.senderName}
-                            onChange={(e) => updateAction(action.id, 'senderName', e.target.value)}
-                            className="mt-1"
-                          />
+                          <Input id={`sender-${action.id}`} value={action.senderName} onChange={(e) => updateAction(action.id, 'senderName', e.target.value)} className="mt-1" />
                         </div>
-
                         <div>
                           <Label htmlFor={`template-${action.id}`}>Message template</Label>
-                          <Select
-                            value={action.messageTemplate}
-                            onValueChange={(value) => updateAction(action.id, 'messageTemplate', value)}
-                          >
+                          <Select value={action.messageTemplate} onValueChange={(value) => updateAction(action.id, 'messageTemplate', value)}>
                             <SelectTrigger className="mt-1">
                               <SelectValue />
                             </SelectTrigger>
@@ -308,7 +257,6 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
                             </SelectContent>
                           </Select>
                         </div>
-
                         <div>
                           <div className="flex items-center justify-between">
                             <Label htmlFor={`subject-${action.id}`}>Email subject</Label>
@@ -316,14 +264,8 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
                               Add variable
                             </Button>
                           </div>
-                          <Input
-                            id={`subject-${action.id}`}
-                            value={action.emailSubject}
-                            onChange={(e) => updateAction(action.id, 'emailSubject', e.target.value)}
-                            className="mt-1"
-                          />
+                          <Input id={`subject-${action.id}`} value={action.emailSubject} onChange={(e) => updateAction(action.id, 'emailSubject', e.target.value)} className="mt-1" />
                         </div>
-
                         <div>
                           <div className="flex items-center justify-between">
                             <Label htmlFor={`body-${action.id}`}>Email body</Label>
@@ -361,18 +303,12 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
                             />
                           </div>
                         </div>
-
                         <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id={`calendar-${action.id}`}
-                            checked={action.includeCalendar}
-                            onCheckedChange={(checked) => updateAction(action.id, 'includeCalendar', checked)}
-                          />
+                          <Checkbox id={`calendar-${action.id}`} checked={action.includeCalendar} onCheckedChange={(checked) => updateAction(action.id, 'includeCalendar', checked)} />
                           <Label htmlFor={`calendar-${action.id}`} className="text-sm">
                             Include calendar event
                           </Label>
                         </div>
-
                         <div className="pt-2">
                           <Button variant="ghost" size="sm" className="text-xs text-muted-foreground">
                             💡 How do I use booking questions as variables?
@@ -381,53 +317,34 @@ export const WorkflowBuilder: React.FC<WorkflowBuilderProps> = ({
                       </div>
                     </div>
                   ))}
-                  
                   <Button variant="ghost" onClick={addAction} className="w-full border-dashed border-2">
                     <Plus className="h-4 w-4 mr-2" />
                     Add action
                   </Button>
-                  
                   <div className="text-right text-xs text-muted-foreground">
                     {actions.length}/5 actions added
                   </div>
                 </CardContent>
               </Card>
             </div>
-
-            {/* Right Column */}
             <div>
               <div>
                 <Label>Which event types will this apply to?</Label>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowEventTypeDialog(true)}
-                  className="w-full mt-1 justify-start text-muted-foreground"
-                >
-                  {selectedEventTypes.length > 0 
-                    ? `${selectedEventTypes.length} event types selected`
-                    : 'Select...'
-                  }
+                <Button variant="outline" onClick={() => setShowEventTypeDialog(true)} className="w-full mt-1 justify-start text-muted-foreground">
+                  {selectedEventTypes.length > 0 ? `${selectedEventTypes.length} event types selected` : 'Select...'}
                 </Button>
               </div>
             </div>
           </div>
-
           <div className="flex justify-end space-x-2 pt-6 border-t">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Delete Workflow
             </Button>
-            <Button>
-              Save Workflow
-            </Button>
+            <Button>Save Workflow</Button>
           </div>
         </DialogContent>
       </Dialog>
-
-      <EventTypeDialog
-        open={showEventTypeDialog}
-        onOpenChange={setShowEventTypeDialog}
-        onApply={handleEventTypesApply}
-      />
+      <EventTypeDialog open={showEventTypeDialog} onOpenChange={setShowEventTypeDialog} onApply={handleEventTypesApply} />
     </>
   );
 };
