@@ -434,60 +434,26 @@ export const Insights = () => {
 
         {activeTab === 'routings' && (
           <div className="space-y-6">
-            {/* Side by Side Layout */}
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* Big Number Cards */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Response Metrics</h3>
-                <div className="space-y-4">
-                  <Card>
-                    <CardContent className="p-6 text-center">
-                      <div className="text-4xl font-bold">1,250</div>
-                      <div className="text-sm font-medium mt-2">Total Responses</div>
-                      <div className="text-xs text-muted-foreground mt-1">All users who submitted the form</div>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="p-6 text-center">
-                      <div className="text-4xl font-bold">840</div>
-                      <div className="text-sm font-medium mt-2">Responses With Booking</div>
-                      <div className="text-xs text-muted-foreground mt-1">Users who went on to book a meeting</div>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardContent className="p-6 text-center">
-                      <div className="text-4xl font-bold">410</div>
-                      <div className="text-sm font-medium mt-2">Responses Without Booking</div>
-                      <div className="text-xs text-muted-foreground mt-1">Users who did not book after replying</div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-
-              {/* Top Performing Forms */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Top Performing Forms</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {[
-                      { name: 'Sales Qualification', responses: 456, bookingRate: '72%' },
-                      { name: 'Technical Assessment', responses: 298, bookingRate: '68%' },
-                      { name: 'General Inquiry', responses: 234, bookingRate: '65%' },
-                      { name: 'Product Demo Request', responses: 189, bookingRate: '78%' },
-                    ].map((form, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 rounded-lg border">
-                        <div>
-                          <h4 className="font-medium">{form.name}</h4>
-                          <p className="text-sm text-muted-foreground">{form.responses} responses</p>
-                        </div>
-                        <Badge variant="secondary">{form.bookingRate}</Badge>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+            {/* Response Metrics */}
+            <div className="grid gap-4 md:grid-cols-3">
+              <MetricCard
+                title="Total Responses"
+                value="1,250"
+                trend={8.2}
+                icon={Target}
+              />
+              <MetricCard
+                title="Responses With Booking"
+                value="840"
+                trend={12.5}
+                icon={CheckCircle}
+              />
+              <MetricCard
+                title="Responses Without Booking"
+                value="410"
+                trend={-3.1}
+                icon={XCircle}
+              />
             </div>
 
             {/* Responses Table */}
