@@ -318,9 +318,10 @@ export const Apps = () => {
                           variant="outline"
                           size="sm"
                           className="flex-1"
-                          onClick={() => setSelectedApp(app)}
+                          onClick={() => setSettingsApp(app)}
                         >
-                          Details
+                          <Settings className="mr-2 h-4 w-4" />
+                          Settings
                         </Button>
                         <Button
                           variant="outline"
