@@ -547,6 +547,16 @@ export const Insights = () => {
               />
             </div>
 
+            {/* Message Pipeline */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Message Flow Pipeline</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {/* Progress Bar */}
+
+
                   {/* Summary Table */}
                   <div className="grid grid-cols-4 gap-4 text-center">
                     <div className="space-y-1">
