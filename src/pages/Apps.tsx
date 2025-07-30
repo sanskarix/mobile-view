@@ -140,7 +140,7 @@ export const Apps = () => {
   useEffect(() => {
     setHeaderMeta({
       title: 'Apps',
-      description: 'Connect all your favourite apps, plugins and tools',
+      description: 'Connect all your favorite apps, plugins, and tools',
     });
   }, [setHeaderMeta]);
 
@@ -158,11 +158,8 @@ export const Apps = () => {
   };
 
   const filteredStoreApps = availableApps.filter((app) => {
-    const matchesSearch =
-      app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      app.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory =
-      selectedCategory === 'All Integrations' || app.category === selectedCategory;
+    const matchesSearch = app.name.toLowerCase().includes(searchQuery.toLowerCase()) || app.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'All Integrations' || app.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -186,7 +183,7 @@ export const Apps = () => {
                     setSelectedTab(tab.id);
                     setSelectedCategory('All Integrations');
                   }}
-                  className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-200 ${
+                  className={`py-4 px-6 border-b-2 font-medium text-sm whitespace-nowrap transition-all duration-300 ease-in-out ${
                     selectedTab === tab.id
                       ? 'border-primary text-primary'
                       : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
@@ -219,7 +216,7 @@ export const Apps = () => {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`flex-shrink-0 px-4 py-2 text-sm rounded-[8px] transition-all duration-200 ${
+                  className={`flex-shrink-0 px-4 py-2 text-sm rounded-[8px] transition-all duration-300 ease-in-out ${
                     selectedCategory === category
                       ? 'bg-[#007ee5] text-primary-foreground'
                       : 'bg-[#edf0f4] text-muted-foreground hover:text-foreground'
@@ -233,17 +230,15 @@ export const Apps = () => {
         </div>
       </div>
 
-      <div>
+      <div className="transition-opacity duration-500 ease-in-out">
         {selectedTab === 'store' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filteredStoreApps.map((app) => {
-              const isInstalled = installedApps.some(
-                (installed) => installed.id === app.id
-              );
+              const isInstalled = installedApps.some((installed) => installed.id === app.id);
               return (
                 <div
                   key={app.id}
-                  className="h-64 w-full bg-card rounded-lg border border-border hover:shadow-md transition-all p-4 aspect-square flex flex-col relative"
+                  className="h-64 w-full bg-card rounded-lg border border-border hover:shadow-md transition-all p-4 aspect-square flex flex-col relative transform hover:scale-105 duration-300 ease-in-out"
                 >
                   <div className="absolute top-3 right-3 flex gap-1">
                     {isInstalled && (
@@ -303,41 +298,41 @@ export const Apps = () => {
                 {installedApps
                   .filter(app => selectedCategory === 'All Integrations' || app.category === selectedCategory)
                   .map((app) => (
-                  <div
-                    key={app.installId}
-                    className="h-64 w-full bg-card rounded-lg border border-border hover:shadow-md transition-all p-4 aspect-square flex flex-col relative"
-                  >
-                    <div className="flex-1 flex flex-col justify-start text-left space-y-3">
-                      <div className="w-12 h-12">
-                        <span className="text-5xl">{app.logo}</span>
+                    <div
+                      key={app.installId}
+                      className="h-64 w-full bg-card rounded-lg border border-border hover:shadow-md transition-all p-4 aspect-square flex flex-col relative transform hover:scale-105 duration-300 ease-in-out"
+                    >
+                      <div className="flex-1 flex flex-col justify-start text-left space-y-3">
+                        <div className="w-12 h-12">
+                          <span className="text-5xl">{app.logo}</span>
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="font-semibold text-sm">{app.name}</h4>
+                          <p className="text-muted-foreground line-clamp-3 text-xs">
+                            {app.description}
+                          </p>
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-sm">{app.name}</h4>
-                        <p className="text-muted-foreground line-clamp-3 text-xs">
-                          {app.description}
-                        </p>
+                      <div className="flex gap-2 mt-4">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => setSelectedApp(app)}
+                        >
+                          Details
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 hover:bg-red-500 hover:text-white transition-colors duration-300 ease-in-out"
+                          onClick={() => handleDeleteApp(app.installId)}
+                        >
+                          Delete
+                        </Button>
                       </div>
                     </div>
-                    <div className="flex gap-2 mt-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex-1"
-                        onClick={() => setSelectedApp(app)}
-                      >
-                        Details
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex-1 hover:bg-red-500 hover:text-white transition-colors duration-200"
-                        onClick={() => handleDeleteApp(app.installId)}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             )}
           </div>
@@ -350,12 +345,8 @@ export const Apps = () => {
     return (
       <AppDetails
         app={selectedApp}
-        isInstalled={installedApps.some(
-          (installed) => installed.id === selectedApp.id
-        )}
-        installedCount={installedApps.filter(
-          (installed) => installed.id === selectedApp.id
-        ).length}
+        isInstalled={installedApps.some((installed) => installed.id === selectedApp.id)}
+        installedCount={installedApps.filter((installed) => installed.id === selectedApp.id).length}
         onBack={() => setSelectedApp(null)}
         onInstall={() => handleInstallApp(selectedApp)}
       />
