@@ -72,18 +72,26 @@ export const AppSettingsModal: React.FC<AppSettingsModalProps> = ({
         
         <div className="grid grid-cols-1 gap-3 mt-4">
           {templates.map((template, index) => (
-            <Button
+            <div
               key={index}
-              variant="outline"
-              className="justify-between h-auto p-4"
-              onClick={() => window.open(template.url, '_blank')}
+              className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50"
             >
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{app.logo}</span>
-                <span className="font-medium">{template.name}</span>
+                <div className="flex flex-col">
+                  <span className="font-medium text-sm">{template.name}</span>
+                  <span className="text-sm text-muted-foreground">{template.description}</span>
+                </div>
               </div>
-              <ExternalLink className="h-4 w-4" />
-            </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => window.open(template.url, '_blank')}
+                className="text-blue-600 border-blue-600 hover:bg-blue-50"
+              >
+                {template.buttonText}
+              </Button>
+            </div>
           ))}
         </div>
       </DialogContent>
