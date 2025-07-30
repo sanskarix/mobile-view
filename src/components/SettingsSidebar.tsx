@@ -1,55 +1,8 @@
-
-import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { ArrowLeft, User, Settings, Calendar, Video, Palette, Clock2, Shield, Lock, Users, Download, Code, Webhook, Key, ChevronDown, ChevronRight } from 'lucide-react';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { ArrowLeft, User, Settings, Calendar, Video, Palette, Clock2, Shield, Lock, Users, Download, Code, Webhook, Key } from 'lucide-react';
 
 export const SettingsSidebar = () => {
-  const location = useLocation();
-  const [expandedTeam, setExpandedTeam] = useState<string | null>(null);
-  const [teams, setTeams] = useState<any[]>([]);
-  
-  // Load teams from localStorage on component mount
-  useEffect(() => {
-    const loadTeams = () => {
-      const savedTeams = localStorage.getItem('teams');
-      if (savedTeams) {
-        try {
-          const parsedTeams = JSON.parse(savedTeams);
-          setTeams(parsedTeams.map((team: any) => ({
-            id: team.id,
-            name: team.name,
-            href: `/settings/teams/${team.id}`,
-            subItems: [
-              { name: 'Profile', href: `/settings/teams/${team.id}/profile` },
-              { name: 'Members', href: `/settings/teams/${team.id}/members` },
-              { name: 'Event Types', href: `/settings/teams/${team.id}/event-types` },
-              { name: 'Appearance', href: `/settings/teams/${team.id}/appearance` },
-              { name: 'Booking Limits', href: `/settings/teams/${team.id}/booking-limits` },
-            ]
-          })));
-        } catch (error) {
-          console.error('Error loading teams:', error);
-        }
-      }
-    };
-
-    loadTeams();
-
-    // Listen for storage changes to update teams in real-time
-    const handleStorageChange = () => {
-      loadTeams();
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    // Also listen for custom event when teams are updated
-    window.addEventListener('teamsUpdated', handleStorageChange);
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('teamsUpdated', handleStorageChange);
-    };
-  }, []);
-
   const navigation = [
     {
       title: '',
@@ -86,6 +39,12 @@ export const SettingsSidebar = () => {
       items: [
         { name: 'Webhooks', href: '/settings/developer/webhooks', icon: Webhook },
         { name: 'API keys', href: '/settings/developer/api-keys', icon: Key },
+      ]
+    },
+    {
+      title: 'Teams',
+      items: [
+        { name: 'Edit Teams', href: '/settings/teams/edit', icon: Users },
       ]
     }
   ];
@@ -135,64 +94,6 @@ export const SettingsSidebar = () => {
             </div>
           </div>
         ))}
-        
-        {/* Teams section */}
-        {teams.length > 0 && (
-          <div>
-            <h3 className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
-              Teams
-            </h3>
-            <div className="space-y-1">
-              {teams.map((team) => {
-                const isTeamActive = location.pathname.includes(team.id);
-                const isExpanded = expandedTeam === team.id || isTeamActive;
-                
-                return (
-                  <div key={team.id}>
-                    <button
-                      onClick={() => setExpandedTeam(isExpanded ? null : team.id)}
-                      className={`w-full group flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-                        isTeamActive
-                          ? 'bg-primary text-primary-foreground shadow-sm'
-                          : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                      }`}
-                    >
-                      <div className="flex items-center">
-                        <Users className="mr-3 h-5 w-5 flex-shrink-0" />
-                        {team.name}
-                      </div>
-                      {isExpanded ? (
-                        <ChevronDown className="h-4 w-4" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4" />
-                      )}
-                    </button>
-                    
-                    {isExpanded && (
-                      <div className="ml-8 mt-1 space-y-1">
-                        {team.subItems.map((subItem) => (
-                          <NavLink
-                            key={subItem.name}
-                            to={subItem.href}
-                            className={({ isActive }) =>
-                              `block px-3 py-2 text-sm rounded-lg transition-all duration-200 ${
-                                isActive
-                                  ? 'bg-primary/10 text-primary font-medium'
-                                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                              }`
-                            }
-                          >
-                            {subItem.name}
-                          </NavLink>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
       </nav>
     </div>
   );
