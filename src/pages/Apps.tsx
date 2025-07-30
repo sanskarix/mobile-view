@@ -249,7 +249,7 @@ export const Apps = () => {
             />
           </div>
 
-          <div className="w-1/2 relative flex items-center">
+          <div className="w-1/3 relative flex items-center">
             {/* Left Arrow */}
             <button
               onClick={scrollLeft}
@@ -304,7 +304,7 @@ export const Apps = () => {
               return (
                 <div
                   key={app.id}
-                  className="h-64 w-full bg-card rounded-lg border border-border hover:shadow-md transition-all p-4 aspect-square flex flex-col relative transform hover:scale-105 duration-300 ease-in-out"
+                  className="h-64 w-full bg-card rounded-lg border border-border hover:shadow-md transition-all p-4 flex flex-col relative"
                 >
                   <div className="absolute top-3 right-3 flex gap-1">
                     {isInstalled && (
