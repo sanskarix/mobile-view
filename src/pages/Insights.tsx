@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import { HeaderMeta } from '@/components/Layout';
 import { DatePickerWithRange } from '@/components/ui/date-range-picker';
+import { DateRange } from 'react-day-picker';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { toast } from 'sonner';
 
@@ -124,7 +125,7 @@ export const Insights = () => {
   const [activeTab, setActiveTab] = useState('bookings');
   const [dateRange, setDateRange] = useState('7d');
   const [showCustomDate, setShowCustomDate] = useState(false);
-  const [customDateRange, setCustomDateRange] = useState();
+  const [customDateRange, setCustomDateRange] = useState<DateRange | undefined>();
   const [selectedAccount, setSelectedAccount] = useState('personal');
   const [selectedEventType, setSelectedEventType] = useState('all');
   const [selectedForm, setSelectedForm] = useState('all');

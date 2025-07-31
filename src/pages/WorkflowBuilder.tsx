@@ -136,7 +136,11 @@ export const WorkflowBuilder = () => {
       title: 'Edit Workflow',
       description: 'Create and manage workflows to automate your event processes',
       enabled: true,
-      onEnabledChange: (enabled: boolean) => setHeaderMeta(prev => ({ ...prev, enabled })),
+      onEnabledChange: (enabled: boolean) => setHeaderMeta({ 
+        title: 'Edit Workflow',
+        description: 'Create and manage workflows to automate your event processes',
+        enabled,
+      }),
     });
   }, [setHeaderMeta]);
 
