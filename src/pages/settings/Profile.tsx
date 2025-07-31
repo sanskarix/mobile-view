@@ -110,11 +110,11 @@ export const Profile = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-background flex justify-center">
+    <div className="w-full min-h-screen bg-background flex justify-center animate-fade-in">
       <div className="px-8 py-6 w-full">
         <div className="space-y-8 mb-12">
           {/* Profile Information Section */}
-          <div className="border rounded-lg p-6 bg-card space-y-8">
+          <div className="border rounded-lg p-6 bg-card space-y-8 hover:bg-muted/20 transition-colors duration-200 animate-fade-in">
             {/* Profile Picture */}
             <div className="space-y-4">
               <Label className="text-base font-medium">Profile Picture</Label>
