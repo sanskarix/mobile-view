@@ -89,7 +89,7 @@ export const General = () => {
                 <h3 className="font-medium text-sm">Travel Schedule</h3>
                 <Dialog open={scheduleTimezoneOpen} onOpenChange={setScheduleTimezoneOpen}>
                   <DialogTrigger asChild>
-                    <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                    <Button variant="outline" size="sm" className="flex items-center space-x-2 hover:scale-105 transition-transform duration-200">
                       <CalendarIcon className="h-4 w-4" />
                       <span>Add</span>
                     </Button>
@@ -142,10 +142,10 @@ export const General = () => {
                       </div>
 
                       <div className="flex space-x-2">
-                        <Button variant="outline" onClick={() => setScheduleTimezoneOpen(false)}>
+                        <Button variant="outline" onClick={() => setScheduleTimezoneOpen(false)} className="hover:scale-105 transition-transform duration-200">
                           Close
                         </Button>
-                        <Button onClick={handleAddTravelSchedule}>
+                        <Button onClick={handleAddTravelSchedule} className="hover:scale-105 transition-transform duration-200">
                           Add
                         </Button>
                       </div>
@@ -160,7 +160,7 @@ export const General = () => {
                     <div className="font-medium">{schedule.dateRange}</div>
                     <div className="text-sm text-muted-foreground">{schedule.timezone}</div>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={() => handleDeleteTravelSchedule(schedule.id)}>
+                  <Button variant="ghost" size="sm" onClick={() => handleDeleteTravelSchedule(schedule.id)} className="hover:scale-105 transition-transform duration-200">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>)}
