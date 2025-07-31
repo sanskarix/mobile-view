@@ -170,7 +170,7 @@ export const Insights = () => {
   ];
 
   return (
-    <div className="space-y-6 pt-0 p-6">
+    <div className="space-y-6 pt-0 p-8">
       {/* Tab Navigation */}
       <div className="flex">
         {tabs.map((tab) => (
