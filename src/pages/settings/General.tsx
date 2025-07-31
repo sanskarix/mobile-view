@@ -50,9 +50,9 @@ export const General = () => {
     });
   }, [setHeaderMeta]);
 
-  return <div className="min-h-screen bg-background flex justify-center">
+  return <div className="min-h-screen bg-background flex justify-center animate-fade-in">
       <div className="px-8  py-6 w-full">
-        <div className="border rounded-lg p-6 bg-card">
+        <div className="border rounded-lg p-6 bg-card hover:bg-muted/20 transition-colors duration-200 animate-fade-in">
         <div className="space-y-6">
           {/* Language */}
           <div className="space-y-2">
