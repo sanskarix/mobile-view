@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
-import { User, Users, Palette, Clock2, Calendar } from 'lucide-react';
+import { User, Users, Palette, Clock2, Calendar, ExternalLink } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { TeamProfile } from './teams/TeamProfile';
 import { TeamMembers } from './teams/TeamMembers';
@@ -99,14 +99,12 @@ export const EditTeams = () => {
 
           {/* View Event Types Button */}
           <div className="py-4">
-            <Button
-              variant="outline"
-              onClick={() => navigate('/settings/teams/default/event-types')}
-              className="flex items-center space-x-2"
-            >
-              <Calendar className="h-4 w-4" />
+            <a 
+              href="/event-types" className="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center space-x-1">
               <span>View Event Types</span>
-            </Button>
+              <ExternalLink className="h-4 w-4" />
+
+            </a>
           </div>
         </div>
       </div>
@@ -120,3 +118,4 @@ export const EditTeams = () => {
     </div>
   );
 };
+

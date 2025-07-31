@@ -34,7 +34,7 @@ export const TeamAppearance = () => {
 
   return (
     <div className="min-h-screen bg-background flex justify-center animate-fade-in">
-      <div className="p-8 max-w-4xl w-full">
+      <div className="py-4 w-full">
         <div className="space-y-8">
           {/* Booking page theme */}
           <div className="border rounded-lg p-6 bg-card hover:bg-muted/20 transition-colors duration-200 animate-fade-in">

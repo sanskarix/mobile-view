@@ -41,7 +41,7 @@ export const EventWorkflows = () => {
             </span>
             <div className="flex items-center space-x-1">
               <span>•</span>
-              <a href="/workflows" className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center space-x-1">
+              <a href="/workflows" className="text-sm font-medium text-blue-600 hover:text-blue-500 flex items-center space-x-1">
                 <span>Create New Workflow</span>
                 <ExternalLink className="h-3 w-3" />
               </a>

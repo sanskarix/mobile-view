@@ -54,11 +54,7 @@ export const TeamMembers = () => {
 
   return (
     <div className="min-h-screen bg-background flex justify-center animate-fade-in">
-      <div className="p-8 max-w-4xl w-full">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-semibold mb-2">Members</h1>
-          <p className="text-muted-foreground">Manage your team members and their permissions</p>
-        </div>
+      <div className="py-4 w-full">
 
         {/* Header Controls */}
         <div className="flex items-center justify-between mb-6">

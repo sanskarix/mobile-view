@@ -40,12 +40,7 @@ export const TeamBookingLimits = () => {
 
   return (
     <div className="min-h-screen bg-background flex justify-center animate-fade-in">
-      <div className="p-8 max-w-4xl w-full">
-        <div className="mb-8 text-center animate-fade-in">
-          <h1 className="text-2xl font-semibold mb-2">Booking Limits</h1>
-          <p className="text-muted-foreground">Control how many bookings can be made for your team</p>
-        </div>
-
+      <div className="py-4 w-full">
         <div className="border rounded-lg p-6 bg-card hover:bg-muted/20 transition-colors duration-200 animate-fade-in">
           <div className="space-y-6">
             <div className="flex items-center justify-between">

@@ -30,49 +30,22 @@ export const TeamProfile = () => {
 
   return (
     <div className="min-h-screen bg-background flex justify-center animate-fade-in">
-      <div className="p-8 w-full max-w-4xl">
+      <div className="py-4 w-full max-w-full">
         <div className="border rounded-lg p-6 bg-card hover:bg-muted/20 transition-colors duration-200">
           <div className="space-y-6">
             {/* Team Logo Upload Section */}
-            <div className="space-y-2 animate-fade-in">
-              <Label htmlFor="team-logo">Team Logo</Label>
-              <div className="flex items-center space-x-4">
-                <div className="relative">
-                  {logoUrl ? (
-                    <div className="relative group">
-                      <img 
-                        src={logoUrl} 
-                        alt="Team Logo" 
-                        className="w-20 h-20 rounded-lg object-cover border-2 border-muted transition-transform duration-200 hover:scale-105"
-                      />
-                      <button
-                        onClick={() => setLogoUrl('')}
-                        className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="w-20 h-20 rounded-lg border-2 border-dashed border-muted-foreground/25 flex items-center justify-center bg-muted/30 hover:bg-muted/50 transition-colors duration-200">
-                      <Upload className="h-8 w-8 text-muted-foreground" />
-                    </div>
-                  )}
-                </div>
-                <div className="flex-1">
-                  <Input
-                    id="team-logo"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleLogoUpload}
-                    className="transition-all duration-200 focus:ring-2 focus:ring-primary/20"
-                  />
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Upload a team logo (JPG, PNG, GIF up to 10MB)
-                  </p>
-                </div>
-              </div>
-            </div>
-
+            <div className="space-y-4">
+                          <Label className="text-base font-medium">Profile Picture</Label>
+                          <div className="flex items-center space-x-4">
+                            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+                              <img src="/lovable-uploads/b849b475-852b-4552-92f1-185302b164ba.png" alt="Profile" className="w-full h-full object-cover" />
+                            </div>
+                            <div className="space-x-2">
+                              <Button variant="outline" className="">Upload Avatar</Button>
+                              <Button variant="outline" className="">Remove</Button>
+                            </div>
+                          </div>
+                        </div>
             <div className="space-y-2 animate-fade-in">
               <Label htmlFor="team-name">Team Name</Label>
               <Input 
