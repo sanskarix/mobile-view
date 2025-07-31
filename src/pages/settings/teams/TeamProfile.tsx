@@ -85,22 +85,24 @@ export const TeamProfile = () => {
               />
             </div>
 
-            <div className="flex justify-between items-center pt-4 animate-fade-in">
-              <Button 
-                variant="destructive" 
-                onClick={handleDeleteTeam}
-                className="flex items-center space-x-2 hover:scale-105 transition-transform duration-200"
-              >
-                <Trash2 className="h-4 w-4" />
-                <span>Delete Team</span>
-              </Button>
-              
+            <div className="flex justify-right items-center pt-4 animate-fade-in">
               <Button className="hover:scale-105 transition-transform duration-200">
                 Save Changes
               </Button>
             </div>
           </div>
         </div>
+<div className="mt-12 border border-destructive/30 rounded-lg p-6 bg-destructive/5 hover:bg-destructive/10 transition-colors duration-200 animate-fade-in">
+    <div className="mb-8">
+        <h2 className="text-lg font-medium mb-2 text-destructive">Danger zone</h2>
+        <p className="text-sm text-muted-foreground">Be careful. Account deletion cannot be undone.</p>
+    </div>
+    <Button variant="outline" className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground hover:scale-105 transition-transform duration-200">
+        <Trash2 className="h-4 w-4 mr-2" />
+        Delete account
+    </Button>
+</div>
+
       </div>
     </div>
   );

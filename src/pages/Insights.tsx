@@ -170,7 +170,7 @@ export const Insights = () => {
   ];
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 pt-0 p-6">
       {/* Tab Navigation */}
       <div className="flex">
         {tabs.map((tab) => (
@@ -207,7 +207,6 @@ export const Insights = () => {
           {activeTab === 'bookings' && (
             <Select value={selectedEventType} onValueChange={setSelectedEventType}>
               <SelectTrigger className="w-[200px]">
-                <Filter className="mr-2 h-4 w-4" />
                 <SelectValue placeholder="Event Types" />
               </SelectTrigger>
               <SelectContent>
@@ -223,7 +222,6 @@ export const Insights = () => {
             <>
               <Select value={selectedForm} onValueChange={setSelectedForm}>
                 <SelectTrigger className="w-[200px]">
-                  <Filter className="mr-2 h-4 w-4" />
                   <SelectValue placeholder="Select Forms" />
                 </SelectTrigger>
                 <SelectContent>
@@ -235,7 +233,6 @@ export const Insights = () => {
               </Select>
               <Select value={selectedBookingStatus} onValueChange={setSelectedBookingStatus}>
                 <SelectTrigger className="w-[200px]">
-                  <Filter className="mr-2 h-4 w-4" />
                   <SelectValue placeholder="Booking Status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -252,8 +249,8 @@ export const Insights = () => {
           )}
           {activeTab === 'workflows' && (
             <Select value={selectedWorkflowType} onValueChange={setSelectedWorkflowType}>
-              <SelectTrigger className="w-[200px]">
-                <Filter className="mr-2 h-4 w-4" />
+              <SelectTrigger className="w-[150px]">
+    
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent>
