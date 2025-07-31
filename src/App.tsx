@@ -24,6 +24,7 @@ import { Password } from "./pages/settings/Password";
 import { Impersonation } from "./pages/settings/Impersonation";
 import { TeamNew } from "./pages/settings/TeamNew";
 import { TeamDetail } from "./pages/settings/TeamDetail";
+import { EditTeams } from "./pages/settings/EditTeams";
 import { TeamProfile } from "./pages/settings/teams/TeamProfile";
 import { TeamMembers } from "./pages/settings/teams/TeamMembers";
 import { TeamEventTypes } from "./pages/settings/teams/TeamEventTypes";
@@ -83,6 +84,7 @@ const App = () => (
               <Route path="developer/webhooks" element={<Webhooks />} />
               <Route path="developer/api-keys" element={<ApiKeys />} />
               <Route path="teams/new" element={<TeamNew />} />
+              <Route path="teams/edit" element={<EditTeams />} />
               <Route path="teams/:teamId" element={<TeamDetail />} />
               <Route path="teams/:teamId/:section" element={<TeamDetail />} />
               <Route path="teams/:teamId/profile" element={<TeamProfile />} />

@@ -1,8 +1,11 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '../../components/ui/button';
 import { ArrowLeft, Users, Calendar, Palette, Clock2, User } from 'lucide-react';
+import { TeamProfile } from './teams/TeamProfile';
+import { TeamMembers } from './teams/TeamMembers';
+import { TeamAppearance } from './teams/TeamAppearance';
+import { TeamBookingLimits } from './teams/TeamBookingLimits';
 
 export const TeamDetail = () => {
   const { teamId, section } = useParams();
@@ -32,7 +35,6 @@ export const TeamDetail = () => {
   const sections = [
     { id: 'profile', name: 'Profile', icon: User },
     { id: 'members', name: 'Members', icon: Users },
-    { id: 'event-types', name: 'Event Types', icon: Calendar },
     { id: 'appearance', name: 'Appearance', icon: Palette },
     { id: 'booking-limits', name: 'Booking Limits', icon: Clock2 },
   ];
@@ -44,52 +46,15 @@ export const TeamDetail = () => {
   const renderSectionContent = () => {
     switch (activeSection) {
       case 'profile':
-        return (
-          <div className="border rounded-lg p-6">
-            <h3 className="text-lg font-medium mb-4">Team Profile</h3>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <div className={`w-16 h-16 ${team.color} rounded-lg flex items-center justify-center text-white font-semibold text-xl`}>
-                  {team.name.split(' ').map(word => word[0]).join('')}
-                </div>
-                <div>
-                  <h4 className="font-medium">{team.name}</h4>
-                  <p className="text-sm text-muted-foreground">{team.description}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
+        return <TeamProfile />;
       case 'members':
-        return (
-          <div className="border rounded-lg p-6">
-            <h3 className="text-lg font-medium mb-4">Team Members</h3>
-            <p className="text-muted-foreground">Manage team members and their permissions.</p>
-          </div>
-        );
-      case 'event-types':
-        return (
-          <div className="border rounded-lg p-6">
-            <h3 className="text-lg font-medium mb-4">Event Types</h3>
-            <p className="text-muted-foreground">Configure team event types and scheduling.</p>
-          </div>
-        );
+        return <TeamMembers />;
       case 'appearance':
-        return (
-          <div className="border rounded-lg p-6">
-            <h3 className="text-lg font-medium mb-4">Appearance</h3>
-            <p className="text-muted-foreground">Customize the team's appearance and branding.</p>
-          </div>
-        );
+        return <TeamAppearance />;
       case 'booking-limits':
-        return (
-          <div className="border rounded-lg p-6">
-            <h3 className="text-lg font-medium mb-4">Booking Limits</h3>
-            <p className="text-muted-foreground">Set booking limits and availability for the team.</p>
-          </div>
-        );
+        return <TeamBookingLimits />;
       default:
-        return null;
+        return <TeamProfile />;
     }
   };
 
@@ -112,31 +77,46 @@ export const TeamDetail = () => {
           </div>
         </div>
 
-        {/* Section Navigation */}
-        <div className="border rounded-lg p-2 mb-8">
-          <div className="flex space-x-1">
+        {/* Horizontal Tabs with Underlines */}
+        <div className="bg-background mb-6">
+          <nav className="flex" aria-label="Tabs">
             {sections.map((section) => {
               const Icon = section.icon;
               return (
                 <button
                   key={section.id}
                   onClick={() => setActiveSection(section.id)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`py-4 px-4 border-b-2 font-medium text-sm whitespace-nowrap transition-colors flex items-center space-x-2 ${
                     activeSection === section.id
-                      ? 'bg-primary text-primary-foreground'
-                      : 'hover:bg-muted'
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground'
                   }`}
+                  title={section.name}
                 >
                   <Icon className="h-4 w-4" />
                   <span>{section.name}</span>
                 </button>
               );
             })}
-          </div>
+          </nav>
+        </div>
+
+        {/* Event Types Button */}
+        <div className="mb-6">
+          <Button
+            variant="outline"
+            onClick={() => navigate(`/settings/teams/${teamId}/event-types`)}
+            className="flex items-center space-x-2"
+          >
+            <Calendar className="h-4 w-4" />
+            <span>View Event Types</span>
+          </Button>
         </div>
 
         {/* Section Content */}
-        {renderSectionContent()}
+        <div className="">
+          {renderSectionContent()}
+        </div>
       </div>
     </div>
   );

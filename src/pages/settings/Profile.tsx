@@ -110,11 +110,11 @@ export const Profile = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-background flex justify-center">
+    <div className="w-full min-h-screen bg-background flex justify-center animate-fade-in">
       <div className="px-8 py-6 w-full">
         <div className="space-y-8 mb-12">
           {/* Profile Information Section */}
-          <div className="border rounded-lg p-6 bg-card space-y-8">
+          <div className="border rounded-lg p-6 bg-card space-y-8 hover:bg-muted/20 transition-colors duration-200 animate-fade-in">
             {/* Profile Picture */}
             <div className="space-y-4">
               <Label className="text-base font-medium">Profile Picture</Label>
@@ -123,8 +123,8 @@ export const Profile = () => {
                   <img src="/lovable-uploads/b849b475-852b-4552-92f1-185302b164ba.png" alt="Profile" className="w-full h-full object-cover" />
                 </div>
                 <div className="space-x-2">
-                  <Button variant="outline">Upload Avatar</Button>
-                  <Button variant="outline">Remove</Button>
+                  <Button variant="outline" className="hover:scale-105 transition-transform duration-200">Upload Avatar</Button>
+                  <Button variant="outline" className="hover:scale-105 transition-transform duration-200">Remove</Button>
                 </div>
               </div>
             </div>
@@ -253,7 +253,7 @@ export const Profile = () => {
                     placeholder="Phone number"
                   />
                 </div>
-                <Button variant="outline" size="sm" onClick={handleSendCode} disabled={!phone || phoneError}>
+                <Button variant="outline" size="sm" onClick={handleSendCode} disabled={!phone || phoneError} className="hover:scale-105 transition-transform duration-200">
                   Send code
                 </Button>
               </div>
@@ -264,7 +264,7 @@ export const Profile = () => {
                   onChange={(e) => setVerificationCode(e.target.value)}
                   disabled={!isCodeSent}
                 />
-                <Button variant="outline" disabled={!verificationCode}>
+                <Button variant="outline" disabled={!verificationCode} className="hover:scale-105 transition-transform duration-200">
                   Verify
                 </Button>
               </div>
@@ -317,12 +317,12 @@ export const Profile = () => {
         </div>
 
         {/* Danger Zone */}
-        <div className="border border-destructive/30 rounded-lg p-6 bg-destructive/5">
+        <div className="border border-destructive/30 rounded-lg p-6 bg-destructive/5 hover:bg-destructive/10 transition-colors duration-200 animate-fade-in">
           <div className="mb-4">
             <h2 className="text-lg font-medium mb-2 text-destructive">Danger zone</h2>
             <p className="text-sm text-muted-foreground">Be careful. Account deletion cannot be undone.</p>
           </div>
-          <Button variant="outline" className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground">
+          <Button variant="outline" className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground hover:scale-105 transition-transform duration-200">
             <Trash2 className="h-4 w-4 mr-2" />
             Delete account
           </Button>
