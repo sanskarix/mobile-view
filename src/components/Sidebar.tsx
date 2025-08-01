@@ -85,13 +85,18 @@ export const Sidebar = ({
       
       <nav className="flex-1 px-4 py-2 space-y-1">
         {navigation.map(item => (
-          <NavLink 
-            key={item.name} 
-            to={item.href} 
-            className={({ isActive }) => 
+          <NavLink
+            key={item.name}
+            to={item.href}
+            onClick={() => {
+              if (isMobile) {
+                setIsOpen(false);
+              }
+            }}
+            className={({ isActive }) =>
               `group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 ${
-                isActive 
-                  ? 'bg-primary text-primary-foreground shadow-sm' 
+                isActive
+                  ? 'bg-primary text-primary-foreground shadow-sm'
                   : 'text-muted-foreground hover:bg-[#CBD0D6] hover:text-[#001629]'
               }`
             }
