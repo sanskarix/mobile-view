@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   ChevronDown, Moon, HelpCircle, MapPin, LogOut, User, Settings,
   FileIcon, Mail, Search
