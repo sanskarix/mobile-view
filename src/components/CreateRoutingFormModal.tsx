@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
@@ -9,17 +8,17 @@ import { ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface CreateRoutingFormModalProps {
-  open: boolean;
+  isOpen: boolean;
   onClose: () => void;
-  onFormCreated: (form: any) => void;
-  teams: any[];
+  onFormCreated?: (form: any) => void;
+  teams?: any[];
 }
 
 export const CreateRoutingFormModal: React.FC<CreateRoutingFormModalProps> = ({
-  open,
+  isOpen,
   onClose,
-  onFormCreated,
-  teams
+  onFormCreated = () => {},
+  teams = []
 }) => {
   const [step, setStep] = useState<'team-select' | 'form-details'>('team-select');
   const [selectedTeam, setSelectedTeam] = useState<string>('');
