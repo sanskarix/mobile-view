@@ -256,6 +256,7 @@ export const EventTypes = () => {
         isOpen={isCreateTeamModalOpen}
         onClose={() => setIsCreateTeamModalOpen(false)}
         teamId={selectedTeamForCreation}
+        teamName={teamEvents.find(team => team.id === selectedTeamForCreation)?.name || ''}
       />
     </div>
   );
