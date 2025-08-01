@@ -63,8 +63,15 @@ export const CreateRoutingFormModal: React.FC<CreateRoutingFormModalProps> = ({
     onClose();
   };
 
+  // Provide default teams if none provided
+  const defaultTeams = [
+    { id: 'personal', name: 'Your account', avatar: 'Y' }
+  ];
+
+  const teamsToShow = teams && teams.length > 0 ? teams : defaultTeams;
+
   const getSelectedTeamName = () => {
-    const team = teams?.find(t => t.id === selectedTeam);
+    const team = teamsToShow.find(t => t.id === selectedTeam);
     return team?.name || 'Select team';
   };
 
