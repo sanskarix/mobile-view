@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   ChevronDown, Moon, HelpCircle, MapPin, LogOut, User, Settings,
-  FileIcon, Mail, ArrowLeft,
+  FileIcon, Mail, ArrowLeft, Menu,
   Edit,
   Delete,
   Trash2
@@ -20,9 +20,11 @@ interface HeaderMeta {
 
 interface HeaderProps {
   metaData: HeaderMeta;
+  onMenuToggle?: () => void;
+  showMenuButton?: boolean;
 }
 
-export const Header = ({ metaData }: HeaderProps) => {
+export const Header = ({ metaData, onMenuToggle, showMenuButton }: HeaderProps) => {
   // Defensive check to ensure metaData is defined
   if (!metaData) {
     return null;
@@ -69,9 +71,18 @@ export const Header = ({ metaData }: HeaderProps) => {
 
   return (
     <header className="h-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-      <div className="h-full px-8 flex items-center justify-between w-full">
-        {/* Left section: Back button, title, and optional description */}
-        <div className="flex flex-col justify-center space-y-1">
+      <div className="h-full px-4 md:px-8 flex items-center justify-between w-full">
+        {/* Left section: Menu button (mobile), Back button, title, and optional description */}
+        <div className="flex items-center space-x-4">
+          {showMenuButton && (
+            <button
+              onClick={onMenuToggle}
+              className="text-muted-foreground hover:text-foreground transition-colors md:hidden"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+          )}
+          <div className="flex flex-col justify-center space-y-1">
           <div className="flex items-center space-x-4">
             {metaData && metaData.enabled !== undefined && (
               <button
@@ -81,25 +92,26 @@ export const Header = ({ metaData }: HeaderProps) => {
                 <ArrowLeft className="h-4 w-4" />
               </button>
             )}
-            <div className="flex flex-col">
-              <h1 className="flex items-center text-xl font-semibold text-foreground">
-                {metaData.title}
-                { metaData.onTitleChange && <Edit
-                  className='h-4 w-4 ml-1'
-                  onClick={() => metaData.onTitleChange && metaData.onTitleChange(metaData.title)}
-                />}
-              </h1>
-              {metaData.description && (
-                <p className="text-sm text-muted-foreground">
-                  {metaData.description}
-                </p>
-              )}
+              <div className="flex flex-col">
+                <h1 className="flex items-center text-lg md:text-xl font-semibold text-foreground">
+                  {metaData.title}
+                  { metaData.onTitleChange && <Edit
+                    className='h-4 w-4 ml-1'
+                    onClick={() => metaData.onTitleChange && metaData.onTitleChange(metaData.title)}
+                  />}
+                </h1>
+                {metaData.description && (
+                  <p className="text-sm text-muted-foreground hidden sm:block">
+                    {metaData.description}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Right section: Toggle, Save, Profile */}
-        <div className="flex items-center space-x-2 ml-auto">
+        <div className="flex items-center space-x-1 md:space-x-2 ml-auto">
           {metaData && metaData.enabled !== undefined && metaData.onEnabledChange && (
             <>
               <TooltipProvider delayDuration={0}>
@@ -119,7 +131,7 @@ export const Header = ({ metaData }: HeaderProps) => {
                 </Tooltip>
               </TooltipProvider>
               <div className="w-px h-6 bg-border" />
-              <div className="flex items-center">
+              <div className="hidden sm:flex items-center">
                 <button
                   onClick={() => console.log('Save clicked')}
                   className="px-3 py-1 text-sm border-l border-t border-b rounded-l-md font-medium hover:bg-secondary transition-colors"
@@ -141,12 +153,12 @@ export const Header = ({ metaData }: HeaderProps) => {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-              className="flex items-center space-x-3 rounded-lg transition-colors w-full"
+              className="flex items-center space-x-2 md:space-x-3 rounded-lg transition-colors w-full"
             >
               <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center">
                 <span className="text-xs font-medium text-primary-foreground">SY</span>
               </div>
-              <span className="text-sm font-medium text-foreground">Sanskar Yadav</span>
+              <span className="text-sm font-medium text-foreground hidden sm:block">Sanskar Yadav</span>
               <ChevronDown className="h-4 w-4 text-muted-foreground" />
             </button>
 
