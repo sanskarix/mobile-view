@@ -85,7 +85,7 @@ export const CreateRoutingFormModal: React.FC<CreateRoutingFormModalProps> = ({
             </DialogHeader>
             
             <div className="space-y-4 py-4">
-              {teams.map((team) => (
+              {teamsToShow.map((team) => (
                 <button
                   key={team.id}
                   onClick={() => handleTeamSelect(team.id)}
