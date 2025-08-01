@@ -1,14 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   ChevronDown, Moon, HelpCircle, MapPin, LogOut, User, Settings,
-  FileIcon, Mail, ArrowLeft, Menu,
-  Edit,
-  Delete,
-  Trash2
+  FileIcon, Mail, Search
 } from 'lucide-react';
-import { Switch } from './ui/switch';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 
 interface HeaderMeta {
   title: string;
@@ -20,19 +14,12 @@ interface HeaderMeta {
 
 interface HeaderProps {
   metaData: HeaderMeta;
-  onMenuToggle?: () => void;
-  showMenuButton?: boolean;
 }
 
-export const Header = ({ metaData, onMenuToggle, showMenuButton }: HeaderProps) => {
-  // Defensive check to ensure metaData is defined
-  if (!metaData) {
-    return null;
-  }
+export const Header = ({ metaData }: HeaderProps) => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showHelpDropdown, setShowHelpDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -70,100 +57,39 @@ export const Header = ({ metaData, onMenuToggle, showMenuButton }: HeaderProps) 
   };
 
   return (
-    <header className="h-20 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-      <div className="h-full px-4 md:px-8 flex items-center justify-between w-full">
-        {/* Left section: Menu button (mobile), Back button, title, and optional description */}
-        <div className="flex items-center space-x-4">
-          {showMenuButton && (
-            <button
-              onClick={onMenuToggle}
-              className="text-muted-foreground hover:text-foreground transition-colors md:hidden"
-            >
-              <Menu className="h-6 w-6" />
-            </button>
-          )}
-          <div className="flex flex-col justify-center space-y-1">
-          <div className="flex items-center space-x-4">
-            {metaData && metaData.enabled !== undefined && (
-              <button
-                onClick={() => navigate(-1)}
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </button>
-            )}
-              <div className="flex flex-col">
-                <h1 className="flex items-center text-lg md:text-xl font-semibold text-foreground">
-                  {metaData.title}
-                  { metaData.onTitleChange && <Edit
-                    className='h-4 w-4 ml-1'
-                    onClick={() => metaData.onTitleChange && metaData.onTitleChange(metaData.title)}
-                  />}
-                </h1>
-                {metaData.description && (
-                  <p className="text-sm text-muted-foreground hidden sm:block">
-                    {metaData.description}
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>
+    <header className="h-16 bg-background border-b border-border">
+      <div className="h-full px-4 flex items-center justify-between">
+        {/* Left section: Logo and Cal ID */}
+        <div className="flex items-center">
+          <img 
+            src="https://cdn.prod.website-files.com/5e53d34464688e6f5960a338/682f1bb36cedcb0cd39a7027_Onehash-CalId-logo%20icon.svg" 
+            alt="Cal ID" 
+            className="h-8 w-8" 
+          />
+          <span className="ml-3 text-xl font-semibold">Cal ID</span>
         </div>
 
-        {/* Right section: Toggle, Save, Profile */}
-        <div className="flex items-center space-x-1 md:space-x-2 ml-auto">
-          {metaData && metaData.enabled !== undefined && metaData.onEnabledChange && (
-            <>
-              <TooltipProvider delayDuration={0}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className='flex items-center'>
-                      <Switch
-                        checked={metaData.enabled}
-                        onCheckedChange={metaData.onEnabledChange}
-                        className='self-center'
-                      />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {metaData.enabled ? "Disable" : "Enable"}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-              <div className="w-px h-6 bg-border" />
-              <div className="hidden sm:flex items-center">
-                <button
-                  onClick={() => console.log('Save clicked')}
-                  className="px-3 py-1 text-sm border-l border-t border-b rounded-l-md font-medium hover:bg-secondary transition-colors"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => console.log('Save clicked')}
-                  className="px-3 py-1 text-sm border rounded-r-md font-medium hover:bg-secondary transition-colors"
-                >
-                  Save
-                </button>
-              </div>
-              <div className="w-px h-6 bg-border" />
-            </>
-          )}
+        {/* Right section: Search and Profile */}
+        <div className="flex items-center space-x-4">
+          {/* Search Icon */}
+          <button className="text-muted-foreground hover:text-foreground transition-colors">
+            <Search className="h-5 w-5" />
+          </button>
 
           {/* Profile Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-              className="flex items-center space-x-2 md:space-x-3 rounded-lg transition-colors w-full"
+              className="flex items-center space-x-2 rounded-lg transition-colors"
             >
-              <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center">
-                <span className="text-xs font-medium text-primary-foreground">SY</span>
+              <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
+                <span className="text-sm font-medium text-primary-foreground">SY</span>
               </div>
-              <span className="text-sm font-medium text-foreground hidden sm:block">Sanskar Yadav</span>
-              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              <ChevronDown className="h-4 w-4 text-muted-foreground hidden sm:block" />
             </button>
 
             {showProfileDropdown && (
-              <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-10">
+              <div className="absolute right-0 top-full mt-2 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-50">
                 <div className="py-1">
                   <button onClick={() => window.location.href = '/settings/profile'} className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors">
                     <User className="h-4 w-4 mr-2" /> My Profile
@@ -189,7 +115,7 @@ export const Header = ({ metaData, onMenuToggle, showMenuButton }: HeaderProps) 
             )}
 
             {showHelpDropdown && (
-              <div className="absolute right-0 top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-20">
+              <div className="absolute right-0 top-full mt-2 w-48 bg-popover border border-border rounded-lg shadow-lg animate-scale-in z-50">
                 <div className="py-1">
                   <button onClick={() => handleHelpClick('docs')} className="flex items-center w-full px-3 py-2 text-sm hover:bg-muted transition-colors">
                     <FileIcon className="h-4 w-4 mr-2" /> Documentation
