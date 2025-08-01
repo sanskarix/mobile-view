@@ -106,6 +106,22 @@ export const RoutingForms = () => {
     setRoutingForms(prev => prev.filter(form => form.id !== formId));
   };
 
+  const handleFormCreated = (formData: any) => {
+    const newForm: RoutingForm = {
+      id: `form-${Date.now()}`,
+      name: formData.title,
+      description: formData.description,
+      url: `/forms/${formData.title.toLowerCase().replace(/\s+/g, '-')}`,
+      teamId: formData.teamId,
+      teamName: formData.teamName,
+      isActive: true,
+      responses: 0,
+      routes: 0,
+      createdAt: new Date().toISOString().split('T')[0]
+    };
+    setRoutingForms(prev => [...prev, newForm]);
+  };
+
   const teamOptions = [
     { value: 'all', label: 'All Teams' },
     { value: 'sales', label: 'Sales Team' },
