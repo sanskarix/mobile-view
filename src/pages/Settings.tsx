@@ -1,19 +1,17 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { SettingsSidebar } from '../components/SettingsSidebar';
-import { Header } from '..//components/Header';
 
 export interface HeaderMeta {
   title: string;
   description?: string;
+  enabled?: boolean;
+  onEnabledChange?: (enabled: boolean) => void;
+  onTitleChange?: (title: string) => void;
 }
 
 export const Settings = () => {
-  const [headerMeta, setHeaderMeta] = useState<HeaderMeta>({
-    title: '',
-    description: '',
-  });  
   const location = useLocation();
   const navigate = useNavigate();
   const isRootSettings = location.pathname === '/settings';
@@ -25,12 +23,11 @@ export const Settings = () => {
   }, [isRootSettings, navigate]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex">
+    <div className="min-h-screen bg-background text-foreground flex pb-16">
       <SettingsSidebar />
-      <div className="flex-1 ml-64">
-       <Header metaData={headerMeta}/>          
+      <div className="flex-1 ml-64">       
         <main className="relative z-0">
-          <Outlet context={{ setHeaderMeta }}/>
+          <Outlet />
         </main>
       </div>
     </div>
