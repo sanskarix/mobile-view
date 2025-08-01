@@ -77,10 +77,12 @@ export const Header = ({ metaData }: HeaderProps) => {
 
         {/* Right section: Search and Profile */}
         <div className="flex items-center space-x-4">
-          {/* Search Icon */}
-          <button className="text-muted-foreground hover:text-foreground transition-colors">
-            <Search className="h-5 w-5" />
-          </button>
+          {/* Search Icon - only show on specific pages */}
+          {showSearchIcon && (
+            <button className="text-muted-foreground hover:text-foreground transition-colors">
+              <Search className="h-5 w-5" />
+            </button>
+          )}
 
           {/* Profile Dropdown */}
           <div className="relative" ref={dropdownRef}>
