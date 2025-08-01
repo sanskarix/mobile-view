@@ -21,6 +21,11 @@ export const Header = ({ metaData }: HeaderProps) => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showHelpDropdown, setShowHelpDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
+
+  // Pages that need search functionality
+  const pagesWithSearch = ['/event-types', '/bookings', '/routing-forms'];
+  const showSearchIcon = pagesWithSearch.includes(location.pathname);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
