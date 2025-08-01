@@ -27,7 +27,7 @@ export const BottomNavigation = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border md:hidden">
       <div className="grid grid-cols-4 h-16">
         {navigation.map((item) => (
           <NavLink
