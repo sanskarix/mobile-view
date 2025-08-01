@@ -36,7 +36,7 @@ export const Layout = () => {
             onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
             showMenuButton={isMobile}
           />
-          <main className="relative z-0">
+          <main className="relative z-0 min-h-[calc(100vh-5rem)]">
             <Outlet context={{ setHeaderMeta }}/>
           </main>
         </div>
