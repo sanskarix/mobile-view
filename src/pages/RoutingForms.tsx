@@ -1,22 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
-import { Route, Plus, ChevronDown, Copy, ExternalLink, Download, Code } from 'lucide-react';
+import { Route, Plus, ChevronDown, Copy, ExternalLink, Search, MoreVertical, Edit, Trash2, Share2, Users, Eye } from 'lucide-react';
 import { CreateRoutingFormModal } from '../components/CreateRoutingFormModal';
 import { Switch } from '../components/ui/switch';
-import { RoutingFormEmbedModal } from '../components/RoutingFormEmbedModal';
-import { RoutingFormCard } from '../components/RoutingFormCard';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../components/ui/dropdown-menu';
 import { useOutletContext } from 'react-router-dom';
 import type { HeaderMeta } from '../components/Layout';
+
+interface RoutingForm {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  teamId: string;
+  teamName: string;
+  isActive: boolean;
+  responses: number;
+  routes: number;
+  createdAt: string;
+}
+
+const mockRoutingForms: RoutingForm[] = [
+  {
+    id: '1',
+    name: 'Sales Qualification',
+    description: 'Route leads to appropriate sales representatives',
+    url: '/forms/sales-qualification',
+    teamId: 'sales',
+    teamName: 'Sales Team',
+    isActive: true,
+    responses: 143,
+    routes: 3,
+    createdAt: '2024-01-15'
+  },
+  {
+    id: '2',
+    name: 'Support Triage',
+    description: 'Direct support requests to the right team',
+    url: '/forms/support-triage',
+    teamId: 'support',
+    teamName: 'Support Team',
+    isActive: true,
+    responses: 89,
+    routes: 5,
+    createdAt: '2024-01-10'
+  },
+  {
+    id: '3',
+    name: 'Interview Scheduling',
+    description: 'Route candidates to appropriate interviewers',
+    url: '/forms/interview-scheduling',
+    teamId: 'hr',
+    teamName: 'HR Team',
+    isActive: false,
+    responses: 67,
+    routes: 4,
+    createdAt: '2024-01-08'
+  }
+];
+
 export const RoutingForms = () => {
   const navigate = useNavigate();
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showTeamDropdown, setShowTeamDropdown] = useState(false);
-  const [showEmbedModal, setShowEmbedModal] = useState(false);
-  const [selectedEmbedFormId, setSelectedEmbedFormId] = useState('');
   const [selectedTeamFilter, setSelectedTeamFilter] = useState('all');
-  const [routingForms, setRoutingForms] = useState<any[]>([]);
-  const [teams, setTeams] = useState<any[]>([]);
+  const [routingForms, setRoutingForms] = useState<RoutingForm[]>(mockRoutingForms);
+  const [searchQuery, setSearchQuery] = useState('');
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
 
@@ -27,267 +76,176 @@ export const RoutingForms = () => {
     });
   }, [setHeaderMeta]);
 
-  // Load teams from localStorage
-  useEffect(() => {
-    const personalTeam = {
-      id: 'personal',
-      name: 'Your account',
-      avatar: 'S'
-    };
-    const savedTeams = localStorage.getItem('teams');
-    const loadedTeams = savedTeams ? JSON.parse(savedTeams) : [];
+  const filteredForms = routingForms.filter(form => {
+    const matchesTeam = selectedTeamFilter === 'all' || form.teamId === selectedTeamFilter;
+    const matchesSearch = form.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesTeam && matchesSearch;
+  });
 
-    // Add 4 example teams for demonstration
-    const exampleTeams = [{
-      id: 'team1',
-      name: 'Marketing Team',
-      avatar: 'M'
-    }, {
-      id: 'team2',
-      name: 'Sales Team',
-      avatar: 'S'
-    }, {
-      id: 'team3',
-      name: 'Development Team',
-      avatar: 'D'
-    }, {
-      id: 'team4',
-      name: 'Support Team',
-      avatar: 'Su'
-    }];
-    setTeams([personalTeam, ...loadedTeams.map((team: any) => ({
-      ...team,
-      name: team.name
-    })), ...exampleTeams]);
-  }, []);
-
-  // Load sample forms
-  useEffect(() => {
-    const sampleForms = [{
-      id: 'form-1',
-      title: 'Customer Support Routing',
-      description: 'Route customers to the right support team based on their issue type',
-      enabled: true,
-      responses: 45,
-      fields: 5,
-      routes: 3,
-      teamName: 'Support Team',
-      createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
-    }, {
-      id: 'form-2',
-      title: 'Sales Qualification Form',
-      description: 'Qualify leads and route them to appropriate sales representatives',
-      enabled: true,
-      responses: 23,
-      fields: 4,
-      routes: 2,
-      teamName: 'Sales Team',
-      createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
-    }, {
-      id: 'form-3',
-      title: 'Marketing Campaign Routing',
-      description: 'Route prospects based on their interest and campaign source',
-      enabled: false,
-      responses: 12,
-      fields: 6,
-      routes: 4,
-      teamName: 'Marketing Team',
-      createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString()
-    }, {
-      id: 'form-4',
-      title: 'Technical Support Triage',
-      description: 'Categorize and route technical support requests to specialized teams',
-      enabled: true,
-      responses: 67,
-      fields: 7,
-      routes: 5,
-      teamName: 'Development Team',
-      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
-    }, {
-      id: 'form-5',
-      title: 'Product Demo Requests',
-      description: 'Route product demonstration requests to appropriate sales engineers',
-      enabled: true,
-      responses: 31,
-      fields: 4,
-      routes: 3,
-      teamName: 'Sales Team',
-      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
-    }, {
-      id: 'form-6',
-      title: 'Partnership Inquiries',
-      description: 'Filter and route partnership and integration requests',
-      enabled: false,
-      responses: 8,
-      fields: 5,
-      routes: 2,
-      teamName: 'Marketing Team',
-      createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
-    }];
-    setRoutingForms(sampleForms);
-  }, []);
-  const handleFormCreated = (form: any) => {
-    const newForm = {
-      ...form,
-      id: `form-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      enabled: true,
-      responses: 0,
-      fields: 0,
-      routes: 0
-    };
-    setRoutingForms(prev => [...prev, newForm]);
-  };
-  const handleSave = () => {
-    // Save functionality - in a real app, this would save to backend
-    console.log('Saving routing forms...');
-    // Show success message or toast
-  };
-  const handleFormEdit = (formId: string) => {
-    navigate(`/routing-forms/${formId}/edit`);
-  };
-  const handleFormToggle = (formId: string, enabled: boolean) => {
-    setRoutingForms(prev => prev.map(form => form.id === formId ? {
-      ...form,
-      enabled
-    } : form));
-  };
-  const handleFormDownload = (formId: string) => {
-    console.log('Downloading responses for form:', formId);
-  };
-  const handleFormDuplicate = (formId: string) => {
-    const formToDuplicate = routingForms.find(f => f.id === formId);
-    if (formToDuplicate) {
-      const duplicatedForm = {
-        ...formToDuplicate,
-        id: `form-${Date.now()}`,
-        title: `${formToDuplicate.title} (Copy)`,
-        createdAt: new Date().toISOString(),
-        responses: 0
-      };
-      setRoutingForms(prev => [...prev, duplicatedForm]);
-    }
-  };
-  const handleFormDelete = (formId: string) => {
-    setRoutingForms(prev => prev.filter(form => form.id !== formId));
-  };
-  const handleCopyLink = (formId: string) => {
-    navigator.clipboard.writeText(`https://cal.id/forms/${formId}`);
+  const handleCopyLink = (url: string, formId: string) => {
+    const fullUrl = `${window.location.origin}${url}`;
+    navigator.clipboard.writeText(fullUrl);
     setCopiedLink(formId);
     setTimeout(() => setCopiedLink(null), 2000);
   };
-  const handleEmbedClick = (formId: string) => {
-    setSelectedEmbedFormId(formId);
-    setShowEmbedModal(true);
+
+  const handleToggleActive = (formId: string) => {
+    setRoutingForms(prev => prev.map(form => 
+      form.id === formId ? { ...form, isActive: !form.isActive } : form
+    ));
   };
-  const getFilteredTeams = () => {
-    const allOption = {
-      id: 'all',
-      name: 'All',
-      avatar: '',
-      checked: selectedTeamFilter === 'all'
-    };
-    const teamOptions = teams.map(team => ({
-      ...team,
-      checked: selectedTeamFilter === team.id
-    }));
-    return [allOption, ...teamOptions];
+
+  const handleDelete = (formId: string) => {
+    setRoutingForms(prev => prev.filter(form => form.id !== formId));
   };
-  return <div className="min-h-screen bg-background">
-      {/* Header */}
-      
 
-      <div className="px-8 py-6">
-        {routingForms.length === 0 ?
-      // Empty state
-      <div className="max-w-6xl mx-auto">
-            {/* Teams Filter Dropdown */}
-            <div className="mb-8">
-              <div className="relative inline-block">
-                <button onClick={() => setShowTeamDropdown(!showTeamDropdown)} className="flex items-center space-x-2 px-3 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm">
-                  <span>Teams: All</span>
-                  <ChevronDown className="h-4 w-4" />
-                </button>
+  const teamOptions = [
+    { value: 'all', label: 'All Teams' },
+    { value: 'sales', label: 'Sales Team' },
+    { value: 'support', label: 'Support Team' },
+    { value: 'hr', label: 'HR Team' },
+  ];
 
-                {showTeamDropdown && <div className="absolute top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-10">
-                    <div className="py-2">
-                      {getFilteredTeams().map(team => <button key={team.id} onClick={() => {
-                  setSelectedTeamFilter(team.id);
-                  setShowTeamDropdown(false);
-                }} className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-muted transition-colors">
-                          <div className="flex items-center">
-                            {team.id === 'all' ? <div className="h-5 w-5 mr-2" /> : <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium mr-2">
-                                {team.avatar}
-                              </div>}
-                            <span>{team.name}</span>
-                          </div>
-                          {team.checked && <div className="h-2 w-2 bg-primary rounded-full" />}
-                        </button>)}
-                    </div>
-                  </div>}
-              </div>
-            </div>
+  return (
+    <div className="p-4 max-w-full overflow-hidden">
+      {/* Header Actions */}
+      <div className="flex items-center justify-between mb-6">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="flex items-center space-x-2">
+              <Users className="h-4 w-4" />
+              <span className="max-w-24 truncate">
+                {teamOptions.find(t => t.value === selectedTeamFilter)?.label}
+              </span>
+              <ChevronDown className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            {teamOptions.map((team) => (
+              <DropdownMenuItem 
+                key={team.value}
+                onClick={() => setSelectedTeamFilter(team.value)}
+              >
+                {team.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-            {/* Empty State Content */}
-            <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
-              <div className="w-32 h-32 bg-muted rounded-full flex items-center justify-center mb-8">
-                <Route className="h-16 w-16 text-muted-foreground" />
-              </div>
-              
-              <h2 className="text-xl font-semibold mb-4">Create your first form</h2>
-              <p className="text-muted-foreground mb-8 max-w-md">
-                With Routing Forms you can ask qualifying questions and route to the correct person or event type.
-              </p>
-              
-              <Button onClick={() => setShowCreateModal(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                New
-              </Button>
-            </div>
-          </div> :
-      // Forms display
-      <div className="pb-6 space-y-4 w-full max-w-full">
-            {/* Teams Filter and New Button */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="relative">
-                <button onClick={() => setShowTeamDropdown(!showTeamDropdown)} className="flex items-center space-x-2 px-3 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm">
-                  <span>Teams: All</span>
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-
-                {showTeamDropdown && <div className="absolute top-full mt-1 w-48 bg-popover border border-border rounded-lg shadow-lg z-10">
-                    <div className="py-2">
-                      {getFilteredTeams().map(team => <button key={team.id} onClick={() => {
-                  setSelectedTeamFilter(team.id);
-                  setShowTeamDropdown(false);
-                }} className="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-muted transition-colors">
-                          <div className="flex items-center">
-                            {team.id === 'all' ? <div className="h-5 w-5 mr-2" /> : <div className="h-5 w-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium mr-2">
-                                {team.avatar}
-                              </div>}
-                            <span>{team.name}</span>
-                          </div>
-                          {team.checked && <div className="h-2 w-2 bg-primary rounded-full" />}
-                        </button>)}
-                    </div>
-                  </div>}
-              </div>
-
-              <Button onClick={() => setShowCreateModal(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                New
-              </Button>
-            </div>
-
-            {/* Forms List - Single Column */}
-            <div className="space-y-4">
-              {routingForms.map(form => <RoutingFormCard key={form.id} form={form} onEdit={handleFormEdit} onToggle={handleFormToggle} onDownload={handleFormDownload} onDuplicate={handleFormDuplicate} onDelete={handleFormDelete} onCopyLink={handleCopyLink} copiedLink={copiedLink} />)}
-            </div>
-          </div>}
-
-        <CreateRoutingFormModal open={showCreateModal} onClose={() => setShowCreateModal(false)} onFormCreated={handleFormCreated} teams={teams} />
-
-        <RoutingFormEmbedModal open={showEmbedModal} onClose={() => setShowEmbedModal(false)} formId={selectedEmbedFormId} />
+        <Button onClick={() => setShowCreateModal(true)} size="sm">
+          <Plus className="h-4 w-4 mr-2" />
+          New Form
+        </Button>
       </div>
-    </div>;
+
+      {/* Search Bar */}
+      <div className="relative mb-6">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+        <input
+          type="text"
+          placeholder="Search routing forms..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full pl-10 pr-4 py-2 border border-border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
+        />
+      </div>
+
+      {/* Routing Forms List */}
+      <div className="space-y-3">
+        {filteredForms.map((form) => (
+          <div
+            key={form.id}
+            className="bg-card border border-border rounded-lg p-4 hover:shadow-md transition-shadow"
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex items-start space-x-3 flex-1 min-w-0">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Route className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <h3 className="font-medium text-foreground truncate">{form.name}</h3>
+                    <Switch 
+                      checked={form.isActive}
+                      onCheckedChange={() => handleToggleActive(form.id)}
+                      className="scale-75"
+                    />
+                  </div>
+                  
+                  {/* Stats */}
+                  <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                    <div className="flex items-center space-x-1">
+                      <span className="font-medium">{form.responses}</span>
+                      <span>responses</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <span className="font-medium">{form.routes}</span>
+                      <span>routes</span>
+                    </div>
+                    <span className="text-xs bg-secondary px-2 py-1 rounded">
+                      {form.teamName}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => navigate(`/routing-forms/${form.id}/edit`)}>
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => window.open(`${window.location.origin}${form.url}`, '_blank')}>
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    Preview
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleCopyLink(form.url, form.id)}>
+                    <Copy className="h-4 w-4 mr-2" />
+                    {copiedLink === form.id ? 'Copied!' : 'Copy Link'}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => console.log('Share form')}>
+                    <Share2 className="h-4 w-4 mr-2" />
+                    Share
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={() => handleDelete(form.id)}
+                    className="text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {filteredForms.length === 0 && (
+        <div className="text-center py-12">
+          <Route className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-foreground mb-2">No routing forms found</h3>
+          <p className="text-muted-foreground mb-6">
+            {searchQuery || selectedTeamFilter !== 'all' 
+              ? 'Try adjusting your filters or search terms.' 
+              : 'Create your first routing form to get started.'}
+          </p>
+          <Button onClick={() => setShowCreateModal(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Routing Form
+          </Button>
+        </div>
+      )}
+
+      <CreateRoutingFormModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+      />
+    </div>
+  );
 };
