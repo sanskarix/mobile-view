@@ -250,7 +250,7 @@ export const EventTypes = () => {
       <CreateEventModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        teamId={selectedTeam}
+        onCreateEvent={(eventData) => console.log('Creating event:', eventData)}
       />
       <CreateTeamEventModal
         isOpen={isCreateTeamModalOpen}
