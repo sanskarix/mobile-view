@@ -69,7 +69,7 @@ export const CreateRoutingFormModal: React.FC<CreateRoutingFormModalProps> = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
         {step === 'team-select' && (
           <>
