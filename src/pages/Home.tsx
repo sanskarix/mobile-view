@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -82,9 +81,9 @@ const Home = () => {
   ];
 
   return (
-    <div className="space-y-8 p-6">
+    <div className="space-y-6 p-4 md:p-6">
       {/* Hero Dashboard Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         {/* Upcoming Bookings Card */}
         <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => navigate('/bookings')}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -92,18 +91,18 @@ const Home = () => {
             <Calendar className="h-5 w-5 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-2 md:gap-4">
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary">8</div>
-                <p className="text-sm text-muted-foreground">Today</p>
+                <div className="text-2xl md:text-3xl font-bold text-primary">8</div>
+                <p className="text-xs md:text-sm text-muted-foreground">Today</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary">42</div>
-                <p className="text-sm text-muted-foreground">This Week</p>
+                <div className="text-2xl md:text-3xl font-bold text-primary">42</div>
+                <p className="text-xs md:text-sm text-muted-foreground">This Week</p>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary">156</div>
-                <p className="text-sm text-muted-foreground">This Month</p>
+                <div className="text-2xl md:text-3xl font-bold text-primary">156</div>
+                <p className="text-xs md:text-sm text-muted-foreground">This Month</p>
               </div>
             </div>
           </CardContent>
@@ -118,8 +117,8 @@ const Home = () => {
           <CardContent>
             <div className="flex items-center justify-center py-4">
               <div className="text-center">
-                <div className="text-4xl font-bold text-orange-500">12</div>
-                <p className="text-sm text-muted-foreground">Awaiting confirmation</p>
+                <div className="text-3xl md:text-4xl font-bold text-orange-500">12</div>
+                <p className="text-xs md:text-sm text-muted-foreground">Awaiting confirmation</p>
               </div>
             </div>
           </CardContent>
