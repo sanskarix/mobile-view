@@ -268,6 +268,8 @@ export const RoutingForms = () => {
       <CreateRoutingFormModal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
+        onFormCreated={handleFormCreated}
+        teams={teams}
       />
     </div>
   );
