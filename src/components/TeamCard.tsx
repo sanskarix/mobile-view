@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Users, Calendar, Palette, MoreHorizontal, Edit, ExternalLink, UserPlus, Trash2, Check } from 'lucide-react';
@@ -239,7 +238,7 @@ export const TeamCard = ({ team, isOnlyTeam = false, onTeamUpdate, onTeamDelete 
 
       {/* Modals */}
       <CreateTeamEventModal
-        open={showEventModal}
+        isOpen={showEventModal}
         onClose={handleEventCreate}
         teamId={team.id}
         teamName={team.name}
