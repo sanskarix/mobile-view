@@ -28,7 +28,7 @@ export const CreateTeamEventModal: React.FC<CreateTeamEventModalProps> = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Add a new team event type</DialogTitle>
