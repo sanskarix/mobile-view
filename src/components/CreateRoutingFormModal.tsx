@@ -37,8 +37,8 @@ export const CreateRoutingFormModal: React.FC<CreateRoutingFormModalProps> = ({
     const formData = {
       title: formTitle || 'A Routing Form',
       description: formDescription || 'Form Description',
-      teamId: selectedTeam,
-      teamName: teamsToShow.find(t => t.id === selectedTeam)?.name || 'Your account'
+      teamId: selectedTeam || 'personal',
+      teamName: teamsToShow.find(t => t.id === (selectedTeam || 'personal'))?.name || 'Your account'
     };
     
     onFormCreated(formData);
