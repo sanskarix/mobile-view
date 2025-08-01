@@ -81,9 +81,9 @@ const Home = () => {
   ];
 
   return (
-    <div className="space-y-6 p-4">
+    <div className="space-y-6 p-4 max-w-full overflow-hidden">
       {/* Hero Dashboard Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Upcoming Bookings Card */}
         <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => navigate('/bookings')}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
