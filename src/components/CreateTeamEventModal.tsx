@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
 import { Button } from './ui/button';
@@ -7,17 +6,17 @@ import { Label } from './ui/label';
 import { RadioGroup, RadioGroupItem } from './ui/radio-group';
 
 interface CreateTeamEventModalProps {
-  open: boolean;
+  isOpen: boolean;
   onClose: () => void;
   teamId: string;
-  teamName: string;
+  teamName?: string;
 }
 
 export const CreateTeamEventModal: React.FC<CreateTeamEventModalProps> = ({
-  open,
+  isOpen,
   onClose,
   teamId,
-  teamName
+  teamName = ''
 }) => {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
