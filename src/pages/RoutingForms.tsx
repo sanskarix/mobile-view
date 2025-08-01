@@ -69,6 +69,13 @@ export const RoutingForms = () => {
   const [copiedLink, setCopiedLink] = useState<string | null>(null);
   const { setHeaderMeta } = useOutletContext<{ setHeaderMeta: (meta: HeaderMeta) => void }>();
 
+  const teams = [
+    { id: 'personal', name: 'Your account', avatar: 'Y' },
+    { id: 'sales', name: 'Sales Team', avatar: 'S' },
+    { id: 'support', name: 'Support Team', avatar: 'S' },
+    { id: 'hr', name: 'HR Team', avatar: 'H' },
+  ];
+
   useEffect(() => {
     setHeaderMeta({
       title: 'Routing Forms',
