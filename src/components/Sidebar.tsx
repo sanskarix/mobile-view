@@ -1,15 +1,20 @@
-
 import { NavLink } from 'react-router-dom';
 import { Users, Settings, Workflow, Home, CalendarCheck, ScrollText, Clock2, Blocks, ListTree, ChartNoAxesColumnIncreasing } from 'lucide-react';
 
 interface SidebarProps {
   darkMode: boolean;
   setDarkMode: (value: boolean) => void;
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
+  isMobile: boolean;
 }
 
 export const Sidebar = ({
   darkMode,
-  setDarkMode
+  setDarkMode,
+  isOpen,
+  setIsOpen,
+  isMobile
 }: SidebarProps) => {
   const navigation = [
     {
@@ -65,8 +70,10 @@ export const Sidebar = ({
   ];
 
   return (
-    <div 
-      className="fixed inset-y-0 left-0 z-50 w-64 bg-card flex flex-col"
+    <div
+      className={`fixed inset-y-0 left-0 z-50 w-64 bg-card flex flex-col transition-transform duration-300 ease-in-out ${
+        isMobile ? (isOpen ? 'translate-x-0' : '-translate-x-full') : 'translate-x-0'
+      }`}
       style={{
         background: 'linear-gradient(#eff6ff, #eef2ff, #faf5ff)'
       }}
