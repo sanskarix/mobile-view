@@ -41,6 +41,7 @@ import { WorkflowBuilder } from "./pages/WorkflowBuilder";
 import { Apps } from "./pages/Apps";
 import Home from "./pages/Home";
 import { Insights } from "./pages/Insights";
+import { More } from "./pages/More";
 import { HeaderProvider } from "./contexts/HeaderContext";
 
 const queryClient = new QueryClient();
