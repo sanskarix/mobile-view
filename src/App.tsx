@@ -74,6 +74,7 @@ const App = () => (
               <Route path="workflows/new" element={<WorkflowBuilder />} />
               <Route path="workflows/:workflowId/edit" element={<WorkflowBuilder />} />
               <Route path="insights" element={<Insights />} />
+              <Route path="more" element={<More />} />
             </Route>
             
             <Route path="/settings" element={<Settings />}>
